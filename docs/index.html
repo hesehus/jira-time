@@ -1,1 +1,10 @@
-<!doctype html><html lang="en"><head><title>Jira time</title><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="shortcut icon" href="/jira-time/favicon.ico"><link href="/jira-time/app.css" rel="stylesheet"></head><body><div id="root" style="height: 100vh">Loading</div><script type="text/javascript" src="/jira-time/vendor.js"></script><script type="text/javascript" src="/jira-time/app.js"></script></body></html>
+<!doctype html><html lang="en"><head><title>Jira time</title><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script>if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(location.hostname === 'localhost' ? '/sw/sw.js' : '/jira-time/sw.js')
+        .then(function(reg) {
+          // registration worked
+          console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+          // registration failed
+          console.log('Registration failed with ' + error);
+        });
+    }</script><link rel="shortcut icon" href="/jira-time/favicon.ico"><link href="/jira-time/app.css" rel="stylesheet"></head><body><div id="root" style="height: 100vh; display: flex; align-items: center; justify-content: center">...</div><script type="text/javascript" src="/jira-time/vendor.js"></script><script type="text/javascript" src="/jira-time/app.js"></script></body></html>
