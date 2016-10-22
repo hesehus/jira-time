@@ -1,3 +1,10 @@
-.core-layout__viewport {
-  padding-top: 4rem;
+.layout-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__viewport {
+    flex-grow: 1;
+    display: flex;
+  }
 }

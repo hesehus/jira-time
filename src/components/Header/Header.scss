@@ -1,4 +1,22 @@
-.route--active {
-  font-weight: bold;
-  text-decoration: underline;
+.top-links {
+  display: flex;
+  justify-content: center;
+
+  &__route {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 20px;
+    text-decoration: none;
+
+    &__icon {
+      opacity: .5;
+    }
+
+
+    &--active {
+      .top-links__route__icon {
+        opacity: 1;
+      }
+    }
+  }
 }

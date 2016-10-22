@@ -1,16 +1,16 @@
-const webpack = require('webpack')
-const cssnano = require('cssnano')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const config = require('../config')
-const debug = require('debug')('app:webpack:config')
+const webpack = require('webpack');
+const cssnano = require('cssnano');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const config = require('../config');
+const debug = require('debug')('app:webpack:config');
 
-const paths = config.utils_paths
-const __DEV__ = config.globals.__DEV__
-const __PROD__ = config.globals.__PROD__
-const __TEST__ = config.globals.__TEST__
+const paths = config.utils_paths;
+const __DEV__ = config.globals.__DEV__;
+const __PROD__ = config.globals.__PROD__;
+const __TEST__ = config.globals.__TEST__;
 
-debug('Creating configuration.')
+debug('Creating configuration.');
 const webpackConfig = {
   name    : 'client',
   target  : 'web',
@@ -20,18 +20,19 @@ const webpackConfig = {
     extensions : ['', '.js', '.jsx', '.json']
   },
   module : {}
-}
+};
+
 // ------------------------------------
 // Entry Points
 // ------------------------------------
-const APP_ENTRY = paths.client('main.js')
+const APP_ENTRY = paths.client('main.js');
 
 webpackConfig.entry = {
   app : __DEV__
     ? [APP_ENTRY].concat(`webpack-hot-middleware/client?path=${config.compiler_public_path}__webpack_hmr`)
     : [APP_ENTRY],
   vendor : config.compiler_vendors
-}
+};
 
 // ------------------------------------
 // Bundle Output
@@ -41,7 +42,7 @@ webpackConfig.output = {
   filename   : `[name].js`,
   path       : paths.dist(),
   publicPath : config.compiler_public_path
-}
+};
 
 // ------------------------------------
 // Plugins

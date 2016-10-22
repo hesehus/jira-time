@@ -4,8 +4,20 @@
   <title>Jira time</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(location.hostname === 'localhost' ? '/sw/sw.js' : '/jira-time/sw.js')
+        .then(function(reg) {
+          // registration worked
+          console.log('Registration succeeded. Scope is ' + reg.scope);
+        }).catch(function(error) {
+          // registration failed
+          console.log('Registration failed with ' + error);
+        });
+    }
+  </script>
 </head>
 <body>
-  <div id="root" style="height: 100vh;">Loading</div>
+  <div id="root" style="height: 100vh; display: flex; align-items: center; justify-content: center;">...</div>
 </body>
 </html>
