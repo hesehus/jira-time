@@ -7,7 +7,7 @@ import CounterRoute from './Counter'
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = (store) => ({
-  path        : '/',
+  path        : '/jira-time',
   component   : CoreLayout,
   indexRoute  : Home,
   childRoutes : [
