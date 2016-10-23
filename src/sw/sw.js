@@ -60,7 +60,7 @@ if (self.registration) {
 } else {
   scope = self.scope || baseUrl;
 }
-log('here!');
+
 this.addEventListener("install", function(e) {
   
   // Put updated resources in a new cache, so that currently running pages
@@ -93,9 +93,9 @@ this.addEventListener("activate", function(e) {
 this.addEventListener("fetch", function(e) {
   var request = e.request;
 
-  //if (request.url.indexOf(scope) === -1) {
-  //  return;
-  //}
+  if (request.url.indexOf(scope) === -1) {
+    return;
+  }
 
   // Basic read-through caching.
   e.respondWith(
