@@ -1,4 +1,4 @@
-/* eslint-disable no-alert */
+/* eslint-disable */
 
 /*
  * @license

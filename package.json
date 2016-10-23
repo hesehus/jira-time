@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rimraf docs",
     "compile": "better-npm-run compile",
-    "lint": "eslint bin build config server src tests",
+    "lint": "eslint bin build config server src",
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
@@ -36,7 +36,7 @@
       }
     },
     "deploy": {
-      "command": "npm run lint && npm run test && npm run clean && npm run compile",
+      "command": "npm run lint && npm run clean && npm run compile",
       "env": {
         "DEBUG": "app:*"
       }
