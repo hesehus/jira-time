@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
 
 // ========================================================
 // Store Instantiation
 // ========================================================
-const initialState = window.___INITIAL_STATE__;
-const store = createStore(initialState);
+const store = createStore();
 
 // ========================================================
 // Render Setup
@@ -26,15 +26,16 @@ let render = () => {
 // ========================================================
 // Developer Tools Setup
 // ========================================================
-if (__DEV__) {
-  if (window.devToolsExtension) {
-    window.devToolsExtension.open();
-  }
-}
+//if (__DEV__) {
+//  if (window.devToolsExtension) {
+//    window.devToolsExtension.open();
+//  }
+//}
 
 // This code is excluded from production bundle
 if (__DEV__) {
   if (module.hot) {
+    
     // Development render functions
     const renderApp = render;
     const renderError = (error) => {

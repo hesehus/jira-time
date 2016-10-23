@@ -1,11 +1,41 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router } from 'react-router'
-import { Provider } from 'react-redux'
+import { Provider, connect } from 'react-redux'
+import stopDrops from './drop';
+import { actions as tasksActions } from '../routes/Tasks/modules/tasks';
+import { isValidJiraURL } from '../shared/urlHelper';
 
 class AppContainer extends Component {
   static propTypes = {
-    routes : PropTypes.object.isRequired,
-    store  : PropTypes.object.isRequired
+    routes  : PropTypes.object.isRequired,
+    store   : PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
+  }
+
+  constructor (props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  componentWillMount () {
+    if (!this.state.binded) {
+      this.setState({ binded: true });
+
+      stopDrops();
+      document.addEventListener('drop', this.onDrop.bind(this), false);
+    }
+  }
+
+  onDrop (event) {
+    const url = event.dataTransfer.getData('URL');
+
+    if (isValidJiraURL(url)) {
+      this.props.dispatch(tasksActions.addTaskFromUrl(url));
+    } else {
+      alert(`Hey, this is not a valid JIRA URL.
+Pull yourself together!`);
+    }
   }
 
   shouldComponentUpdate () {
@@ -25,4 +55,8 @@ class AppContainer extends Component {
   }
 }
 
-export default AppContainer
+function mapStateToProps (state) {
+  return {};
+}
+
+export default connect(mapStateToProps)(AppContainer);

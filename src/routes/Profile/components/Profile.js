@@ -1,11 +1,39 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-export const Profile = (props) => (
-  <div style={{ margin: '0 auto' }} >
-    <h2>Profile page..</h2>
-  </div>
-)
+import './Profile.scss';
 
-Profile.propTypes = {}
+export class Profile extends Component {
 
-export default Profile
+  onLoginButtonClick () {
+    this.doLogin();
+  }
+
+  doLogin () {
+    alert('todo');
+    /*const headers = new Headers();
+
+    const authHash = 'aGFrb25oazpQb3N0bWFubnBhdDE=';
+
+    //fetch(`http://${authHash}@localhost:8080/rest/api/2/issue/TEST-11`, {
+    fetch(`http://localhost:8080/rest/api/2/issue/TEST-11`, {
+      method: 'GET',
+      headers: headers,
+      mode: 'no-cors',
+      cache: 'default'
+    })
+    .then(response => {
+      debugger;
+      //return response.blob();
+    });*/
+  }
+
+  render () {
+    return (
+      <div className='profile'>
+        <button onClick={this.onLoginButtonClick.bind(this)}>Login</button>
+      </div>
+    );
+  }
+}
+
+export default Profile;

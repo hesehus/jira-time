@@ -1,0 +1,14 @@
+.tasks {
+  flex-grow: 1;
+
+  &--no-tasks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__item {
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+  }
+}

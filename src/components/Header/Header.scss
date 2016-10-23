@@ -1,20 +1,31 @@
-.top-links {
+.header {
+  $bg: #f0f0f0;
+
   display: flex;
   justify-content: center;
+  background: $bg;
 
   &__route {
     display: inline-block;
-    margin: 0 5px;
-    padding: 20px;
+    margin: 0 1px;
+    padding: 10px 15px;
     text-decoration: none;
+    background: $bg;
+    transition: background-color 100ms;
+
+    &:hover {
+      background: darken($bg, 10%);
+    }
 
     &__icon {
       opacity: .5;
+      transition: opacity 100ms;
     }
 
-
     &--active {
-      .top-links__route__icon {
+      background: darken($bg, 10%);
+
+      .header__route__icon {
         opacity: 1;
       }
     }
