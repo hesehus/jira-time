@@ -4,17 +4,22 @@ import './Profile.scss';
 
 export class Profile extends Component {
 
+  constructor (props) {
+    super(props);
+
+    this.onLoginButtonClick = this.onLoginButtonClick.bind(this);
+  }
+
   onLoginButtonClick () {
     this.doLogin();
   }
 
   doLogin () {
     alert('todo');
-    /*const headers = new Headers();
+    /* const headers = new Headers();
 
-    const authHash = 'aGFrb25oazpQb3N0bWFubnBhdDE=';
+    // const authHash = 'aGFrb25oazpQb3N0bWFubnBhdDE=';
 
-    //fetch(`http://${authHash}@localhost:8080/rest/api/2/issue/TEST-11`, {
     fetch(`http://localhost:8080/rest/api/2/issue/TEST-11`, {
       method: 'GET',
       headers: headers,
@@ -24,13 +29,13 @@ export class Profile extends Component {
     .then(response => {
       debugger;
       //return response.blob();
-    });*/
+    }); */
   }
 
   render () {
     return (
       <div className='profile'>
-        <button onClick={this.onLoginButtonClick.bind(this)}>Login</button>
+        <button onClick={this.onLoginButtonClick}>Login</button>
       </div>
     );
   }

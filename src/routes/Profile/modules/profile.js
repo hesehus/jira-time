@@ -13,7 +13,7 @@ export function attemptLogin (action) {
   }
 };
 
-//export const doubleAsync = () => {
+// export const doubleAsync = () => {
 //  return (dispatch, getState) => {
 //    return new Promise((resolve) => {
 //      setTimeout(() => {
@@ -22,7 +22,7 @@ export function attemptLogin (action) {
 //      }, 200)
 //    })
 //  }
-//}
+// }
 
 export const actions = {
   attemptLogin
@@ -41,7 +41,7 @@ const ACTION_HANDLERS = {
 const initialState = { username: '' };
 
 export default function profileReducer (state = initialState, action) {
-  
+
   const handler = ACTION_HANDLERS[action.type]
 
   return handler ? handler(state, action) : state;

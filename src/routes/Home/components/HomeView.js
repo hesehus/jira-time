@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-//import AppIcon from '../assets/stopwatch.svg';
 import './HomeView.scss';
 
 import Tasks from '../../Tasks';

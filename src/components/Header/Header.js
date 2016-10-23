@@ -1,7 +1,6 @@
 import React from 'react'
 import { IndexLink, Link } from 'react-router'
 import './Header.scss'
-//import HomeIcon from './assets/home.svg';
 import ListIcon from './assets/list.svg';
 import UserIcon from './assets/user.svg';
 

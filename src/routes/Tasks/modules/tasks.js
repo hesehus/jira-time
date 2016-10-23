@@ -13,7 +13,7 @@ export function addTaskFromUrl (url) {
   }
 };
 
-//export const doubleAsync = () => {
+// export const doubleAsync = () => {
 //  return (dispatch, getState) => {
 //    return new Promise((resolve) => {
 //      setTimeout(() => {
@@ -22,7 +22,7 @@ export function addTaskFromUrl (url) {
 //      }, 200)
 //    })
 //  }
-//}
+// }
 
 export const actions = {
   addTaskFromUrl
@@ -45,8 +45,7 @@ const ACTION_HANDLERS = {
 const initialState = { tasks: [] };
 
 export default function tasksReducer (state = initialState, action) {
-  
-  const handler = ACTION_HANDLERS[action.type]
+  const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;
 }

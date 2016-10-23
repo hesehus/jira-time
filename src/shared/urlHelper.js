@@ -1,5 +1,4 @@
 export function isValidJiraURL (url = '') {
-  
   if (url.indexOf('://jira') !== -1) {
     return true;
   }

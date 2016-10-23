@@ -1,5 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux';
-import {persistStore, autoRehydrate} from 'redux-persist'
+import { persistStore, autoRehydrate } from 'redux-persist'
 import thunk from 'redux-thunk';
 import { browserHistory } from 'react-router';
 import makeRootReducer from './reducers';

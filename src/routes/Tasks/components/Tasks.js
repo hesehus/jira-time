@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import './Tasks.scss';
 
 export class TasksView extends Component {
+
+  static propTypes = {
+    tasks: PropTypes.array
+  }
 
   render () {
 
