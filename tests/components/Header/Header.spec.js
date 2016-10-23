@@ -1,36 +1,33 @@
-import React from 'react'
-import { Header } from 'components/Header/Header'
-import { IndexLink, Link } from 'react-router'
-import { shallow } from 'enzyme'
+import React from 'react';
+import { Header } from 'components/Header/Header';
+import { IndexLink, Link } from 'react-router';
+import { shallow } from 'enzyme';
+
+import ListIcon from 'components/Header/assets/list.svg';
+import UserIcon from 'components/Header/assets/user.svg';
 
 describe('(Component) Header', () => {
-  let _wrapper
+  let _wrapper;
 
   beforeEach(() => {
     _wrapper = shallow(<Header />)
-  })
-
-  it('Renders a welcome message', () => {
-    const welcome = _wrapper.find('h1')
-    expect(welcome).to.exist
-    expect(welcome.text()).to.match(/React Redux Starter Kit/)
-  })
+  });
 
   describe('Navigation links...', () => {
     it('Should render a Link to Home route', () => {
       expect(_wrapper.contains(
-        <IndexLink activeClassName='route--active' to='/'>
-          Home
+        <IndexLink to='/jira-time' className='header__route' activeClassName='header__route--active'>
+          <img className='header__route__icon' src={ListIcon} alt='Home' />
         </IndexLink>
-      )).to.be.true
-    })
+      )).to.be.true;
+    });
 
-    it('Should render a Link to Counter route', () => {
+    it('Should render a Link to Profile route', () => {
       expect(_wrapper.contains(
-        <Link activeClassName='route--active' to='/counter'>
-          Counter
+        <Link to='/jira-time/profile' className='header__route' activeClassName='header__route--active'>
+          <img className='header__route__icon' src={UserIcon} alt='Profile' />
         </Link>
-      )).to.be.true
-    })
-  })
-})
+      )).to.be.true;
+    });
+  });
+});

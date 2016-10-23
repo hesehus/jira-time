@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import './Tasks.scss';
+import lazyDog from './assets/lazy-dog.jpg';
 
 export class TasksView extends Component {
 
@@ -13,7 +14,8 @@ export class TasksView extends Component {
     if (this.props.tasks.length === 0) {
       return (
         <div className='tasks tasks--no-tasks'>
-          No tasks, you lazy dog
+          <div>You have not added any tasks, you lazy dog</div>
+          <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
         </div>
       );
     }

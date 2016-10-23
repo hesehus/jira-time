@@ -1,32 +1,31 @@
 import {
-  COUNTER_INCREMENT,
-  increment,
-  doubleAsync,
-  default as counterReducer
-} from 'routes/Counter/modules/counter'
+  ATTEMPT_LOGIN,
+  attemptLogin,
+  default as profileReducer
+} from 'routes/Profile/modules/profile'
 
-describe('(Redux Module) Counter', () => {
-  it('Should export a constant COUNTER_INCREMENT.', () => {
-    expect(COUNTER_INCREMENT).to.equal('COUNTER_INCREMENT')
+/* describe('(Redux Module) Profile', () => {
+  it('Should export a constant ATTEMPT_LOGIN.', () => {
+    expect(ATTEMPT_LOGIN).to.equal('ATTEMPT_LOGIN')
   })
 
   describe('(Reducer)', () => {
     it('Should be a function.', () => {
-      expect(counterReducer).to.be.a('function')
+      expect(profileReducer).to.be.a('function')
     })
 
     it('Should initialize with a state of 0 (Number).', () => {
-      expect(counterReducer(undefined, {})).to.equal(0)
+      expect(profileReducer(undefined, {})).to.equal(0)
     })
 
     it('Should return the previous state if an action was not matched.', () => {
-      let state = counterReducer(undefined, {})
+      let state = profileReducer(undefined, {})
       expect(state).to.equal(0)
-      state = counterReducer(state, { type: '@@@@@@@' })
+      state = profileReducer(state, { type: '@@@@@@@' })
       expect(state).to.equal(0)
-      state = counterReducer(state, increment(5))
+      state = profileReducer(state, increment(5))
       expect(state).to.equal(5)
-      state = counterReducer(state, { type: '@@@@@@@' })
+      state = profileReducer(state, { type: '@@@@@@@' })
       expect(state).to.equal(5)
     })
   })
@@ -36,8 +35,8 @@ describe('(Redux Module) Counter', () => {
       expect(increment).to.be.a('function')
     })
 
-    it('Should return an action with type "COUNTER_INCREMENT".', () => {
-      expect(increment()).to.have.property('type', COUNTER_INCREMENT)
+    it('Should return an action with type "ATTEMPT_LOGIN".', () => {
+      expect(increment()).to.have.property('type', ATTEMPT_LOGIN)
     })
 
     it('Should assign the first argument to the "payload" property.', () => {
@@ -56,12 +55,12 @@ describe('(Redux Module) Counter', () => {
 
     beforeEach(() => {
       _globalState = {
-        counter : counterReducer(undefined, {})
+        counter : profileReducer(undefined, {})
       }
       _dispatchSpy = sinon.spy((action) => {
         _globalState = {
           ..._globalState,
-          counter : counterReducer(_globalState.counter, action)
+          counter : profileReducer(_globalState.counter, action)
         }
       })
       _getStateSpy = sinon.spy(() => {
@@ -110,16 +109,16 @@ describe('(Redux Module) Counter', () => {
   // NOTE: if you have a more complex state, you will probably want to verify
   // that you did not mutate the state. In this case our state is just a number
   // (which cannot be mutated).
-  describe('(Action Handler) COUNTER_INCREMENT', () => {
+  describe('(Action Handler) ATTEMPT_LOGIN', () => {
     it('Should increment the state by the action payload\'s "value" property.', () => {
-      let state = counterReducer(undefined, {})
+      let state = profileReducer(undefined, {})
       expect(state).to.equal(0)
-      state = counterReducer(state, increment(1))
+      state = profileReducer(state, increment(1))
       expect(state).to.equal(1)
-      state = counterReducer(state, increment(2))
+      state = profileReducer(state, increment(2))
       expect(state).to.equal(3)
-      state = counterReducer(state, increment(-3))
+      state = profileReducer(state, increment(-3))
       expect(state).to.equal(0)
     })
   })
-})
+}) */
