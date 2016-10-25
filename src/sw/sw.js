@@ -1,7 +1,5 @@
 /* eslint-disable */
 
-var CACHE_VERSION = 5;
-
 /*
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -67,8 +65,8 @@ this.addEventListener("install", function(e) {
   
   // Put updated resources in a new cache, so that currently running pages
   // get the current versions.
-  e.waitUntil(caches.delete("core-v-" + (CACHE_VERSION - 1)).then(function() {
-    return caches.open("core-v-" + (CACHE_VERSION - 1)).then(function(core) {
+  e.waitUntil(caches.delete("core-waiting").then(function() {
+    return caches.open("core-waiting").then(function(core) {
       var resourceUrls = [
         "",
         "app.js",
@@ -88,14 +86,8 @@ this.addEventListener("install", function(e) {
 
 
 this.addEventListener("activate", function(e) {
-  
   // Copy the newly installed cache to the active cache
-  e.waitUntil(cacheCopy("core-v-" + (CACHE_VERSION - 1), "core-v-" + CACHE_VERSION));
-
-  // `claim()` sets this worker as the active worker for all clients that
-  // match the workers scope and triggers an `oncontrollerchange` event for
-  // the clients.
-  return self.clients.claim();
+  e.waitUntil(cacheCopy("core-waiting", "core"));
 });
 
 this.addEventListener("fetch", function(e) {
@@ -107,7 +99,7 @@ this.addEventListener("fetch", function(e) {
 
   // Basic read-through caching.
   e.respondWith(
-    caches.open("core-v-" + CACHE_VERSION).then(function(core) {
+    caches.open("core").then(function(core) {
       return core.match(request).then(function(response) {
         if (response) {
           return response;
@@ -118,12 +110,6 @@ this.addEventListener("fetch", function(e) {
 
         return fetchAndCache(request, core);
       });
-    }).then(function() {
-      // `skipWaiting()` forces the waiting ServiceWorker to become the
-      // active ServiceWorker, triggering the `onactivate` event.
-      // Together with `Clients.claim()` this allows a worker to take effect
-      // immediately in the client(s).
-      return self.skipWaiting();
     })
   );
 });

@@ -25,9 +25,9 @@ class AppContainer extends Component {
       stopDrops();
       document.addEventListener('drop', this.onDrop.bind(this), false);
 
-      navigator.serviceWorker.controller.onstatechange = function serviceWorkerStateChanged () {
-        console.log('SW CHANGED');
-      }
+      // navigator.serviceWorker.controller.onstatechange = function serviceWorkerStateChanged () {
+      //   console.log('SW CHANGED');
+      // }
     }
   }
 
