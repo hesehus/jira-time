@@ -1,5 +1,6 @@
 /* eslint-disable */
-// Last update: 25.10.16 20:26
+
+var CACHE_VERSION = 1;
 
 /*
  * @license
@@ -66,8 +67,8 @@ this.addEventListener("install", function(e) {
   
   // Put updated resources in a new cache, so that currently running pages
   // get the current versions.
-  e.waitUntil(caches.delete("core-waiting").then(function() {
-    return caches.open("core-waiting").then(function(core) {
+  e.waitUntil(caches.delete("core-v-" + (CACHE_VERSION - 1).then(function() {
+    return caches.open("core-v-" + (CACHE_VERSION - 1).then(function(core) {
       var resourceUrls = [
         "",
         "app.js",
@@ -88,7 +89,7 @@ this.addEventListener("install", function(e) {
 
 this.addEventListener("activate", function(e) {
   // Copy the newly installed cache to the active cache
-  e.waitUntil(cacheCopy("core-waiting", "core"));
+  e.waitUntil(cacheCopy("core-v-" + (CACHE_VERSION - 1, "core" + CACHE_VERSION));
 });
 
 this.addEventListener("fetch", function(e) {
@@ -100,7 +101,7 @@ this.addEventListener("fetch", function(e) {
 
   // Basic read-through caching.
   e.respondWith(
-    caches.open("core").then(function(core) {
+    caches.open("core" + CACHE_VERSION).then(function(core) {
       return core.match(request).then(function(response) {
         if (response) {
           return response;
