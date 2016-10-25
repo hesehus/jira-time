@@ -67,8 +67,8 @@ this.addEventListener("install", function(e) {
   
   // Put updated resources in a new cache, so that currently running pages
   // get the current versions.
-  e.waitUntil(caches.delete("core-v-" + (CACHE_VERSION - 1).then(function() {
-    return caches.open("core-v-" + (CACHE_VERSION - 1).then(function(core) {
+  e.waitUntil(caches.delete("core-v-" + (CACHE_VERSION - 1)).then(function() {
+    return caches.open("core-v-" + (CACHE_VERSION - 1)).then(function(core) {
       var resourceUrls = [
         "",
         "app.js",
@@ -89,7 +89,7 @@ this.addEventListener("install", function(e) {
 
 this.addEventListener("activate", function(e) {
   // Copy the newly installed cache to the active cache
-  e.waitUntil(cacheCopy("core-v-" + (CACHE_VERSION - 1, "core" + CACHE_VERSION));
+  e.waitUntil(cacheCopy("core-v-" + (CACHE_VERSION - 1), "core" + CACHE_VERSION));
 });
 
 this.addEventListener("fetch", function(e) {
