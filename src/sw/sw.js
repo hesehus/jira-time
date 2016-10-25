@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-var CACHE_VERSION = 2;
+var CACHE_VERSION = 3;
 
 /*
  * @license
@@ -88,8 +88,14 @@ this.addEventListener("install", function(e) {
 
 
 this.addEventListener("activate", function(e) {
+  
   // Copy the newly installed cache to the active cache
   e.waitUntil(cacheCopy("core-v-" + (CACHE_VERSION - 1), "core" + CACHE_VERSION));
+
+  // `claim()` sets this worker as the active worker for all clients that
+  // match the workers scope and triggers an `oncontrollerchange` event for
+  // the clients.
+  return self.clients.claim();
 });
 
 this.addEventListener("fetch", function(e) {
@@ -112,6 +118,12 @@ this.addEventListener("fetch", function(e) {
 
         return fetchAndCache(request, core);
       });
+    }).then(function() {
+      // `skipWaiting()` forces the waiting ServiceWorker to become the
+      // active ServiceWorker, triggering the `onactivate` event.
+      // Together with `Clients.claim()` this allows a worker to take effect
+      // immediately in the client(s).
+      return self.skipWaiting();
     })
   );
 });
