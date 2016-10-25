@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-var CACHE_VERSION = 4;
+var CACHE_VERSION = 5;
 
 /*
  * @license
