@@ -14,7 +14,7 @@ export class TasksView extends Component {
     if (this.props.tasks.length === 0) {
       return (
         <div className='tasks tasks--no-tasks'>
-          <div>You have not added any tasks, you lazy dog!!</div>
+          <div>You have not added any tasks, you lazy dog</div>
           <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
         </div>
       );
