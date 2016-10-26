@@ -14,7 +14,7 @@ export default class Header extends Component {
 
   componentWillMount () {
     if (window.__getServiceWorkerStatus) {
-      window.__getServiceWorkerStatus()
+      window.__getServiceWorkerStatus
         .then((status) => {
           this.setState({ serviceWorkerUpdated: status.updateAvailable });
         });
