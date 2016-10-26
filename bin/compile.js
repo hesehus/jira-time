@@ -16,9 +16,6 @@ const compile = () => {
       }
       debug('Copying static assets to dist folder.');
       fs.copySync(paths.client('static'), paths.dist());
-
-      debug('Copying service worker assets to dist folder.');
-      fs.copySync(paths.client('sw'), paths.dist());
     })
     .then(() => {
       debug('Compilation completed successfully.');
