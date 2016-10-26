@@ -37,7 +37,7 @@
 /* eslint-disable indent, no-unused-vars, no-multiple-empty-lines, max-nested-callbacks, space-before-function-paren, quotes, comma-spacing */
 'use strict';
 
-var precacheConfig = [["/jira-time/4a47e47fb02419923df8ca270281c656.jpg","4a47e47fb02419923df8ca270281c656"],["/jira-time/app.css","f334cd8471077918758db8c3db443bcd"],["/jira-time/app.js","9ba329cd182036f7931c38e1a87bb250"],["/jira-time/favicon.ico","456d2fdfd5ba9137f0bf3100c098e5f1"],["/jira-time/index.html","a237b079b6ecadb14c8677a686d7d975"],["/jira-time/vendor.js","3ba6254ba30e4296bb930fa3074ea2da"]];
+var precacheConfig = [["/jira-time/4a47e47fb02419923df8ca270281c656.jpg","4a47e47fb02419923df8ca270281c656"],["/jira-time/app.css","7166b22aebe910ac43fefc56d98872ef"],["/jira-time/app.js","9ba329cd182036f7931c38e1a87bb250"],["/jira-time/favicon.ico","456d2fdfd5ba9137f0bf3100c098e5f1"],["/jira-time/index.html","a237b079b6ecadb14c8677a686d7d975"],["/jira-time/vendor.js","3ba6254ba30e4296bb930fa3074ea2da"]];
 var cacheName = 'sw-precache-v2-jira-time-' + (self.registration ? self.registration.scope : '');
 
 
