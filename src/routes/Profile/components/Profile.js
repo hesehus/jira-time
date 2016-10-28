@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
 import Login from '../../Login';
-import { setLoggedIn } from '../modules/profile';
 
 import './Profile.scss';
 
@@ -10,7 +9,8 @@ export class Profile extends Component {
   static get propTypes () {
     return {
       profile: PropTypes.object.isRequired,
-      dispatch: PropTypes.func.isRequired
+      dispatch: PropTypes.func.isRequired,
+      setLoggedIn: PropTypes.func.isRequired
     };
   }
 
