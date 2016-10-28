@@ -1,7 +1,7 @@
 {
-  "name": "react-redux-starter-kit",
-  "version": "3.0.0-alpha.2",
-  "description": "Get started with React, Redux, and React-Router!",
+  "name": "jira-time",
+  "version": "0.0.1",
+  "description": "Log JIRA time awesomly!",
   "main": "index.js",
   "engines": {
     "node": ">=4.5.0",
@@ -93,11 +93,11 @@
     "html-webpack-plugin": "^2.22.0",
     "imports-loader": "^0.6.5",
     "ip": "^1.1.2",
-    "jira-client": "^4.0.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
     "postcss-loader": "^0.13.0",
+    "promise-finally": "^2.2.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-redux": "^4.4.5",

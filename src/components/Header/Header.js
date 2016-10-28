@@ -25,10 +25,10 @@ export default class Header extends Component {
     return (
       <div className='header'>
         <IndexLink to='/jira-time' className='header__route' activeClassName='header__route--active'>
-          <img className='header__route__icon' src={ListIcon} alt='Home' />
+          <img className='header__icon' src={ListIcon} alt='Home' />
         </IndexLink>
         <Link to='/jira-time/profile' className='header__route' activeClassName='header__route--active'>
-          <img className='header__route__icon' src={UserIcon} alt='Profile' />
+          <img className='header__icon' src={UserIcon} alt='Profile' />
         </Link>
         {this.state.serviceWorkerUpdated ? <div>Update available!</div> : null}
       </div>

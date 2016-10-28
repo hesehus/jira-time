@@ -1,3 +1,5 @@
+const initialState = { tasks: [] };
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -42,8 +44,6 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = { tasks: [] };
-
 export default function tasksReducer (state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
 

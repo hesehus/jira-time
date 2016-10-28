@@ -1,41 +1,40 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+
+import Login from '../../Login';
+import { setLoggedIn } from '../modules/profile';
 
 import './Profile.scss';
 
 export class Profile extends Component {
 
+  static get propTypes () {
+    return {
+      profile: PropTypes.object.isRequired,
+      dispatch: PropTypes.func.isRequired
+    };
+  }
+
   constructor (props) {
     super(props);
 
-    this.onLoginButtonClick = this.onLoginButtonClick.bind(this);
+    this.onLoginSuccess = this.onLoginSuccess.bind(this);
   }
 
-  onLoginButtonClick () {
-    this.doLogin();
-  }
-
-  doLogin () {
-    alert('todo');
-    /* const headers = new Headers();
-
-    // const authHash = 'aGFrb25oazpQb3N0bWFubnBhdDE=';
-
-    fetch(`http://localhost:8080/rest/api/2/issue/TEST-11`, {
-      method: 'GET',
-      headers: headers,
-      mode: 'no-cors',
-      cache: 'default'
-    })
-    .then(response => {
-      debugger;
-      //return response.blob();
-    }); */
+  onLoginSuccess ({ username }) {
+    this.props.setLoggedIn({ isLoggedIn: true, username });
   }
 
   render () {
+
+    if (!this.props.profile.loggedIn) {
+      return (<Login onLoginSuccess={this.onLoginSuccess} />);
+    }
+
+    const { username } = this.props.profile;
+
     return (
       <div className='profile'>
-        <button onClick={this.onLoginButtonClick}>Login</button>
+        <div>Username: {username}</div>
       </div>
     );
   }

@@ -15,20 +15,24 @@
     transition: background-color 100ms;
 
     &:hover {
-      background: darken($bg, 10%);
-    }
-
-    &__icon {
-      opacity: .5;
-      transition: opacity 100ms;
+      background: darken($bg, 5%);
     }
 
     &--active {
-      background: darken($bg, 10%);
-
-      .header__route__icon {
-        opacity: 1;
+      &,
+      &:hover {
+        background: darken($bg, 10%);
       }
+    }
+  }
+
+  &__icon {
+    opacity: .5;
+    transition: opacity 100ms;
+
+    .header__route--active &,
+    .header__route--active:hover & {
+      opacity: 1;
     }
   }
 }

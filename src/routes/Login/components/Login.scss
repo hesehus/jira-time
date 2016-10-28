@@ -1,0 +1,17 @@
+.login {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &-label {
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  &-label__text {
+    display: block;
+    margin-bottom: 5px;
+  }
+}

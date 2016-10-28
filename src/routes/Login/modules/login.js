@@ -1,34 +1,29 @@
-const initialState = {
-  loggedIn: false,
-  username: ''
-};
+const initialState = { username: '', password: '' };
 
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const SET_LOGGED_IN = 'SET_LOGGED_IN';
+export const ATTEMPT_LOGIN = 'ATTEMPT_LOGIN';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setLoggedIn ({ isLoggedIn, username }) {
+export function attemptLogin (action) {
   return {
-    type: SET_LOGGED_IN,
-    isLoggedIn,
-    username
+    type: ATTEMPT_LOGIN,
+    action
   }
+};
+
+export const actions = {
+  attemptLogin
 };
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [SET_LOGGED_IN] : (state, action) => {
-    return {
-      loggedIn: action.isLoggedIn,
-      username: action.username
-    }
-  }
+  [ATTEMPT_LOGIN] : (state, action) => state
 };
 
 // ------------------------------------
