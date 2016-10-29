@@ -19,6 +19,11 @@ function callApi ({ path, method = 'get', body }) {
     body
   })
   .then((response) => {
+
+    if (!response) {
+      throw new Error('No response received from API');
+    }
+
     switch (response.status) {
       case 500 : {
         throw new Error(response);
@@ -46,6 +51,13 @@ export function login ({ username, password }) {
     body: JSON.stringify({ username, password })
   })
   .then((response) => {
+
+    if (!response) {
+      return {
+        success: false,
+        type: 'noResponseFromAPI'
+      };
+    }
 
     // Invalid credentials
     if (response.status === 401) {

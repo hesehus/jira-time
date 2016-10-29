@@ -2,14 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router } from 'react-router'
 import { Provider, connect } from 'react-redux'
 import stopDrops from './drop';
-import { actions as tasksActions } from '../routes/Tasks/modules/tasks';
+import { addTaskFromUrl } from '../routes/Tasks/modules/tasks';
 import { isValidJiraURL } from '../shared/urlHelper';
 
 class AppContainer extends Component {
   static propTypes = {
     routes  : PropTypes.object.isRequired,
-    store   : PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
+    store   : PropTypes.object.isRequired
   }
 
   constructor (props) {
@@ -35,7 +34,7 @@ class AppContainer extends Component {
     const url = event.dataTransfer.getData('URL');
 
     if (isValidJiraURL(url)) {
-      this.props.dispatch(tasksActions.addTaskFromUrl(url));
+      this.props.addTaskFromUrl(url);
     } else {
       alert(`Hey, this is not a valid JIRA URL.
 Pull yourself together!`);
@@ -63,4 +62,8 @@ function mapStateToProps (state) {
   return {};
 }
 
-export default connect(mapStateToProps)(AppContainer);
+const mapDispatchToProps = {
+  addTaskFromUrl
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

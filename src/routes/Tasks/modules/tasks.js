@@ -15,21 +15,6 @@ export function addTaskFromUrl (url) {
   }
 };
 
-// export const doubleAsync = () => {
-//  return (dispatch, getState) => {
-//    return new Promise((resolve) => {
-//      setTimeout(() => {
-//        dispatch(increment(getState().counter))
-//        resolve()
-//      }, 200)
-//    })
-//  }
-// }
-
-export const actions = {
-  addTaskFromUrl
-};
-
 // ------------------------------------
 // Action Handlers
 // ------------------------------------

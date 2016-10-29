@@ -32,7 +32,7 @@ export function setAuthenticationHash ({ username, password }) {
 const ACTION_HANDLERS = {
   [SET_VISITED] : (state, action) => {
     return {
-      apit: state.api,
+      api: state.api,
       visited: action.visited,
       authenticationHash: state.authenticationHash
     }

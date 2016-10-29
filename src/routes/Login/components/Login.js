@@ -1,16 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import promiseFinally from 'promise-finally';
 
 import './Login.scss';
 
 import { login } from '../../../shared/jiraClient';
-import { setAuthenticationHash } from '../../../store/app';
 
 export class Login extends Component {
 
   static get propTypes () {
     return {
-      dispatch: PropTypes.func.isRequired,
       onLoginSuccess: PropTypes.func
     }
   }
@@ -46,8 +43,10 @@ export class Login extends Component {
         password: this.refs.password.value
       };
 
-      const p = login(userInfo)
+      login(userInfo)
         .then((resp) => {
+
+          this.setState({ loggingIn: false });
 
           if (resp.success) {
 
@@ -57,28 +56,24 @@ export class Login extends Component {
               tooManyFailedLoginAttempts: 0
             });
 
-            this.props.dispatch(setAuthenticationHash(userInfo));
+            this.props.setAuthenticationHash(userInfo);
 
             if (this.props.onLoginSuccess) {
               this.props.onLoginSuccess(userInfo);
             }
           } else {
 
-            if (resp.type === 'invalidCredentials') {
-              this.setState({
-                error: resp.type
-              });
-            } else if (resp.type === 'tooManyFailedLoginAttempts') {
-              this.setState({
-                error: resp.type,
-                tooManyFailedLoginAttempts: this.state.tooManyFailedLoginAttempts + 1
-              });
+            const errorState = {
+              error: resp.type
+            };
+  
+            if (resp.type === 'tooManyFailedLoginAttempts') {
+              errorState.tooManyFailedLoginAttempts = this.state.tooManyFailedLoginAttempts + 1;
             }
 
+            this.setState(errorState);
           }
         });
-
-      promiseFinally(p, () => this.setState({ loggingIn: false }));
     }
   }
 
@@ -88,12 +83,15 @@ export class Login extends Component {
 
     if (this.state.error) {
       if (this.state.error === 'invalidCredentials') {
+
         if (this.state.attempts === 1) {
           error = <div className='login-error'>I don't think this is correct</div>;
         } else {
           error = <div className='login-error'>I still don't think this is correct</div>;
         }
+
       } else if (this.state.error === 'tooManyFailedLoginAttempts') {
+
         if (this.state.tooManyFailedLoginAttempts === 1) {
           error = (
             <div className='login-error'>
@@ -123,6 +121,9 @@ export class Login extends Component {
             </div>
           );
         }
+        
+      } else if (this.state.error === 'noResponseFromAPI') {
+        error = (<div className='login-error'>No response from API =(</div>);
       }
     }
 
