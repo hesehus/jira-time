@@ -9,7 +9,6 @@ export class Profile extends Component {
   static get propTypes () {
     return {
       profile: PropTypes.object.isRequired,
-      dispatch: PropTypes.func.isRequired,
       setLoggedIn: PropTypes.func.isRequired
     };
   }

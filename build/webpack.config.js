@@ -93,7 +93,10 @@ if (__DEV__) {
         runtimeCaching: [{
           handler: 'cacheFirst',
           urlPattern: /[.]jpg$/
-        }]
+        }],
+        stripPrefixMulti: {
+          'D:/blabla/': '/jira-time'
+        }
       }
     )
   )

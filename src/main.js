@@ -9,6 +9,9 @@ import AppContainer from './containers/AppContainer';
 // ========================================================
 const store = createStore();
 
+// Bleed store to the window, so we are able to access it when using API calls
+window.store = store;
+
 // ========================================================
 // Render Setup
 // ========================================================

@@ -4,6 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 5%;
 
   &-label {
     display: block;
@@ -13,5 +14,19 @@
   &-label__text {
     display: block;
     margin-bottom: 5px;
+  }
+
+  &-error {
+    background: #ffe2e2;
+    margin-bottom: 20px;
+    padding: 10px;
+
+    &__header {
+      margin-bottom: 10px;
+    }
+
+    &__footer {
+      margin-top: 10px;
+    }
   }
 }
