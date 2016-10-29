@@ -1,7 +1,19 @@
-const base = location.hostname === 'localhost' ? 'http://localhost:8080/rest' : 'https://jira.hesehus.dk/rest';
+/**
+* Wrapper for all API calls
+**/
+function callApi ({ path, method = 'get', body }) {
 
-function callApi ({ path, method = 'get', body, headers }) {
-  return fetch(`${base}/${path}`, {
+  const state = window.store.getState();
+
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  if (state.app.authenticationHash) {
+    headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
+  }
+
+  return fetch(`${state.app.api}/${path}`, {
     method,
     headers: { 'Content-Type': 'application/json' },
     body

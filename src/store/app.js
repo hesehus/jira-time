@@ -1,4 +1,5 @@
 const initialState = {
+  api: location.hostname === 'localhost' ? 'http://localhost:8080/rest' : 'https://jira.hesehus.dk/rest',
   visited: false,
   authenticationHash: null
 };
@@ -31,12 +32,14 @@ export function setAuthenticationHash ({ username, password }) {
 const ACTION_HANDLERS = {
   [SET_VISITED] : (state, action) => {
     return {
+      apit: state.api,
       visited: action.visited,
       authenticationHash: state.authenticationHash
     }
   },
   [SET_AUTHENTICATION_HASH] : (state, action) => {
     return {
+      api: state.api,
       visited: state.visited,
       authenticationHash: action.hash
     }
