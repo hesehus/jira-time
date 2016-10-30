@@ -11,13 +11,13 @@ export class TaskItemRecord extends Component {
 
     const { record } = this.props;
 
-    const st = new Date(record.startTime);
-    const et = new Date(record.endTime);
+    const st = new Date(record.startTime).toLocaleString();
+    const et = record.endTime ? new Date(record.endTime).toLocaleString() : '';
 
     return (
       <div className='task-item-record'>
-        <span className='task-item-record__start-time'>{st.toLocaleString()}</span>
-        <span className='task-item-record__end-time'>{et.toLocaleString()}</span>
+        <span className='task-item-record__start-time'>{st}</span>
+        <span className='task-item-record__end-time'>{et}</span>
       </div>
     );
   }
