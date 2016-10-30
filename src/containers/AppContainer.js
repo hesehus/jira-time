@@ -1,9 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { browserHistory, Router } from 'react-router'
 import { Provider, connect } from 'react-redux'
-import stopDrops from './drop';
-import { addTaskFromUrl } from '../routes/Tasks/modules/tasks';
-import { isValidJiraURL } from '../shared/urlHelper';
 
 class AppContainer extends Component {
   static propTypes = {
@@ -11,38 +8,30 @@ class AppContainer extends Component {
     store   : PropTypes.object.isRequired
   }
 
-  constructor (props) {
-    super(props);
-
-    this.state = {};
-  }
-
   componentWillMount () {
-    if (!this.state.binded) {
-      this.setState({ binded: true });
+    if (!window.__mainDropBinded) {
+      
+      window.__mainDropBinded = true;
 
-      stopDrops();
-      document.addEventListener('drop', this.onDrop.bind(this), false);
+      ['drag',
+      'dragend',
+      'dragenter',
+      'dragexit',
+      'dragleave',
+      'dragover',
+      'dragstart',
+      'drop'].forEach(name => document.addEventListener(name, e => e.preventDefault(), false));
 
-      // navigator.serviceWorker.controller.onstatechange = function serviceWorkerStateChanged () {
-      //   console.log('SW CHANGED');
-      // }
-    }
-  }
-
-  onDrop (event) {
-    const url = event.dataTransfer.getData('URL');
-
-    if (isValidJiraURL(url)) {
-      this.props.addTaskFromUrl(url);
-    } else {
-      alert(`Hey, this is not a valid JIRA URL.
-Pull yourself together!`);
+      document.addEventListener('drop', function (event) {
+        const url = event.dataTransfer.getData('URL');
+    
+        window.__events.emit('drop', { url });
+      }, false);
     }
   }
 
   shouldComponentUpdate () {
-    return false
+    return false;
   }
 
   render () {
@@ -62,8 +51,6 @@ function mapStateToProps (state) {
   return {};
 }
 
-const mapDispatchToProps = {
-  addTaskFromUrl
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

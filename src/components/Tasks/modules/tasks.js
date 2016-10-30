@@ -1,17 +1,26 @@
+import TaskModel from './TaskModel';
+
 const initialState = { tasks: [] };
 
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const ADD_TASK_FROM_URL = 'ADD_TASK_FROM_URL';
+export const ADD_TASK = 'ADD_TASK';
+export const REMOVE_TASK = 'REMOVE_TASK';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function addTaskFromUrl (url) {
+export function addTask ({ issue }) {
   return {
-    type: ADD_TASK_FROM_URL,
-    url
+    type: ADD_TASK,
+    issue
+  }
+};
+export function removeTask ({ cuid }) {
+  return {
+    type: REMOVE_TASK,
+    cuid
   }
 };
 
@@ -19,10 +28,21 @@ export function addTaskFromUrl (url) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_TASK_FROM_URL] : (state, action) => {
+  [ADD_TASK] : (state, action) => {
+
+    const { issue } = action;
+
     return {
-      tasks: [action.url, ...state.tasks]
+      tasks: [...state.tasks, new TaskModel({ issue })]
     }
+  },
+  [REMOVE_TASK] : (state, action) => {
+
+    let taskIndex = state.tasks.findIndex(task => task.cuid === action.cuid);
+
+    return {
+      tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
+    };
   }
 };
 

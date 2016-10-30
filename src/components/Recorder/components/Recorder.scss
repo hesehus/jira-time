@@ -1,0 +1,43 @@
+.recorder {
+
+  flex-shrink: 0;
+  height: 0;
+  overflow: hidden;
+  transition: height 150ms;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &--show {
+    height: 100px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+  }
+
+  &-issue-key {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    flex-shrink: 0;
+    min-width: 200px;
+  }
+
+  &-elapsed-time {
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    margin-left: 15px;
+    min-width: 200px;
+    text-align: right;
+  }
+
+  &-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-button {
+    margin: 0 5px;
+    font-size: 2rem;
+  }
+  
+}

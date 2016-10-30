@@ -1,5 +1,5 @@
 const initialState = {
-  api: location.hostname === 'localhost' ? 'http://localhost:8080/rest' : 'https://jira.hesehus.dk/rest',
+  api: '/rest',
   visited: false,
   authenticationHash: null
 };

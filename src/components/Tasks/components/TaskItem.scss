@@ -1,0 +1,39 @@
+.task-item {
+  border-bottom: 1px solid #f0f0f0;
+  background: #fff;
+  transition: background 250ms;
+
+  &:hover {
+    background: #fafafa;
+  }
+
+  &-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+  }
+
+  &__remove {
+    flex-shrink: 0;
+    width: 30px;
+  }
+
+  &__key {
+    flex-shrink: 0;
+    width: 80px;
+    margin-left: 15px;
+  }
+
+  &__summary {
+    margin: 0 15px;
+    font-size: .7rem;
+    flex-shrink: 1;
+    flex-grow: 1;
+  }
+
+  &__log {
+    flex-shrink: 0;
+    width: 30px;
+  }
+}

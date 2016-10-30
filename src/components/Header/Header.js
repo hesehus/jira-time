@@ -21,7 +21,17 @@ export default class Header extends Component {
     }
   }
 
+  onUpdateAvailableClick () {
+    location.reload();
+  }
+
   render () {
+
+    let updateAvailable;
+    if (this.state.serviceWorkerUpdated) {
+      updateAvailable = <div onClick={this.onUpdateAvailableClick}>Update available!</div>;
+    }
+
     return (
       <div className='header'>
         <IndexLink to='/jira-time' className='header__route' activeClassName='header__route--active'>
@@ -30,7 +40,7 @@ export default class Header extends Component {
         <Link to='/jira-time/profile' className='header__route' activeClassName='header__route--active'>
           <img className='header__icon' src={UserIcon} alt='Profile' />
         </Link>
-        {this.state.serviceWorkerUpdated ? <div>Update available!</div> : null}
+        {updateAvailable}
       </div>
     );
   }

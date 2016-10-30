@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import EventClass from './shared/eventClass';
 
 import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
+
+// Register global event class instance
+window.__events = new EventClass();
 
 // ========================================================
 // Store Instantiation

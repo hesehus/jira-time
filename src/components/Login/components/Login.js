@@ -8,7 +8,8 @@ export class Login extends Component {
 
   static get propTypes () {
     return {
-      onLoginSuccess: PropTypes.func
+      onLoginSuccess: PropTypes.func,
+      setAuthenticationHash: PropTypes.func.isRequired
     }
   }
 
@@ -66,7 +67,7 @@ export class Login extends Component {
             const errorState = {
               error: resp.type
             };
-  
+
             if (resp.type === 'tooManyFailedLoginAttempts') {
               errorState.tooManyFailedLoginAttempts = this.state.tooManyFailedLoginAttempts + 1;
             }
@@ -121,7 +122,7 @@ export class Login extends Component {
             </div>
           );
         }
-        
+
       } else if (this.state.error === 'noResponseFromAPI') {
         error = (<div className='login-error'>No response from API =(</div>);
       }

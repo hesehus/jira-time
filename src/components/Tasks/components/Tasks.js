@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './Tasks.scss';
 import lazyDog from './assets/lazy-dog.jpg';
+import TaskItem from '../containers/TaskItem';
 
 export class TasksView extends Component {
 
@@ -10,8 +11,10 @@ export class TasksView extends Component {
 
   render () {
 
+    const { tasks } = this.props;
+
     // Tell the user to start working
-    if (this.props.tasks.length === 0) {
+    if (tasks.length === 0) {
       return (
         <div className='tasks tasks--no-tasks'>
           <div>You have not added any tasks, you lazy dog.</div>
@@ -23,11 +26,7 @@ export class TasksView extends Component {
     // Output the list of tasks
     return (
       <div className='tasks'>
-        {
-          this.props.tasks.map((task, index) => (
-            <div className='tasks__item' key={index}>{task}</div>
-          ))
-        }
+        {tasks.map((task, index) => (<TaskItem key={index} task={task} />))}
       </div>
     );
   }

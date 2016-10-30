@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import Tasks from '../../Tasks';
+import Tasks from '../../../components/Tasks';
 import { setVisited } from '../../../store/app';
 
 import './Home.scss';
@@ -20,13 +20,14 @@ export class Home extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
 
     /**
     * Redirect to login page if this is the first time opening
     * the app, and there is no previous attempt at at login registerd
     **/
     if (!this.props.app.visited) {
+      console.log(this.props.app);
       this.context.router.push('/jira-time/profile');
       this.props.dispatch(setVisited(true));
     }

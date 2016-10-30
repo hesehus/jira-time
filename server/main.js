@@ -1,4 +1,5 @@
 const express = require('express');
+const proxy = require('http-proxy-middleware');
 const debug = require('debug')('app:server');
 const webpack = require('webpack');
 const webpackConfig = require('../build/webpack.config');
@@ -6,6 +7,11 @@ const config = require('../config');
 
 const app = express();
 const paths = config.utils_paths;
+
+// Development proxy for JIRA api
+if (config.env === 'development') {
+  app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
+}
 
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement universal
