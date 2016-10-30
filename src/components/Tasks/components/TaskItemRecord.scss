@@ -1,7 +1,7 @@
 .task-item-record {
   display: flex;
   //justify-content: space-between;
-  padding: 5px;
+  padding: 5px 10px;
   border-top: 1px solid #f0f0f0;
   align-items: center;
   font-size: .9rem;
@@ -16,5 +16,9 @@
       display: inline-block;
       margin-right: 12px;
     }
+  }
+
+  &__elapsed-time {
+    margin-left: 25px;
   }
 }
