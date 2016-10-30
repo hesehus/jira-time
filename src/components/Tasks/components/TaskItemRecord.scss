@@ -1,7 +1,19 @@
 .task-item-record {
   display: flex;
-  justify-content: space-between;
+  //justify-content: space-between;
   padding: 5px;
   border-top: 1px solid #f0f0f0;
   align-items: center;
+
+  &__start-time {
+    margin-right: 15px;
+  }
+
+  &__end-time {
+    &:before {
+      content: " - ";
+      display: inline-block;
+      margin-right: 12x;
+    }
+  }
 }

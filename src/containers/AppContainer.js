@@ -10,7 +10,7 @@ class AppContainer extends Component {
 
   componentWillMount () {
     if (!window.__mainDropBinded) {
-      
+
       window.__mainDropBinded = true;
 
       ['drag',
@@ -24,7 +24,7 @@ class AppContainer extends Component {
 
       document.addEventListener('drop', function (event) {
         const url = event.dataTransfer.getData('URL');
-    
+
         window.__events.emit('drop', { url });
       }, false);
     }

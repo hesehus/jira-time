@@ -47,7 +47,7 @@ export default class Recorder extends Component {
   onDrop ({ url }) {
     getIssue({ url })
       .then((issue) => {
-        
+
         if (issue) {
           this.props.addTask({ issue });
         } else {
@@ -59,7 +59,7 @@ export default class Recorder extends Component {
   onPause () {
     this.props.pauseRecording();
   }
-  
+
   onStop () {
     this.props.stopRecording();
   }
@@ -94,16 +94,20 @@ export default class Recorder extends Component {
     const { task, record } = this.props.recorder;
 
     if (!task) {
-      return (<div className='recorder'></div>);
+      return (<div className='recorder' />);
     }
+
+    const btnPause = <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
+    const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>Stop</button>;
+    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>Start</button>;
 
     return (
       <div className='recorder recorder--show'>
         <div className='recorder-issue-key'>{task.issue.key}</div>
         <div className='recorder-buttons'>
-          {record ? <button  onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button> : null}
-          {record ? <button  onClick={this.onStop} className='recorder-button recorder-button--stop'>Stop</button> : null}
-          {!record ? <button onClick={this.onStart} className='recorder-button recorder-button--start'>Start</button> : null}
+          {record ? btnPause : null}
+          {record ? btnStop : null}
+          {!record ? btnStart : null}
         </div>
         <div className='recorder-elapsed-time'>{this.state.elapsedTime}</div>
       </div>

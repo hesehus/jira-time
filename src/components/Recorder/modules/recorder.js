@@ -52,7 +52,7 @@ const ACTION_HANDLERS = {
 
     // Determine which task to log to
     const task = action.task || state.task || new TaskModel();
-    const record = action.record || new RecordModel({ task });
+    const record = action.record || new RecordModel({ task });
 
     records.push(record);
 

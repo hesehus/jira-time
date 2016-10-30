@@ -1,3 +1,4 @@
+/* eslint-disable */
 let _listeners = Symbol("listeners");
 
 export default class EventClass {
