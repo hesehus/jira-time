@@ -25,6 +25,7 @@
     "object-curly-spacing" : [2, "always"],
     "semi"                 : 0,
     "padded-blocks"        : 0,
-    "trailing-spaces"      : [0, { "skipBlankLines": true }]
+    "trailing-spaces"      : [0, { "skipBlankLines": true }],
+    "indent"               : [1]
   }
 }
