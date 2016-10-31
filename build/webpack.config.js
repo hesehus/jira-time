@@ -95,7 +95,7 @@ if (__DEV__) {
           urlPattern: /[.]jpg$/
         }],
         stripPrefixMulti: {
-          'D:/blabla/': '/jira-time'
+          'D:/Frontend/jira-time/docs/': '/jira-time/'
         }
       }
     )
