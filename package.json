@@ -8,7 +8,7 @@
     "npm": "^3.0.0"
   },
   "scripts": {
-    "clean": "rimraf docs",
+    "clean": "rimraf dist",
     "compile": "better-npm-run compile",
     "lint": "eslint bin build config server src",
     "lint:fix": "npm run lint -- --fix",
@@ -29,7 +29,7 @@
       }
     },
     "dev": {
-      "command": "nodemon bin/server --ignore docs --ignore coverage --ignore tests --ignore src",
+      "command": "nodemon bin/server --ignore dist --ignore coverage --ignore tests --ignore src",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*"
