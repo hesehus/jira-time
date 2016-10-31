@@ -39,7 +39,7 @@ export default class Header extends Component {
     location.href = '/jira-time';
   }
 
-  onSyncClick () {
+  onSyncClick () {
     console.log('LETS SYNC!!');
   }
 

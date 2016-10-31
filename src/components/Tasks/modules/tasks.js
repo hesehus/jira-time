@@ -29,7 +29,7 @@ export function removeTask ({ cuid }) {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [ADD_TASK] : (state, action) => {
-    
+
     const { issue } = action;
 
     return {

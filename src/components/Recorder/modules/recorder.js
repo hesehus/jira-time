@@ -51,7 +51,7 @@ const ACTION_HANDLERS = {
       record.endTime = Date.now();
       records.push(record);
     }
-    
+
     // Determine which task to log to
     const task = action.task || state.task || TaskModel();
     const record = action.record || RecordModel({ task });
@@ -126,7 +126,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 export function getRecordsForTask ({ state, taskCuid }) {
   const records = [];
-  
+
   state.recorder.records.forEach((record) => {
     if (record.taskCuid === taskCuid) {
       records.push(record);
