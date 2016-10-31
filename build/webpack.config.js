@@ -74,7 +74,7 @@ if (__DEV__) {
     new webpack.NoErrorsPlugin()
   )
 } else if (__PROD__) {
-  
+
   debug('Enable plugins for production (OccurenceOrder, Dedupe, UglifyJS & Service Worker file update).')
   webpackConfig.plugins.push(
     new webpack.optimize.OccurrenceOrderPlugin(),
