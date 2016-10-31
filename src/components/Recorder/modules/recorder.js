@@ -1,5 +1,7 @@
 import RecordModel from './RecordModel';
+
 import TaskModel from '../../Tasks/modules/TaskModel';
+import { REMOVE_TASK } from '../../Tasks/modules/tasks';
 
 const initialState = {
   record: null,
@@ -49,10 +51,10 @@ const ACTION_HANDLERS = {
       record.endTime = Date.now();
       records.push(record);
     }
-
+    
     // Determine which task to log to
-    const task = action.task || state.task || new TaskModel();
-    const record = action.record || new RecordModel({ task });
+    const task = action.task || state.task || TaskModel();
+    const record = action.record || RecordModel({ task });
 
     records.push(record);
 
@@ -91,8 +93,50 @@ const ACTION_HANDLERS = {
       task: state.task,
       records
     }
+  },
+  [REMOVE_TASK] : (state, action) => {
+
+    const records = [];
+    state.records.forEach((record) => {
+      if (record.taskCuid !== action.cuid) {
+        records.push(record);
+      }
+    });
+
+    let record = state.record;
+    if (record && record.taskCuid === action.cuid) {
+      record = initialState.record;
+    }
+
+    let task = state.task;
+    if (task && task.cuid === action.cuid) {
+      task = initialState.task;
+    }
+
+    return {
+      record,
+      task,
+      records
+    };
   }
 };
+
+// ------------------------------------
+// Getters
+// ------------------------------------
+export function getRecordsForTask ({ state, taskCuid }) {
+  const records = [];
+  
+  state.recorder.records.forEach((record) => {
+    if (record.taskCuid === taskCuid) {
+      records.push(record);
+    }
+  });
+
+  return records;
+}
+
+export const thereAreRecords = state => !!state.recorder.records.length;
 
 // ------------------------------------
 // Reducer

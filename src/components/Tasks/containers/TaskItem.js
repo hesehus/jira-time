@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { removeTask } from '../modules/tasks';
-import { startRecording } from '../../Recorder/modules/recorder';
+import { startRecording, getRecordsForTask } from '../../Recorder/modules/recorder';
 
 import TaskItem from '../components/TaskItem';
 
@@ -9,8 +9,8 @@ const mapDispatchToProps = {
   startRecording
 };
 
-const mapStateToProps = (state) => ({
-  records: state.recorder.records
+const mapStateToProps = (state, props) => ({
+  records: getRecordsForTask({ state, taskCuid: props.task.cuid })
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

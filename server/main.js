@@ -10,7 +10,8 @@ const paths = config.utils_paths;
 
 // Development proxy for JIRA api
 if (config.env === 'development') {
-  app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+  //app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+  app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
 }
 
 // This rewrites all routes requests to the root /index.html file

@@ -69,7 +69,7 @@ export default class Recorder extends Component {
 
     this.props.startRecording({
       task,
-      record: new RecordModel({ task })
+      record: RecordModel({ task })
     });
   }
 
@@ -105,9 +105,9 @@ export default class Recorder extends Component {
       <div className='recorder recorder--show'>
         <div className='recorder-issue-key'>{task.issue.key}</div>
         <div className='recorder-buttons'>
-          {record ? btnPause : null}
-          {record ? btnStop : null}
           {!record ? btnStart : null}
+          {record ? btnPause : null}
+          {btnStop}
         </div>
         <div className='recorder-elapsed-time'>{this.state.elapsedTime}</div>
       </div>

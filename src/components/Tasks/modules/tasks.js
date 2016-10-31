@@ -29,11 +29,11 @@ export function removeTask ({ cuid }) {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [ADD_TASK] : (state, action) => {
-
+    
     const { issue } = action;
 
     return {
-      tasks: [...state.tasks, new TaskModel({ issue })]
+      tasks: [...state.tasks, TaskModel({ issue })]
     }
   },
   [REMOVE_TASK] : (state, action) => {

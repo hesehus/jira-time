@@ -3,15 +3,16 @@
 
   flex-shrink: 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background: $bg;
 
-  &__route {
+  &__button {
     display: inline-block;
     margin: 0;
     padding: 10px 15px;
     text-decoration: none;
+    cursor: pointer;
     background: $bg;
     transition: background-color 100ms;
 
@@ -35,5 +36,9 @@
     .header__route--active:hover & {
       opacity: 1;
     }
+  }
+
+  &__update-available {
+    margin-left: 10px;
   }
 }

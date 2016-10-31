@@ -23,6 +23,11 @@ export const updateLocation = ({ dispatch }) => {
 };
 
 // ------------------------------------
+// Getters
+// ------------------------------------
+export const getCurrentPath = state => state.location.pathname;
+
+// ------------------------------------
 // Reducer
 // ------------------------------------
 export default function locationReducer (state = initialState, action) {

@@ -29,7 +29,7 @@ export class TaskItem extends Component {
 
     this.props.startRecording({
       task,
-      record: new RecordModel({ task })
+      record: RecordModel({ task })
     });
   }
 

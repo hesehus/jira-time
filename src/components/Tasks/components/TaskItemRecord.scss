@@ -19,6 +19,13 @@
   }
 
   &__elapsed-time {
-    margin-left: 25px;
+    margin-left: 10px;
+
+    &:before {
+      content: '(';
+    }
+    &:after {
+      content: ')';
+    }
   }
 }

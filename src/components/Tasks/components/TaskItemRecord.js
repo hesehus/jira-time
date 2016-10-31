@@ -20,8 +20,8 @@ export class TaskItemRecord extends Component {
     return (
       <div className='task-item-record'>
         <span className='task-item-record__start-time'>{startTime}</span>
-        <span className='task-item-record__end-time'>{endTime}</span>
-        <span className='task-item-record__end-time'>{elapsedTime}</span>
+        {record.endTime ? <span className='task-item-record__end-time'>{endTime}</span> : null}
+        {record.endTime ? <span className='task-item-record__elapsed-time'>{elapsedTime}</span> : null}
       </div>
     );
   }
