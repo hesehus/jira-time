@@ -8,6 +8,7 @@ import './Header.scss'
 import ListIcon from './assets/list.svg';
 import UserIcon from './assets/user.svg';
 import ExportIcon from './assets/export.svg';
+import LoadingIcon from './assets/loading.svg';
 
 export default class Header extends Component {
 
@@ -45,6 +46,10 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
+    this.setState({
+      syncing: true
+    });
+
     const syncer = new Sync({
       records: this.props.records.map(r => r),
       setRecordSync: this.props.setRecordSync,
@@ -52,9 +57,13 @@ export default class Header extends Component {
       refreshIssue: this.props.refreshIssue
     });
 
-    syncer.on('syncStart', record => console.log('starting sync for record', record));
-    syncer.on('syncEnd', record => console.log('finished sync for record', record));
-    syncer.on('done', record => console.log('sync done'));
+    // syncer.on('syncStart', record => console.log('starting sync for record', record));
+    // syncer.on('syncEnd', record => console.log('finished sync for record', record));
+    syncer.on('done', () => {
+      this.setState({
+        syncing: false
+      });
+    });
   }
 
   render () {
@@ -69,7 +78,13 @@ export default class Header extends Component {
 
     // Show sync icon if there are items to sync
     let sync;
-    if (!!this.props.records.length) {
+    if (this.state.syncing) {
+      sync = (
+        <div className='header__button header__button--syncing' title='Syncing!'>
+          <img className='header__icon' src={LoadingIcon} alt='Loading' />
+        </div>
+      );
+    } else if (!!this.props.records.length) {
       sync = (
         <div className='header__button' onClick={this.onSyncClick} title='Sync to JIRA'>
           <img className='header__icon' src={ExportIcon} alt='Export' />
