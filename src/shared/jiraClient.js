@@ -1,3 +1,6 @@
+import moment from 'moment';
+import { ensureDate } from './helpers';
+
 /**
 * Wrapper for all API calls
 **/
@@ -16,7 +19,7 @@ function callApi ({ path, method = 'get', body }) {
   return fetch(`${state.app.api}/${path}`, {
     method,
     headers,
-    body
+    body: body ? JSON.stringify(body) : null
   })
   .then((response) => {
 
@@ -51,7 +54,10 @@ export function login ({ username, password }) {
   return callApi({
     path: 'auth/1/session',
     method: 'post',
-    body: JSON.stringify({ username, password })
+    body: {
+      username,
+      password
+    }
   })
   .then((response) => {
 
@@ -111,4 +117,30 @@ function extractIssueIdFromUrl (url) {
     return;
   }
   return match[0];
+}
+
+/**
+* Logs work to an issue
+* @param record: RecordModel
+* @returns promise
+**/
+export function addWorklog ({ record }) {
+
+  const { comment, startTime, endTime } = record;
+
+  let timeSpentSeconds = Math.floor((ensureDate(endTime) - ensureDate(startTime)) / 1000);
+  if (timeSpentSeconds < 60) {
+    timeSpentSeconds = 60;
+  }
+
+  return callApi({
+    path: `api/2/issue/${record.taskIssueKey}/worklog`,
+    method: 'post',
+    body: {
+      comment,
+      timeSpentSeconds,
+      started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+    }
+  })
+  .catch(err => console.error(err));
 }

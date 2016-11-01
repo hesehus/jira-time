@@ -17,8 +17,10 @@ export class TaskItemRecord extends Component {
     const endTime = record.endTime ? new Date(record.endTime).toLocaleString() : null;
     const elapsedTime = record.endTime ? new Elapsed(record.startTime, record.endTime).optimal : null;
 
+    const className = record.syncing ? 'task-item-record task-item-record--syncing' : 'task-item-record';
+
     return (
-      <div className='task-item-record'>
+      <div className={className}>
         <span className='task-item-record__start-time'>{startTime}</span>
         {record.endTime ? <span className='task-item-record__end-time'>{endTime}</span> : null}
         {record.endTime ? <span className='task-item-record__elapsed-time'>{elapsedTime}</span> : null}

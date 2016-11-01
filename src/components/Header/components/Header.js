@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { IndexLink, Link } from 'react-router'
 
+import Sync from '../../../shared/sync';
+
 import './Header.scss'
 
 import ListIcon from './assets/list.svg';
@@ -11,8 +13,11 @@ export default class Header extends Component {
 
   static get propTypes () {
     return {
-      thereAreRecords: PropTypes.bool.isRequired,
-      currentPath: PropTypes.string.isRequired
+      records: PropTypes.array.isRequired,
+      currentPath: PropTypes.string.isRequired,
+      setRecordSync: PropTypes.func.isRequired,
+      removeRecord: PropTypes.func.isRequired,
+      refreshIssue: PropTypes.func.isRequired
     };
   }
 
@@ -40,7 +45,16 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
-    console.log('LETS SYNC!!');
+    const syncer = new Sync({
+      records: this.props.records.map(r => r),
+      setRecordSync: this.props.setRecordSync,
+      removeRecord: this.props.removeRecord,
+      refreshIssue: this.props.refreshIssue
+    });
+
+    syncer.on('syncStart', record => console.log('starting sync for record', record));
+    syncer.on('syncEnd', record => console.log('finished sync for record', record));
+    syncer.on('done', record => console.log('sync done'));
   }
 
   render () {
@@ -55,7 +69,7 @@ export default class Header extends Component {
 
     // Show sync icon if there are items to sync
     let sync;
-    if (this.props.thereAreRecords) {
+    if (!!this.props.records.length) {
       sync = (
         <div className='header__button' onClick={this.onSyncClick} title='Sync to JIRA'>
           <img className='header__icon' src={ExportIcon} alt='Export' />

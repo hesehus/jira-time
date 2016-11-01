@@ -15,6 +15,8 @@ const initialState = {
 export const START_RECORDING = 'START_RECORDING';
 export const STOP_RECORDING = 'STOP_RECORDING';
 export const PAUSE_RECORDING = 'PAUSE_RECORDING';
+export const SET_RECORD_SYNC = 'SET_RECORD_SYNC';
+export const REMOVE_RECORD = 'REMOVE_RECORD';
 
 // ------------------------------------
 // Actions
@@ -34,6 +36,19 @@ export function stopRecording () {
 export function pauseRecording () {
   return {
     type: PAUSE_RECORDING
+  };
+};
+export function setRecordSync ({ cuid, syncing }) {
+  return {
+    type: SET_RECORD_SYNC,
+    cuid,
+    syncing
+  };
+};
+export function removeRecord ({ cuid }) {
+  return {
+    type: REMOVE_RECORD,
+    cuid
   };
 };
 
@@ -118,6 +133,48 @@ const ACTION_HANDLERS = {
       task,
       records
     };
+  },
+  [SET_RECORD_SYNC] : (state, action) => {
+
+    const records = state.records.map((record) => {
+      if (record.cuid === action.cuid) {
+        record.syncing = action.syncing;
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record.syncing = action.syncing;
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [REMOVE_RECORD] : (state, action) => {
+
+    const records = [];
+
+    state.records.forEach((record) => {
+      if (record.cuid !== action.cuid) {
+        records.push(record);
+      }
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record.syncing = initialState.record;
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
   }
 };
 
@@ -136,7 +193,7 @@ export function getRecordsForTask ({ state, taskCuid }) {
   return records;
 }
 
-export const thereAreRecords = state => !!state.recorder.records.length;
+export const getRecords = state => state.recorder.records;
 
 // ------------------------------------
 // Reducer

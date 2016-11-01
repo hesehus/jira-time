@@ -1,14 +1,19 @@
 import { connect } from 'react-redux';
 
 import { getCurrentPath } from '../../../store/location';
-import { thereAreRecords } from '../../Recorder/modules/recorder';
+import { getRecords, setRecordSync, removeRecord } from '../../Recorder/modules/recorder';
+import { refreshIssue } from '../../Tasks/modules/tasks';
 
 import Header from '../components/Header';
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  setRecordSync,
+  removeRecord,
+  refreshIssue
+};
 
 const mapStateToProps = (state) => ({
-  thereAreRecords: thereAreRecords(state),
+  records: getRecords(state),
   currentPath: getCurrentPath(state)
 });
 

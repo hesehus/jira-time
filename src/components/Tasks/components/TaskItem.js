@@ -52,6 +52,7 @@ export class TaskItem extends Component {
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>{task.issue.key}</span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
+          <span className='task-item__remaining'>{task.issue.fields.timetracking.remainingEstimate}</span>
           <button className='task-item__log' onClick={this.onLogClick}>+</button>
         </div>
         <div className='task-item-records'>

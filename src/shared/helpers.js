@@ -20,3 +20,10 @@ export function extractIssueIdFromUrl (url) {
   }
   return match[0];
 }
+
+export function ensureDate (date) {
+  if (date instanceof Date) {
+    return date;
+  }
+  return new Date(date);
+}

@@ -7,7 +7,8 @@ export default function RecordModel ({ task }) {
     taskIssueKey: task.issue.key,
     startTime: Date.now(),
     endTime: null,
-    comment: ''
+    comment: 'Jira Time test worklog',
+    syncing: false
   };
 
   return model;
