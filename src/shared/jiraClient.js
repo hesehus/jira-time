@@ -102,7 +102,7 @@ export function getIssue ({ id, url }) {
   }
 
   if (!id) {
-    return Promise.reject();
+    return Promise.reject(`Did not find a valid JIRA id in the given url ${url}`);
   }
 
   return callApi({

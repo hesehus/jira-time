@@ -13,6 +13,7 @@
     "lint": "eslint bin build config server src",
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
+    "start:dummyapi": "better-npm-run start:dummyapi",
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
@@ -61,6 +62,13 @@
         "DEBUG": "app:*"
       }
     },
+    "start:dummyapi": {
+      "command": "node bin/server",
+      "env": {
+        "DUMMY_API": "1",
+        "DEBUG": "app:*"
+      }
+    },
     "test": {
       "command": "node ./node_modules/karma/bin/karma start build/karma.conf",
       "env": {
@@ -98,6 +106,7 @@
     "imports-loader": "^0.6.5",
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
+    "lorem-ipsum": "^1.0.3",
     "moment": "^2.15.2",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",

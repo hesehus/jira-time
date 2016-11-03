@@ -5,13 +5,20 @@ const webpack = require('webpack');
 const webpackConfig = require('../build/webpack.config');
 const config = require('../config');
 
+const dummyApi = require('./jira-dummy-api');
+
 const app = express();
 const paths = config.utils_paths;
 
-// Development proxy for JIRA api
-if (config.env === 'development') {
-  app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
-  // app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
+if (config.useDummyApi) {
+  app.use('/rest', dummyApi);
+} else {
+
+  // Development proxy for JIRA api
+  if (config.env === 'development') {
+    app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+    // app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
+  }
 }
 
 // This rewrites all routes requests to the root /index.html file

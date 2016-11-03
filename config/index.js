@@ -10,6 +10,7 @@ debug('Creating default configuration.')
 // ========================================================
 const config = {
   env : process.env.NODE_ENV || 'development',
+  useDummyApi : process.env.DUMMY_API || false,
 
   // ----------------------------------
   // Project Structure
