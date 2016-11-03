@@ -51,7 +51,7 @@ export default class Sync extends EventClass {
 				getIssue({
 					id: record.taskIssueKey
 				})
-      			.then((issue) => {
+  			.then((issue) => {
 					this.refreshIssue({
 						cuid: record.taskCuid,
 						issue

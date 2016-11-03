@@ -56,7 +56,7 @@ export class TaskItem extends Component {
           <button className='task-item__log' onClick={this.onLogClick}>+</button>
         </div>
         <div className='task-item-records'>
-          {records.map((record, index) => (<TaskItemRecord record={record} key={record.cuid} />))}
+          {records.map((record, index) => (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />))}
         </div>
       </div>
     );

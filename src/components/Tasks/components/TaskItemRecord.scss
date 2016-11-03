@@ -1,30 +1,39 @@
 .task-item-record {
   display: flex;
-  //justify-content: space-between;
   padding: 5px 10px;
   border-top: 1px solid #f0f0f0;
   align-items: center;
   font-size: .9rem;
 
   &--syncing {
-    background-color: #f0f0f0;
+    background-color: #f1f1f1;
   }
 
-  &__start-time {
+  &-remove {
+    font-size: 10px;
+    padding: 2px 4px;
+    margin-right: 10px;
+  }
+
+  &-date {
     margin-right: 15px;
-  }
 
-  &__end-time {
-    &:before {
-      content: " - ";
-      display: inline-block;
-      margin-right: 12px;
+    &__input {
+      padding: 0;
+      border: none;
+      background: #fafafa;
+    }
+
+    &--end {
+      &:before {
+        content: " - ";
+        display: inline-block;
+        margin-right: 12px;
+      }
     }
   }
 
   &__elapsed-time {
-    margin-left: 10px;
-
     &:before {
       content: '(';
     }

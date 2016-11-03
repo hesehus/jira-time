@@ -21,8 +21,9 @@
 
   &__key {
     flex-shrink: 0;
-    width: 80px;
+    min-width: 80px;
     margin-left: 15px;
+    white-space: nowrap;
   }
 
   &__summary {

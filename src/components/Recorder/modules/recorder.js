@@ -16,6 +16,7 @@ export const START_RECORDING = 'START_RECORDING';
 export const STOP_RECORDING = 'STOP_RECORDING';
 export const PAUSE_RECORDING = 'PAUSE_RECORDING';
 export const SET_RECORD_SYNC = 'SET_RECORD_SYNC';
+export const SET_RECORD_DATE = 'SET_RECORD_DATE';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
 
 // ------------------------------------
@@ -45,6 +46,14 @@ export function setRecordSync ({ cuid, syncing }) {
     syncing
   };
 };
+export function setRecordDate ({ cuid, startTime, endTime }) {
+  return {
+    type: SET_RECORD_DATE,
+    cuid,
+    startTime,
+    endTime
+  };
+};
 export function removeRecord ({ cuid }) {
   return {
     type: REMOVE_RECORD,
@@ -62,9 +71,9 @@ const ACTION_HANDLERS = {
 
     // Stop ongoing record
     if (state.record) {
-      const record = state.record;
-      record.endTime = Date.now();
-      records.push(record);
+      records[records.length - 1] = Object.assign({}, records[records.length - 1], {
+        endTime: Date.now()
+      });
     }
 
     // Determine which task to log to
@@ -81,13 +90,14 @@ const ACTION_HANDLERS = {
   },
   [STOP_RECORDING] : (state) => {
 
-    if (!state.record) {
-      return state;
-    }
-
     const records = [...state.records];
-    records[records.length - 1].endTime = Date.now();
 
+    if (state.record) {
+      records[records.length - 1] = Object.assign({}, records[records.length - 1], {
+        endTime: Date.now()
+      });
+    }
+    
     return {
       record: initialState.record,
       task: initialState.task,
@@ -101,7 +111,10 @@ const ACTION_HANDLERS = {
     }
 
     const records = [...state.records];
-    records[records.length - 1].endTime = Date.now();
+    
+    records[records.length - 1] = Object.assign({}, records[records.length - 1], {
+      endTime: Date.now()
+    });
 
     return {
       record: initialState.record,
@@ -113,13 +126,13 @@ const ACTION_HANDLERS = {
 
     const records = [];
     state.records.forEach((record) => {
-      if (record.taskCuid !== action.cuid) {
+      if (record.taskCuid !== action.cuid || record.syncing) {
         records.push(record);
       }
     });
 
     let record = state.record;
-    if (record && record.taskCuid === action.cuid) {
+    if (record && record.taskCuid === action.cuid && !record.syncing) {
       record = initialState.record;
     }
 
@@ -137,8 +150,11 @@ const ACTION_HANDLERS = {
   [SET_RECORD_SYNC] : (state, action) => {
 
     const records = state.records.map((record) => {
+      
       if (record.cuid === action.cuid) {
-        record.syncing = action.syncing;
+        return Object.assign({}, record, {
+          syncing: action.syncing
+        });
       }
 
       return record;
@@ -146,7 +162,37 @@ const ACTION_HANDLERS = {
 
     let record = state.record;
     if (record && record.cuid === action.cuid) {
-      record.syncing = action.syncing;
+      record = Object.assign({}, record, {
+        syncing: action.syncing
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [SET_RECORD_DATE] : (state, action) => {
+
+    const records = state.records.map((record) => {
+      
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          startTime: action.startTime,
+          endTime: action.endTime
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        startTime: action.startTime,
+        endTime: action.endTime
+      });
     }
 
     return {
@@ -167,7 +213,7 @@ const ACTION_HANDLERS = {
 
     let record = state.record;
     if (record && record.cuid === action.cuid) {
-      record.syncing = initialState.record;
+      record = initialState.record;
     }
 
     return {
@@ -194,6 +240,8 @@ export function getRecordsForTask ({ state, taskCuid }) {
 }
 
 export const getRecords = state => state.recorder.records;
+
+export const getRecord = ({ state, recordCuid }) => state.recorder.records.find(r => r.cuid === recordCuid);
 
 // ------------------------------------
 // Reducer
