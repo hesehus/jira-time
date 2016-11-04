@@ -14,13 +14,13 @@ class AppContainer extends Component {
       window.__mainDropBinded = true;
 
       ['drag',
-      'dragend',
-      'dragenter',
-      'dragexit',
-      'dragleave',
-      'dragover',
-      'dragstart',
-      'drop'].forEach(name => document.addEventListener(name, e => e.preventDefault(), false));
+        'dragend',
+        'dragenter',
+        'dragexit',
+        'dragleave',
+        'dragover',
+        'dragstart',
+        'drop'].forEach(name => document.addEventListener(name, e => e.preventDefault(), false));
 
       document.addEventListener('drop', function (event) {
         const url = event.dataTransfer.getData('URL');

@@ -116,7 +116,7 @@ const ACTION_HANDLERS = {
         elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
       });
     }
-    
+
     return {
       record: initialState.record,
       task: initialState.task,
@@ -130,7 +130,7 @@ const ACTION_HANDLERS = {
     }
 
     const records = [...state.records];
-    
+
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
       elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
@@ -170,7 +170,7 @@ const ACTION_HANDLERS = {
   [SET_RECORD_SYNC] : (state, action) => {
 
     const records = state.records.map((record) => {
-      
+
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
           syncing: action.syncing
@@ -196,7 +196,7 @@ const ACTION_HANDLERS = {
   [SET_RECORD_DATE] : (state, action) => {
 
     const records = state.records.map((record) => {
-      
+
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
           startTime: action.startTime,
@@ -224,9 +224,9 @@ const ACTION_HANDLERS = {
     };
   },
   [SET_RECORD_COMMENT] : (state, action) => {
-    
+
     const records = state.records.map((record) => {
-      
+
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
           comment: action.comment
@@ -250,9 +250,9 @@ const ACTION_HANDLERS = {
     };
   },
   [UPDATE_RECORD_ELAPSED] : (state, action) => {
-    
+
     const records = state.records.map((record) => {
-      
+
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
           elapsed: new Elapsed(record.startTime, record.endTime || Date.now()).optimal

@@ -55,9 +55,6 @@ export class TaskItemRecord extends Component {
 
     const { record } = this.props;
 
-    const startTimeDate = new Date(record.startTime);
-    const endTimeDate = new Date(record.endTime);
-
     let endTimeDisplay;
     if (record.endTime && record.endTime < record.startTime) {
       endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
@@ -83,11 +80,10 @@ export class TaskItemRecord extends Component {
           </div>
           {endTimeDisplay}
         </div>
-        <textarea 
+        <textarea
           className='task-item-record-comment'
           onChange={this.onCommentChange}
-          value={record.comment}>
-        </textarea>
+          value={record.comment} />
       </div>
     );
   }
@@ -139,20 +135,33 @@ class DateInput extends Component {
     const className = `task-item-record-date task-item-record-date--${this.props.type}`;
 
     const dateObject = moment(this.props.date);
-    
+
     const date = dateObject.format('YYYY-MM-DD');
     const time = dateObject.format('HH:mm');
 
-    const datetime = dateObject.format('YYYY-MM-DD HH:mm');
-
-    const dateDisplay = <input type='date' ref='date' value={date} onChange={this.onChange} className='task-item-record-date__input task-item-record-date__input--date' />;
-    const timeDisplay = <input type='time' ref='time' value={time} onChange={this.onChange} className='task-item-record-date__input task-item-record-date__input--time' />;
+    const dateDisplay = (
+      <input type='date'
+        ref='date'
+        value={date}
+        onChange={this.onChange}
+        className='task-item-record-date__input task-item-record-date__input--date'
+       />
+    );
+    const timeDisplay = (
+      <input type='time'
+        ref='time'
+        value={time}
+        onChange={this.onChange}
+        className='task-item-record-date__input task-item-record-date__input--time'
+       />
+    );
 
     let isToday = moment().isSame(dateObject, 'day');
+    let today = <span className='task-item-record-date__today' onClick={this.onTodayClick}>Today</span>;
 
     return (
       <span className={className}>
-        {isToday && !this.state.showDate ? <span className='task-item-record-date__today' onClick={this.onTodayClick}>Today</span> : dateDisplay}
+        {isToday && !this.state.showDate ? today : dateDisplay}
         {timeDisplay}
       </span>
     );

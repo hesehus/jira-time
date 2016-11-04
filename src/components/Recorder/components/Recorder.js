@@ -108,13 +108,12 @@ export default class Recorder extends Component {
     const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>Stop</button>;
     const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>Start</button>;
     const comment = (
-        <textarea
-          className='recorder-comment'
-          value={record ? record.comment : null}
-          onChange={this.onCommentChange}>
-        </textarea>
+      <textarea
+        className='recorder-comment'
+        value={record ? record.comment : null}
+        onChange={this.onCommentChange} />
     );
-    
+
     return (
       <div className='recorder recorder--show'>
         <div className='recorder-left'>
