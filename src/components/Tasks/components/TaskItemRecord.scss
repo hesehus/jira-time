@@ -66,9 +66,21 @@
 
   &__elapsed-time {
     min-width: 100px;
+
+    .task-item-record--active & {
+      animation: blink 2s infinite;
+    }
   }
 
   &-comment {
     padding: 5px;
   }
+}
+
+@keyframes blink {
+  0%  { opacity: 1; }
+  25%  { opacity: 1; }
+  50%  { opacity: 0; }
+  75%  { opacity: 1; }
+  100%  { opacity: 1; }
 }
