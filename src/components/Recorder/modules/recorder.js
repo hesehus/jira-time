@@ -89,7 +89,8 @@ const ACTION_HANDLERS = {
     // Stop ongoing record
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-        endTime: Date.now()
+        endTime: Date.now(),
+        elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
       });
     }
 
@@ -111,7 +112,8 @@ const ACTION_HANDLERS = {
 
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-        endTime: Date.now()
+        endTime: Date.now(),
+        elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
       });
     }
     
@@ -130,7 +132,8 @@ const ACTION_HANDLERS = {
     const records = [...state.records];
     
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-      endTime: Date.now()
+      endTime: Date.now(),
+      elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
     });
 
     return {
@@ -197,7 +200,8 @@ const ACTION_HANDLERS = {
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
           startTime: action.startTime,
-          endTime: action.endTime
+          endTime: action.endTime,
+          elapsed: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
         });
       }
 
@@ -208,7 +212,8 @@ const ACTION_HANDLERS = {
     if (record && record.cuid === action.cuid) {
       record = Object.assign({}, record, {
         startTime: action.startTime,
-        endTime: action.endTime
+        endTime: action.endTime,
+        elapsed: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
       });
     }
 

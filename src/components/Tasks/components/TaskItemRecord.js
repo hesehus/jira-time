@@ -68,7 +68,7 @@ export class TaskItemRecord extends Component {
 
     return (
       <div className={className}>
-        <button className='task-item-record-remove' onClick={this.onRemoveClick}>x</button>
+        <button className='task-item-record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
         <div className='task-item-record-time'>
           <div className='task-item-record-dates'>
             <DateInput date={record.startTime} type='start' onChange={this.onStartTimeChange} />
