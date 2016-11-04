@@ -6,6 +6,7 @@ export default function RecordModel ({ task }) {
     taskCuid: task.cuid,
     taskIssueKey: task.issue.key,
     startTime: Date.now(),
+    elapsedTime: null,
     endTime: null,
     comment: 'Jira Time test worklog',
     syncing: false

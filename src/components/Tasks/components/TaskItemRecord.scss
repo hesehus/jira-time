@@ -3,7 +3,7 @@
   padding: 5px 10px;
   border-top: 1px solid #f0f0f0;
   align-items: center;
-  font-size: .9rem;
+  font-size: .8rem;
 
   &--syncing {
     background-color: #f1f1f1;
@@ -13,32 +13,62 @@
     font-size: 10px;
     padding: 2px 4px;
     margin-right: 10px;
+    flex-shrink: 0;
+  }
+
+  &-time {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+  }
+
+  &-comment {
+    flex-grow: 1;
+  }
+
+  &-dates {
+    margin-right: 15px;
   }
 
   &-date {
-    margin-right: 15px;
+    display: block;
+
+    &:not(:first-child) {
+      margin-top: 5px;
+    }
 
     &__input {
       padding: 0;
       border: none;
       background: #fafafa;
-    }
 
-    &--end {
-      &:before {
-        content: " - ";
-        display: inline-block;
-        margin-right: 12px;
+      &::-ms-clear,
+      &::-webkit-clear-button,
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+          display:none;
       }
     }
+
+    &__today {
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    &__input--date,
+    &__today {
+      width: 130px;
+    }
+
+    &--end {}
   }
 
   &__elapsed-time {
-    &:before {
-      content: '(';
-    }
-    &:after {
-      content: ')';
-    }
+    min-width: 100px;
+  }
+
+  &-comment {
+    padding: 5px;
   }
 }

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { getIssue } from '../../../shared/jiraClient';
 import RecordModel from '../modules/RecordModel';
-import Elapsed from 'elapsed';
 
 import './Recorder.scss';
 
@@ -13,7 +12,9 @@ export default class Recorder extends Component {
       startRecording: PropTypes.func.isRequired,
       stopRecording: PropTypes.func.isRequired,
       pauseRecording: PropTypes.func.isRequired,
-      recorder: PropTypes.object.isRequired
+      recorder: PropTypes.object.isRequired,
+      setRecordComment: PropTypes.func.isRequired,
+      updateRecordElapsed: PropTypes.func.isRequired
     };
   }
 
@@ -27,6 +28,7 @@ export default class Recorder extends Component {
     this.onStop = this.onStop.bind(this);
     this.onStart = this.onStart.bind(this);
     this.updateElapsedTime = this.updateElapsedTime.bind(this);
+    this.onCommentChange = this.onCommentChange.bind(this);
   }
 
   componentWillMount () {
@@ -73,20 +75,25 @@ export default class Recorder extends Component {
     });
   }
 
+  onCommentChange (e) {
+    const { record } = this.props.recorder;
+
+    if (record) {
+      this.props.setRecordComment({
+        cuid: record.cuid,
+        comment: e.target.value
+      });
+    }
+  }
+
   updateElapsedTime () {
     const { record } = this.props.recorder;
 
-    if (!record) {
-      return this.setState({
-        elapsedTime: ''
+    if (record) {
+      this.props.updateRecordElapsed({
+        cuid: record.cuid
       });
     }
-
-    const elapsedTime = new Elapsed(record.startTime, Date.now());
-
-    this.setState({
-      elapsedTime: elapsedTime.optimal
-    });
   }
 
   render () {
@@ -100,16 +107,26 @@ export default class Recorder extends Component {
     const btnPause = <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
     const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>Stop</button>;
     const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>Start</button>;
-
+    const comment = (
+        <textarea
+          className='recorder-comment'
+          value={record ? record.comment : null}
+          onChange={this.onCommentChange}>
+        </textarea>
+    );
+    
     return (
       <div className='recorder recorder--show'>
-        <div className='recorder-issue-key'>{task.issue.key}</div>
+        <div className='recorder-left'>
+          <div className='recorder-issue-key'>{task.issue.key}</div>
+          {record ? comment : null}
+        </div>
         <div className='recorder-buttons'>
           {!record ? btnStart : null}
           {record ? btnPause : null}
           {btnStop}
         </div>
-        <div className='recorder-elapsed-time'>{this.state.elapsedTime}</div>
+        <div className='recorder-elapsed-time'>{record ? record.elapsed : null}</div>
       </div>
     )
   }

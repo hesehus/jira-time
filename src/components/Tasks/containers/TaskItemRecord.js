@@ -1,6 +1,6 @@
 import  { connect } from 'react-redux';
 
-import { removeRecord, setRecordDate, getRecord } from '../../Recorder/modules/recorder';
+import { removeRecord, setRecordDate, setRecordComment, getRecord } from '../../Recorder/modules/recorder';
 
 import TaskItemRecord from '../components/TaskItemRecord';
 
@@ -12,7 +12,8 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = {
   removeRecord,
-  setRecordDate
+  setRecordDate,
+  setRecordComment
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskItemRecord);

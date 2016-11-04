@@ -1,3 +1,5 @@
+import Elapsed from 'elapsed';
+
 import RecordModel from './RecordModel';
 
 import TaskModel from '../../Tasks/modules/TaskModel';
@@ -17,6 +19,8 @@ export const STOP_RECORDING = 'STOP_RECORDING';
 export const PAUSE_RECORDING = 'PAUSE_RECORDING';
 export const SET_RECORD_SYNC = 'SET_RECORD_SYNC';
 export const SET_RECORD_DATE = 'SET_RECORD_DATE';
+export const SET_RECORD_COMMENT = 'SET_RECORD_COMMENT';
+export const UPDATE_RECORD_ELAPSED = 'UPDATE_RECORD_ELAPSED';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
 
 // ------------------------------------
@@ -52,6 +56,19 @@ export function setRecordDate ({ cuid, startTime, endTime }) {
     cuid,
     startTime,
     endTime
+  };
+};
+export function setRecordComment ({ cuid, comment }) {
+  return {
+    type: SET_RECORD_COMMENT,
+    cuid,
+    comment
+  };
+};
+export function updateRecordElapsed ({ cuid, elapsed }) {
+  return {
+    type: UPDATE_RECORD_ELAPSED,
+    cuid
   };
 };
 export function removeRecord ({ cuid }) {
@@ -192,6 +209,58 @@ const ACTION_HANDLERS = {
       record = Object.assign({}, record, {
         startTime: action.startTime,
         endTime: action.endTime
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [SET_RECORD_COMMENT] : (state, action) => {
+    
+    const records = state.records.map((record) => {
+      
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          comment: action.comment
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        comment: action.comment
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [UPDATE_RECORD_ELAPSED] : (state, action) => {
+    
+    const records = state.records.map((record) => {
+      
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          elapsed: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        elapsed: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
       });
     }
 

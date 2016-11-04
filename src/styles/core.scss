@@ -20,4 +20,8 @@ body {
 
 input {
   padding: 7px 10px;
+
+  &::-webkit-clear-button {
+    display: none;
+  }
 }
