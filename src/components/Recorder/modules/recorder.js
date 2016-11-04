@@ -317,6 +317,8 @@ export const getRecords = state => state.recorder.records;
 
 export const getRecord = ({ state, recordCuid }) => state.recorder.records.find(r => r.cuid === recordCuid);
 
+export const getActiveRecord = state => state.recorder.record;
+
 // ------------------------------------
 // Reducer
 // ------------------------------------

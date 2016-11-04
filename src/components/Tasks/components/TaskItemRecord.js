@@ -11,7 +11,8 @@ export class TaskItemRecord extends Component {
     recordCuid: PropTypes.string.isRequired,
     removeRecord: PropTypes.func.isRequired,
     setRecordDate: PropTypes.func.isRequired,
-    setRecordComment: PropTypes.func.isRequired
+    setRecordComment: PropTypes.func.isRequired,
+    activeRecord: PropTypes.object
   }
 
   constructor (props) {
@@ -64,7 +65,13 @@ export class TaskItemRecord extends Component {
       endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsed}</span>;
     }
 
-    const className = record.syncing ? 'task-item-record task-item-record--syncing' : 'task-item-record';
+    let className = 'task-item-record';
+    if (record.syncing) {
+      className += ' task-item-record--syncing';
+    }
+    if (this.props.activeRecord && this.props.activeRecord.cuid === record.cuid) {
+      className += ' task-item-record--active';
+    }
 
     return (
       <div className={className}>
