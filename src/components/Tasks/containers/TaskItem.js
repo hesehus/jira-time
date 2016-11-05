@@ -1,11 +1,19 @@
 import { connect } from 'react-redux';
-import { removeTask } from '../modules/tasks';
+
+import {
+  removeTask,
+  refreshIssue,
+  setIssueRefreshing
+} from '../modules/tasks';
+
 import { startRecording, getRecordsForTask } from '../../Recorder/modules/recorder';
 
 import TaskItem from '../components/TaskItem';
 
 const mapDispatchToProps = {
   removeTask,
+  refreshIssue,
+  setIssueRefreshing,
   startRecording
 };
 

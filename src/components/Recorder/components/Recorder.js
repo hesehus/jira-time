@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { getIssue } from '../../../shared/jiraClient';
 import RecordModel from '../modules/RecordModel';
 
+import { Notification } from 'react-notification';
+
 import './Recorder.scss';
 
 export default class Recorder extends Component {
@@ -15,7 +17,7 @@ export default class Recorder extends Component {
       recorder: PropTypes.object.isRequired,
       setRecordComment: PropTypes.func.isRequired,
       updateRecordElapsed: PropTypes.func.isRequired,
-      isLoggedIn: PropTypes.bool
+      isLoggedIn: PropTypes.bool.isRequired
     };
   }
 
@@ -49,8 +51,17 @@ export default class Recorder extends Component {
 
   onDrop ({ url }) {
     if (this.props.isLoggedIn) {
+
+     this.setState({
+      addingTaskFromUrl: true
+     });
+
       getIssue({ url })
         .then((issue) => {
+
+          this.setState({
+            addingTaskFromUrl: false
+           });
 
           if (issue) {
             this.props.addTask({ issue });
@@ -58,6 +69,8 @@ export default class Recorder extends Component {
             alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
           }
         });
+    } else {
+      alert('Hey dude, you are not logged in. How do you expect me to verify that this URL you dropped is even valid??');
     }
   }
 
@@ -116,6 +129,22 @@ export default class Recorder extends Component {
         value={record ? record.comment : null}
         onChange={this.onCommentChange} />
     );
+
+    let notifications;
+    if (this.state.addingTaskFromUrl) {
+      const options = {
+        isActive: true,
+        dismissAfter: 999999,
+        message: `Yo, hold on. I'm busy trying to add your task`
+      };
+      notifications = (
+        <Notification
+          isActive={options.isActive}
+          dismissAfter={options.dismissAfter}
+          message={options.message}
+        />
+      );
+    }
 
     return (
       <div className='recorder recorder--show'>

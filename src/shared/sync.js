@@ -47,26 +47,26 @@ export default class Sync extends EventClass {
       addWorklog({ record })
 			.then((result) => {
 
-        this.emit('syncEnd', record, this.records[this.index + 1]);
+  this.emit('syncEnd', record, this.records[this.index + 1]);
 
 				// Something went wrong
-        if (!result) {
-          this.setRecordSync({
-            cuid: record.cuid,
-            syncing: false
-          });
-        } else {
+  if (!result) {
+    this.setRecordSync({
+      cuid: record.cuid,
+      syncing: false
+    });
+  } else {
 
-          this.removeRecord({
-            cuid: record.cuid
-          });
+    this.removeRecord({
+      cuid: record.cuid
+    });
 
 					// Moving on to next issue
-          this.index += 1;
-          this.syncIterator();
-        }
+    this.index += 1;
+    this.syncIterator();
+  }
 
-      });
+});
     }
   }
 }
