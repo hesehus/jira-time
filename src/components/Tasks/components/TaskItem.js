@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import TaskItemRecord from '../containers/TaskItemRecord';
 import RecordModel from '../../Recorder/modules/RecordModel';
 
+import LoadingIcon from '../../../assets/loading.svg';
+
 import './TaskItem.scss';
 
 export class TaskItem extends Component {
@@ -45,6 +47,11 @@ export class TaskItem extends Component {
       }
     });
 
+    let issueInfo = <span className='task-item__info'>{task.issue.fields.timetracking.remainingEstimate}</span>;
+    if (task.issueRefreshing) {
+      issueInfo = <span className='task-item__info'><img src={LoadingIcon} alt='Loading' /></span>;
+    }
+
     // Output the list of tasks
     return (
       <div className='task-item'>
@@ -52,7 +59,7 @@ export class TaskItem extends Component {
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>{task.issue.key}</span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          <span className='task-item__remaining'>{task.issue.fields.timetracking.remainingEstimate}</span>
+          {issueInfo}
           <button className='task-item__log' onClick={this.onLogClick}>+</button>
         </div>
         <div className='task-item-records'>
