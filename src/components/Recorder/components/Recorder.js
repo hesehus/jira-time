@@ -148,6 +148,7 @@ export default class Recorder extends Component {
 
     return (
       <div className='recorder recorder--show'>
+        {notifications}
         <div className='recorder-left'>
           <div className='recorder-issue-key'>{task.issue.key}</div>
           {record ? comment : null}
