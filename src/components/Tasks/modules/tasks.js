@@ -1,3 +1,5 @@
+import DeepAssign from 'deep-assign';
+
 import TaskModel from './TaskModel';
 
 const initialState = { tasks: [] };
@@ -8,6 +10,7 @@ const initialState = { tasks: [] };
 export const ADD_TASK = 'ADD_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK';
 export const REFRESH_ISSUE = 'REFRESH_ISSUE';
+export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 
 // ------------------------------------
 // Actions
@@ -29,6 +32,13 @@ export function refreshIssue ({ cuid, issue }) {
     type: REFRESH_ISSUE,
     cuid,
     issue
+  }
+};
+export function setIssueRefreshing ({ cuid, refresing }) {
+  return {
+    type: SET_ISSUE_REFRESHING,
+    cuid,
+    refresing
   }
 };
 
@@ -56,7 +66,24 @@ const ACTION_HANDLERS = {
 
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
-        task.issue = action.issue;
+        return DeepAssign({}, task, {
+          issue: action.issue
+        });
+      }
+      return task;
+    });
+
+    return {
+      tasks
+    };
+  },
+  [SET_ISSUE_REFRESHING] : (state, action) => {
+
+    let tasks = state.tasks.map(task => {
+      if (task.cuid === action.cuid) {
+        return DeepAssign({}, task, {
+          issueRefreshing: action.issueRefreshing
+        });
       }
       return task;
     });

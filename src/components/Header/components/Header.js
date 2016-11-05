@@ -2,13 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import { IndexLink, Link } from 'react-router'
 
 import Sync from '../../../shared/sync';
+import { getIssue } from '../../../shared/jiraClient';
 
 import './Header.scss'
 
-import ListIcon from './assets/list.svg';
-import UserIcon from './assets/user.svg';
-import ExportIcon from './assets/export.svg';
-import LoadingIcon from './assets/loading.svg';
+import ListIcon from '../../../assets/list.svg';
+import UserIcon from '../../../assets/user.svg';
+import ExportIcon from '../../../assets/export.svg';
+import LoadingIcon from '../../../assets/loading.svg';
 
 export default class Header extends Component {
 
@@ -53,12 +54,24 @@ export default class Header extends Component {
     const syncer = new Sync({
       records: this.props.records.map(r => r),
       setRecordSync: this.props.setRecordSync,
-      removeRecord: this.props.removeRecord,
-      refreshIssue: this.props.refreshIssue
+      removeRecord: this.props.removeRecord
     });
 
-    // syncer.on('syncStart', record => console.log('starting sync for record', record));
-    // syncer.on('syncEnd', record => console.log('finished sync for record', record));
+    // Refresh issue info when all the records for the task is synced
+    syncer.on('syncEnd', (record, nextRecord) => {
+      if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
+        getIssue({
+          id: record.taskIssueKey
+        })
+        .then((issue) => {
+          this.props.refreshIssue({
+            cuid: record.taskCuid,
+            issue
+          });
+        });
+      }
+    });
+
     syncer.on('done', () => {
       this.setState({
         syncing: false

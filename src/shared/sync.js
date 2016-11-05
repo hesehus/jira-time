@@ -1,13 +1,13 @@
 import EventClass from './eventClass';
 
-import { addWorklog, getIssue } from './jiraClient';
+import { addWorklog } from './jiraClient';
 import { ensureDate } from './helpers';
 
 export default class Sync extends EventClass {
   constructor ({ records, setRecordSync, removeRecord, refreshIssue }) {
     super();
 
-    this.records = records;
+    this.records = records.sort((a, b) => a.taskIssueKey < b.taskIssueKey);
     this.setRecordSync = setRecordSync;
     this.removeRecord = removeRecord;
     this.refreshIssue = refreshIssue;
@@ -46,36 +46,27 @@ export default class Sync extends EventClass {
 
       addWorklog({ record })
 			.then((result) => {
-  this.emit('syncEnd', record);
 
-  getIssue({
-    id: record.taskIssueKey
-  })
-  			.then((issue) => {
-    this.refreshIssue({
-      cuid: record.taskCuid,
-      issue
-    });
-  });
+        this.emit('syncEnd', record, this.records[this.index + 1]);
 
 				// Something went wrong
-  if (!result) {
-    this.setRecordSync({
-      cuid: record.cuid,
-      syncing: false
-    });
-  } else {
+        if (!result) {
+          this.setRecordSync({
+            cuid: record.cuid,
+            syncing: false
+          });
+        } else {
 
-    this.removeRecord({
-      cuid: record.cuid
-    });
+          this.removeRecord({
+            cuid: record.cuid
+          });
 
 					// Moving on to next issue
-    this.index += 1;
-    this.syncIterator();
-  }
+          this.index += 1;
+          this.syncIterator();
+        }
 
-});
+      });
     }
   }
 }
