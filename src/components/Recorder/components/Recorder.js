@@ -14,7 +14,8 @@ export default class Recorder extends Component {
       pauseRecording: PropTypes.func.isRequired,
       recorder: PropTypes.object.isRequired,
       setRecordComment: PropTypes.func.isRequired,
-      updateRecordElapsed: PropTypes.func.isRequired
+      updateRecordElapsed: PropTypes.func.isRequired,
+      isLoggedIn: PropTypes.bool
     };
   }
 
@@ -47,15 +48,17 @@ export default class Recorder extends Component {
   }
 
   onDrop ({ url }) {
-    getIssue({ url })
-      .then((issue) => {
+    if (this.props.isLoggedIn) {
+      getIssue({ url })
+        .then((issue) => {
 
-        if (issue) {
-          this.props.addTask({ issue });
-        } else {
-          alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
-        }
-      });
+          if (issue) {
+            this.props.addTask({ issue });
+          } else {
+            alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
+          }
+        });
+    }
   }
 
   onPause () {

@@ -2,14 +2,15 @@ import { connect } from 'react-redux';
 
 import { getCurrentPath } from '../../../store/location';
 import { getRecords, setRecordSync, removeRecord } from '../../Recorder/modules/recorder';
-import { refreshIssue } from '../../Tasks/modules/tasks';
+import { refreshIssue, setIssueRefreshing } from '../../Tasks/modules/tasks';
 
 import Header from '../components/Header';
 
 const mapDispatchToProps = {
   setRecordSync,
   removeRecord,
-  refreshIssue
+  refreshIssue,
+  setIssueRefreshing
 };
 
 const mapStateToProps = (state) => ({

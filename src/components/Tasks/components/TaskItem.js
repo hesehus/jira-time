@@ -47,9 +47,9 @@ export class TaskItem extends Component {
       }
     });
 
-    let issueInfo = <span className='task-item__info'>{task.issue.fields.timetracking.remainingEstimate}</span>;
+    let issueInfoAtEnd = <span className='task-item__info'>{task.issue.fields.timetracking.remainingEstimate}</span>;
     if (task.issueRefreshing) {
-      issueInfo = <span className='task-item__info'><img src={LoadingIcon} alt='Loading' /></span>;
+      issueInfoAtEnd = <span className='task-item__info'><img src={LoadingIcon} alt='Loading' className='task-item__loading' /></span>;
     }
 
     // Output the list of tasks
@@ -59,7 +59,7 @@ export class TaskItem extends Component {
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>{task.issue.key}</span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          {issueInfo}
+          {issueInfoAtEnd}
           <button className='task-item__log' onClick={this.onLogClick}>+</button>
         </div>
         <div className='task-item-records'>

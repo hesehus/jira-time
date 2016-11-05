@@ -36,6 +36,13 @@
   &__info {
     margin-right: 15px;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  &__loading {
+    width: 20px;
+    opacity: .7;
   }
 
   &__log {

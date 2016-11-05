@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+
 import {
   startRecording,
   stopRecording,
@@ -6,6 +7,7 @@ import {
   setRecordComment,
   updateRecordElapsed
 } from '../modules/recorder';
+
 import { addTask } from '../../Tasks/modules/tasks';
 
 import Recorder from '../components/Recorder';
@@ -21,7 +23,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   tasks : state.tasks.tasks,
-  recorder: state.recorder
+  recorder: state.recorder,
+  isLoggedIn: state.profile.isLoggedIn
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recorder);

@@ -19,7 +19,8 @@ export default class Header extends Component {
       currentPath: PropTypes.string.isRequired,
       setRecordSync: PropTypes.func.isRequired,
       removeRecord: PropTypes.func.isRequired,
-      refreshIssue: PropTypes.func.isRequired
+      refreshIssue: PropTypes.func.isRequired,
+      setIssueRefreshing: PropTypes.func.isRequired
     };
   }
 
@@ -60,6 +61,12 @@ export default class Header extends Component {
     // Refresh issue info when all the records for the task is synced
     syncer.on('syncEnd', (record, nextRecord) => {
       if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
+
+        this.props.setIssueRefreshing({
+          cuid: record.taskCuid,
+          refreshing: true
+        });
+
         getIssue({
           id: record.taskIssueKey
         })

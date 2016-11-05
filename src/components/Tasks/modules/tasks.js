@@ -34,11 +34,11 @@ export function refreshIssue ({ cuid, issue }) {
     issue
   }
 };
-export function setIssueRefreshing ({ cuid, refresing }) {
+export function setIssueRefreshing ({ cuid, refreshing }) {
   return {
     type: SET_ISSUE_REFRESHING,
     cuid,
-    refresing
+    refreshing
   }
 };
 
@@ -67,7 +67,8 @@ const ACTION_HANDLERS = {
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
         return DeepAssign({}, task, {
-          issue: action.issue
+          issue: action.issue,
+          issueRefreshing: false
         });
       }
       return task;
@@ -82,7 +83,7 @@ const ACTION_HANDLERS = {
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
         return DeepAssign({}, task, {
-          issueRefreshing: action.issueRefreshing
+          issueRefreshing: action.refreshing
         });
       }
       return task;
