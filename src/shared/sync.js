@@ -37,6 +37,11 @@ export default class Sync extends EventClass {
         return;
       }
 
+      // Must have a comment
+      if (record.comment && !record.comment.length) {
+        return;
+      }
+
       this.emit('syncStart', record);
 
       this.setRecordSync({
