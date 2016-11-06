@@ -70,7 +70,8 @@ export default class Recorder extends Component {
           }
         });
     } else {
-      alert('Hey dude, you are not logged in. How do you expect me to verify that this URL you dropped is even valid??');
+      alert(`Hey dude, you are not logged in.
+        How do you expect me to verify that this URL you dropped is even valid??`);
     }
   }
 

@@ -75,6 +75,10 @@ export class TaskItem extends Component {
 
     let issueInfoAtEnd;
 
+    let recordItems = records.map((record, index) => {
+      return (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />);
+    });
+
     if (task.issue) {
 
       if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
@@ -86,9 +90,7 @@ export class TaskItem extends Component {
                 {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
               </span>
             </div>
-            <div className='task-item-records'>
-              {records.map((record, index) => (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />))}
-            </div>
+            <div className='task-item-records'>{recordItems}</div>
           </div>
         );
       }
@@ -118,9 +120,7 @@ export class TaskItem extends Component {
           {issueInfoAtEnd}
           <button className='task-item__log' onClick={this.onLogClick}>+</button>
         </div>
-        <div className='task-item-records'>
-          {records.map((record, index) => (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />))}
-        </div>
+        <div className='task-item-records'>{recordItems}</div>
       </div>
     );
   }

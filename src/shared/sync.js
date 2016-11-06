@@ -51,7 +51,7 @@ export default class Sync extends EventClass {
 
       addWorklog({ record })
 			.then((response) => {
-        
+
         this.emit('syncEnd', record, this.records[this.index + 1]);
 
       	// Something went wrong
@@ -62,7 +62,7 @@ export default class Sync extends EventClass {
           });
         } else {
 
-          if (response.status === 403 || response.status === 404) {
+          if (response.status === 403 || response.status === 404) {
             alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
           } else if (response.status === 400) {
             alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
