@@ -18,22 +18,6 @@ export class Home extends Component {
     }
   }
 
-  componentDidMount () {
-
-    /**
-    * Redirect to login page if this is the first time opening
-    * the app, and there is no previous attempt at at login registerd
-    **/
-    try {
-      const isVisited = localStorage.getItem('appVisited');
-      if (!isVisited) {
-        localStorage.setItem('appVisited', 1);
-
-        this.context.router.push('/jira-time/profile');
-      }
-    } catch (e) {}
-  }
-
   render () {
     return (
       <div className='home'>

@@ -56,7 +56,7 @@ export class TaskItemRecord extends Component {
     const { record } = this.props;
 
     let endTimeDisplay;
-    if (record.endTime && record.endTime < record.startTime) {
+    if (record.endTime && record.endTime < record.startTime || record.elapsed[0] === '-') {
       endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
     } else {
       endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsed}</span>;

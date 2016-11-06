@@ -17,6 +17,7 @@ export default class Header extends Component {
     return {
       records: PropTypes.array.isRequired,
       currentPath: PropTypes.string.isRequired,
+      loggedIn: PropTypes.bool.isRequired,
       setRecordSync: PropTypes.func.isRequired,
       removeRecord: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
@@ -112,15 +113,19 @@ export default class Header extends Component {
       );
     }
 
+    let homeLink = (
+      <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
+        <img className='header__icon' src={ListIcon} alt='Home' />
+      </IndexLink>
+    );
+
     return (
       <div className='header'>
         <div className='header-left'>
           {updateAvailable}
         </div>
         <div className='header-center'>
-          <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
-            <img className='header__icon' src={ListIcon} alt='Home' />
-          </IndexLink>
+          {this.props.loggedIn ? homeLink : null}
           <Link to='/jira-time/profile' className='header__button' activeClassName='header__button--active'>
             <img className='header__icon' src={UserIcon} alt='Profile' />
           </Link>

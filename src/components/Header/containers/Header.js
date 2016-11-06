@@ -15,7 +15,8 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   records: getRecords(state),
-  currentPath: getCurrentPath(state)
+  currentPath: getCurrentPath(state),
+  loggedIn: state.profile.loggedIn
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
