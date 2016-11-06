@@ -146,13 +146,13 @@ const ACTION_HANDLERS = {
 
     const records = [];
     state.records.forEach((record) => {
-      if (record.taskCuid !== action.cuid || record.syncing) {
+      if (record.taskCuid !== action.cuid) {
         records.push(record);
       }
     });
 
     let record = state.record;
-    if (record && record.taskCuid === action.cuid && !record.syncing) {
+    if (record && record.taskCuid === action.cuid) {
       record = initialState.record;
     }
 

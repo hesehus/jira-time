@@ -31,9 +31,6 @@ function callApi ({ path, method = 'get', body }) {
       case 500 : {
         throw new Error(response);
       }
-      case 404 : {
-        throw new Error(response);
-      }
       default : {
         return response;
       }
@@ -68,7 +65,6 @@ export function login ({ username, password }) {
       };
     }
 
-    // Invalid credentials
     if (response.status === 401) {
       return {
         success: false,

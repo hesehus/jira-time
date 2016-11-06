@@ -63,13 +63,11 @@ const ACTION_HANDLERS = {
     };
   },
   [REFRESH_ISSUE] : (state, action) => {
-
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
-        return DeepAssign({}, task, {
-          issue: action.issue,
-          issueRefreshing: false
-        });
+        task = DeepAssign({}, task);
+        task.issue = action.issue;
+        task.issueRefreshing = false;
       }
       return task;
     });

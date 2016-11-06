@@ -112,23 +112,16 @@ export default class Header extends Component {
       );
     }
 
-    const classNameHome = this.props.currentPath === '/jira-time'
-            ? 'header__button header__button--active'
-            : 'header__button';
-    const classNameProfile = this.props.currentPath === '/jira-time/profile'
-            ? 'header__button header__button--active'
-            : 'header__button';
-
     return (
       <div className='header'>
         <div className='header-left'>
           {updateAvailable}
         </div>
         <div className='header-center'>
-          <IndexLink to='/jira-time' className={classNameHome}>
+          <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
             <img className='header__icon' src={ListIcon} alt='Home' />
           </IndexLink>
-          <Link to='/jira-time/profile' className={classNameProfile}>
+          <Link to='/jira-time/profile' className='header__button' activeClassName='header__button--active'>
             <img className='header__icon' src={UserIcon} alt='Profile' />
           </Link>
         </div>

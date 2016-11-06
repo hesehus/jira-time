@@ -76,6 +76,23 @@ export class TaskItem extends Component {
     let issueInfoAtEnd;
 
     if (task.issue) {
+
+      if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
+        return (
+          <div className='task-item task-item--errors'>
+            <div className='task-item-info'>
+              <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
+              <span className='task-item__summary'>
+                {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
+              </span>
+            </div>
+            <div className='task-item-records'>
+              {records.map((record, index) => (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />))}
+            </div>
+          </div>
+        );
+      }
+
       issueInfoAtEnd = (
         <span className='task-item__info'
           title='Click to refresh the remaining estimate, yo!'

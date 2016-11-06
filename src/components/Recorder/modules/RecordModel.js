@@ -8,7 +8,7 @@ export default function RecordModel ({ task }) {
     startTime: Date.now(),
     elapsedTime: null,
     endTime: null,
-    comment: 'Jira Time test worklog',
+    comment: '',
     syncing: false
   };
 
