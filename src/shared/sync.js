@@ -38,7 +38,7 @@ export default class Sync extends EventClass {
       }
 
       // Must have a comment
-      if (record.comment && !record.comment.length) {
+      if (!record.comment) {
         return;
       }
 
