@@ -52,16 +52,16 @@ export default class Recorder extends Component {
   onDrop ({ url }) {
     if (this.props.isLoggedIn) {
 
-     this.setState({
-      addingTaskFromUrl: true
-     });
+      this.setState({
+        addingTaskFromUrl: true
+      });
 
       getIssue({ url })
         .then((issue) => {
 
           this.setState({
             addingTaskFromUrl: false
-           });
+          });
 
           if (issue) {
             this.props.addTask({ issue });
@@ -117,9 +117,11 @@ export default class Recorder extends Component {
 
     const { task, record } = this.props.recorder;
 
-    //const btnPause = <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
+    // eslint-disable
+    // <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
     const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
-    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
+    // <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
+    // eslint-enable
 
     const comment = (
       <textarea
