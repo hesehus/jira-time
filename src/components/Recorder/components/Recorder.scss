@@ -1,50 +1,57 @@
 .recorder {
 
   flex-shrink: 0;
-  height: 0;
-  overflow: hidden;
-  transition: height 150ms;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-
-  &--show {
-    height: 100px;
-    padding: 10px;
-    border-top: 1px solid #ccc;
-  }
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: -5px 0 12px 0 rgba(0, 0, 0, .3);
 
   &-left {
     margin-right: 15px;
     flex-shrink: 0;
-    min-width: 200px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-issue-info {
+    display: flex;
+    justify-content: space-between;
   }
 
   &-issue-key {
     font-size: 1.5rem;
   }
 
-  &-comment {
-    margin-top: 10px;
+  &-elapsed-time {
+    font-size: 1.5rem;
+    flex-shrink: 0;
   }
 
-  &-elapsed-time {
-    flex-shrink: 0;
-    font-size: 1.5rem;
-    margin-left: 15px;
-    min-width: 200px;
-    text-align: right;
+  &-comment {
+    margin-top: 10px;
+    height: 27px;
   }
 
   &-buttons {
+    flex-shrink: 1;
     display: flex;
-    align-items: center;
     justify-content: center;
   }
 
   &-button {
-    margin: 0 5px;
-    font-size: 2rem;
+    margin: 0;
+    padding: 0 20px;
+    font-size: 4rem;
+
+    &:not(:first-child) {
+      margin-left: 15px;
+    }
+
+    &--start {
+      color: red;
+    }
   }
   
 }

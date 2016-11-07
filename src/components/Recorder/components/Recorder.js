@@ -117,13 +117,10 @@ export default class Recorder extends Component {
 
     const { task, record } = this.props.recorder;
 
-    if (!task) {
-      return (<div className='recorder' />);
-    }
+    //const btnPause = <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
+    const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
+    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
 
-    const btnPause = <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
-    const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>Stop</button>;
-    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>Start</button>;
     const comment = (
       <textarea
         className='recorder-comment'
@@ -151,15 +148,15 @@ export default class Recorder extends Component {
       <div className='recorder recorder--show'>
         {notifications}
         <div className='recorder-left'>
-          <div className='recorder-issue-key'>{task.issue.key}</div>
+          <div className='recorder-issue-info'>
+            {record && task && task.issue ? <div className='recorder-issue-key'>{task.issue.key}</div> : null}
+            <div className='recorder-elapsed-time'>{record ? record.elapsed : null}</div>
+          </div>
           {record ? comment : null}
         </div>
         <div className='recorder-buttons'>
-          {!record ? btnStart : null}
-          {record ? btnPause : null}
-          {btnStop}
+          {record ? btnStop : null}
         </div>
-        <div className='recorder-elapsed-time'>{record ? record.elapsed : null}</div>
       </div>
     )
   }

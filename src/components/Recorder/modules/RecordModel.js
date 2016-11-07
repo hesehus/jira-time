@@ -1,10 +1,10 @@
 import cuid from 'cuid';
 
-export default function RecordModel ({ task, startTime = Date.now(), endTime }) {
+export default function RecordModel ({ task, startTime = Date.now(), endTime } = {}) {
   const model = {
     cuid: cuid(),
-    taskCuid: task.cuid,
-    taskIssueKey: task.issue.key,
+    taskCuid: task ? task.cuid : null,
+    taskIssueKey: task ? task.issue.key: null,
     startTime,
     elapsedTime: null,
     endTime,

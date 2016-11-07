@@ -139,7 +139,7 @@ export class TaskItem extends Component {
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           {issueInfoAtEnd}
           <button className='task-item__log task-item__log--passive' title='Add a worklog' onClick={this.onStartPassiveLogClick}>+</button>
-          <button className='task-item__log task-item__log--active' title='Start new worklog' onClick={this.onStartActiveLogClick}>►</button>
+          <button className='task-item__log task-item__log--active' title='Start new worklog' onClick={this.onStartActiveLogClick}>●</button>
         </div>
         <div className='task-item-records'>{recordItems}</div>
       </div>

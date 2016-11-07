@@ -21,7 +21,7 @@
 
   &__key {
     flex-shrink: 0;
-    min-width: 80px;
+    min-width: 120px;
     margin-left: 15px;
     white-space: nowrap;
   }
@@ -47,11 +47,17 @@
 
   &__log {
     flex-shrink: 0;
-    width: 30px;
+    width: 20px;
 
     &--passive {
       width: 10px;
       margin-right: 5px;
+    }
+
+    &--active {
+      color: red;
+      font-size: 29px;
+      line-height: 18px;
     }
   }
 }
