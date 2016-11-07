@@ -100,6 +100,7 @@ export class TaskItem extends Component {
 
     if (task.issue) {
 
+      // There are errors with the task. Display that instead of issue info
       if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
         return (
           <div className='task-item task-item--errors'>
@@ -134,7 +135,7 @@ export class TaskItem extends Component {
       <div className='task-item'>
         <div className='task-item-info'>
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-          <span className='task-item__key'>{task.issue.key}</span>
+          <span className='task-item__key'><a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a></span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           {issueInfoAtEnd}
           <button className='task-item__log task-item__log--passive' title='Add a worklog' onClick={this.onStartPassiveLogClick}>+</button>
