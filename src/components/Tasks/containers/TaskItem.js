@@ -6,7 +6,11 @@ import {
   setIssueRefreshing
 } from '../modules/tasks';
 
-import { startRecording, getRecordsForTask } from '../../Recorder/modules/recorder';
+import {
+  addRecord,
+  startRecording,
+  getRecordsForTask
+} from '../../Recorder/modules/recorder';
 
 import TaskItem from '../components/TaskItem';
 
@@ -14,7 +18,8 @@ const mapDispatchToProps = {
   removeTask,
   refreshIssue,
   setIssueRefreshing,
-  startRecording
+  startRecording,
+  addRecord
 };
 
 const mapStateToProps = (state, props) => ({

@@ -49,5 +49,10 @@
   &__log {
     flex-shrink: 0;
     width: 30px;
+
+    &--passive {
+      width: 10px;
+      margin-right: 5px;
+    }
   }
 }

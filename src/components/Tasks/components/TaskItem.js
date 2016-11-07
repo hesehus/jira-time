@@ -15,6 +15,7 @@ export class TaskItem extends Component {
       task: PropTypes.object.isRequired,
       records: PropTypes.array.isRequired,
       removeTask: PropTypes.func.isRequired,
+      addRecord: PropTypes.func.isRequired,
       startRecording: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
       setIssueRefreshing: PropTypes.func.isRequired
@@ -25,7 +26,8 @@ export class TaskItem extends Component {
     super(props);
 
     this.onRemoveClick = this.onRemoveClick.bind(this);
-    this.onLogClick = this.onLogClick.bind(this);
+    this.onStartPassiveLogClick = this.onStartPassiveLogClick.bind(this);
+    this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
     this.onRemainingClick = this.onRemainingClick.bind(this);
   }
 
@@ -33,7 +35,24 @@ export class TaskItem extends Component {
     this.props.removeTask({ cuid: this.props.task.cuid });
   }
 
-  onLogClick () {
+  onStartPassiveLogClick () {
+    const { task } = this.props;
+
+    const startTime = Date.now();
+    const endTime = new Date();
+    endTime.setMinutes(endTime.getMinutes() + 1);
+
+    this.props.addRecord({
+      task,
+      record: RecordModel({
+        task,
+        startTime,
+        endTime
+      })
+    });
+  }
+
+  onStartActiveLogClick () {
     const { task } = this.props;
 
     this.props.startRecording({
@@ -118,7 +137,8 @@ export class TaskItem extends Component {
           <span className='task-item__key'>{task.issue.key}</span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           {issueInfoAtEnd}
-          <button className='task-item__log' onClick={this.onLogClick}>+</button>
+          <button className='task-item__log task-item__log--passive' title='Add a worklog' onClick={this.onStartPassiveLogClick}>+</button>
+          <button className='task-item__log task-item__log--active' title='Start new worklog' onClick={this.onStartActiveLogClick}>►</button>
         </div>
         <div className='task-item-records'>{recordItems}</div>
       </div>

@@ -14,6 +14,7 @@ const initialState = {
 // ------------------------------------
 // Constants
 // ------------------------------------
+export const ADD_RECORDING = 'ADD_RECORDING';
 export const START_RECORDING = 'START_RECORDING';
 export const STOP_RECORDING = 'STOP_RECORDING';
 export const PAUSE_RECORDING = 'PAUSE_RECORDING';
@@ -26,6 +27,13 @@ export const REMOVE_RECORD = 'REMOVE_RECORD';
 // ------------------------------------
 // Actions
 // ------------------------------------
+export function addRecord ({ task, record } = {}) {
+  return {
+    type: ADD_RECORDING,
+    task,
+    record
+  };
+};
 export function startRecording ({ task, record } = {}) {
   return {
     type: START_RECORDING,
@@ -82,6 +90,22 @@ export function removeRecord ({ cuid }) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
+  [ADD_RECORDING] : (state, action) => {
+
+    const records = [...state.records];
+
+    // Determine which task to log to
+    const task = action.task || TaskModel();
+    const record = action.record || RecordModel({ task });
+
+    records.push(record);
+
+    return {
+      record: state.record,
+      task: state.task,
+      records
+    }
+  },
   [START_RECORDING] : (state, action) => {
 
     const records = [...state.records];

@@ -1,13 +1,13 @@
 import cuid from 'cuid';
 
-export default function RecordModel ({ task }) {
+export default function RecordModel ({ task, startTime = Date.now(), endTime }) {
   const model = {
     cuid: cuid(),
     taskCuid: task.cuid,
     taskIssueKey: task.issue.key,
-    startTime: Date.now(),
+    startTime,
     elapsedTime: null,
-    endTime: null,
+    endTime,
     comment: '',
     syncing: false
   };
