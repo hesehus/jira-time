@@ -49,6 +49,7 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
+    console.log('start sync');
     this.setState({
       syncing: true
     });
@@ -59,8 +60,16 @@ export default class Header extends Component {
       removeRecord: this.props.removeRecord
     });
 
-    // Refresh issue info when all the records for the task is synced
-    syncer.on('syncEnd', (record, nextRecord) => {
+    syncer.on('syncDone', () => {
+      console.log('done');
+      this.setState({
+        syncing: false
+      });
+    });
+
+    syncer.on('syncTaskDone', ({ record, nextRecord }) => {
+      
+      // Refresh issue info when all the records for the task is synced
       if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
 
         this.props.setIssueRefreshing({
@@ -80,11 +89,7 @@ export default class Header extends Component {
       }
     });
 
-    syncer.on('done', () => {
-      this.setState({
-        syncing: false
-      });
-    });
+    syncer.start();
   }
 
   render () {

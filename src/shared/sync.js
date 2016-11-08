@@ -13,33 +13,39 @@ export default class Sync extends EventClass {
     this.refreshIssue = refreshIssue;
 
     this.index = 0;
+  }
 
+  start () {
     this.syncIterator();
   }
 
   syncIterator () {
 
-    const record = this.records[this.index];
+    // Moving on to next issue
+    const processNext = () => {
+      this.index += 1;
+      this.syncIterator();
+    }
 
+    const record = this.records[this.index];
+    
     if (!record) {
-      return this.emit('done');
+      return this.emit('syncDone');
     } else {
 
 			// No end time specified. Moving on
       if (!record.endTime) {
-        this.index += 1;
-        this.syncIterator();
-        return;
+        return processNext();
       }
 
 			// Must be at least one minute
       if ((ensureDate(record.endTime) - ensureDate(record.startTime)) < 60) {
-        return;
+        return processNext();
       }
 
       // Must have a comment
       if (!record.comment) {
-        return;
+        return processNext();
       }
 
       this.emit('syncStart', record);
@@ -52,32 +58,41 @@ export default class Sync extends EventClass {
       addWorklog({ record })
 			.then((response) => {
 
-  this.emit('syncEnd', record, this.records[this.index + 1]);
+        let didSync;
+        
+        if (!response) {
+          didSync = false;
+        } else if (response.status === 201) {
+          didSync = true;
+        }
 
-      	// Something went wrong
-  if (!response) {
-    this.setRecordSync({
-      cuid: record.cuid,
-      syncing: false
-    });
-  } else {
+        if (didSync) {
+          this.removeRecord({
+            cuid: record.cuid
+          });
+        } else {
+          this.setRecordSync({
+            cuid: record.cuid,
+            syncing: false
+          });
 
-    if (response.status === 403 || response.status === 404) {
-      alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
-    } else if (response.status === 400) {
-      alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
-    } else if (response.status === 201) {
-      this.removeRecord({
-        cuid: record.cuid
+          if (response.status === 403 || response.status === 404) {
+            alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
+          } else if (response.status === 400) {
+            alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
+          } else {
+            alert(`Hm. An unkown error occured when attempting to log ${record.taskIssueKey}. I have no idea why...`);
+          }
+        }
+
+        this.emit('syncTaskDone', {
+          record,
+          nextRecord: this.records[this.index + 1],
+          didSync
+        });
+
+        processNext();
       });
-    }
-
-					// Moving on to next issue
-    this.index += 1;
-    this.syncIterator();
-  }
-
-});
     }
   }
 }

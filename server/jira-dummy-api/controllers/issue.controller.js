@@ -11,7 +11,7 @@ api.getIssue = function (req, res) {
 
 api.addWorklog = function (req, res) {
   helpers.delay(function () {
-    res.status(200).send();
+    res.status(201).send();
   });
 }
 
