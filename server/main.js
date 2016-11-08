@@ -14,10 +14,10 @@ if (config.useDummyApi) {
   app.use('/rest', dummyApi);
 } else {
 
-  // Development proxy for JIRA api
+  // Development proxy for JIRA API
   if (config.env === 'development') {
-    app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
-    // app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
+    //app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+    app.use('/rest', proxy({ target: 'http://localhost:8080', changeOrigin: false }));
   }
 }
 

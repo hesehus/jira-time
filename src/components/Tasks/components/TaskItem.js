@@ -7,6 +7,7 @@ import RecordModel from '../../Recorder/modules/RecordModel';
 import { getIssue, setIssueRemaining } from '../../../shared/jiraClient';
 
 import LoadingIcon from '../../../assets/loading.svg';
+import RefreshIcon from '../../../assets/refresh.svg';
 
 import './TaskItem.scss';
 
@@ -32,6 +33,17 @@ export class TaskItem extends Component {
     this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
     this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
     this.onRemainignBlur = this.onRemainignBlur.bind(this);
+
+    this.state = {};
+  }
+
+  componentDidUpdate () {
+
+    // Update the remaining estimate since we allow it to be an uncontrolled input
+    if (this.refs.inputRemaining) {
+      const { issue } = this.props.task;
+      this.refs.inputRemaining.value = this.state.remainingEstimate || issue.fields.timetracking.remainingEstimate;
+    }
   }
 
   onRemoveClick () {
@@ -83,11 +95,13 @@ export class TaskItem extends Component {
     });
   }
 
-  onRemainignChange () {}
-
   onRemainignBlur (e) {
 
     const remainingEstimate = e.target.value;
+
+    this.setState({
+      remainingEstimate
+    });
     
     const { task } = this.props;
 
@@ -96,15 +110,12 @@ export class TaskItem extends Component {
       refreshing: true
     });
 
-    this.props.setIssueRemainingEstimate({
-      cuid: task.cuid,
-      remainingEstimate
-    });
-
     getIssue({
       id: task.issue.key
     })
     .then((issue) => {
+
+      issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
       this.props.refreshIssue({
         cuid: task.cuid,
@@ -113,12 +124,18 @@ export class TaskItem extends Component {
 
       setIssueRemaining({
         id: task.issue.key,
+        remainingEstimate,
+
         /*
           We need to send the original estimate along due to a bug in the JIRA REST API:
           https://jira.atlassian.com/browse/JRA-30459
         */
-        originalEstimate: issue.fields.timetracking.originalEstimate,
-        remainingEstimate
+        originalEstimate: issue.fields.timetracking.originalEstimate
+      })
+      .then(() => {
+        this.setState({
+          remainingEstimate: null
+        });
       });
     });
   }
@@ -161,8 +178,9 @@ export class TaskItem extends Component {
       refreshIcon = (
         <span className='task-item__issue-refresh'
           title='Click to refresh the JIRA issue, yo!'
-          onClick={this.onIssueRefreshClick}
-          >●</span>
+          onClick={this.onIssueRefreshClick}>
+          <img src={RefreshIcon} alt='Refresh' className='task-item__issue-refresh-image' />
+        </span>
       );
     }
     if (task.issueRefreshing) {
@@ -183,7 +201,11 @@ export class TaskItem extends Component {
             {refreshIcon}
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          <input className='task-item__remaining' value={task.issue.fields.timetracking.remainingEstimate} onBlur={this.onRemainignBlur} onChange={this.onRemainignChange} />
+          <input className='task-item__remaining'
+          defaultValue={task.issue.fields.timetracking.remainingEstimate}
+          onBlur={this.onRemainignBlur}
+          ref='inputRemaining'
+          />
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'
             onClick={this.onStartPassiveLogClick}>+</button>
