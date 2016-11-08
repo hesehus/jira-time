@@ -49,7 +49,7 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
-    
+
     this.setState({
       syncing: true
     });
@@ -67,7 +67,7 @@ export default class Header extends Component {
     });
 
     syncer.on('syncTaskDone', ({ record, nextRecord }) => {
-      
+
       // Refresh issue info when all the records for the task is synced
       if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
 

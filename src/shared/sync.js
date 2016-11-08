@@ -30,7 +30,7 @@ export default class Sync extends EventClass {
     }
 
     const record = this.records[this.index];
-    
+
     if (!record) {
       return this.emit('syncDone');
     } else {
@@ -61,7 +61,7 @@ export default class Sync extends EventClass {
 			.then((response) => {
 
         let didSync;
-        
+
         if (!response) {
           didSync = false;
         } else if (response.status === 201) {
