@@ -25,6 +25,8 @@ export default class Sync extends EventClass {
     const processNext = () => {
       this.index += 1;
       this.syncIterator();
+
+      return this;
     }
 
     const record = this.records[this.index];

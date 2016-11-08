@@ -49,7 +49,7 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
-    console.log('start sync');
+    
     this.setState({
       syncing: true
     });
@@ -61,7 +61,6 @@ export default class Header extends Component {
     });
 
     syncer.on('syncDone', () => {
-      console.log('done');
       this.setState({
         syncing: false
       });
