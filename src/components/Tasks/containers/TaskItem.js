@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import {
   removeTask,
   refreshIssue,
-  setIssueRefreshing
+  setIssueRefreshing,
+  setIssueRemainingEstimate
 } from '../modules/tasks';
 
 import {
@@ -18,6 +19,7 @@ const mapDispatchToProps = {
   removeTask,
   refreshIssue,
   setIssueRefreshing,
+  setIssueRemainingEstimate,
   startRecording,
   addRecord
 };

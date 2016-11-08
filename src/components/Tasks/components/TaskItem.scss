@@ -46,6 +46,8 @@
     white-space: nowrap;
     display: flex;
     align-items: center;
+    border: none;
+    text-align: right;
   }
 
   &__loading {

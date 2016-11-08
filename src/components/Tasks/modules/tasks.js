@@ -10,6 +10,7 @@ const initialState = { tasks: [] };
 export const ADD_TASK = 'ADD_TASK';
 export const REMOVE_TASK = 'REMOVE_TASK';
 export const REFRESH_ISSUE = 'REFRESH_ISSUE';
+export const SET_ISSUE_REMAINING_ESTIMATE = 'SET_ISSUE_REMAINING_ESTIMATE';
 export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 
 // ------------------------------------
@@ -39,6 +40,13 @@ export function setIssueRefreshing ({ cuid, refreshing }) {
     type: SET_ISSUE_REFRESHING,
     cuid,
     refreshing
+  }
+};
+export function setIssueRemainingEstimate ({ cuid, remainingEstimate }) {
+  return {
+    type: SET_ISSUE_REMAINING_ESTIMATE,
+    cuid,
+    remainingEstimate
   }
 };
 
@@ -83,6 +91,21 @@ const ACTION_HANDLERS = {
         return DeepAssign({}, task, {
           issueRefreshing: action.refreshing
         });
+      }
+      return task;
+    });
+
+    return {
+      tasks
+    };
+  },
+  [SET_ISSUE_REMAINING_ESTIMATE] : (state, action) => {
+
+    let tasks = state.tasks.map(task => {
+      if (task.cuid === action.cuid) {
+        const newTask = DeepAssign({}, task);
+        newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
+        return newTask;
       }
       return task;
     });

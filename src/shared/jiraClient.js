@@ -140,3 +140,19 @@ export function addWorklog ({ record }) {
   })
   .catch(err => console.error(err));
 }
+
+// Test method to see if we can actually do this
+export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) {
+  return callApi({
+    path: `api/2/issue/${id}`,
+    method: 'put',
+    body: {
+      fields: {
+        timetracking: {
+          originalEstimate,
+          remainingEstimate
+        }
+      }
+    }
+  });
+}
