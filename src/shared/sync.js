@@ -39,7 +39,7 @@ export default class Sync extends EventClass {
       }
 
 			// Must be at least one minute
-      if ((ensureDate(record.endTime) - ensureDate(record.startTime)) < 60) {
+      if ((ensureDate(record.endTime) - ensureDate(record.startTime)) < 60000) {
         return processNext();
       }
 
