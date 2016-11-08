@@ -24,6 +24,15 @@
     min-width: 120px;
     margin-left: 15px;
     white-space: nowrap;
+    display: flex;
+  }
+
+  &__issue-refresh {
+    cursor: pointer;
+    margin-left: 15px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
   }
 
   &__summary {
@@ -32,12 +41,11 @@
     flex-grow: 1;
   }
 
-  &__info {
+  &__remaining {
     margin-right: 15px;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    cursor: pointer;
   }
 
   &__loading {

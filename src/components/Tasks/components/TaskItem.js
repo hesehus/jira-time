@@ -28,7 +28,7 @@ export class TaskItem extends Component {
     this.onRemoveClick = this.onRemoveClick.bind(this);
     this.onStartPassiveLogClick = this.onStartPassiveLogClick.bind(this);
     this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
-    this.onRemainingClick = this.onRemainingClick.bind(this);
+    this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
   }
 
   onRemoveClick () {
@@ -61,7 +61,7 @@ export class TaskItem extends Component {
     });
   }
 
-  onRemainingClick () {
+  onIssueRefreshClick () {
     const { task } = this.props;
 
     this.props.setIssueRefreshing({
@@ -92,11 +92,11 @@ export class TaskItem extends Component {
       }
     });
 
-    let issueInfoAtEnd;
-
     let recordItems = records.map((record, index) => {
       return (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />);
     });
+
+    let refreshIcon;
 
     if (task.issue) {
 
@@ -115,16 +115,16 @@ export class TaskItem extends Component {
         );
       }
 
-      issueInfoAtEnd = (
-        <span className='task-item__info'
-          title='Click to refresh the remaining estimate, yo!'
-          onClick={this.onRemainingClick}
-        >{task.issue.fields.timetracking.remainingEstimate}</span>
+      refreshIcon = (
+        <span className='task-item__issue-refresh'
+          title='Click to refresh the JIRA issue, yo!'
+          onClick={this.onIssueRefreshClick}
+          >●</span>
       );
     }
     if (task.issueRefreshing) {
-      issueInfoAtEnd = (
-        <span className='task-item__info'>
+      refreshIcon = (
+        <span className='task-item__issue-refresh'>
           <img src={LoadingIcon} alt='Loading' className='task-item__loading' />
         </span>
       );
@@ -137,9 +137,10 @@ export class TaskItem extends Component {
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>
             <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
+            {refreshIcon}
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          {issueInfoAtEnd}
+          <span className='task-item__remaining'>{task.issue.fields.timetracking.remainingEstimate}</span>
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'
             onClick={this.onStartPassiveLogClick}>+</button>
