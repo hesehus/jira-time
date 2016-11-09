@@ -35,15 +35,6 @@ export class TaskItem extends Component {
     this.state = {};
   }
 
-  componentDidUpdate () {
-
-    // Update the remaining estimate since we allow it to be an uncontrolled input
-    if (this.refs.inputRemaining) {
-      const { issue } = this.props.task;
-      this.refs.inputRemaining.value = this.state.remainingEstimate || issue.fields.timetracking.remainingEstimate;
-    }
-  }
-
   onRemoveClick () {
     this.props.removeTask({ cuid: this.props.task.cuid });
   }
@@ -90,16 +81,18 @@ export class TaskItem extends Component {
         cuid: task.cuid,
         issue
       });
+
+      const remInp = this.refs.inputRemaining;
+      const remaining = issue.fields.timetracking.remainingEstimate;
+      if (remInp && remInp.value !== remaining) {
+        remInp.value = remaining;
+      }
     });
   }
 
   onRemainignBlur (e) {
 
     const remainingEstimate = e.target.value;
-
-    this.setState({
-      remainingEstimate
-    });
 
     const { task } = this.props;
 
@@ -112,8 +105,6 @@ export class TaskItem extends Component {
       id: task.issue.key
     })
     .then((issue) => {
-
-      issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
       this.props.refreshIssue({
         cuid: task.cuid,
@@ -129,11 +120,6 @@ export class TaskItem extends Component {
           https://jira.atlassian.com/browse/JRA-30459
         */
         originalEstimate: issue.fields.timetracking.originalEstimate
-      })
-      .then(() => {
-        this.setState({
-          remainingEstimate: null
-        });
       });
     });
   }
