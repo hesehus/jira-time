@@ -73,7 +73,7 @@ export function setRecordComment ({ cuid, comment }) {
     comment
   };
 };
-export function updateRecordElapsed ({ cuid, elapsed }) {
+export function updateRecordElapsed ({ cuid }) {
   return {
     type: UPDATE_RECORD_ELAPSED,
     cuid
@@ -114,7 +114,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+        elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
       });
     }
 
@@ -137,7 +137,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+        elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
       });
     }
 
@@ -157,7 +157,7 @@ const ACTION_HANDLERS = {
 
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
-      elapsed: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+      elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
     });
 
     return {
@@ -225,7 +225,7 @@ const ACTION_HANDLERS = {
         return Object.assign({}, record, {
           startTime: action.startTime,
           endTime: action.endTime,
-          elapsed: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
+          elapsedTime: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
         });
       }
 
@@ -237,7 +237,7 @@ const ACTION_HANDLERS = {
       record = Object.assign({}, record, {
         startTime: action.startTime,
         endTime: action.endTime,
-        elapsed: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
+        elapsedTime: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
       });
     }
 
@@ -279,7 +279,7 @@ const ACTION_HANDLERS = {
 
       if (record.cuid === action.cuid) {
         return Object.assign({}, record, {
-          elapsed: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
+          elapsedTime: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
         });
       }
 
@@ -289,7 +289,7 @@ const ACTION_HANDLERS = {
     let record = state.record;
     if (record && record.cuid === action.cuid) {
       record = Object.assign({}, record, {
-        elapsed: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
+        elapsedTime: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
       });
     }
 

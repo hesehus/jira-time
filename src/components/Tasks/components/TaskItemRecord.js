@@ -56,10 +56,10 @@ export class TaskItemRecord extends Component {
     const { record } = this.props;
 
     let endTimeDisplay;
-    if (record.endTime && record.endTime < record.startTime || (record.elapsed && record.elapsed[0] === '-')) {
+    if (record.endTime && record.endTime < record.startTime || (record.elapsedTime && record.elapsedTime[0] === '-')) {
       endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
     } else {
-      endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsed}</span>;
+      endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsedTime}</span>;
     }
 
     let className = 'task-item-record';
@@ -114,10 +114,15 @@ class DateInput extends Component {
       date = new Date(this.refs.date.value + ' ' + this.refs.time.value);
     } else {
       date = new Date(this.props.date);
+
       const vals = this.refs.time.value.split(':');
       date.setHours(vals[0]);
       date.setMinutes(vals[1]);
     }
+
+    // Always start at first second, for convenience.
+    // We are not displaying the seconds in the UI anyway
+    date.setSeconds(0);
 
     this.props.onChange({
       date

@@ -43,7 +43,7 @@ export class TaskItem extends Component {
   onStartPassiveLogClick () {
     const { task } = this.props;
 
-    const startTime = Date.now();
+    const startTime = new Date();
     const endTime = new Date();
     endTime.setMinutes(endTime.getMinutes() + 1);
 
@@ -106,6 +106,9 @@ export class TaskItem extends Component {
       id: task.issue.key
     })
     .then((issue) => {
+
+      // Ensure that our remaining estimate gets persisted
+      issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
       this.props.refreshIssue({
         cuid: task.cuid,

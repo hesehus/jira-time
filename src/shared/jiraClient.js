@@ -141,7 +141,7 @@ export function addWorklog ({ record }) {
   .catch(err => console.error(err));
 }
 
-// Test method to see if we can actually do this
+// Set remaining estimate for an issue
 export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) {
   return callApi({
     path: `api/2/issue/${id}`,
