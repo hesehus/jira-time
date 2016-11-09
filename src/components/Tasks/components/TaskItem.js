@@ -195,7 +195,7 @@ export class TaskItem extends Component {
             title='Add a worklog'
             onClick={this.onStartPassiveLogClick}>
             <img src={PlusIcon} alt='Plus' />
-            </button>
+          </button>
           <button className='task-item__log task-item__log--active'
             title='Start new worklog'
             onClick={this.onStartActiveLogClick}>●</button>
