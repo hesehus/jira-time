@@ -182,8 +182,8 @@ export class TaskItem extends Component {
         <div className='task-item-info'>
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>
-            <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
             {refreshIcon}
+            <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           <input className='task-item__remaining'
@@ -194,7 +194,7 @@ export class TaskItem extends Component {
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'
             onClick={this.onStartPassiveLogClick}>
-            <img src={PlusIcon} alt='Plus' />
+            <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
           </button>
           <button className='task-item__log task-item__log--active'
             title='Start new worklog'

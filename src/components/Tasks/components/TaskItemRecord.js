@@ -142,7 +142,7 @@ class DateInput extends Component {
     const dateDisplay = (
       <input type='date'
         ref='date'
-        value={date}
+        defaultValue={date}
         onChange={this.onChange}
         className='task-item-record-date__input task-item-record-date__input--date'
        />
@@ -150,7 +150,7 @@ class DateInput extends Component {
     const timeDisplay = (
       <input type='time'
         ref='time'
-        value={time}
+        defaultValue={time}
         onChange={this.onChange}
         className='task-item-record-date__input task-item-record-date__input--time'
        />

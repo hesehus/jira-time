@@ -15,6 +15,18 @@ api.addWorklog = function (req, res) {
   });
 }
 
+api.updateIssue = function (req, res) {
+  helpers.delay(function () {
+    res.status(204).send();
+  });
+}
+
+api.watchIssue = function (req, res) {
+  helpers.delay(function () {
+    res.status(204).send();
+  });
+}
+
 function createDummyIssue (key) {
   var issue = {
     key: key,
