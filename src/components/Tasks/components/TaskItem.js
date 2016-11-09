@@ -1,5 +1,3 @@
-import DeepAssign from 'deep-assign';
-
 import React, { Component, PropTypes } from 'react';
 import TaskItemRecord from '../containers/TaskItemRecord';
 import RecordModel from '../../Recorder/modules/RecordModel';
@@ -102,7 +100,7 @@ export class TaskItem extends Component {
     this.setState({
       remainingEstimate
     });
-    
+
     const { task } = this.props;
 
     this.props.setIssueRefreshing({
@@ -202,9 +200,9 @@ export class TaskItem extends Component {
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           <input className='task-item__remaining'
-          defaultValue={task.issue.fields.timetracking.remainingEstimate}
-          onBlur={this.onRemainignBlur}
-          ref='inputRemaining'
+            defaultValue={task.issue.fields.timetracking.remainingEstimate}
+            onBlur={this.onRemainignBlur}
+            ref='inputRemaining'
           />
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'
