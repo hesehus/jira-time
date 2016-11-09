@@ -156,3 +156,10 @@ export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) 
     }
   });
 }
+
+export function addCurrentUserAsWatcher ({ taskIssueKey }) {
+  return callApi({
+    path: `api/2/issue/${taskIssueKey}/watchers`,
+    method: 'post'
+  });
+}

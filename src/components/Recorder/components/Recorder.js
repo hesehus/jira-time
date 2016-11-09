@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { getIssue } from '../../../shared/jiraClient';
+import { getIssue, addCurrentUserAsWatcher } from '../../../shared/jiraClient';
 import RecordModel from '../modules/RecordModel';
 
 import { Notification } from 'react-notification';
@@ -65,6 +65,9 @@ export default class Recorder extends Component {
 
           if (issue) {
             this.props.addTask({ issue });
+
+            addCurrentUserAsWatcher({ taskIssueKey: issue.key });
+
           } else {
             alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
           }

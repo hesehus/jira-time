@@ -6,6 +6,7 @@ import { getIssue, setIssueRemaining } from '../../../shared/jiraClient';
 
 import LoadingIcon from '../../../assets/loading.svg';
 import RefreshIcon from '../../../assets/refresh.svg';
+import PlusIcon from '../../../assets/plus.svg';
 
 import './TaskItem.scss';
 
@@ -192,7 +193,9 @@ export class TaskItem extends Component {
           />
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'
-            onClick={this.onStartPassiveLogClick}>+</button>
+            onClick={this.onStartPassiveLogClick}>
+            <img src={PlusIcon} alt='Plus' />
+            </button>
           <button className='task-item__log task-item__log--active'
             title='Start new worklog'
             onClick={this.onStartActiveLogClick}>●</button>
