@@ -12,7 +12,7 @@ export default function RecordModel ({ task, startTime = Date.now(), endTime, el
     comment: '',
     syncing: false
   };
-  
+
   if (startTime && endTime && !elapsedTime) {
     model.elapsedTime = new Elapsed(startTime, endTime).optimal;
   }
