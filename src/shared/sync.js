@@ -60,41 +60,44 @@ export default class Sync extends EventClass {
       addWorklog({ record })
 			.then((response) => {
 
-  let didSync;
+        let didSync;
 
-  if (!response) {
-    didSync = false;
-  } else if (response.status === 201) {
-    didSync = true;
-  }
+        if (!response) {
+          didSync = false;
+        } else if (response.status === 201) {
+          didSync = true;
+        }
 
-  if (didSync) {
-    this.removeRecord({
-      cuid: record.cuid
-    });
-  } else {
-    this.setRecordSync({
-      cuid: record.cuid,
-      syncing: false
-    });
+        if (didSync) {
+          this.removeRecord({
+            cuid: record.cuid
+          });
+        } else {
+          this.setRecordSync({
+            cuid: record.cuid,
+            syncing: false
+          });
 
-    if (response.status === 403 || response.status === 404) {
-      alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
-    } else if (response.status === 400) {
-      alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
-    } else {
-      alert(`Hm. An unkown error occured when attempting to log ${record.taskIssueKey}. I have no idea why...`);
-    }
-  }
+          if (response.status === 403) {
+            alert(`Heey.. Looks like you don't have permissions to log to ${record.taskIssueKey}. Did you change your login password or something?`);
+          } else if (response.status === 400) {
+            alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
+          } else {
+            alert(`Hm. An unkown error occured when attempting to log to ${record.taskIssueKey}. I have no idea why...`);
+          }
+        }
 
-  this.emit('syncTaskDone', {
-    record,
-    nextRecord: this.records[this.index + 1],
-    didSync
-  });
+        this.emit('syncTaskDone', {
+          record,
+          nextRecord: this.records[this.index + 1],
+          didSync
+        });
 
-  processNext();
-});
+        processNext();
+      })
+      .catch(() => {
+        alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
+      });
     }
   }
 }

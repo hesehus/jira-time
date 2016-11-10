@@ -16,28 +16,38 @@ function callApi ({ path, method = 'get', body }) {
     headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
   }
 
-  return fetch(`${state.app.api}/${path}`, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null
-  })
-  .then((response) => {
+  return new Promise((resolve, reject) {
+    fetch(`${state.app.api}/${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null
+    })
+    .then((response) => {
 
-    if (!response) {
-      throw new Error('No response received from API');
-    }
+      if (!response) {
+        reject('No response received from API');
+      }
 
-    switch (response.status) {
-      case 500 : {
-        throw new Error(response);
+      switch (response.status) {
+        
+        // In case of API error
+        case 500 : {
+          reject(response);
+        }
+
+        // Not found or not permissions to call this API action
+        case 404 : {
+          reject(response);
+        }
+
+        default : {
+          resolve(response);
+        }
       }
-      default : {
-        return response;
-      }
-    }
-  })
-  .catch((error) => {
-    console.error(error);
+    })
+    .catch((error) => {
+      reject(error);
+    });
   });
 }
 
@@ -125,9 +135,6 @@ export function addWorklog ({ record }) {
   const { comment, startTime, endTime } = record;
 
   let timeSpentSeconds = Math.floor((ensureDate(endTime) - ensureDate(startTime)) / 1000);
-  if (timeSpentSeconds < 60) {
-    timeSpentSeconds = 60;
-  }
 
   return callApi({
     path: `api/2/issue/${record.taskIssueKey}/worklog`,
@@ -137,11 +144,15 @@ export function addWorklog ({ record }) {
       timeSpentSeconds,
       started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
     }
-  })
-  .catch(err => console.error(err));
+  });
 }
 
-// Set remaining estimate for an issue
+/**
+* Updates the remaining time for an issue
+* @param originalEstimate: string
+* @param remainingEstimate: string
+* @returns promise
+**/
 export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) {
   return callApi({
     path: `api/2/issue/${id}`,
@@ -157,6 +168,12 @@ export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) 
   });
 }
 
+// 
+/**
+* Sets the logged in user as watcher for a given issue
+* @param taskIssueKey: string
+* @returns promise
+**/
 export function addCurrentUserAsWatcher ({ taskIssueKey }) {
   return callApi({
     path: `api/2/issue/${taskIssueKey}/watchers`,
