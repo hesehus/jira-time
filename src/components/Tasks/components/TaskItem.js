@@ -36,6 +36,12 @@ export class TaskItem extends Component {
     this.state = {};
   }
 
+  componentWillUpdate () {
+    if (this.props.task && this.props.task.issue) {
+      this.setRemainingInputValue(this.props.task.issue.fields.timetracking.remainingEstimate);
+    }
+  }
+
   onRemoveClick () {
     this.props.removeTask({ cuid: this.props.task.cuid });
   }
@@ -78,17 +84,21 @@ export class TaskItem extends Component {
       id: task.issue.key
     })
     .then((issue) => {
+
       this.props.refreshIssue({
         cuid: task.cuid,
         issue
       });
 
-      const remInp = this.refs.inputRemaining;
-      const remaining = issue.fields.timetracking.remainingEstimate;
-      if (remInp && remInp.value !== remaining) {
-        remInp.value = remaining;
-      }
+      this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
     });
+  }
+
+  setRemainingInputValue (remaining) {
+    const remInp = this.refs.inputRemaining;
+    if (remInp && remInp.value !== remaining) {
+      remInp.value = remaining;
+    }
   }
 
   onRemainignBlur (e) {
@@ -99,7 +109,8 @@ export class TaskItem extends Component {
 
     this.props.setIssueRefreshing({
       cuid: task.cuid,
-      refreshing: true
+      refreshing: true,
+      remainingEstimate
     });
 
     getIssue({

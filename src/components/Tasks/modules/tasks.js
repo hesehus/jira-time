@@ -35,11 +35,12 @@ export function refreshIssue ({ cuid, issue }) {
     issue
   }
 };
-export function setIssueRefreshing ({ cuid, refreshing }) {
+export function setIssueRefreshing ({ cuid, refreshing, remainingEstimate }) {
   return {
     type: SET_ISSUE_REFRESHING,
     cuid,
-    refreshing
+    refreshing,
+    remainingEstimate
   }
 };
 export function setIssueRemainingEstimate ({ cuid, remainingEstimate }) {
@@ -88,9 +89,16 @@ const ACTION_HANDLERS = {
 
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
-        return DeepAssign({}, task, {
+        
+        const newTask = DeepAssign({}, task, {
           issueRefreshing: action.refreshing
         });
+
+        if (newTask.issue && action.remainingEstimate) {
+          newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
+        }
+
+        return newTask;
       }
       return task;
     });
