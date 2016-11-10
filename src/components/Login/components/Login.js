@@ -76,7 +76,13 @@ export class Login extends Component {
 
             this.setState(errorState);
           }
-        });
+        })
+        .catch(() => {
+          this.setState({
+            loggingIn: false,
+            error: 'noResponseFromAPI'
+          });
+        })
     }
   }
 
