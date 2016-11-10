@@ -5,6 +5,8 @@ import RecordModel from './RecordModel';
 import TaskModel from '../../Tasks/modules/TaskModel';
 import { REMOVE_TASK } from '../../Tasks/modules/tasks';
 
+import { SET_LOGGED_IN } from 'routes/Profile/modules/profile';
+
 const initialState = {
   record: null,
   records: [],
@@ -320,6 +322,14 @@ const ACTION_HANDLERS = {
       records
     };
   }
+};
+
+// Listen for logout. Clear everything if we log out
+ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
+  if (!action.isLoggedIn) {
+    return initialState;
+  }
+  return state;
 };
 
 // ------------------------------------

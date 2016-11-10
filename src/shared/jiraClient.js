@@ -16,7 +16,7 @@ function callApi ({ path, method = 'get', body }) {
     headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
   }
 
-  return new Promise((resolve, reject) {
+  return new Promise((resolve, reject) => {
     fetch(`${state.app.api}/${path}`, {
       method,
       headers,
@@ -29,19 +29,22 @@ function callApi ({ path, method = 'get', body }) {
       }
 
       switch (response.status) {
-        
+
         // In case of API error
         case 500 : {
           reject(response);
+          break;
         }
 
         // Not found or not permissions to call this API action
         case 404 : {
           reject(response);
+          break;
         }
 
         default : {
           resolve(response);
+          break;
         }
       }
     })
@@ -168,7 +171,6 @@ export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) 
   });
 }
 
-// 
 /**
 * Sets the logged in user as watcher for a given issue
 * @param taskIssueKey: string

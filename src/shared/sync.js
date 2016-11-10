@@ -79,11 +79,14 @@ export default class Sync extends EventClass {
           });
 
           if (response.status === 403) {
-            alert(`Heey.. Looks like you don't have permissions to log to ${record.taskIssueKey}. Did you change your login password or something?`);
+            alert(`Heey.. Looks like you don't have permissions to log to ${record.taskIssueKey}.
+              Did you change your login password or something?`);
           } else if (response.status === 400) {
-            alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided. Shape up!`);
+            alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided.
+              Shape up!`);
           } else {
-            alert(`Hm. An unkown error occured when attempting to log to ${record.taskIssueKey}. I have no idea why...`);
+            alert(`Hm. An unkown error occured when attempting to log to ${record.taskIssueKey}.
+              I have no idea why...`);
           }
         }
 

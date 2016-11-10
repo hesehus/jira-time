@@ -2,6 +2,8 @@ import DeepAssign from 'deep-assign';
 
 import TaskModel from './TaskModel';
 
+import { SET_LOGGED_IN } from 'routes/Profile/modules/profile';
+
 const initialState = { tasks: [] };
 
 // ------------------------------------
@@ -122,6 +124,14 @@ const ACTION_HANDLERS = {
       tasks
     };
   }
+};
+
+// Listen for logout. Clear everything if we log out
+ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
+  if (!action.isLoggedIn) {
+    return initialState;
+  }
+  return state;
 };
 
 // ------------------------------------

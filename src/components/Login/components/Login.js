@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react'
 
 import './Login.scss';
 
-import { login } from '../../../shared/jiraClient';
+import { login } from 'shared/jiraClient';
+
+import LoadingIcon from 'assets/loading.svg';
 
 export class Login extends Component {
 
@@ -132,16 +134,17 @@ export class Login extends Component {
       <form className='login' onSubmit={this.onSubmit}>
         <label className='login-label'>
           <div className='login-label__text'>Username:</div>
-          <input type='text' ref='username' name='username' />
+          <input type='text' ref='username' name='username' disabled={this.state.loggingIn} />
         </label>
         <label className='login-label'>
           <div className='login-label__text'>Password:</div>
-          <input type='password' ref='password' name='password' />
+          <input type='password' ref='password' name='password' disabled={this.state.loggingIn} />
         </label>
 
         {error}
 
-        <button disabled={this.state.loggingIn}>Login</button>
+        {!this.state.loggingIn ? <button>Login</button> : null}
+        {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
       </form>
     );
   }

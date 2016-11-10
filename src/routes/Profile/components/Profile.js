@@ -17,10 +17,15 @@ export class Profile extends Component {
     super(props);
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.onLogoutClick = this.onLogoutClick.bind(this);
   }
 
   onLoginSuccess ({ username }) {
     this.props.setLoggedIn({ isLoggedIn: true, username });
+  }
+
+  onLogoutClick () {
+    this.props.setLoggedIn({ isLoggedIn: false, username: this.props.profile.username });
   }
 
   render () {
@@ -34,6 +39,7 @@ export class Profile extends Component {
     return (
       <div className='profile'>
         <div>Username: {username}</div>
+        <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
       </div>
     );
   }
