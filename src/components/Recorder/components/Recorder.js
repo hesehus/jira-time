@@ -155,7 +155,7 @@ export default class Recorder extends Component {
         <div className='recorder-left'>
           <div className='recorder-issue-info'>
             {record && task && task.issue ? <div className='recorder-issue-key'>{task.issue.key}</div> : null}
-            <div className='recorder-elapsed-time'>{record ? record.elapsed : null}</div>
+            <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
           </div>
           {record ? comment : null}
         </div>

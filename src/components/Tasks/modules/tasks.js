@@ -89,7 +89,7 @@ const ACTION_HANDLERS = {
 
     let tasks = state.tasks.map(task => {
       if (task.cuid === action.cuid) {
-        
+
         const newTask = DeepAssign({}, task, {
           issueRefreshing: action.refreshing
         });
