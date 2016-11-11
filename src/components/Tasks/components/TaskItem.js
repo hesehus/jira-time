@@ -10,6 +10,8 @@ import PlusIcon from '../../../assets/plus.svg';
 
 import './TaskItem.scss';
 
+let focusingOnRemaining = false;
+
 export class TaskItem extends Component {
 
   static get propTypes () {
@@ -95,13 +97,21 @@ export class TaskItem extends Component {
   }
 
   setRemainingInputValue (remaining) {
-    const remInp = this.refs.inputRemaining;
-    if (remInp && remInp.value !== remaining) {
-      remInp.value = remaining;
+    if (!focusingOnRemaining) {
+      const remInp = this.refs.inputRemaining;
+      if (remInp && remInp.value !== remaining) {
+        remInp.value = remaining;
+      }
     }
   }
 
+  onRemainignFocus (e) {
+    focusingOnRemaining = true;
+  }
+
   onRemainignBlur (e) {
+
+    focusingOnRemaining = false;
 
     const remainingEstimate = e.target.value;
 
@@ -202,6 +212,7 @@ export class TaskItem extends Component {
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           <input className='task-item__remaining'
             defaultValue={task.issue.fields.timetracking.remainingEstimate}
+            onFocus={this.onRemainignFocus}
             onBlur={this.onRemainignBlur}
             ref='inputRemaining'
           />
