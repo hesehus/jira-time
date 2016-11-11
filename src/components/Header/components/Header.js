@@ -135,7 +135,7 @@ export default class Header extends Component {
           </Link>
         </div>
         <div className='header-right'>
-          {sync}
+          {this.props.loggedIn ? sync : null}
         </div>
       </div>
     );

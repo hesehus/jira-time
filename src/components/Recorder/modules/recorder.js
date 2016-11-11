@@ -326,10 +326,20 @@ const ACTION_HANDLERS = {
 
 // Listen for logout. Clear everything if we log out
 ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
-  if (!action.isLoggedIn) {
-    return initialState;
+  const records = [...state.records];
+
+  if (state.record) {
+    records[records.length - 1] = Object.assign({}, records[records.length - 1], {
+      endTime: Date.now(),
+      elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+    });
   }
-  return state;
+
+  return {
+    record: initialState.record,
+    task: initialState.task,
+    records
+  }
 };
 
 // ------------------------------------
