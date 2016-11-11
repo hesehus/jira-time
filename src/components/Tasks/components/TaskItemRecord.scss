@@ -4,9 +4,19 @@
   border-top: 1px solid #f0f0f0;
   align-items: center;
   font-size: .8rem;
+  background: #fff;
+  box-sizing: border-box;
 
   &--syncing {
     background-color: #f1f1f1;
+  }
+
+  &--moving {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
   }
 
   &-remove {

@@ -10,10 +10,16 @@ import {
 import {
   addRecord,
   startRecording,
+  getMovingRecord,
   getRecordsForTask
 } from '../../Recorder/modules/recorder';
 
 import TaskItem from '../components/TaskItem';
+
+const mapStateToProps = (state, props) => ({
+  records: getRecordsForTask({ state, taskCuid: props.task.cuid }),
+  movingRecord: getMovingRecord(state)
+});
 
 const mapDispatchToProps = {
   removeTask,
@@ -23,9 +29,5 @@ const mapDispatchToProps = {
   startRecording,
   addRecord
 };
-
-const mapStateToProps = (state, props) => ({
-  records: getRecordsForTask({ state, taskCuid: props.task.cuid })
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

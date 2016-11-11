@@ -23,6 +23,9 @@ export const PAUSE_RECORDING = 'PAUSE_RECORDING';
 export const SET_RECORD_SYNC = 'SET_RECORD_SYNC';
 export const SET_RECORD_DATE = 'SET_RECORD_DATE';
 export const SET_RECORD_COMMENT = 'SET_RECORD_COMMENT';
+export const SET_RECORD_MOVING = 'SET_RECORD_MOVING';
+export const SET_RECORD_MOVE_TARGET = 'SET_RECORD_MOVE_TARGET';
+export const SET_RECORD_TASK = 'SET_RECORD_TASK';
 export const UPDATE_RECORD_ELAPSED = 'UPDATE_RECORD_ELAPSED';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
 
@@ -73,6 +76,28 @@ export function setRecordComment ({ cuid, comment }) {
     type: SET_RECORD_COMMENT,
     cuid,
     comment
+  };
+};
+export function setRecordTask ({ cuid, taskCuid, taskIssueKey }) {
+  return {
+    type: SET_RECORD_TASK,
+    cuid,
+    taskCuid,
+    taskIssueKey
+  };
+};
+export function setRecordMoving ({ cuid, moving }) {
+  return {
+    type: SET_RECORD_MOVING,
+    cuid,
+    moving
+  };
+};
+export function setRecordMoveTarget ({ cuid, taskCuid }) {
+  return {
+    type: SET_RECORD_MOVE_TARGET,
+    cuid,
+    taskCuid
   };
 };
 export function updateRecordElapsed ({ cuid }) {
@@ -275,6 +300,90 @@ const ACTION_HANDLERS = {
       records
     };
   },
+  [SET_RECORD_TASK] : (state, action) => {
+
+    const { taskCuid, taskIssueKey } = action;
+
+    const records = state.records.map((record) => {
+
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          taskCuid,
+          taskIssueKey,
+          moving: false,
+          taskDroppableCuid: null
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        taskCuid,
+        taskIssueKey,
+        moving: false,
+        taskDroppableCuid: null
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [SET_RECORD_MOVING] : (state, action) => {
+
+    const records = state.records.map((record) => {
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          moving: action.moving
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        moving: action.moving
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
+  [SET_RECORD_MOVE_TARGET] : (state, action) => {
+
+    const records = state.records.map((record) => {
+      if (record.cuid === action.cuid) {
+        return Object.assign({}, record, {
+          taskDroppableCuid: action.taskCuid
+        });
+      }
+
+      return record;
+    });
+
+    let record = state.record;
+    if (record && record.cuid === action.cuid) {
+      record = Object.assign({}, record, {
+        taskDroppableCuid: action.taskCuid
+      });
+    }
+
+    return {
+      record,
+      task: state.task,
+      records
+    };
+  },
   [UPDATE_RECORD_ELAPSED] : (state, action) => {
 
     const records = state.records.map((record) => {
@@ -359,9 +468,12 @@ export function getRecordsForTask ({ state, taskCuid }) {
 
 export const getRecords = state => state.recorder.records;
 
-export const getRecord = ({ state, recordCuid }) => state.recorder.records.find(r => r.cuid === recordCuid);
-
 export const getActiveRecord = state => state.recorder.record;
+
+export const getMovingRecord = state => {
+  const index = state.recorder.records.findIndex(r => r.moving);
+  return state.recorder.records[index];
+}
 
 // ------------------------------------
 // Reducer

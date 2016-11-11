@@ -1,8 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 
+import Hammer from 'hammerjs';
 import moment from 'moment';
+import domClosest from 'dom-closest';
 
 import './TaskItemRecord.scss';
+
+// Clears any HTML text selection on the page
+function clearSelection () {
+    if (document.selection) {
+        document.selection.empty();
+    } else if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+    }
+}
 
 export class TaskItemRecord extends Component {
 
@@ -12,7 +23,11 @@ export class TaskItemRecord extends Component {
     removeRecord: PropTypes.func.isRequired,
     setRecordDate: PropTypes.func.isRequired,
     setRecordComment: PropTypes.func.isRequired,
-    activeRecord: PropTypes.object
+    setRecordMoving: PropTypes.func.isRequired,
+    setRecordMoveTarget: PropTypes.func.isRequired,
+    setRecordTask: PropTypes.func.isRequired,
+    activeRecord: PropTypes.object,
+    movingRecord: PropTypes.object
   }
 
   constructor (props) {
@@ -22,6 +37,103 @@ export class TaskItemRecord extends Component {
     this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.onRemoveClick = this.onRemoveClick.bind(this);
     this.onCommentChange = this.onCommentChange.bind(this);
+
+    this.onPanStart = this.onPanStart.bind(this);
+    this.onPanMove = this.onPanMove.bind(this);
+    this.onPanEnd = this.onPanEnd.bind(this);
+    this.onKeyPress = this.onKeyPress.bind(this);
+  }
+
+  componentDidMount () {
+    if (this.refs.outer) {
+      this.mc = new Hammer.Manager(this.refs.outer, {
+        cssProps: {
+          userSelect: 'text'
+        }
+      });
+
+      this.mc.add(new Hammer.Pan({
+        direction: Hammer.DIRECTION_VERTICAL
+      }));
+
+      this.mc.on('panstart', this.onPanStart);
+      this.mc.on('panmove', this.onPanMove);
+      this.mc.on('panend', this.onPanEnd);
+    }
+
+    if (!this.documentListener) {
+      document.addEventListener('keydown', this.onKeyPress, false);
+      this.documentListener = true;
+    }
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.onKeyPress);
+  }
+
+  onKeyPress (e) {
+    if (e.keyCode === 27) {
+      if (this.props.record.moving) {
+        this.targetTaskCuid = null;
+        this.onPanEnd();
+      }
+    }
+  }
+
+  onPanStart (e) {
+    e.preventDefault();
+
+    clearSelection();
+
+    document.body.classList.add('moving');
+
+    this.props.setRecordMoving({
+      cuid: this.props.record.cuid,
+      moving: true
+    });
+
+    this.onPanMove(e);
+  }
+
+  onPanMove (e) {
+    if (this.refs.outer) {
+      e.preventDefault();
+
+      const { record } = this.props;
+
+      this.refs.outer.style.top = `${e.center.y + 20}px`;
+
+      const target = document.elementFromPoint(e.center.x, e.center.y);
+      const closestTask = domClosest(target, '.task-item');
+
+      const taskCuid = closestTask ? closestTask.dataset.cuid : null;
+      const taskIssueKey = closestTask ? closestTask.dataset.taskissuekey : null;
+
+      this.targetTaskCuid = taskCuid;
+      this.targetTaskIssueKey = taskIssueKey;
+
+      this.props.setRecordMoveTarget({
+        cuid: record.cuid,
+        taskCuid
+      });
+    }
+  }
+
+  onPanEnd (e) {
+    if (this.targetTaskCuid) {
+      this.props.setRecordTask({
+        cuid: this.props.record.cuid,
+        taskCuid: this.targetTaskCuid,
+        taskIssueKey: this.targetTaskIssueKey
+      });
+    } else {
+      this.props.setRecordMoving({
+        cuid: this.props.record.cuid,
+        moving: false
+      });
+    }
+    clearSelection();
+    document.body.classList.remove('moving');
   }
 
   onStartTimeChange ({ date }) {
@@ -53,7 +165,9 @@ export class TaskItemRecord extends Component {
 
   render () {
 
-    const { record } = this.props;
+    const { record, movingRecord } = this.props;
+
+    const someRecordIsMoving = !!movingRecord;
 
     let endTimeDisplay;
     if (record.endTime && record.endTime < record.startTime || (record.elapsedTime && record.elapsedTime[0] === '-')) {
@@ -69,21 +183,40 @@ export class TaskItemRecord extends Component {
     if (this.props.activeRecord && this.props.activeRecord.cuid === record.cuid) {
       className += ' task-item-record--active';
     }
+    if (record.moving) {
+      className += ' task-item-record--moving';
+    }
 
     return (
-      <div className={className}>
+      <div className={className} ref='outer'>
         <button className='task-item-record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
         <div className='task-item-record-time'>
           <div className='task-item-record-dates'>
-            <DateInput date={record.startTime} type='start' onChange={this.onStartTimeChange} />
-            {record.endTime ? <DateInput date={record.endTime} type='end' onChange={this.onEndTimeChange} /> : null}
+            <DateInput
+              date={record.startTime}
+              type='start'
+              onChange={this.onStartTimeChange}
+              disabled={someRecordIsMoving}
+            />
+            {record.endTime ? (
+              <DateInput
+                date={record.endTime}
+                type='end'
+                onChange={this.onEndTimeChange}
+                disabled={someRecordIsMoving}
+              />
+            ) : (
+              null
+            )}
           </div>
           {endTimeDisplay}
         </div>
         <textarea
           className='task-item-record-comment'
           onChange={this.onCommentChange}
-          value={record.comment} />
+          value={record.comment}
+          disabled={someRecordIsMoving}
+        />
       </div>
     );
   }
@@ -94,7 +227,8 @@ class DateInput extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     date: PropTypes.any.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    disabled: PropTypes.bool
   }
 
   constructor (props) {
@@ -150,6 +284,7 @@ class DateInput extends Component {
         defaultValue={date}
         onChange={this.onChange}
         className='task-item-record-date__input task-item-record-date__input--date'
+        disabled={this.props.disabled}
        />
     );
     const timeDisplay = (
@@ -158,6 +293,7 @@ class DateInput extends Component {
         defaultValue={time}
         onChange={this.onChange}
         className='task-item-record-date__input task-item-record-date__input--time'
+        disabled={this.props.disabled}
        />
     );
 

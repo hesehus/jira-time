@@ -22,7 +22,8 @@ export class TaskItem extends Component {
       addRecord: PropTypes.func.isRequired,
       startRecording: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
-      setIssueRefreshing: PropTypes.func.isRequired
+      setIssueRefreshing: PropTypes.func.isRequired,
+      movingRecord: PropTypes.object
     };
   }
 
@@ -151,15 +152,13 @@ export class TaskItem extends Component {
 
   render () {
 
-    const { task } = this.props;
+    const { task, records, movingRecord } = this.props;
 
-    // Get the records for this task
-    let records = [];
-    this.props.records.forEach(record => {
-      if (record.taskCuid === task.cuid) {
-        records.push(record);
-      }
-    });
+    let className = 'task-item';
+
+    if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
+      className += ' task-item--drop-active';
+    }
 
     let recordItems = records.map((record, index) => {
       return (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />);
@@ -167,6 +166,7 @@ export class TaskItem extends Component {
 
     let refreshIcon;
 
+    // This task does have a JIRA issue
     if (task.issue) {
 
       // There are errors with the task. Display that instead of issue info
@@ -205,9 +205,9 @@ export class TaskItem extends Component {
       remainingEstimate = null;
     }
 
-    // Output the list of tasks
+    // Output the task
     return (
-      <div className='task-item'>
+      <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
         <div className='task-item-info'>
           <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
           <span className='task-item__key'>
@@ -220,6 +220,7 @@ export class TaskItem extends Component {
             onFocus={this.onRemainignFocus}
             onBlur={this.onRemainignBlur}
             ref='inputRemaining'
+            disabled={!!movingRecord}
           />
           <button className='task-item__log task-item__log--passive'
             title='Add a worklog'

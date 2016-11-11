@@ -6,6 +6,8 @@ export default function RecordModel ({ task, startTime = Date.now(), endTime, el
     cuid: cuid(),
     taskCuid: task ? task.cuid : null,
     taskIssueKey: task ? task.issue.key : null,
+    taskDroppableCuid: null,
+    moving: false,
     startTime,
     elapsedTime,
     endTime,

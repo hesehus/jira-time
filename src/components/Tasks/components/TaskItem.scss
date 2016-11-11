@@ -1,10 +1,17 @@
 .task-item {
   border-bottom: 1px solid #f0f0f0;
   background: #fff;
-  transition: background 250ms;
+  transition: background 100ms;
 
   &:hover {
     background: #fafafa;
+  }
+
+  &--drop-active {
+    &,
+    &:hover {
+      background: #e0e0e0;
+    }
   }
 
   &-info {
