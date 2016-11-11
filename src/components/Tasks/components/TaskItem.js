@@ -200,6 +200,11 @@ export class TaskItem extends Component {
       );
     }
 
+    let remainingEstimate = task.issue.fields.timetracking.remainingEstimate;
+    if (!remainingEstimate || remainingEstimate === 'undefined') {
+      remainingEstimate = null;
+    }
+
     // Output the list of tasks
     return (
       <div className='task-item'>
@@ -211,7 +216,7 @@ export class TaskItem extends Component {
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
           <input className='task-item__remaining'
-            defaultValue={task.issue.fields.timetracking.remainingEstimate}
+            defaultValue={remainingEstimate}
             onFocus={this.onRemainignFocus}
             onBlur={this.onRemainignBlur}
             ref='inputRemaining'
