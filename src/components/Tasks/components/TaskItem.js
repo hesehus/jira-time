@@ -4,9 +4,9 @@ import RecordModel from '../../Recorder/modules/RecordModel';
 
 import { getIssue, setIssueRemaining } from '../../../shared/jiraClient';
 
-import LoadingIcon from '../../../assets/loading.svg';
-import RefreshIcon from '../../../assets/refresh.svg';
-import PlusIcon from '../../../assets/plus.svg';
+import LoadingIcon from 'assets/loading.svg';
+import RefreshIcon from 'assets/refresh.svg';
+import PlusIcon from 'assets/plus.svg';
 
 import './TaskItem.scss';
 
@@ -160,8 +160,8 @@ export class TaskItem extends Component {
       className += ' task-item--drop-active';
     }
 
-    let recordItems = records.map((record, index) => {
-      return (<TaskItemRecord recordCuid={record.cuid} record={record} key={index} />);
+    let recordItems = records.map((record) => {
+      return <TaskItemRecord recordCuid={record.cuid} record={record} key={record.cuid} />;
     });
 
     let refreshIcon;
@@ -179,7 +179,7 @@ export class TaskItem extends Component {
                 {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
               </span>
             </div>
-            <div className='task-item-records'>{recordItems}</div>
+            <div className='records'>{recordItems}</div>
           </div>
         );
       }
@@ -231,7 +231,7 @@ export class TaskItem extends Component {
             title='Start new worklog'
             onClick={this.onStartActiveLogClick}>●</button>
         </div>
-        <div className='task-item-records'>{recordItems}</div>
+        <div className='records'>{recordItems}</div>
       </div>
     );
   }

@@ -12,6 +12,8 @@ body {
   height: 100%;
 
   &.moving {
+    cursor: default;
+    
     * {
       user-select: none;
     }

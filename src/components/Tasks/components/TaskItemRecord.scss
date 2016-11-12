@@ -1,4 +1,21 @@
-.task-item-record {
+.records {
+
+  transition: background 100ms;
+
+  &--no-issue {
+    border-bottom: 1px solid #ccc;
+  }
+
+  &--drop-active {
+    background: #e0e0e0;
+  }
+  
+  &-header {
+    padding: 10px 5px;
+  }
+}
+
+.record {
   display: flex;
   padding: 5px 10px;
   border-top: 1px solid #f0f0f0;
@@ -77,7 +94,7 @@
   &__elapsed-time {
     min-width: 100px;
 
-    .task-item-record--active & {
+    .record--active & {
       animation: blink 2s infinite;
     }
   }

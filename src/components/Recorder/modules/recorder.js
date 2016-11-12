@@ -146,7 +146,8 @@ const ACTION_HANDLERS = {
     }
 
     // Determine which task to log to
-    const task = action.task || state.task || TaskModel();
+    // const task = action.task || state.task || TaskModel();
+    const task = action.task || TaskModel();
     const record = action.record || RecordModel({ task });
 
     records.push(record);
@@ -466,11 +467,23 @@ export function getRecordsForTask ({ state, taskCuid }) {
   return records;
 }
 
-export const getRecords = state => state.recorder.records;
+export function getRecordsWithNoIssue ({ state }) {
+  const records = [];
 
-export const getActiveRecord = state => state.recorder.record;
+  state.recorder.records.forEach((record) => {
+    if (!record.taskIssueKey) {
+      records.push(record);
+    }
+  });
 
-export const getMovingRecord = state => {
+  return records;
+}
+
+export const getRecords = ({ state }) => state.recorder.records;
+
+export const getActiveRecord = ({ state }) => state.recorder.record;
+
+export const getMovingRecord = ({ state }) => {
   const index = state.recorder.records.findIndex(r => r.moving);
   return state.recorder.records[index];
 }

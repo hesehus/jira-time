@@ -8,11 +8,11 @@ import './TaskItemRecord.scss';
 
 // Clears any HTML text selection on the page
 function clearSelection () {
-    if (document.selection) {
-        document.selection.empty();
-    } else if (window.getSelection) {
-        window.getSelection().removeAllRanges();
-    }
+  if (document.selection) {
+    document.selection.empty();
+  } else if (window.getSelection) {
+    window.getSelection().removeAllRanges();
+  }
 }
 
 export class TaskItemRecord extends Component {
@@ -106,32 +106,39 @@ export class TaskItemRecord extends Component {
       const target = document.elementFromPoint(e.center.x, e.center.y);
       const closestTask = domClosest(target, '.task-item');
 
-      const taskCuid = closestTask ? closestTask.dataset.cuid : null;
-      const taskIssueKey = closestTask ? closestTask.dataset.taskissuekey : null;
+      let taskCuid;
+      let taskIssueKey;
 
-      this.targetTaskCuid = taskCuid;
-      this.targetTaskIssueKey = taskIssueKey;
+      if (closestTask) {
+        taskCuid = closestTask.dataset.cuid;
+        taskIssueKey = closestTask.dataset.taskissuekey;
+        this.targetIsRecordsWithNoIssue = false;
+      } else {
+        if (domClosest(target, '.records--no-issue')) {
+          this.targetIsRecordsWithNoIssue = true;
+        }
+      }
 
-      this.props.setRecordMoveTarget({
-        cuid: record.cuid,
-        taskCuid
-      });
+      if (this.targetTaskCuid !== taskCuid) {
+        this.targetTaskCuid = taskCuid;
+        this.targetTaskIssueKey = taskIssueKey;
+
+        this.props.setRecordMoveTarget({
+          cuid: record.cuid,
+          taskCuid
+        });
+      }
     }
   }
 
   onPanEnd (e) {
-    if (this.targetTaskCuid) {
-      this.props.setRecordTask({
-        cuid: this.props.record.cuid,
-        taskCuid: this.targetTaskCuid,
-        taskIssueKey: this.targetTaskIssueKey
-      });
-    } else {
-      this.props.setRecordMoving({
-        cuid: this.props.record.cuid,
-        moving: false
-      });
-    }
+
+    this.props.setRecordTask({
+      cuid: this.props.record.cuid,
+      taskCuid: this.targetTaskCuid,
+      taskIssueKey: this.targetTaskIssueKey
+    });
+
     clearSelection();
     document.body.classList.remove('moving');
   }
@@ -173,25 +180,25 @@ export class TaskItemRecord extends Component {
     if (record.endTime && record.endTime < record.startTime || (record.elapsedTime && record.elapsedTime[0] === '-')) {
       endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
     } else {
-      endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsedTime}</span>;
+      endTimeDisplay = <span className='record__elapsed-time'>{record.elapsedTime}</span>;
     }
 
-    let className = 'task-item-record';
+    let className = 'record';
     if (record.syncing) {
-      className += ' task-item-record--syncing';
+      className += ' record--syncing';
     }
     if (this.props.activeRecord && this.props.activeRecord.cuid === record.cuid) {
-      className += ' task-item-record--active';
+      className += ' record--active';
     }
     if (record.moving) {
-      className += ' task-item-record--moving';
+      className += ' record--moving';
     }
 
     return (
       <div className={className} ref='outer'>
-        <button className='task-item-record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
-        <div className='task-item-record-time'>
-          <div className='task-item-record-dates'>
+        <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
+        <div className='record-time'>
+          <div className='record-dates'>
             <DateInput
               date={record.startTime}
               type='start'
@@ -212,7 +219,7 @@ export class TaskItemRecord extends Component {
           {endTimeDisplay}
         </div>
         <textarea
-          className='task-item-record-comment'
+          className='record-comment'
           onChange={this.onCommentChange}
           value={record.comment}
           disabled={someRecordIsMoving}
@@ -271,7 +278,7 @@ class DateInput extends Component {
 
   render () {
 
-    const className = `task-item-record-date task-item-record-date--${this.props.type}`;
+    const className = `record-date record-date--${this.props.type}`;
 
     const dateObject = moment(this.props.date);
 
@@ -283,7 +290,7 @@ class DateInput extends Component {
         ref='date'
         defaultValue={date}
         onChange={this.onChange}
-        className='task-item-record-date__input task-item-record-date__input--date'
+        className='record-date__input record-date__input--date'
         disabled={this.props.disabled}
        />
     );
@@ -292,13 +299,13 @@ class DateInput extends Component {
         ref='time'
         defaultValue={time}
         onChange={this.onChange}
-        className='task-item-record-date__input task-item-record-date__input--time'
+        className='record-date__input record-date__input--time'
         disabled={this.props.disabled}
        />
     );
 
     let isToday = moment().isSame(dateObject, 'day');
-    let today = <span className='task-item-record-date__today' onClick={this.onTodayClick}>Today</span>;
+    let today = <span className='record-date__today' onClick={this.onTodayClick}>Today</span>;
 
     return (
       <span className={className}>

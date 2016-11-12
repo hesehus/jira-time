@@ -15,8 +15,8 @@ import TaskItemRecord from '../components/TaskItemRecord';
 
 const mapStateToProps = (state, props) => {
   return {
-    activeRecord: getActiveRecord(state),
-    movingRecord: getMovingRecord(state)
+    activeRecord: getActiveRecord({ state }),
+    movingRecord: getMovingRecord({ state })
   };
 }
 

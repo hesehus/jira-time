@@ -18,7 +18,7 @@ import TaskItem from '../components/TaskItem';
 
 const mapStateToProps = (state, props) => ({
   records: getRecordsForTask({ state, taskCuid: props.task.cuid }),
-  movingRecord: getMovingRecord(state)
+  movingRecord: getMovingRecord({ state })
 });
 
 const mapDispatchToProps = {
