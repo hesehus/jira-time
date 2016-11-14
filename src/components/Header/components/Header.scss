@@ -38,8 +38,19 @@
       opacity: 1;
     }
   }
+}
 
-  &__update-available {
-    margin-left: 10px;
+.update-available {
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  &-icon {
+    display: inline-block;
+    width: 25px;
+    margin-right: 10px;
+    position: relative;
+    top: -1px;
   }
 }

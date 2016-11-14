@@ -2,7 +2,9 @@ import DeepAssign from 'deep-assign';
 
 import TaskModel from './TaskModel';
 
-const initialState = { tasks: [] };
+const initialState = {
+  tasks: []
+};
 
 // ------------------------------------
 // Constants

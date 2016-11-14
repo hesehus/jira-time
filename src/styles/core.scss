@@ -10,6 +10,14 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+
+  &.moving {
+    cursor: default;
+    
+    * {
+      user-select: none;
+    }
+  }
 }
 
 *,

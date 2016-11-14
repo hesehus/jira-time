@@ -6,10 +6,11 @@ import { getIssue } from '../../../shared/jiraClient';
 
 import './Header.scss'
 
-import ListIcon from '../../../assets/list.svg';
-import UserIcon from '../../../assets/user.svg';
-import ExportIcon from '../../../assets/export.svg';
-import LoadingIcon from '../../../assets/loading.svg';
+import ListIcon from 'assets/list.svg';
+import UserIcon from 'assets/user.svg';
+import ExportIcon from 'assets/export.svg';
+import LoadingIcon from 'assets/loading.svg';
+import RefreshIcon from 'assets/refresh.svg';
 
 export default class Header extends Component {
 
@@ -97,7 +98,10 @@ export default class Header extends Component {
     let updateAvailable;
     if (this.state.serviceWorkerUpdated) {
       updateAvailable = (
-        <div className='header__update-available' onClick={this.onUpdateAvailableClick}>Update available!</div>
+        <div className='update-available' onClick={this.onUpdateAvailableClick}>
+          <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
+          Update available!
+        </div>
       );
     }
 

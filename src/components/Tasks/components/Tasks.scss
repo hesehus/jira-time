@@ -1,6 +1,12 @@
 .tasks {
   flex-grow: 1;
 
+  &-outer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
   &--no-tasks {
     display: flex;
     justify-content: center;

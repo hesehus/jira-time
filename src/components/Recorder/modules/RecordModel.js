@@ -1,11 +1,13 @@
 import Elapsed from 'elapsed';
 import cuid from 'cuid';
 
-export default function RecordModel ({ task, startTime = Date.now(), endTime, elapsedTime }) {
+export default function RecordModel ({ task, startTime = Date.now(), endTime, elapsedTime } = {}) {
   const model = {
     cuid: cuid(),
     taskCuid: task ? task.cuid : null,
     taskIssueKey: task ? task.issue.key : null,
+    taskDroppableCuid: null,
+    moving: false,
     startTime,
     elapsedTime,
     endTime,

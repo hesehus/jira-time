@@ -87,11 +87,8 @@ export default class Recorder extends Component {
   }
 
   onStart () {
-    const { task } = this.props.recorder;
-
     this.props.startRecording({
-      task,
-      record: RecordModel({ task })
+      record: RecordModel()
     });
   }
 
@@ -118,12 +115,12 @@ export default class Recorder extends Component {
 
   render () {
 
-    const { task, record } = this.props.recorder;
+    const { record } = this.props.recorder;
 
     // eslint-disable
     // <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
     const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
-    // <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
+    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
     // eslint-enable
 
     const comment = (
@@ -149,18 +146,28 @@ export default class Recorder extends Component {
       );
     }
 
+    let issueInfoDisplay;
+    if (record) {
+      if (record.taskIssueKey) {
+        issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
+      } else {
+        issueInfoDisplay = <div className='recorder-issue-info'>Argh. I don't know which issue to log to =(</div>;
+      }
+    }
+
     return (
       <div className='recorder recorder--show'>
         {notifications}
         <div className='recorder-left'>
           <div className='recorder-issue-info'>
-            {record && task && task.issue ? <div className='recorder-issue-key'>{task.issue.key}</div> : null}
+            {issueInfoDisplay}
             <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
           </div>
           {record ? comment : null}
         </div>
         <div className='recorder-buttons'>
           {record ? btnStop : null}
+          {btnStart}
         </div>
       </div>
     )
