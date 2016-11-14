@@ -1,5 +1,3 @@
-import Elapsed from 'elapsed';
-
 import RecordModel from './RecordModel';
 
 import TaskModel from '../../Tasks/modules/TaskModel';
@@ -28,6 +26,24 @@ export const SET_RECORD_MOVE_TARGET = 'SET_RECORD_MOVE_TARGET';
 export const SET_RECORD_TASK = 'SET_RECORD_TASK';
 export const UPDATE_RECORD_ELAPSED = 'UPDATE_RECORD_ELAPSED';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
+
+export function getElapsedTime ({ startTime, endTime = Date.now() }) {
+
+  if (endTime < startTime) {
+    return 'Negative time? You are not that fast.';
+  }
+
+  let s = endTime - startTime;
+
+  let ms = s % 1000;
+  s = (s - ms) / 1000;
+  let secs = s % 60;
+  s = (s - secs) / 60;
+  let mins = s % 60;
+  let hrs = (s - mins) / 60;
+
+  return hrs + 'h ' + mins + 'm ' + secs + 's';
+}
 
 // ------------------------------------
 // Actions
@@ -141,7 +157,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
       });
     }
 
@@ -165,7 +181,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
       });
     }
 
@@ -185,7 +201,7 @@ const ACTION_HANDLERS = {
 
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
-      elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+      elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
     });
 
     return {
@@ -250,10 +266,11 @@ const ACTION_HANDLERS = {
     const records = state.records.map((record) => {
 
       if (record.cuid === action.cuid) {
+        const { startTime, endTime } = action;
         return Object.assign({}, record, {
-          startTime: action.startTime,
-          endTime: action.endTime,
-          elapsedTime: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
+          startTime,
+          endTime,
+          elapsedTime: getElapsedTime({ startTime, endTime })
         });
       }
 
@@ -262,10 +279,11 @@ const ACTION_HANDLERS = {
 
     let record = state.record;
     if (record && record.cuid === action.cuid) {
+      const { startTime, endTime } = action;
       record = Object.assign({}, record, {
-        startTime: action.startTime,
-        endTime: action.endTime,
-        elapsedTime: new Elapsed(action.startTime, action.endTime || Date.now()).optimal
+        startTime,
+        endTime,
+        elapsedTime: getElapsedTime({ startTime, endTime })
       });
     }
 
@@ -390,8 +408,9 @@ const ACTION_HANDLERS = {
     const records = state.records.map((record) => {
 
       if (record.cuid === action.cuid) {
+        const { startTime, endTime } = record;
         return Object.assign({}, record, {
-          elapsedTime: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
+          elapsedTime: getElapsedTime({ startTime, endTime })
         });
       }
 
@@ -400,8 +419,9 @@ const ACTION_HANDLERS = {
 
     let record = state.record;
     if (record && record.cuid === action.cuid) {
+      const { startTime, endTime } = record;
       record = Object.assign({}, record, {
-        elapsedTime: new Elapsed(record.startTime, record.endTime || Date.now()).optimal
+        elapsedTime: getElapsedTime({ startTime, endTime })
       });
     }
 
@@ -441,7 +461,7 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
   if (state.record) {
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
-      elapsedTime: new Elapsed(records[records.length - 1].startTime, Date.now()).optimal
+      elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
     });
   }
 

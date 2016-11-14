@@ -72,31 +72,32 @@ export class TaskItemRecord extends Component {
   }
 
   onKeyPress (e) {
+
+    // ESC
     if (e.keyCode === 27) {
-      if (this.props.record.moving) {
-        this.targetTaskCuid = null;
-        this.onPanEnd();
-      }
+      this.cancelPan();
     }
   }
 
   onPanStart (e) {
-    e.preventDefault();
+    if (e.target.type !== 'textarea' && e.target.type !== 'input') {
+      e.preventDefault();
 
-    clearSelection();
+      clearSelection();
 
-    document.body.classList.add('moving');
+      document.body.classList.add('moving');
 
-    this.props.setRecordMoving({
-      cuid: this.props.record.cuid,
-      moving: true
-    });
+      this.props.setRecordMoving({
+        cuid: this.props.record.cuid,
+        moving: true
+      });
 
-    this.onPanMove(e);
+      this.onPanMove(e);
+    }
   }
 
   onPanMove (e) {
-    if (this.refs.outer) {
+    if (this.props.record.moving && this.refs.outer) {
       e.preventDefault();
 
       const { record } = this.props;
@@ -132,15 +133,31 @@ export class TaskItemRecord extends Component {
   }
 
   onPanEnd (e) {
+    if (this.props.record.moving) {
+      this.props.setRecordTask({
+        cuid: this.props.record.cuid,
+        taskCuid: this.targetTaskCuid,
+        taskIssueKey: this.targetTaskIssueKey
+      });
 
-    this.props.setRecordTask({
-      cuid: this.props.record.cuid,
-      taskCuid: this.targetTaskCuid,
-      taskIssueKey: this.targetTaskIssueKey
-    });
+      this.panCleanup();
+    }
+  }
 
+  panCleanup () {
     clearSelection();
     document.body.classList.remove('moving');
+  }
+
+  cancelPan () {
+    this.targetTaskCuid = null;
+
+    this.props.setRecordMoving({
+      cuid: this.props.record.cuid,
+      moving: false
+    });
+
+    this.panCleanup();
   }
 
   onStartTimeChange ({ date }) {
@@ -177,11 +194,7 @@ export class TaskItemRecord extends Component {
     const someRecordIsMoving = !!movingRecord;
 
     let endTimeDisplay;
-    if (record.endTime && record.endTime < record.startTime || (record.elapsedTime && record.elapsedTime[0] === '-')) {
-      endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
-    } else {
-      endTimeDisplay = <span className='record__elapsed-time'>{record.elapsedTime}</span>;
-    }
+    endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsedTime}</span>;
 
     let className = 'record';
     if (record.syncing) {
@@ -223,6 +236,7 @@ export class TaskItemRecord extends Component {
           onChange={this.onCommentChange}
           value={record.comment}
           disabled={someRecordIsMoving}
+          autoFocus={focus}
         />
       </div>
     );

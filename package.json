@@ -101,7 +101,6 @@
     "debug": "^2.2.0",
     "deep-assign": "^2.0.0",
     "dom-closest": "^0.2.0",
-    "elapsed": "^0.0.7",
     "event-class-es6": "^1.0.3",
     "extract-text-webpack-plugin": "^1.0.0",
     "file-loader": "^0.9.0",

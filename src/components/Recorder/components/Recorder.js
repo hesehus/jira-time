@@ -26,7 +26,7 @@ export default class Recorder extends Component {
 
     this.state = {};
 
-    this.onDrop = this.onDrop.bind(this);
+    this.onDropAndPaste = this.onDropAndPaste.bind(this);
     this.onPause = this.onPause.bind(this);
     this.onStop = this.onStop.bind(this);
     this.onStart = this.onStart.bind(this);
@@ -38,18 +38,19 @@ export default class Recorder extends Component {
     if (!this.state.binded) {
       this.setState({ binded: true, test: 1 });
 
-      window.__events.on('drop', this.onDrop);
+      window.__events.on('drop', this.onDropAndPaste);
+      window.__events.on('paste', this.onDropAndPaste);
 
       this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
     }
   }
 
   componentWillUnmount () {
-    window.__events.off('drop', this.onDrop);
+    window.__events.off('drop', this.onDropAndPaste);
     clearInterval(this.elapsedTimeInterval);
   }
 
-  onDrop ({ url }) {
+  onDropAndPaste ({ url }) {
     if (this.props.isLoggedIn) {
 
       this.setState({
@@ -74,7 +75,7 @@ export default class Recorder extends Component {
         });
     } else {
       alert(`Hey dude, you are not logged in.
-        How do you expect me to verify that this URL you dropped is even valid??`);
+How do you expect me to verify that this URL you dropped is even valid??`);
     }
   }
 
@@ -135,7 +136,7 @@ export default class Recorder extends Component {
       const options = {
         isActive: true,
         dismissAfter: 999999,
-        message: `Yo, hold on. I'm busy trying to add your task`
+        message: `Yo, hold on. I'm real busy trying to add your task`
       };
       notifications = (
         <Notification
@@ -151,7 +152,7 @@ export default class Recorder extends Component {
       if (record.taskIssueKey) {
         issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
       } else {
-        issueInfoDisplay = <div className='recorder-issue-info'>Argh. I don't know which issue to log to =(</div>;
+        issueInfoDisplay = <div className='recorder-issue-info'>No issue id? Really? Not cool dude.</div>;
       }
     }
 
@@ -167,7 +168,7 @@ export default class Recorder extends Component {
         </div>
         <div className='recorder-buttons'>
           {record ? btnStop : null}
-          {btnStart}
+          {this.props.isLoggedIn ? btnStart : null}
         </div>
       </div>
     )
