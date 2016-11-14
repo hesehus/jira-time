@@ -26,7 +26,7 @@ export default class Recorder extends Component {
 
     this.state = {};
 
-    this.onDrop = this.onDrop.bind(this);
+    this.onDropAndPaste = this.onDropAndPaste.bind(this);
     this.onPause = this.onPause.bind(this);
     this.onStop = this.onStop.bind(this);
     this.onStart = this.onStart.bind(this);
@@ -38,18 +38,19 @@ export default class Recorder extends Component {
     if (!this.state.binded) {
       this.setState({ binded: true, test: 1 });
 
-      window.__events.on('drop', this.onDrop);
+      window.__events.on('drop', this.onDropAndPaste);
+      window.__events.on('paste', this.onDropAndPaste);
 
       this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
     }
   }
 
   componentWillUnmount () {
-    window.__events.off('drop', this.onDrop);
+    window.__events.off('drop', this.onDropAndPaste);
     clearInterval(this.elapsedTimeInterval);
   }
 
-  onDrop ({ url }) {
+  onDropAndPaste ({ url }) {
     if (this.props.isLoggedIn) {
 
       this.setState({

@@ -9,9 +9,9 @@ class AppContainer extends Component {
   }
 
   componentWillMount () {
-    if (!window.__mainDropBinded) {
+    if (!window.__mainEventsBinded) {
 
-      window.__mainDropBinded = true;
+      window.__mainEventsBinded = true;
 
       ['drag',
         'dragend',
@@ -27,6 +27,16 @@ class AppContainer extends Component {
 
         window.__events.emit('drop', { url });
       }, false);
+
+      document.addEventListener('paste', function onPaste (e) {
+        if (e.clipboardData && e.clipboardData.getData) {
+          const url = e.clipboardData.getData('text/plain');
+          if (url) {
+            window.__events.emit('paste', { url });
+          }
+        }
+      });
+
     }
   }
 
