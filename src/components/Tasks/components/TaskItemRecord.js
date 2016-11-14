@@ -72,7 +72,7 @@ export class TaskItemRecord extends Component {
   }
 
   onKeyPress (e) {
-    
+
     // ESC
     if (e.keyCode === 27) {
       this.cancelPan();
@@ -80,18 +80,20 @@ export class TaskItemRecord extends Component {
   }
 
   onPanStart (e) {
-    e.preventDefault();
+    if (e.target.type !== 'textarea' && e.target.type !== 'input') {
+      e.preventDefault();
 
-    clearSelection();
+      clearSelection();
 
-    document.body.classList.add('moving');
+      document.body.classList.add('moving');
 
-    this.props.setRecordMoving({
-      cuid: this.props.record.cuid,
-      moving: true
-    });
+      this.props.setRecordMoving({
+        cuid: this.props.record.cuid,
+        moving: true
+      });
 
-    this.onPanMove(e);
+      this.onPanMove(e);
+    }
   }
 
   onPanMove (e) {
