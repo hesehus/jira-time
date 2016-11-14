@@ -168,7 +168,7 @@ How do you expect me to verify that this URL you dropped is even valid??`);
         </div>
         <div className='recorder-buttons'>
           {record ? btnStop : null}
-          {btnStart}
+          {this.props.isLoggedIn ? btnStart : null}
         </div>
       </div>
     )
