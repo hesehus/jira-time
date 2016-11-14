@@ -94,6 +94,10 @@ export default class Header extends Component {
 
   render () {
 
+    if (!this.props.loggedIn) {
+      return null;
+    }
+
     // Signal that there is a new version ready to be installed
     let updateAvailable;
     if (this.state.serviceWorkerUpdated) {
@@ -121,19 +125,15 @@ export default class Header extends Component {
       );
     }
 
-    let homeLink = (
-      <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
-        <img className='header__icon' src={ListIcon} alt='Home' />
-      </IndexLink>
-    );
-
     return (
       <div className='header'>
         <div className='header-left'>
           {updateAvailable}
         </div>
         <div className='header-center'>
-          {this.props.loggedIn ? homeLink : null}
+          <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
+            <img className='header__icon' src={ListIcon} alt='Home' />
+          </IndexLink>
           <Link to='/jira-time/profile' className='header__button' activeClassName='header__button--active'>
             <img className='header__icon' src={UserIcon} alt='Profile' />
           </Link>

@@ -60,7 +60,7 @@ function callApi ({ path, method = 'get', body }) {
 * @param password: string
 * @returns promise
 **/
-export function login ({ username, password }) {
+export function login ({ username, password } = {}) {
   return callApi({
     path: 'auth/1/session',
     method: 'post',
@@ -104,28 +104,37 @@ export function login ({ username, password }) {
 * @param url: string
 * @returns promise
 **/
-export function getIssue ({ id, url }) {
+export function getIssue ({ key, url }) {
 
-  if (!id && url) {
-    id = extractIssueIdFromUrl(url);
+  if (!key && url) {
+    key = extractIssueKeysFromText(url)[0];
+
+    if (!key) {
+      return Promise.reject(`Did not find a valid JIRA key in the given url ${url}`);
+    }
   }
 
-  if (!id) {
-    return Promise.reject(`Did not find a valid JIRA id in the given url ${url}`);
+  if (!key) {
+    return Promise.reject(`No valid key passed for getIssue`);
   }
 
   return callApi({
-    path: `api/2/issue/${id}`
+    path: `api/2/issue/${key}`
   })
   .then(response => response.json());
 }
 
-function extractIssueIdFromUrl (url) {
-  const match = url.match(/[a-zA-Z]+[-][0-9]+/g);
-  if (!match || match.length === 0) {
-    return;
+/**
+* Extracts Jira issue keys from a text
+* @param text: string
+* @returns array
+**/
+export function extractIssueKeysFromText (text) {
+  const matches = text.match(/[a-zA-Z]+[-][0-9]+/g);
+  if (!matches) {
+    return [];
   }
-  return match[0];
+  return matches;
 }
 
 /**

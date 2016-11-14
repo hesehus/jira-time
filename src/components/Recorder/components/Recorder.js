@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { getIssue, addCurrentUserAsWatcher } from '../../../shared/jiraClient';
+import { getIssue, extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
 import RecordModel from '../modules/RecordModel';
 
 import { Notification } from 'react-notification';
@@ -50,29 +50,41 @@ export default class Recorder extends Component {
     clearInterval(this.elapsedTimeInterval);
   }
 
-  onDropAndPaste ({ url }) {
+  onDropAndPaste ({ url, text }) {
     if (this.props.isLoggedIn) {
 
-      this.setState({
-        addingTaskFromUrl: true
-      });
+      const taskKeys = extractIssueKeysFromText(url || text);
 
-      getIssue({ url })
-        .then((issue) => {
+      if (!!taskKeys.length) {
 
-          this.setState({
-            addingTaskFromUrl: false
-          });
-
-          if (issue) {
-            this.props.addTask({ issue });
-
-            addCurrentUserAsWatcher({ taskIssueKey: issue.key });
-
-          } else {
-            alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
-          }
+        this.setState({
+          addingTasksFromDropOrPaste: taskKeys.length
         });
+
+        taskKeys.forEach(key => {
+          getIssue({ key })
+          .then((issue) => {
+
+            this.setState({
+              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
+            });
+
+            if (issue) {
+              this.props.addTask({ issue });
+
+              addCurrentUserAsWatcher({ taskIssueKey: issue.key });
+
+            } else {
+              alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
+            }
+          })
+          .catch(() => {
+            this.setState({
+              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
+            });
+          });
+        });
+      }
     } else {
       alert(`Hey dude, you are not logged in.
 How do you expect me to verify that this URL you dropped is even valid??`);
@@ -116,6 +128,10 @@ How do you expect me to verify that this URL you dropped is even valid??`);
 
   render () {
 
+    if (!this.props.isLoggedIn) {
+      return null;
+    }
+
     const { record } = this.props.recorder;
 
     // eslint-disable
@@ -132,11 +148,12 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     );
 
     let notifications;
-    if (this.state.addingTaskFromUrl) {
+    if (this.state.addingTasksFromDropOrPaste) {
+      const num = this.state.addingTasksFromDropOrPaste;
       const options = {
         isActive: true,
         dismissAfter: 999999,
-        message: `Yo, hold on. I'm real busy trying to add your task`
+        message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
       };
       notifications = (
         <Notification
@@ -152,7 +169,7 @@ How do you expect me to verify that this URL you dropped is even valid??`);
       if (record.taskIssueKey) {
         issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
       } else {
-        issueInfoDisplay = <div className='recorder-issue-info'>No issue id? Really? Not cool dude.</div>;
+        issueInfoDisplay = <div className='recorder-issue-info'>No issue key? Really? Not cool dude.</div>;
       }
     }
 
@@ -168,7 +185,7 @@ How do you expect me to verify that this URL you dropped is even valid??`);
         </div>
         <div className='recorder-buttons'>
           {record ? btnStop : null}
-          {this.props.isLoggedIn ? btnStart : null}
+          {btnStart}
         </div>
       </div>
     )

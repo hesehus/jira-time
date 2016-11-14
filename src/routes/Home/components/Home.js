@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import Tasks from '../../../components/Tasks';
+import Tasks from 'components/Tasks';
+import Login from 'components/Login';
 
 import './Home.scss';
 
@@ -14,14 +15,15 @@ export class Home extends Component {
 
   static get propTypes () {
     return {
-      app: PropTypes.object.isRequired
+      app: PropTypes.object.isRequired,
+      loggedIn: PropTypes.bool.isRequired
     }
   }
 
   render () {
     return (
       <div className='home'>
-        <Tasks />
+        {this.props.loggedIn ? <Tasks /> : <Login />}
       </div>
     );
   }

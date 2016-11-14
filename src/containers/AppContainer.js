@@ -29,10 +29,12 @@ class AppContainer extends Component {
       }, false);
 
       document.addEventListener('paste', function onPaste (e) {
-        if (e.clipboardData && e.clipboardData.getData) {
-          const url = e.clipboardData.getData('text/plain');
-          if (url) {
-            window.__events.emit('paste', { url });
+        if (e.target.type !== 'input' && e.target.type !== 'textarea') {
+          if (e.clipboardData && e.clipboardData.getData) {
+            const text = e.clipboardData.getData('text/plain');
+            if (text) {
+              window.__events.emit('paste', { text });
+            }
           }
         }
       });
