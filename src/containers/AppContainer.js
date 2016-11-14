@@ -22,7 +22,7 @@ class AppContainer extends Component {
         'dragstart',
         'drop'].forEach(name => document.addEventListener(name, e => e.preventDefault(), false));
 
-      document.addEventListener('drop', function (event) {
+      document.addEventListener('drop', function onDrop (event) {
         const url = event.dataTransfer.getData('URL');
 
         window.__events.emit('drop', { url });

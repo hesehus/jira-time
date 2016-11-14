@@ -75,7 +75,7 @@ export default class Recorder extends Component {
         });
     } else {
       alert(`Hey dude, you are not logged in.
-        How do you expect me to verify that this URL you dropped is even valid??`);
+How do you expect me to verify that this URL you dropped is even valid??`);
     }
   }
 
@@ -136,7 +136,7 @@ export default class Recorder extends Component {
       const options = {
         isActive: true,
         dismissAfter: 999999,
-        message: `Yo, hold on. I'm busy trying to add your task`
+        message: `Yo, hold on. I'm real busy trying to add your task`
       };
       notifications = (
         <Notification
@@ -152,7 +152,7 @@ export default class Recorder extends Component {
       if (record.taskIssueKey) {
         issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
       } else {
-        issueInfoDisplay = <div className='recorder-issue-info'>Argh. I don't know which issue to log to =(</div>;
+        issueInfoDisplay = <div className='recorder-issue-info'>No issue id? Really? Not cool dude.</div>;
       }
     }
 
