@@ -219,6 +219,7 @@ export class TaskItemRecord extends Component {
           onChange={this.onCommentChange}
           value={record.comment}
           disabled={someRecordIsMoving}
+          autoFocus={focus}
         />
       </div>
     );
