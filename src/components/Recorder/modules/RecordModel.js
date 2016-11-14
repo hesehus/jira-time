@@ -1,5 +1,6 @@
-import Elapsed from 'elapsed';
 import cuid from 'cuid';
+
+import { getElapsedTime } from './recorder';
 
 export default function RecordModel ({ task, startTime = Date.now(), endTime, elapsedTime } = {}) {
   const model = {
@@ -16,7 +17,7 @@ export default function RecordModel ({ task, startTime = Date.now(), endTime, el
   };
 
   if (startTime && endTime && !elapsedTime) {
-    model.elapsedTime = new Elapsed(startTime, endTime).optimal;
+    model.elapsedTime = getElapsedTime({ startTime, endTime });
   }
 
   return model;
