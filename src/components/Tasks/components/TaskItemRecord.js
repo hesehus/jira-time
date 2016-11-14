@@ -177,11 +177,7 @@ export class TaskItemRecord extends Component {
     const someRecordIsMoving = !!movingRecord;
 
     let endTimeDisplay;
-    if (record.endTime && record.endTime < record.startTime || (record.elapsedTime && record.elapsedTime[0] === '-')) {
-      endTimeDisplay = <span>Dude, negative time? <br />You are not <i>that</i> fast.</span>;
-    } else {
-      endTimeDisplay = <span className='record__elapsed-time'>{record.elapsedTime}</span>;
-    }
+    endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsedTime}</span>;
 
     let className = 'record';
     if (record.syncing) {
@@ -223,6 +219,7 @@ export class TaskItemRecord extends Component {
           onChange={this.onCommentChange}
           value={record.comment}
           disabled={someRecordIsMoving}
+          autoFocus={focus}
         />
       </div>
     );
