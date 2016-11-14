@@ -1,5 +1,3 @@
-import Elapsed from 'elapsed';
-
 import RecordModel from './RecordModel';
 
 import TaskModel from '../../Tasks/modules/TaskModel';
@@ -31,7 +29,7 @@ export const REMOVE_RECORD = 'REMOVE_RECORD';
 
 function getElapsedTime ({ startTime, endTime = Date.now() }) {
 
-  if (endTime < startTime ){
+  if (endTime < startTime) {
     return 'Negative time? You are not that fast.';
   }
 
@@ -159,7 +157,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsedTime: getElapsedTime({startTime: records[records.length - 1].startTime})
+        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
       });
     }
 
@@ -183,7 +181,7 @@ const ACTION_HANDLERS = {
     if (state.record) {
       records[records.length - 1] = Object.assign({}, records[records.length - 1], {
         endTime: Date.now(),
-        elapsedTime: getElapsedTime({startTime: records[records.length - 1].startTime})
+        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
       });
     }
 
@@ -203,7 +201,7 @@ const ACTION_HANDLERS = {
 
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
-      elapsedTime: getElapsedTime({startTime: records[records.length - 1].startTime})
+      elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
     });
 
     return {
@@ -463,7 +461,7 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
   if (state.record) {
     records[records.length - 1] = Object.assign({}, records[records.length - 1], {
       endTime: Date.now(),
-      elapsedTime: getElapsedTime({startTime: records[records.length - 1].startTime})
+      elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
     });
   }
 
