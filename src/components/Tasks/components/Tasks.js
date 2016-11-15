@@ -19,18 +19,6 @@ export class TasksView extends Component {
 
     const { tasks, movingRecord, recordsWithNoIssue } = this.props;
 
-    // Tell the user to start working
-    if (tasks.length === 0) {
-      return (
-        <div className='tasks-outer'>
-          <div className='tasks tasks--no-tasks'>
-            <div>You have not added any tasks, you lazy dog.</div>
-            <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
-          </div>
-        </div>
-      );
-    }
-
     let textInLimbo;
     switch (recordsWithNoIssue.length) {
       case 0 : {
@@ -57,6 +45,18 @@ export class TasksView extends Component {
 
     if (movingRecord && !movingRecord.taskDroppableCuid) {
       classNameRecordsNoIssue += ' records--drop-active';
+    }
+
+    // Tell the user to start working
+    if (tasks.length === 0 && recordsWithNoIssue.length === 0) {
+      return (
+        <div className='tasks-outer'>
+          <div className='tasks tasks--no-tasks'>
+            <div>You have not added any tasks, you lazy dog.</div>
+            <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
+          </div>
+        </div>
+      );
     }
 
     // Output the list of tasks

@@ -11,6 +11,7 @@ export class Login extends Component {
   static get propTypes () {
     return {
       onLoginSuccess: PropTypes.func,
+      setLoggedIn: PropTypes.func.isRequired,
       setAuthenticationHash: PropTypes.func.isRequired
     }
   }
@@ -61,9 +62,15 @@ export class Login extends Component {
 
             this.props.setAuthenticationHash(userInfo);
 
+            this.props.setLoggedIn({
+              isLoggedIn: true,
+              username: userInfo.username
+            });
+
             if (this.props.onLoginSuccess) {
-              this.props.onLoginSuccess(userInfo);
+              this.props.onLoginSuccess({ userInfo });
             }
+
           } else {
 
             const errorState = {
@@ -77,12 +84,13 @@ export class Login extends Component {
             this.setState(errorState);
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           this.setState({
             loggingIn: false,
-            error: 'noResponseFromAPI'
+            error: 'error'
           });
-        })
+        });
     }
   }
 
