@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { getIssue, addCurrentUserAsWatcher } from '../../../shared/jiraClient';
+import { getIssue, extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
 import RecordModel from '../modules/RecordModel';
 
 import { Notification } from 'react-notification';
@@ -26,7 +26,7 @@ export default class Recorder extends Component {
 
     this.state = {};
 
-    this.onDrop = this.onDrop.bind(this);
+    this.onDropAndPaste = this.onDropAndPaste.bind(this);
     this.onPause = this.onPause.bind(this);
     this.onStop = this.onStop.bind(this);
     this.onStart = this.onStart.bind(this);
@@ -38,43 +38,56 @@ export default class Recorder extends Component {
     if (!this.state.binded) {
       this.setState({ binded: true, test: 1 });
 
-      window.__events.on('drop', this.onDrop);
+      window.__events.on('drop', this.onDropAndPaste);
+      window.__events.on('paste', this.onDropAndPaste);
 
       this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
     }
   }
 
   componentWillUnmount () {
-    window.__events.off('drop', this.onDrop);
+    window.__events.off('drop', this.onDropAndPaste);
     clearInterval(this.elapsedTimeInterval);
   }
 
-  onDrop ({ url }) {
+  onDropAndPaste ({ url, text }) {
     if (this.props.isLoggedIn) {
 
-      this.setState({
-        addingTaskFromUrl: true
-      });
+      const taskKeys = extractIssueKeysFromText(url || text);
 
-      getIssue({ url })
-        .then((issue) => {
+      if (!!taskKeys.length) {
 
-          this.setState({
-            addingTaskFromUrl: false
-          });
-
-          if (issue) {
-            this.props.addTask({ issue });
-
-            addCurrentUserAsWatcher({ taskIssueKey: issue.key });
-
-          } else {
-            alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
-          }
+        this.setState({
+          addingTasksFromDropOrPaste: taskKeys.length
         });
+
+        taskKeys.forEach(key => {
+          getIssue({ key })
+          .then((issue) => {
+
+            this.setState({
+              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
+            });
+
+            if (issue) {
+              this.props.addTask({ issue });
+
+              addCurrentUserAsWatcher({ taskIssueKey: issue.key });
+
+            } else {
+              alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
+            }
+          })
+          .catch(() => {
+            this.setState({
+              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
+            });
+          });
+        });
+      }
     } else {
       alert(`Hey dude, you are not logged in.
-        How do you expect me to verify that this URL you dropped is even valid??`);
+How do you expect me to verify that this URL you dropped is even valid??`);
     }
   }
 
@@ -115,6 +128,10 @@ export default class Recorder extends Component {
 
   render () {
 
+    if (!this.props.isLoggedIn) {
+      return null;
+    }
+
     const { record } = this.props.recorder;
 
     // eslint-disable
@@ -131,11 +148,12 @@ export default class Recorder extends Component {
     );
 
     let notifications;
-    if (this.state.addingTaskFromUrl) {
+    if (this.state.addingTasksFromDropOrPaste) {
+      const num = this.state.addingTasksFromDropOrPaste;
       const options = {
         isActive: true,
         dismissAfter: 999999,
-        message: `Yo, hold on. I'm busy trying to add your task`
+        message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
       };
       notifications = (
         <Notification
@@ -151,7 +169,7 @@ export default class Recorder extends Component {
       if (record.taskIssueKey) {
         issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
       } else {
-        issueInfoDisplay = <div className='recorder-issue-info'>Argh. I don't know which issue to log to =(</div>;
+        issueInfoDisplay = <div className='recorder-issue-info'>No issue key? Really? Not cool dude.</div>;
       }
     }
 

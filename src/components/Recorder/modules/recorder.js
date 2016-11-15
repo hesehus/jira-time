@@ -27,7 +27,7 @@ export const SET_RECORD_TASK = 'SET_RECORD_TASK';
 export const UPDATE_RECORD_ELAPSED = 'UPDATE_RECORD_ELAPSED';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
 
-function getElapsedTime ({ startTime, endTime = Date.now() }) {
+export function getElapsedTime ({ startTime, endTime = Date.now() }) {
 
   if (endTime < startTime) {
     return 'Negative time? You are not that fast.';

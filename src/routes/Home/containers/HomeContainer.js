@@ -4,7 +4,8 @@ import Home from '../components/Home';
 
 function mapStateToProps (state) {
   return {
-    app: state.app
+    app: state.app,
+    loggedIn: state.profile.loggedIn
   }
 }
 
