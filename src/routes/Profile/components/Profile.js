@@ -16,12 +16,7 @@ export class Profile extends Component {
   constructor (props) {
     super(props);
 
-    this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.onLogoutClick = this.onLogoutClick.bind(this);
-  }
-
-  onLoginSuccess ({ username }) {
-    this.props.setLoggedIn({ isLoggedIn: true, username });
   }
 
   onLogoutClick () {
@@ -31,7 +26,7 @@ export class Profile extends Component {
   render () {
 
     if (!this.props.profile.loggedIn) {
-      return (<Login onLoginSuccess={this.onLoginSuccess} />);
+      return (<Login />);
     }
 
     const { username } = this.props.profile;
