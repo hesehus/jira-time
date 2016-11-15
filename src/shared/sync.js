@@ -104,7 +104,13 @@ export default class Sync extends EventClass {
           processNext();
         })
         .catch(() => {
-          alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
+          this.emit('syncTaskError', {
+            record,
+            nextRecord: this.records[this.index + 1],
+            didSync: false
+          });
+
+          processNext();
         });
     }
   }

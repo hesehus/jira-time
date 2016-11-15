@@ -84,7 +84,7 @@ export class TaskItem extends Component {
     });
 
     getIssue({
-      id: task.issue.key
+      key: task.issue.key
     })
     .then((issue) => {
 
@@ -125,7 +125,7 @@ export class TaskItem extends Component {
     });
 
     getIssue({
-      id: task.issue.key
+      key: task.issue.key
     })
     .then((issue) => {
 
