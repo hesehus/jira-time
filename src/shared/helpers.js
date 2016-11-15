@@ -3,13 +3,13 @@ import { getIssue } from './jiraClient';
 export function getJIRAIssueFromUrl (url = '') {
   return new Promise((resolve, reject) => {
 
-    const id = extractIssueIdFromUrl(url);
+    const key = extractIssueIdFromUrl(url);
 
-    if (!id) {
+    if (!key) {
       resolve();
     }
 
-    return getIssue({ id });
+    return getIssue({ key });
   });
 }
 
