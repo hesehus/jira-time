@@ -4,7 +4,9 @@ import { setLoggedIn } from 'routes/Profile/modules/profile';
 
 import Login from '../components/Login';
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+  username: state.profile.username
+});
 
 const mapDispatchToProps = {
   setLoggedIn,

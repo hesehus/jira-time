@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import { getIssue, extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
-import RecordModel from '../modules/RecordModel';
-
 import { Notification } from 'react-notification';
 
+import { extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
+import RecordModel from '../modules/RecordModel';
+import ProcessTask from './ProcessTask';
+
 import './Recorder.scss';
+
+const processTask = new ProcessTask();
 
 export default class Recorder extends Component {
 
@@ -24,7 +27,9 @@ export default class Recorder extends Component {
   constructor (props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      addingTasksFromDropOrPaste: processTask.getRemaining()
+    };
 
     this.onDropAndPaste = this.onDropAndPaste.bind(this);
     this.onPause = this.onPause.bind(this);
@@ -32,6 +37,17 @@ export default class Recorder extends Component {
     this.onStart = this.onStart.bind(this);
     this.updateElapsedTime = this.updateElapsedTime.bind(this);
     this.onCommentChange = this.onCommentChange.bind(this);
+
+    processTask.on('add', (result) => {
+      this.setState({
+        addingTasksFromDropOrPaste: processTask.getRemaining()
+      });
+
+      if (result.success) {
+        this.props.addTask({ issue: result.issue });
+        addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+      }
+    });
   }
 
   componentWillMount () {
@@ -47,6 +63,7 @@ export default class Recorder extends Component {
 
   componentWillUnmount () {
     window.__events.off('drop', this.onDropAndPaste);
+    window.__events.off('paste', this.onDropAndPaste);
     clearInterval(this.elapsedTimeInterval);
   }
 
@@ -57,32 +74,10 @@ export default class Recorder extends Component {
 
       if (!!taskKeys.length) {
 
+        processTask.add(taskKeys);
+
         this.setState({
-          addingTasksFromDropOrPaste: taskKeys.length
-        });
-
-        taskKeys.forEach(key => {
-          getIssue({ key })
-          .then((issue) => {
-
-            this.setState({
-              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
-            });
-
-            if (issue) {
-              this.props.addTask({ issue });
-
-              addCurrentUserAsWatcher({ taskIssueKey: issue.key });
-
-            } else {
-              alert(`Hey, this is not a valid JIRA URL.\nPull yourself together!`);
-            }
-          })
-          .catch(() => {
-            this.setState({
-              addingTasksFromDropOrPaste: this.state.addingTasksFromDropOrPaste - 1
-            });
-          });
+          addingTasksFromDropOrPaste: processTask.getRemaining()
         });
       }
     } else {
@@ -148,8 +143,8 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     );
 
     let notifications;
-    if (this.state.addingTasksFromDropOrPaste) {
-      const num = this.state.addingTasksFromDropOrPaste;
+    const num = this.state.addingTasksFromDropOrPaste;
+    if (num) {
       const options = {
         isActive: true,
         dismissAfter: 999999,
@@ -191,3 +186,5 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     )
   }
 }
+
+

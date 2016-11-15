@@ -1,6 +1,11 @@
 import moment from 'moment';
 import { ensureDate } from './helpers';
 
+import { setLoggedIn} from 'routes/Profile/modules/profile';
+
+// Check the session in a few seconds
+setTimeout(verifyLoginStatus, 5000);
+
 /**
 * Wrapper for all API calls
 **/
@@ -99,6 +104,33 @@ export function login ({ username, password } = {}) {
 }
 
 /**
+* Verifies the current user session
+* @returns void
+**/
+function verifyLoginStatus () {
+  callApi({
+    path: `auth/1/session`
+  })
+  .then((response) => {
+    
+    // Not authenticated. Log out
+    if (response.status === 403) {
+      logout();
+    }
+  });
+}
+
+/**
+* Logs out user
+* @returns void
+**/
+function logout () {
+  store.dispatch(setLoggedIn({
+    isLoggedIn: false
+  }));
+}
+
+/**
 * Get issue
 * @param id: string
 * @param url: string
@@ -118,10 +150,20 @@ export function getIssue ({ key, url }) {
     return Promise.reject(`No valid key passed for getIssue`);
   }
 
-  return callApi({
-    path: `api/2/issue/${key}`
-  })
-  .then(response => response.json());
+  return new Promise((resolve, reject) => {
+    callApi({
+      path: `api/2/issue/${key}`
+    })
+    .then((response) => {
+
+      if (response.status === 200) {
+        return resolve(response.json());
+      }
+
+      reject(response.status);
+    })
+    .catch(reject);
+  });
 }
 
 /**
@@ -148,14 +190,36 @@ export function addWorklog ({ record }) {
 
   let timeSpentSeconds = Math.floor((ensureDate(endTime) - ensureDate(startTime)) / 1000);
 
-  return callApi({
-    path: `api/2/issue/${record.taskIssueKey}/worklog`,
-    method: 'post',
-    body: {
-      comment,
-      timeSpentSeconds,
-      started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
-    }
+  return new Promise((resolve, reject) => {
+    callApi({
+      path: `api/2/issue/${record.taskIssueKey}/worklog`,
+      method: 'post',
+      body: {
+        comment,
+        timeSpentSeconds,
+        started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+      }
+    })
+    .then(response => {
+      switch (response.status) {
+        case 200 : {
+          resolve();
+          break;
+        }
+
+        // No permission to log here
+        case 403 : {
+          reject();
+          verifyLoginStatus();
+          break;
+        }
+
+        default : {
+          reject(response);
+        }
+      }
+    })
+    .catch(reject);
   });
 }
 

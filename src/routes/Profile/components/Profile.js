@@ -20,7 +20,7 @@ export class Profile extends Component {
   }
 
   onLogoutClick () {
-    this.props.setLoggedIn({ isLoggedIn: false, username: this.props.profile.username });
+    this.props.setLoggedIn({ isLoggedIn: false });
   }
 
   render () {

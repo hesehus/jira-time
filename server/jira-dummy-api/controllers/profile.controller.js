@@ -2,16 +2,15 @@ const helpers = require('../helpers');
 
 var api = {};
 
-api.session = function (req, res) {
+api.login = function (req, res) {
   helpers.delay(function () {
+    res.status(200).send();
+  });
+}
 
-   // ALL OK if nothing is provided
-    if (!req.body || (!req.body.username && !req.body.password)) {
-      res.status(200).send();
-    }
-
-    // Not ok if anything else is sent
-    res.status(401).send();
+api.checkSession = function (req, res) {
+  helpers.delay(function () {
+    res.status(403).send();
   });
 }
 

@@ -4,7 +4,8 @@ var IssueController = require('./controllers/issue.controller');
 
 const router = new Express.Router();
 
-router.route('/auth/1/session').post(ProfileController.session);
+router.route('/auth/1/session').post(ProfileController.login);
+router.route('/auth/1/session').get(ProfileController.checkSession);
 
 router.route('/api/2/issue/:id').get(IssueController.getIssue);
 router.route('/api/2/issue/:id').put(IssueController.updateIssue);
