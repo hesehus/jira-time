@@ -20,7 +20,7 @@ function callApi ({ path, method = 'get', body }) {
   if (state.app.authenticationHash) {
     headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
   }
-  console.log(`Basic ${state.app.authenticationHash}`);
+  
   return new Promise((resolve, reject) => {
     fetch(`${state.app.api}/${path}`, {
       method,
