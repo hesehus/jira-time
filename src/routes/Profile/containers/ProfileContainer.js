@@ -9,7 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    setLoggedIn
+  setLoggedIn
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

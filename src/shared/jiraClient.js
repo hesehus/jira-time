@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { ensureDate } from './helpers';
 
-import { setLoggedIn} from 'routes/Profile/modules/profile';
+import { setLoggedIn } from 'routes/Profile/modules/profile';
 
 // Check the session in a few seconds
 setTimeout(verifyLoginStatus, 5000);
@@ -20,7 +20,7 @@ function callApi ({ path, method = 'get', body }) {
   if (state.app.authenticationHash) {
     headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
   }
-
+  console.log(`Basic ${state.app.authenticationHash}`);
   return new Promise((resolve, reject) => {
     fetch(`${state.app.api}/${path}`, {
       method,
@@ -107,15 +107,19 @@ export function login ({ username, password } = {}) {
 * Verifies the current user session
 * @returns void
 **/
-function verifyLoginStatus () {
+function verifyLoginStatus () {
   callApi({
     path: `auth/1/session`
   })
   .then((response) => {
-    
+
     // Not authenticated. Log out
     if (response.status === 403) {
       logout();
+
+      store.dispatch(setLoggedIn({
+        isLoggedIn: false
+      }));
     }
   });
 }
@@ -124,10 +128,11 @@ function verifyLoginStatus () {
 * Logs out user
 * @returns void
 **/
-function logout () {
-  store.dispatch(setLoggedIn({
-    isLoggedIn: false
-  }));
+export function logout () {
+  callApi({
+    path: 'auth/1/session',
+    method: 'delete'
+  });
 }
 
 /**
@@ -156,7 +161,7 @@ export function getIssue ({ key, url }) {
     })
     .then((response) => {
 
-      if (response.status === 200) {
+      if (response.status === 200) {
         return resolve(response.json());
       }
 
@@ -202,14 +207,14 @@ export function addWorklog ({ record }) {
     })
     .then(response => {
       switch (response.status) {
-        case 200 : {
+        case 201 : {
           resolve();
           break;
         }
 
         // No permission to log here
         case 403 : {
-          reject();
+          reject(response);
           verifyLoginStatus();
           break;
         }

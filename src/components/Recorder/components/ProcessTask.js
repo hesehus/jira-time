@@ -24,7 +24,7 @@ export default class ProcessTask extends EventClass {
     return this.tasks.length;
   }
 
-  process () {
+  process () {
 
     if (!this.tasks.length) {
       return;

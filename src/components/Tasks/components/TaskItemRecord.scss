@@ -92,7 +92,7 @@
   }
 
   &__elapsed-time {
-    min-width: 100px;
+    min-width: 60px;
 
     .record--active & {
       animation: blink 2s infinite;

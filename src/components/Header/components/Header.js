@@ -67,10 +67,6 @@ export default class Header extends Component {
       });
     });
 
-    syncer.on('syncTaskError', ({ record }) => {
-      alert(`Heey.. Looks like ${record.taskIssueKey} is closed or something. Cannot log dude.`);
-    });
-
     syncer.on('syncTaskDone', ({ record, nextRecord }) => {
 
       // Refresh issue info when all the records for the task is synced

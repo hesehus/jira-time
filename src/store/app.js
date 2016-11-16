@@ -3,6 +3,8 @@ const initialState = {
   authenticationHash: null
 };
 
+import { SET_LOGGED_IN } from 'routes/Profile/modules/profile';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -25,9 +27,20 @@ const ACTION_HANDLERS = {
   [SET_AUTHENTICATION_HASH] : (state, action) => {
     return {
       api: state.api,
-      visited: state.visited,
       authenticationHash: action.hash
     }
+  },
+
+  // Listen for logout
+  [SET_LOGGED_IN] : (state, action) => {
+    if (action.isLoggedIn) {
+      return state;
+    }
+
+    return {
+      api: state.api,
+      authenticationHash: null
+    };
   }
 };
 

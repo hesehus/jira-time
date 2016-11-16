@@ -93,11 +93,10 @@ export class Login extends Component {
             this.setState(errorState);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           this.setState({
             loggingIn: false,
-            error: 'error'
+            error: 'noResponseFromAPI'
           });
         });
     }

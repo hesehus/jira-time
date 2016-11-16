@@ -8,6 +8,12 @@ api.login = function (req, res) {
   });
 }
 
+api.logout = function (req, res) {
+  helpers.delay(function () {
+    res.status(204).send();
+  });
+}
+
 api.checkSession = function (req, res) {
   helpers.delay(function () {
     res.status(403).send();
