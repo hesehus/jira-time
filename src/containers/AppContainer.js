@@ -24,8 +24,9 @@ class AppContainer extends Component {
 
       document.addEventListener('drop', function onDrop (event) {
         const url = event.dataTransfer.getData('URL');
+        const text = event.dataTransfer.getData('Text');
 
-        window.__events.emit('drop', { url });
+        window.__events.emit('drop', { url, text });
       }, false);
 
       document.addEventListener('paste', function onPaste (e) {
