@@ -52,7 +52,6 @@ export default class ProcessTask extends EventClass {
     .catch(next);
 
     var next = () => {
-      console.log('next..', this.tasks);
       this.tasks = this.tasks.splice(1);
       this.process();
     }
