@@ -10,6 +10,7 @@ export class Login extends Component {
 
   static get propTypes () {
     return {
+      username: PropTypes.string,
       onLoginSuccess: PropTypes.func,
       setLoggedIn: PropTypes.func.isRequired,
       setAuthenticationHash: PropTypes.func.isRequired
@@ -26,6 +27,14 @@ export class Login extends Component {
       attempts: 0,
       tooManyFailedLoginAttempts: 0
     };
+  }
+
+  componentDidMount () {
+    if (this.props.username) {
+      this.refs.password.select();
+    } else {
+      this.refs.username.select();
+    }
   }
 
   onSubmit (event) {
@@ -84,11 +93,10 @@ export class Login extends Component {
             this.setState(errorState);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           this.setState({
             loggingIn: false,
-            error: 'error'
+            error: 'noResponseFromAPI'
           });
         });
     }
@@ -148,11 +156,20 @@ export class Login extends Component {
       <form className='login' onSubmit={this.onSubmit}>
         <label className='login-label'>
           <div className='login-label__text'>Username:</div>
-          <input type='text' ref='username' name='username' disabled={this.state.loggingIn} />
+          <input type='text'
+            ref='username'
+            name='username'
+            defaultValue={this.props.username}
+            disabled={this.state.loggingIn}
+          />
         </label>
         <label className='login-label'>
           <div className='login-label__text'>Password:</div>
-          <input type='password' ref='password' name='password' disabled={this.state.loggingIn} />
+          <input type='password'
+            ref='password'
+            name='password'
+            disabled={this.state.loggingIn}
+          />
         </label>
 
         {error}

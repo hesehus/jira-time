@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 
-import Login from '../../../components/Login';
+import { logout } from 'shared/jiraClient';
+
+import Login from 'components/Login';
 
 import './Profile.scss';
 
@@ -20,7 +22,8 @@ export class Profile extends Component {
   }
 
   onLogoutClick () {
-    this.props.setLoggedIn({ isLoggedIn: false, username: this.props.profile.username });
+    logout();
+    this.props.setLoggedIn({ isLoggedIn: false });
   }
 
   render () {

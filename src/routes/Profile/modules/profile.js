@@ -26,7 +26,7 @@ const ACTION_HANDLERS = {
   [SET_LOGGED_IN] : (state, action) => {
     return {
       loggedIn: action.isLoggedIn,
-      username: action.username
+      username: typeof action.username === 'undefined' ? state.username : action.username
     }
   }
 };

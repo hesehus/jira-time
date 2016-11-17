@@ -193,9 +193,6 @@ export class TaskItemRecord extends Component {
 
     const someRecordIsMoving = !!movingRecord;
 
-    let endTimeDisplay;
-    endTimeDisplay = <span className='task-item-record__elapsed-time'>{record.elapsedTime}</span>;
-
     let className = 'record';
     if (record.syncing) {
       className += ' record--syncing';
@@ -229,7 +226,7 @@ export class TaskItemRecord extends Component {
               null
             )}
           </div>
-          {endTimeDisplay}
+          <span className='record__elapsed-time'>{record.elapsedTime}</span>
         </div>
         <textarea
           className='record-comment'
