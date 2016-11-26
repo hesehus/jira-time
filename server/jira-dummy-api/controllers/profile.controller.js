@@ -16,7 +16,7 @@ api.logout = function (req, res) {
 
 api.checkSession = function (req, res) {
   helpers.delay(function () {
-    res.status(403).send();
+    res.status(200).send();
   });
 }
 

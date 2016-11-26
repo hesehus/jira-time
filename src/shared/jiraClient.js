@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { ensureDate } from './helpers';
 
-import { setLoggedIn } from 'routes/Profile/modules/profile';
+import { setLoggedIn } from 'store/reducers/profile';
 
 // Check the session in a few seconds
 setTimeout(verifyLoginStatus, 5000);
@@ -114,7 +114,7 @@ function verifyLoginStatus () {
   .then((response) => {
 
     // Not authenticated. Log out
-    if (response.status === 403) {
+    if (response.status !== 200) {
       logout();
 
       store.dispatch(setLoggedIn({
