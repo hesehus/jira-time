@@ -1,12 +1,11 @@
 import { combineReducers } from 'redux';
 
 // Import all reducers that are not async
-import app from './app';
-import location from './location';
-import tasks from '../components/Tasks/modules/tasks';
-import recorder from '../components/Recorder/modules/recorder';
-
-import profile from '../routes/Profile/modules/profile';
+import app from './reducers/app';
+import location from './reducers/location';
+import tasks from './reducers/tasks';
+import recorder from './reducers/recorder';
+import profile from './reducers/profile';
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({

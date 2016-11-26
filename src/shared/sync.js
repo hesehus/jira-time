@@ -37,21 +37,25 @@ export default class Sync extends EventClass {
 
       // No end time specified. Moving on
       if (!record.endTime) {
+        console.log('Cannot sync record. No end time', record)
         return processNext();
       }
 
       // Must have a comment
       if (!record.comment) {
+        console.log('Cannot sync record. No comment', record)
         return processNext();
       }
 
       // Must have a issue key
       if (!record.taskIssueKey) {
+        console.log('Cannot sync record. No task issue key', record)
         return processNext();
       }
 
       // Must be at least one minute
       if ((ensureDate(record.endTime) - ensureDate(record.startTime)) < 60000) {
+        console.log('Cannot sync record. Less than a minute', record)
         return processNext();
       }
 
