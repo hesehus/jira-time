@@ -5,7 +5,7 @@ import ProfileRoute from './Profile';
 
 export const createRoutes = (store) => {
   return {
-    path        : '/jira-time',
+    path        : '/',
     component   : CoreLayout,
     indexRoute  : Home,
     childRoutes : [

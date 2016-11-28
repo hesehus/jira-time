@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory, Router } from 'react-router';
+import { hashHistory, Router } from 'react-router';
 import { Provider, connect } from 'react-redux';
 
 class AppContainer extends Component {
@@ -52,7 +52,7 @@ class AppContainer extends Component {
 
     return (
       <Provider store={store}>
-        <Router history={browserHistory} children={routes} />
+        <Router history={hashHistory} children={routes} />
       </Provider>
     )
   }

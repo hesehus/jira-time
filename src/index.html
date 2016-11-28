@@ -16,7 +16,7 @@
   <script>
     if (location.hostname !== 'localhost' && 'serviceWorker' in navigator) {
       window.__getServiceWorkerStatus = new Promise(function (resolve, reject) {
-        navigator.serviceWorker.register('/jira-time/service-worker.js').then(function(reg) {
+        navigator.serviceWorker.register(location.pathname + 'service-worker.js').then(function(reg) {
           // updatefound is fired if service-worker.js changes.
           reg.onupdatefound = function() {
             // The updatefound event implies that reg.installing is set; see

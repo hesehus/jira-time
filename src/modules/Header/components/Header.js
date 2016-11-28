@@ -46,7 +46,7 @@ export default class Header extends Component {
   }
 
   onUpdateAvailableClick () {
-    location.href = '/jira-time';
+    location.reload();
   }
 
   onSyncClick () {
@@ -131,16 +131,30 @@ export default class Header extends Component {
       );
     }
 
+    let classNameHome = 'header__button';
+    let classNameProfile = 'header__button';
+
+    switch (this.props.currentPath) {
+      case '/profile' : {
+        classNameProfile += ' header__button--active';
+        break;
+      }
+
+      default : {
+        classNameHome += ' header__button--active';
+      }
+    }
+
     return (
       <div className='header'>
         <div className='header-left'>
           {updateAvailable}
         </div>
         <div className='header-center'>
-          <IndexLink to='/jira-time' className='header__button' activeClassName='header__button--active'>
+          <IndexLink to='/' className={classNameHome}>
             <img className='header__icon' src={ListIcon} alt='Home' />
           </IndexLink>
-          <Link to='/jira-time/profile' className='header__button' activeClassName='header__button--active'>
+          <Link to='/profile' className={classNameProfile}>
             <img className='header__icon' src={UserIcon} alt='Profile' />
           </Link>
         </div>
