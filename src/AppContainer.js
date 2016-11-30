@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { hashHistory, Router } from 'react-router';
 import { Provider, connect } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 class AppContainer extends Component {
   static propTypes = {
@@ -52,7 +55,9 @@ class AppContainer extends Component {
 
     return (
       <Provider store={store}>
-        <Router history={hashHistory} children={routes} />
+        <MuiThemeProvider>
+          <Router history={hashHistory} children={routes} />
+        </MuiThemeProvider>
       </Provider>
     )
   }

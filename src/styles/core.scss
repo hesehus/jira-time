@@ -1,5 +1,6 @@
 @import 'base';
 @import '~normalize.css/normalize';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 * {
   box-sizing: border-box;
@@ -10,10 +11,11 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: 'Roboto', sans-serif;
 
   &.moving {
     cursor: default;
-    
+
     * {
       user-select: none;
     }
