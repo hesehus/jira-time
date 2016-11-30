@@ -11,6 +11,7 @@ import UserIcon from 'assets/user.svg';
 import ExportIcon from 'assets/export.svg';
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
+import PlusIcon from 'assets/plus.svg';
 
 export default class Header extends Component {
 
@@ -98,6 +99,10 @@ export default class Header extends Component {
     syncer.start();
   }
 
+  addNewTask () {
+
+  }
+
   render () {
 
     if (!this.props.loggedIn) {
@@ -131,6 +136,12 @@ export default class Header extends Component {
       );
     }
 
+    let add = (
+        <div className='header__button button__add' onClick={this.addNewTask} title='Add task'>
+          <img className='header__icon' src={PlusIcon} alt='Add' />
+        </div>
+      );
+
     let classNameHome = 'header__button';
     let classNameProfile = 'header__button';
 
@@ -148,6 +159,7 @@ export default class Header extends Component {
     return (
       <div className='header'>
         <div className='header-left'>
+          {add}
           {updateAvailable}
         </div>
         <div className='header-center'>
