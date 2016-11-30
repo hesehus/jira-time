@@ -215,6 +215,7 @@ export class TaskItem extends Component {
             <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
+          <span className='task-item__status'>{task.issue.fields.status.description}</span>
           <input className='task-item__remaining'
             defaultValue={remainingEstimate}
             onFocus={this.onRemainignFocus}
