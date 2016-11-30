@@ -14,6 +14,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state) => ({
+  profile: state.profile,
   records: getRecords({ state }),
   currentPath: getCurrentPath(state),
   loggedIn: state.profile.loggedIn

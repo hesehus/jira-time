@@ -22,7 +22,8 @@ export default class Header extends Component {
       setRecordSync: PropTypes.func.isRequired,
       removeRecord: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
-      setIssueRefreshing: PropTypes.func.isRequired
+      setIssueRefreshing: PropTypes.func.isRequired,
+      profile: PropTypes.object.isRequired,
     };
   }
 
@@ -145,6 +146,15 @@ export default class Header extends Component {
       }
     }
 
+    let avatarUrl = UserIcon;
+
+    const avatarUrls = this.props.profile.userinfo.avatarUrls;
+    const avatarSize = '24x24';
+
+    if(this.props.profile && this.props.profile.userinfo.avatarUrls) {
+      avatarUrl = avatarUrls[avatarSize];
+    }
+
     return (
       <div className='header'>
         <div className='header-left'>
@@ -155,7 +165,7 @@ export default class Header extends Component {
             <img className='header__icon' src={ListIcon} alt='Home' />
           </IndexLink>
           <Link to='/profile' className={classNameProfile}>
-            <img className='header__icon' src={UserIcon} alt='Profile' />
+            <img className='header__icon' src={avatarUrl} alt='Profile' />
           </Link>
         </div>
         <div className='header-right'>
