@@ -98,6 +98,7 @@ export class TaskItem extends Component {
   }
 
   setRemainingInputValue (remaining) {
+    if (!remaining) remaining = '';
     if (!focusingOnRemaining) {
       const remInp = this.refs.inputRemaining;
       if (remInp && remInp.value !== remaining) {
