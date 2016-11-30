@@ -34,6 +34,9 @@ function createDummyIssue (key) {
       summary: ips({ count: 2, units: 'sentences' }),
       timetracking: {
         remainingEstimate: '2d 14h 51m'
+      },
+      status: {
+        description: 'Foresporgsel'
       }
     }
   };
