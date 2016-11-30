@@ -87,6 +87,7 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
+    "@blueprintjs/core": "~1.1.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-transform-runtime": "^6.15.0",
     "babel-polyfill": "^6.16.0",
