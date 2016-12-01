@@ -22,7 +22,8 @@ export default class Header extends Component {
       setRecordSync: PropTypes.func.isRequired,
       removeRecord: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
-      setIssueRefreshing: PropTypes.func.isRequired
+      setIssueRefreshing: PropTypes.func.isRequired,
+      profile: PropTypes.object.isRequired,
     };
   }
 
@@ -159,20 +160,30 @@ export default class Header extends Component {
       }
     }
 
+    let avatarUrl = UserIcon;
+
+    const avatarUrls = this.props.profile.userinfo.avatarUrls;
+    const avatarSize = '48x48';
+
+    if(this.props.profile && this.props.profile.userinfo.avatarUrls) {
+      avatarUrl = avatarUrls[avatarSize];
+      classNameProfile = classNameProfile + ' header__button--avatar'
+    }
+
     return (
       <div className='header'>
-        <div className='header-left'>
+        <div className='header__left'>
           {updateAvailable}
         </div>
-        <div className='header-center'>
+        <div className='header__center'>
           <IndexLink to='/' className={classNameHome}>
             <img className='header__icon' src={ListIcon} alt='Home' />
           </IndexLink>
           <Link to='/profile' className={classNameProfile}>
-            <img className='header__icon' src={UserIcon} alt='Profile' />
+            <img className='header__icon' src={avatarUrl} alt='Profile' />
           </Link>
         </div>
-        <div className='header-right'>
+        <div className='header__right'>
           {this.props.loggedIn ? sync : null}
         </div>
       </div>

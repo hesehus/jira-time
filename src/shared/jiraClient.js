@@ -103,6 +103,28 @@ export function login ({ username, password } = {}) {
   });
 }
 
+/*
+* get user info
+*
+*
+*/
+export function userInfo ({username}) {
+    return new Promise((resolve, reject) => {
+    callApi({
+      path: `/api/2/user?username=${username}`
+    })
+    .then((response) => {
+
+      if (response.status === 200) {
+        return resolve(response.json());
+      }
+
+      reject(response.status);
+    })
+    .catch(reject);
+  });
+}
+
 /**
 * Verifies the current user session
 * @returns void

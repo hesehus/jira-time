@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import './Login.scss';
 
-import { login } from 'shared/jiraClient';
+import { login, userInfo } from 'shared/jiraClient';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -13,6 +13,7 @@ export class Login extends Component {
       username: PropTypes.string,
       onLoginSuccess: PropTypes.func,
       setLoggedIn: PropTypes.func.isRequired,
+      setUserInfo: PropTypes.func.isRequired,
       setAuthenticationHash: PropTypes.func.isRequired
     }
   }

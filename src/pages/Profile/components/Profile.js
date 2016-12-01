@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import { logout } from 'shared/jiraClient';
+import { logout, userInfo } from 'shared/jiraClient';
 
 import Login from 'modules/Login';
 
@@ -11,7 +11,8 @@ export class Profile extends Component {
   static get propTypes () {
     return {
       profile: PropTypes.object.isRequired,
-      setLoggedIn: PropTypes.func.isRequired
+      setLoggedIn: PropTypes.func.isRequired,
+      setUserInfo: PropTypes.func.isRequired
     };
   }
 
@@ -26,6 +27,15 @@ export class Profile extends Component {
     this.props.setLoggedIn({ isLoggedIn: false });
   }
 
+  componentWillMount () {
+    const { username } = this.props.profile;
+
+    userInfo({ username })
+      .then((userinfo) => {
+        this.props.setUserInfo({ userinfo })
+      });
+  }
+
   render () {
 
     if (!this.props.profile.loggedIn) {
@@ -33,6 +43,8 @@ export class Profile extends Component {
     }
 
     const { username } = this.props.profile;
+
+    console.log(this.props.profile);
 
     return (
       <div className='profile'>
