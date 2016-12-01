@@ -23,6 +23,8 @@
     background: $bg;
     transition: background-color 100ms;
     line-height: 0;
+    height: 52px;
+    box-sizing: border-box;
 
     &:hover {
       background: darken($bg, 5%);

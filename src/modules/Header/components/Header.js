@@ -23,7 +23,7 @@ export default class Header extends Component {
       removeRecord: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
       setIssueRefreshing: PropTypes.func.isRequired,
-      profile: PropTypes.object.isRequired,
+      profile: PropTypes.object.isRequired
     };
   }
 
@@ -165,8 +165,9 @@ export default class Header extends Component {
     const avatarUrls = this.props.profile.userinfo.avatarUrls;
     const avatarSize = '48x48';
 
-    if(this.props.profile && this.props.profile.userinfo.avatarUrls) {
+    if (this.props.profile && this.props.profile.userinfo.avatarUrls) {
       avatarUrl = avatarUrls[avatarSize];
+      avatarUrl = avatarUrl.replace('http://localhost:3000', 'https://jira.hesehus.dk')
       classNameProfile = classNameProfile + ' header__button--avatar'
     }
 

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import { logout, userInfo } from 'shared/jiraClient';
+import { logout, updateUserInfo } from 'shared/jiraClient';
 
 import Login from 'modules/Login';
 
@@ -28,12 +28,7 @@ export class Profile extends Component {
   }
 
   componentWillMount () {
-    const { username } = this.props.profile;
-
-    userInfo({ username })
-      .then((userinfo) => {
-        this.props.setUserInfo({ userinfo })
-      });
+    updateUserInfo();
   }
 
   render () {
