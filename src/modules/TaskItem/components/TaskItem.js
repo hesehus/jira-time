@@ -206,6 +206,8 @@ export class TaskItem extends Component {
       remainingEstimate = null;
     }
 
+    const description = task.issue.fields.status ? task.issue.fields.status.description : null;
+
     // Output the task
     return (
       <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
@@ -216,7 +218,7 @@ export class TaskItem extends Component {
             <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
           </span>
           <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          <span className='task-item__status'>{task.issue.fields.status.description}</span>
+          <span className='task-item__status'>{description}</span>
           <input className='task-item__remaining'
             defaultValue={remainingEstimate}
             onFocus={this.onRemainignFocus}
