@@ -139,7 +139,7 @@ export default class Header extends Component {
       );
     } else if (!!this.props.records.length) {
       sync = (
-        <div id='sync-button' className='header__button' onClick={this.onSyncClick} title='Sync to JIRA'>
+        <div id='sync-button' className='header__button' onClick={this.onSyncClick} title='Sync all worklogs to JIRA'>
           <img className='header__icon' src={ExportIcon} alt='Export' />
         </div>
       );

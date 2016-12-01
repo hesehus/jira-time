@@ -3,6 +3,10 @@ import React, { Component, PropTypes } from 'react';
 import Hammer from 'hammerjs';
 import moment from 'moment';
 import domClosest from 'dom-closest';
+import Sync from 'shared/sync';
+
+import ExportIcon from 'assets/export.svg';
+import LoadingIcon from 'assets/loading.svg';
 
 import './RecordItem.scss';
 
@@ -20,6 +24,7 @@ export class RecordItem extends Component {
   static propTypes = {
     record: PropTypes.object.isRequired,
     recordCuid: PropTypes.string.isRequired,
+    setRecordSync: PropTypes.func.isRequired,
     removeRecord: PropTypes.func.isRequired,
     setRecordDate: PropTypes.func.isRequired,
     setRecordComment: PropTypes.func.isRequired,
@@ -37,6 +42,7 @@ export class RecordItem extends Component {
     this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.onRemoveClick = this.onRemoveClick.bind(this);
     this.onCommentChange = this.onCommentChange.bind(this);
+    this.onSyncClick = this.onSyncClick.bind(this);
 
     this.onPanStart = this.onPanStart.bind(this);
     this.onPanMove = this.onPanMove.bind(this);
@@ -187,6 +193,16 @@ export class RecordItem extends Component {
     this.props.removeRecord({ cuid: this.props.record.cuid });
   }
 
+  onSyncClick() {
+    const syncer = new Sync({
+      records: [this.props.record],
+      setRecordSync: this.props.setRecordSync,
+      removeRecord: this.props.removeRecord
+    });
+
+    syncer.start();
+  }
+
   render () {
 
     const { record, movingRecord } = this.props;
@@ -202,6 +218,21 @@ export class RecordItem extends Component {
     }
     if (record.moving) {
       className += ' record--moving';
+    }
+
+    let btnSync;
+    if (record.syncing) {
+      btnSync = (
+        <div className='record__sync record__sync--syncing' title='Syncing!'>
+          <img className='record__sync-icon' src={LoadingIcon} alt='Loading' />
+        </div>
+      );
+    } else {
+      btnSync = (
+        <div className='record__sync' onClick={this.onSyncClick} title='Sync this worklog to JIRA'>
+          <img className='record__sync-icon' src={ExportIcon} alt='Export' />
+        </div>
+      );
     }
 
     return (
@@ -235,6 +266,7 @@ export class RecordItem extends Component {
           disabled={someRecordIsMoving}
           autoFocus={focus}
         />
+        {btnSync}
       </div>
     );
   }
