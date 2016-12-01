@@ -2,9 +2,15 @@ import { connect } from 'react-redux';
 
 import UITabs from '../components/Tabs';
 
+import { addTab, addTabTask } from 'store/reducers/tabs';
+
 const mapStateToProps = (state) => ({
-  tabs: [],
-  activeTab: {}
+  tabs: state.tabs
 });
 
-export default connect(mapStateToProps)(UITabs);
+const mapDispatchToProps = {
+    addTab,
+    addTabTask
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UITabs);

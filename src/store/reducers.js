@@ -6,6 +6,7 @@ import location from './reducers/location';
 import tasks from './reducers/tasks';
 import recorder from './reducers/recorder';
 import profile from './reducers/profile';
+import tabs from './reducers/tabs';
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
@@ -14,6 +15,7 @@ export const makeRootReducer = (asyncReducers) => {
     tasks,
     recorder,
     profile,
+    tabs,
     ...asyncReducers
   });
 };

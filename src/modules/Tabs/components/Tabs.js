@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import Slider from 'material-ui/Slider'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
 import './Tabs.scss'
 
 const styles = {
@@ -21,27 +24,31 @@ export default class UITabs extends Component {
     };
   }
 
+  constructor (props) {
+    super(props);
+
+    this.onAddClick = this.onAddClick.bind(this);
+  }
+
   handleActive(tab) {
     console.log(`A tab with this route property ${tab.props['data-route']} was activated.`);
   }
 
+  onAddClick () {
+    this.props.addTab();
+  }
+
   render () {
     return (
-      <Tabs>
-        <Tab label="Item One" >
-
-        </Tab>
-        <Tab label="Item Two" >
-
-        </Tab>
-        <Tab
-          label="onActive"
-          data-route="/home"
-          onActive={this.handleActive}
-        >
-          
-        </Tab>
-      </Tabs>
+      <div className="tabs">
+        <Tabs className="tabs-tabs">
+          <Tab label="Alle"></Tab>
+          {this.props.tabs.map(t => <Tab key={t.cuid} label={t.name}></Tab>)}
+        </Tabs>
+        <FloatingActionButton mini={true} className="tabs-add" onClick={this.onAddClick}>
+          <ContentAdd />
+        </FloatingActionButton>
+      </div>
     );
   }
 }
