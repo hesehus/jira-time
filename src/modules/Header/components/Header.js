@@ -167,8 +167,8 @@ export default class Header extends Component {
 
     if (this.props.profile && this.props.profile.userinfo.avatarUrls) {
       avatarUrl = avatarUrls[avatarSize];
-      avatarUrl = avatarUrl.replace('http://localhost:3000', 'https://jira.hesehus.dk')
-      classNameProfile = classNameProfile + ' header__button--avatar'
+      avatarUrl = avatarUrl.replace('http://localhost:3000', 'https://jira.hesehus.dk');
+      classNameProfile = classNameProfile + ' header__button--avatar';
     }
 
     return (
