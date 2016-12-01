@@ -24,6 +24,24 @@
   background: #fff;
   box-sizing: border-box;
 
+  &__sync {
+    height: 100%;
+    padding: 0 0 0 10px;
+    box-sizing: border-box;
+    
+    &-icon {
+      width: 24px;
+      opacity: .5;
+      cursor: pointer;
+      transition: opacity 250ms linear;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+  }
+
   &--syncing {
     background-color: #f1f1f1;
   }
