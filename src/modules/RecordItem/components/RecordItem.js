@@ -193,7 +193,7 @@ export class RecordItem extends Component {
     this.props.removeRecord({ cuid: this.props.record.cuid });
   }
 
-  onSyncClick() {
+  onSyncClick () {
     const syncer = new Sync({
       records: [this.props.record],
       setRecordSync: this.props.setRecordSync,
