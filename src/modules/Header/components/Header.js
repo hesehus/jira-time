@@ -36,7 +36,7 @@ export default class Header extends Component {
       if (e.ctrlKey) {
         let charCode = e.keyCode || e.which;
         let charStr = String.fromCharCode(charCode);
-        if (charStr == 'S') {
+        if (charStr === 'S') {
           e.preventDefault();
           let syncButton = document.getElementById('sync-button');
           if (syncButton) syncButton.click();
