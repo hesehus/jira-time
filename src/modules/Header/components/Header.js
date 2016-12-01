@@ -32,6 +32,20 @@ export default class Header extends Component {
     this.state = {};
 
     this.onSyncClick = this.onSyncClick.bind(this);
+    document.addEventListener('keydown', function onKeyDown (e) {
+      if (e.ctrlKey) {
+        let charCode = e.keyCode || e.which;
+        let charStr = String.fromCharCode(charCode);
+        if (charStr == 'S') {
+          e.preventDefault();
+          let syncButton = document.getElementById('sync-button');
+          if (syncButton) syncButton.click();
+        }
+      }
+      if (e.altKey) {
+
+      }
+    });
   }
 
   componentWillMount () {
@@ -125,7 +139,7 @@ export default class Header extends Component {
       );
     } else if (!!this.props.records.length) {
       sync = (
-        <div className='header__button' onClick={this.onSyncClick} title='Sync to JIRA'>
+        <div id='sync-button' className='header__button' onClick={this.onSyncClick} title='Sync to JIRA'>
           <img className='header__icon' src={ExportIcon} alt='Export' />
         </div>
       );
