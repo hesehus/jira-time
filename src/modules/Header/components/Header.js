@@ -11,6 +11,7 @@ import UserIcon from 'assets/user.svg';
 import ExportIcon from 'assets/export.svg';
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
+import ChristmasTree from 'assets/christmas-tree.png';
 
 export default class Header extends Component {
 
@@ -163,6 +164,7 @@ export default class Header extends Component {
       <div className='header'>
         <div className='header-left'>
           {updateAvailable}
+          <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
         </div>
         <div className='header-center'>
           <IndexLink to='/' className={classNameHome}>
