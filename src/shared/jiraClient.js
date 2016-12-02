@@ -1,10 +1,47 @@
 import moment from 'moment';
 import { ensureDate } from './helpers';
 
-import { setLoggedIn } from 'store/reducers/profile';
+import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
 
 // Check the session in a few seconds
-setTimeout(verifyLoginStatus, 5000);
+setTimeout(startupCheck, 2000);
+
+function startupCheck () {
+  verifyLoginStatus()
+    .then(updateUserInfo);
+}
+
+/**
+* Verifies the current user session
+* @returns void
+**/
+function verifyLoginStatus () {
+  return callApi({
+    path: `auth/1/session`
+  })
+  .then((response) => {
+
+    // Not authenticated. Log out
+    if (response.status !== 200) {
+      logout();
+
+      store.dispatch(setLoggedIn({
+        isLoggedIn: false
+      }));
+    }
+
+    return response;
+  });
+}
+
+export function updateUserInfo () {
+  const state = store.getState();
+
+  userInfo({ username: state.profile.username })
+    .then((userinfo) => {
+      store.dispatch(setUserInfo({ userinfo }));
+    });
+}
 
 /**
 * Wrapper for all API calls
@@ -103,24 +140,25 @@ export function login ({ username, password } = {}) {
   });
 }
 
-/**
-* Verifies the current user session
-* @returns void
-**/
-function verifyLoginStatus () {
-  callApi({
-    path: `auth/1/session`
-  })
-  .then((response) => {
+/*
+* get user info
+*
+*
+*/
+export function userInfo ({ username }) {
+  return new Promise((resolve, reject) => {
+    callApi({
+      path: `/api/2/user?username=${username}`
+    })
+    .then((response) => {
 
-    // Not authenticated. Log out
-    if (response.status !== 200) {
-      logout();
+      if (response.status === 200) {
+        return resolve(response.json());
+      }
 
-      store.dispatch(setLoggedIn({
-        isLoggedIn: false
-      }));
-    }
+      reject(response.status);
+    })
+    .catch(reject);
   });
 }
 
