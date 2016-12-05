@@ -119,8 +119,6 @@
     "postcss-loader": "^0.13.0",
     "preact": "~7.1.0",
     "preact-compat": "~3.9.3",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
     "react-notification": "^6.3.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.0",
