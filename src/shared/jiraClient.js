@@ -148,7 +148,7 @@ export function login ({ username, password } = {}) {
 export function userInfo ({ username }) {
   return new Promise((resolve, reject) => {
     callApi({
-      path: `/api/2/user?username=${username}`
+      path: `api/2/user?username=${username}`
     })
     .then((response) => {
 
