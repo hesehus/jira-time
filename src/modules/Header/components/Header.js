@@ -117,7 +117,7 @@ export default class Header extends Component {
   render () {
 
     if (!this.props.loggedIn) {
-      return null;
+      return <div />;
     }
 
     // Signal that there is a new version ready to be installed
