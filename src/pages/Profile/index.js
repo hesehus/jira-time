@@ -1,8 +1,6 @@
-export default (store) => ({
+import Profile from './containers/Profile';
+
+export default {
   path : 'profile',
-  /*  Async getComponent is only invoked when route matches   */
-  getComponent (nextState, cb) {
-    const Profile = require('./containers/ProfileContainer').default;
-    cb(null, Profile);
-  }
-});
+  component: Profile
+}

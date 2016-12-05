@@ -11,6 +11,7 @@ import UserIcon from 'assets/user.svg';
 import ExportIcon from 'assets/export.svg';
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
+import CalendarIcon from 'assets/calendar.svg';
 import ChristmasTree from 'assets/christmas-tree.png';
 
 export default class Header extends Component {
@@ -149,13 +150,17 @@ export default class Header extends Component {
 
     let classNameHome = 'header__button';
     let classNameProfile = 'header__button';
+    let classNameSummary = 'header__button';
 
     switch (this.props.currentPath) {
       case '/profile' : {
         classNameProfile += ' header__button--active';
         break;
       }
-
+      case '/summary' : {
+        classNameSummary += ' header__button--active';
+        break;
+      }
       default : {
         classNameHome += ' header__button--active';
       }
@@ -179,6 +184,9 @@ export default class Header extends Component {
           <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
         </div>
         <div className='header__center'>
+          <Link to='/summary' className={classNameSummary}>
+            <img className='header__icon' src={CalendarIcon} alt='Calendar' />
+          </Link>
           <IndexLink to='/' className={classNameHome}>
             <img className='header__icon' src={ListIcon} alt='Home' />
           </IndexLink>

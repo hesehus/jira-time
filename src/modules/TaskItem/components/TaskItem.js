@@ -94,6 +94,12 @@ export class TaskItem extends Component {
       });
 
       this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
+    })
+    .catch(() => {
+      this.props.setIssueRefreshing({
+        cuid: task.cuid,
+        refreshing: false
+      });
     });
   }
 

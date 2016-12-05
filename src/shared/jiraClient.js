@@ -1,4 +1,5 @@
 import moment from 'moment';
+
 import { ensureDate } from './helpers';
 
 import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
@@ -297,4 +298,66 @@ export function addCurrentUserAsWatcher ({ taskIssueKey }) {
     path: `api/2/issue/${taskIssueKey}/watchers`,
     method: 'post'
   });
+}
+
+/**
+* Gets the logs for a given time span
+* @param taskIssueKey: string
+* @returns promise
+**/
+export function getWorkLogs ({ startDate, endDate, username }) {
+
+  startDate = moment(startDate);
+  endDate = moment(endDate);
+
+  return new Promise((resolve, reject) => {
+    let jql = `
+      worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
+      worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
+      worklogAuthor="${username}"`;
+
+    callApi({
+      path: `api/2/search?jql=${jql}`
+    })
+    .then(r => r.json())
+    .then((response) => {
+
+      if (response.errorMessages) {
+        return reject(response.errorMessages);
+      }
+
+      let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
+
+      Promise.all(worklogsGetters)
+        .then((worklogs) => {
+
+          let combined = [];
+          worklogs.forEach(w => combined.push(...w));
+
+          worklogs = worklogs.map((w) => {
+            w.started = moment(w.started);
+            return w;
+          });
+
+          combined = combined.sort((a, b) => a.started > b.started);
+
+          resolve(combined);
+        })
+        .catch(reject);
+    })
+    .catch(reject);
+  });
+}
+
+function getWorkLogsForIssue ({ key, startDate, username }) {
+  return callApi({
+    path: `api/2/issue/${key}/worklog`
+  })
+  .then(r => r.json())
+  .then(r => r.worklogs.filter(w => w.author.name === username))
+  .then(worklogs => worklogs.filter(w => moment(w.started) >= startDate))
+  .then(worklogs => worklogs.map(w => {
+    w.issueKey = key;
+    return w;
+  }))
 }

@@ -20,15 +20,15 @@ const webpackConfig = {
     root       : paths.client(),
     extensions : ['', '.js', '.jsx', '.json'],
     alias: {
-      "react": "preact-compat",
-      "react-dom": "preact-compat",
-    },
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
   },
   module : {},
   node: {
     fs: 'empty',
     net: 'empty',
-    tls: 'empty',
+    tls: 'empty'
   }
 };
 

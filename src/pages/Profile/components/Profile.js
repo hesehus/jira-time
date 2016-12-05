@@ -39,8 +39,6 @@ export class Profile extends Component {
 
     const { username } = this.props.profile;
 
-    console.log(this.props.profile);
-
     return (
       <div className='profile'>
         <div>Username: {username}</div>

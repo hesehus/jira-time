@@ -1,7 +1,8 @@
 import CoreLayout from 'layouts/CoreLayout/CoreLayout';
 
 import Home from './Home';
-import ProfileRoute from './Profile';
+import Profile from './Profile';
+import Summary from './Summary';
 
 export const createRoutes = (store) => {
   return {
@@ -9,7 +10,8 @@ export const createRoutes = (store) => {
     component   : CoreLayout,
     indexRoute  : Home,
     childRoutes : [
-      ProfileRoute(store)
+      Profile,
+      Summary
     ]
   };
 };

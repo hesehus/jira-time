@@ -30,6 +30,7 @@
     "indent"               : [1],
     "no-extra-boolean-cast": "off",
     "no-tabs"              : [1],
-    "no-mixed-spaces-and-tabs": [1]
+    "no-mixed-spaces-and-tabs": [1],
+    "no-return-assign"     : "off"
   }
 }
