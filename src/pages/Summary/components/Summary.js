@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 
 import { getWorkLogs } from 'shared/jiraClient';
-import SyncedRecordItem from 'modules/SyncedRecordItem';
+import HistoryRecordItem from 'modules/HistoryRecordItem';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -12,7 +12,9 @@ export default class Summary extends Component {
 
   static get propTypes () {
     return {
-      profile: PropTypes.object.isRequired
+      profile: PropTypes.object.isRequired,
+      notSyncedRecords: PropTypes.array.isRequired,
+      activeRecord: PropTypes.object
     }
   }
 
@@ -41,6 +43,7 @@ export default class Summary extends Component {
   render () {
 
     const { loading, records } = this.state;
+    let { notSyncedRecords, activeRecord } = this.props;
 
     if (!records || loading) {
       return (
@@ -53,23 +56,38 @@ export default class Summary extends Component {
     if (records && records.length === 0) {
       return (
         <div className='summary summary--no-found'>
-          No worklogs found
+          No worklogs found today
         </div>
       );
     }
 
-    let totalSeconds = 0;
-    records.forEach(r => totalSeconds += r.timeSpentSeconds);
+    if (activeRecord) {
+      notSyncedRecords = notSyncedRecords.filter(r => r.cuid !== activeRecord.cuid);
+    }
 
-    let hours = Math.floor(totalSeconds / 60 / 60);
-    let minutes = Math.floor((totalSeconds - (hours * 60 * 60)) / 60);
+    let outputRecords = [...notSyncedRecords, ...records];
+
+    // Ensure momentified dates
+    outputRecords = outputRecords.map((r) => {
+      r.startTime = moment(r.startTime);
+      r.endTime = moment(r.endTime || new Date());
+      return r;
+    });
+
+    // Sort by time started
+    outputRecords = outputRecords.sort((a, b) => a.startTime > b.startTime);
+
+    let duration = moment.duration();
+    outputRecords.forEach(r => duration.add(r.endTime.unix() - r.startTime.unix(), 'seconds'));
+    duration.add(moment(activeRecord.endTime || new Date()).unix() - moment(activeRecord.startTime).unix(), 'seconds');
 
     return (
       <div className='summary'>
         <table className='summary-table'>
-          {records.map(record => <SyncedRecordItem record={record} />)}
+          {outputRecords.map(record => <HistoryRecordItem record={record} />)}
+          {activeRecord ? <HistoryRecordItem record={activeRecord} /> : null}
         </table>
-        <div>Total: {hours}h {minutes}m</div>
+        <div>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
       </div>
     );
   }

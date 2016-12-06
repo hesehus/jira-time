@@ -1,9 +1,9 @@
 import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 
-// import './SyncedRecordItem.scss';
+// import './HistoryRecordItem.scss';
 
-export default class SyncedRecordItem extends Component {
+export default class HistoryRecordItem extends Component {
 
   static propTypes = {
     record: PropTypes.object.isRequired
@@ -12,14 +12,15 @@ export default class SyncedRecordItem extends Component {
   render () {
     const { record } = this.props;
 
-    const startTime = moment(record.started);
-    const endTime = moment(record.started).add(record.timeSpentSeconds, 'seconds');
+    const startTime = moment(record.startTime);
+    const endTime = moment(record.endTime);
 
     return (
       <tr>
-        <td>{record.issueKey}</td>
+        <td>{record.taskIssueKey}</td>
         <td>{startTime.format('HH:mm')}</td>
         <td>{endTime.format('HH:mm')}</td>
+        <td>{record.elapsedTime}</td>
         <td>{record.comment}</td>
       </tr>
     );

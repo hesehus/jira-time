@@ -3,6 +3,7 @@ import moment from 'moment';
 import { ensureDate } from './helpers';
 
 import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
+import RecordModel from '../store/models/RecordModel';
 
 // Check the session in a few seconds
 setTimeout(startupCheck, 2000);
@@ -305,6 +306,7 @@ export function addCurrentUserAsWatcher ({ taskIssueKey }) {
 * @param taskIssueKey: string
 * @returns promise
 **/
+
 export function getWorkLogs ({ startDate, endDate, username }) {
 
   startDate = moment(startDate);
@@ -332,14 +334,14 @@ export function getWorkLogs ({ startDate, endDate, username }) {
         .then((worklogs) => {
 
           let combined = [];
+
           worklogs.forEach(w => combined.push(...w));
 
-          worklogs = worklogs.map((w) => {
-            w.started = moment(w.started);
-            return w;
+          // Conform all worklogs to our RecordModel
+          combined = combined.map((w) => {
+            w.startTime = w.started;
+            return RecordModel(w);
           });
-
-          combined = combined.sort((a, b) => a.started > b.started);
 
           resolve(combined);
         })
@@ -356,8 +358,8 @@ function getWorkLogsForIssue ({ key, startDate, username }) {
   .then(r => r.json())
   .then(r => r.worklogs.filter(w => w.author.name === username))
   .then(worklogs => worklogs.filter(w => moment(w.started) >= startDate))
-  .then(worklogs => worklogs.map(w => {
-    w.issueKey = key;
+  .then(worklogs => worklogs.map((w) => {
+    w.taskIssueKey = key;
     return w;
-  }))
+  }));
 }
