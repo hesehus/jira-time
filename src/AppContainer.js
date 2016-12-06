@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { hashHistory, Router } from 'react-router';
 import { Provider, connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { default as swal } from 'sweetalert2'
 
 class AppContainer extends Component {
   static propTypes = {
@@ -41,25 +42,19 @@ class AppContainer extends Component {
         }
       });
 
-      let altDown = false;
       document.addEventListener('keydown', function onKeyUp (e) {
-        if (e.keyCode === 18) {
-          altDown = true;
-        }
-
         // 65 === 'a'
-        if (e.keyCode === 65 && altDown) {
-          altDown = false;
-          const text = prompt(`Throw some issue keys at me man!`);
-          if (text) {
-            window.__events.emit('paste', { text });
-          }
-        }
-      }, false);
-      document.addEventListener('keyup', function onKeyUp (e) {
-
-        if (e.keyCode === 18) {
-          altDown = false;
+        if (e.keyCode === 65 && e.altKey) {
+          swal({
+            title: 'Add issue',
+            text: 'Throw some issue keys at me man!',
+            input: 'text'
+          })
+          .then(text => {
+            if (text) {
+              window.__events.emit('paste', { text });
+            }
+          });
         }
       }, false);
 

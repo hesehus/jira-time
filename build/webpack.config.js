@@ -151,6 +151,7 @@ webpackConfig.module.loaders.push({
 webpackConfig.module.loaders.push({
   test    : /\.css$/,
   exclude : null,
+  include : /node_modules/,
   loaders : [
     'style',
     BASE_CSS_LOADER,
