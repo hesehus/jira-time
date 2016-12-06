@@ -56,22 +56,30 @@ export class TaskItem extends Component {
     const endTime = new Date();
     endTime.setMinutes(endTime.getMinutes() + 1);
 
+    const record = RecordModel({
+      task,
+      startTime,
+      endTime
+    });
+
+    this.focusOnRecordCommentCuid = record.cuid;
+
     this.props.addRecord({
       task,
-      record: RecordModel({
-        task,
-        startTime,
-        endTime
-      })
+      record
     });
   }
 
   onStartActiveLogClick () {
     const { task } = this.props;
 
+    const record = RecordModel({ task });
+
+    this.focusOnRecordCommentCuid = record.cuid;
+
     this.props.startRecording({
       task,
-      record: RecordModel({ task })
+      record
     });
   }
 
@@ -168,8 +176,12 @@ export class TaskItem extends Component {
     }
 
     let recordItems = records.map((record) => {
-      return <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />;
+      const autofocus = this.focusOnRecordCommentCuid === record.cuid;
+      return <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} autofocus={autofocus} />;
     });
+
+    // Reset this always after the list is rendered
+    this.focusOnRecordCommentCuid = false;
 
     let refreshIcon;
 

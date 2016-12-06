@@ -46,7 +46,15 @@ export default class Recorder extends Component {
       if (result.success) {
         this.props.addTask({ issue: result.issue });
         addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+      } else {
+        alert(result.message);
       }
+    });
+
+    processTask.on('end', () => {
+      this.setState({
+        addingTasksFromDropOrPaste: 0
+      });
     });
   }
 

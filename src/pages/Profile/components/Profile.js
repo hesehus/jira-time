@@ -42,6 +42,7 @@ export class Profile extends Component {
     return (
       <div className='profile'>
         <div>Username: {username}</div>
+        <div>App shortcuts: ALT+a: add issue(s)</div>
         <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
       </div>
     );

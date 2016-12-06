@@ -13,7 +13,6 @@ export class Login extends Component {
       username: PropTypes.string,
       onLoginSuccess: PropTypes.func,
       setLoggedIn: PropTypes.func.isRequired,
-      setUserInfo: PropTypes.func.isRequired,
       setAuthenticationHash: PropTypes.func.isRequired
     }
   }

@@ -41,6 +41,28 @@ class AppContainer extends Component {
         }
       });
 
+      let altDown = false;
+      document.addEventListener('keydown', function onKeyUp (e) {
+        if (e.keyCode === 18) {
+          altDown = true;
+        }
+
+        // 65 === 'a'
+        if (e.keyCode === 65 && altDown) {
+          altDown = false;
+          const text = prompt(`Throw some issue keys at me man!`);
+          if (text) {
+            window.__events.emit('paste', { text });
+          }
+        }
+      }, false);
+      document.addEventListener('keyup', function onKeyUp (e) {
+
+        if (e.keyCode === 18) {
+          altDown = false;
+        }
+      }, false);
+
     }
   }
 

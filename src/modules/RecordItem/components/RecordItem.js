@@ -32,7 +32,8 @@ export class RecordItem extends Component {
     setRecordMoveTarget: PropTypes.func.isRequired,
     setRecordTask: PropTypes.func.isRequired,
     activeRecord: PropTypes.object,
-    movingRecord: PropTypes.object
+    movingRecord: PropTypes.object,
+    autofocus: PropTypes.bool
   }
 
   constructor (props) {
@@ -70,6 +71,10 @@ export class RecordItem extends Component {
     if (!this.documentListener) {
       document.addEventListener('keydown', this.onKeyPress, false);
       this.documentListener = true;
+    }
+
+    if (this.inputComment && this.props.autofocus) {
+      this.inputComment.select();
     }
   }
 
@@ -264,7 +269,7 @@ export class RecordItem extends Component {
           onChange={this.onCommentChange}
           value={record.comment}
           disabled={someRecordIsMoving}
-          autoFocus={focus}
+          ref={(i) => this.inputComment = i}
         />
         {btnSync}
       </div>
