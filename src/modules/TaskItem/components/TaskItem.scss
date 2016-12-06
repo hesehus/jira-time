@@ -14,11 +14,28 @@
     }
   }
 
-  &-info {
+  &__info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px;
+  }
+
+  &__left,
+  &__mid,
+  &__right {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+  }
+
+  &__right {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__mid {
+    flex-grow: 1;
   }
 
   &__remove {
@@ -32,6 +49,7 @@
     margin-left: 15px;
     white-space: nowrap;
     display: flex;
+    align-items: center;
   }
 
   &__issue-refresh {
@@ -89,5 +107,11 @@
   &__log-icon {
     width: 10px;
     height: 10px;
+  }
+
+  &__btn-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
   }
 }
