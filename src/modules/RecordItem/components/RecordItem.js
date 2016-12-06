@@ -75,6 +75,7 @@ export class RecordItem extends Component {
 
     if (this.inputComment && this.props.autofocus) {
       this.inputComment.select();
+      this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
     }
   }
 
