@@ -75,6 +75,13 @@ export default class Recorder extends Component {
     clearInterval(this.elapsedTimeInterval);
   }
 
+  componentDidUpdate () {
+    if (this.autofocusOnComment && this.refs.comment) {
+      this.refs.comment.select();
+      this.autofocusOnComment = false;
+    }
+  }
+
   onDropAndPaste ({ url, text }) {
     if (this.props.isLoggedIn) {
 
@@ -106,6 +113,8 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     this.props.startRecording({
       record: RecordModel()
     });
+
+    this.autofocusOnComment = true;
   }
 
   onCommentChange (e) {
@@ -147,7 +156,9 @@ How do you expect me to verify that this URL you dropped is even valid??`);
       <textarea
         className='recorder-comment'
         value={record ? record.comment : null}
-        onChange={this.onCommentChange} />
+        onChange={this.onCommentChange}
+        ref='comment'
+      />
     );
 
     let notifications;
