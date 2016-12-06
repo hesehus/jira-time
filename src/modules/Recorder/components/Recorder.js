@@ -46,7 +46,15 @@ export default class Recorder extends Component {
       if (result.success) {
         this.props.addTask({ issue: result.issue });
         addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+      } else {
+        alert(result.message);
       }
+    });
+
+    processTask.on('end', () => {
+      this.setState({
+        addingTasksFromDropOrPaste: 0
+      });
     });
   }
 
@@ -65,6 +73,13 @@ export default class Recorder extends Component {
     window.__events.off('drop', this.onDropAndPaste);
     window.__events.off('paste', this.onDropAndPaste);
     clearInterval(this.elapsedTimeInterval);
+  }
+
+  componentDidUpdate () {
+    if (this.autofocusOnComment && this.refs.comment) {
+      this.refs.comment.select();
+      this.autofocusOnComment = false;
+    }
   }
 
   onDropAndPaste ({ url, text }) {
@@ -98,6 +113,8 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     this.props.startRecording({
       record: RecordModel()
     });
+
+    this.autofocusOnComment = true;
   }
 
   onCommentChange (e) {
@@ -139,7 +156,9 @@ How do you expect me to verify that this URL you dropped is even valid??`);
       <textarea
         className='recorder-comment'
         value={record ? record.comment : null}
-        onChange={this.onCommentChange} />
+        onChange={this.onCommentChange}
+        ref='comment'
+      />
     );
 
     let notifications;

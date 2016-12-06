@@ -27,10 +27,16 @@ export default class ProcessTask extends EventClass {
   process () {
 
     if (!this.tasks.length) {
+      this.emit('end');
       return;
     }
 
     const key = this.tasks[0];
+
+    var next = () => {
+      this.tasks = this.tasks.splice(1);
+      this.process();
+    }
 
     getIssue({ key })
     .then((issue) => {
@@ -49,11 +55,13 @@ export default class ProcessTask extends EventClass {
         });
       }
     })
-    .catch(next);
+    .catch(() => {
+      this.emit('add', {
+        success: false,
+        message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
+      });
 
-    var next = () => {
-      this.tasks = this.tasks.splice(1);
-      this.process();
-    }
+      next();
+    });
   }
 }

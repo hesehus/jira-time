@@ -1,5 +1,7 @@
 @import 'base';
 @import '~normalize.css/normalize';
+@import '~sweetalert2/dist/sweetalert2.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
 * {
   box-sizing: border-box;
@@ -10,10 +12,11 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: 'Roboto', sans-serif;
 
   &.moving {
     cursor: default;
-    
+
     * {
       user-select: none;
     }
@@ -31,6 +34,19 @@ input {
 
   &::-webkit-clear-button {
     display: none;
+  }
+}
+
+.swal2-prompt {
+  display: flex;
+  flex-direction: column;
+
+  &-header {
+    margin-bottom: 10px;
+  }
+
+  &-input {
+    padding: 10px;
   }
 }
 

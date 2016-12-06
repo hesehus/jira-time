@@ -1,10 +1,48 @@
 import moment from 'moment';
+
 import { ensureDate } from './helpers';
 
-import { setLoggedIn } from 'store/reducers/profile';
+import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
 
 // Check the session in a few seconds
-setTimeout(verifyLoginStatus, 5000);
+setTimeout(startupCheck, 2000);
+
+function startupCheck () {
+  verifyLoginStatus()
+    .then(updateUserInfo);
+}
+
+/**
+* Verifies the current user session
+* @returns void
+**/
+function verifyLoginStatus () {
+  return callApi({
+    path: `auth/1/session`
+  })
+  .then((response) => {
+
+    // Not authenticated. Log out
+    if (response.status !== 200) {
+      logout();
+
+      store.dispatch(setLoggedIn({
+        isLoggedIn: false
+      }));
+    }
+
+    return response;
+  });
+}
+
+export function updateUserInfo () {
+  const state = store.getState();
+
+  userInfo({ username: state.profile.username })
+    .then((userinfo) => {
+      store.dispatch(setUserInfo({ userinfo }));
+    });
+}
 
 /**
 * Wrapper for all API calls
@@ -103,24 +141,25 @@ export function login ({ username, password } = {}) {
   });
 }
 
-/**
-* Verifies the current user session
-* @returns void
-**/
-function verifyLoginStatus () {
-  callApi({
-    path: `auth/1/session`
-  })
-  .then((response) => {
+/*
+* get user info
+*
+*
+*/
+export function userInfo ({ username }) {
+  return new Promise((resolve, reject) => {
+    callApi({
+      path: `api/2/user?username=${username}`
+    })
+    .then((response) => {
 
-    // Not authenticated. Log out
-    if (response.status !== 200) {
-      logout();
+      if (response.status === 200) {
+        return resolve(response.json());
+      }
 
-      store.dispatch(setLoggedIn({
-        isLoggedIn: false
-      }));
-    }
+      reject(response.status);
+    })
+    .catch(reject);
   });
 }
 
@@ -259,4 +298,66 @@ export function addCurrentUserAsWatcher ({ taskIssueKey }) {
     path: `api/2/issue/${taskIssueKey}/watchers`,
     method: 'post'
   });
+}
+
+/**
+* Gets the logs for a given time span
+* @param taskIssueKey: string
+* @returns promise
+**/
+export function getWorkLogs ({ startDate, endDate, username }) {
+
+  startDate = moment(startDate);
+  endDate = moment(endDate);
+
+  return new Promise((resolve, reject) => {
+    let jql = `
+      worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
+      worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
+      worklogAuthor="${username}"`;
+
+    callApi({
+      path: `api/2/search?jql=${jql}`
+    })
+    .then(r => r.json())
+    .then((response) => {
+
+      if (response.errorMessages) {
+        return reject(response.errorMessages);
+      }
+
+      let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
+
+      Promise.all(worklogsGetters)
+        .then((worklogs) => {
+
+          let combined = [];
+          worklogs.forEach(w => combined.push(...w));
+
+          worklogs = worklogs.map((w) => {
+            w.started = moment(w.started);
+            return w;
+          });
+
+          combined = combined.sort((a, b) => a.started > b.started);
+
+          resolve(combined);
+        })
+        .catch(reject);
+    })
+    .catch(reject);
+  });
+}
+
+function getWorkLogsForIssue ({ key, startDate, username }) {
+  return callApi({
+    path: `api/2/issue/${key}/worklog`
+  })
+  .then(r => r.json())
+  .then(r => r.worklogs.filter(w => w.author.name === username))
+  .then(worklogs => worklogs.filter(w => moment(w.started) >= startDate))
+  .then(worklogs => worklogs.map(w => {
+    w.issueKey = key;
+    return w;
+  }))
 }

@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { hashHistory, Router } from 'react-router';
 import { Provider, connect } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { default as swal } from 'sweetalert2'
 
 class AppContainer extends Component {
   static propTypes = {
@@ -40,6 +42,22 @@ class AppContainer extends Component {
         }
       });
 
+      document.addEventListener('keydown', function onKeyUp (e) {
+        // 65 === 'a'
+        if (e.keyCode === 65 && e.altKey) {
+          swal({
+            title: 'Add issue',
+            text: 'Throw some issue keys at me man!',
+            input: 'text'
+          })
+          .then(text => {
+            if (text) {
+              window.__events.emit('paste', { text });
+            }
+          });
+        }
+      }, false);
+
     }
   }
 
@@ -52,7 +70,9 @@ class AppContainer extends Component {
 
     return (
       <Provider store={store}>
-        <Router history={hashHistory} children={routes} />
+        <MuiThemeProvider>
+          <Router history={hashHistory} children={routes} />
+        </MuiThemeProvider>
       </Provider>
     )
   }

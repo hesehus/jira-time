@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import './Login.scss';
 
-import { login } from 'shared/jiraClient';
+import { login, updateUserInfo } from 'shared/jiraClient';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -79,6 +79,7 @@ export class Login extends Component {
             if (this.props.onLoginSuccess) {
               this.props.onLoginSuccess({ userInfo });
             }
+            updateUserInfo();
 
           } else {
 

@@ -18,7 +18,11 @@ const webpackConfig = {
   devtool : config.compiler_devtool,
   resolve : {
     root       : paths.client(),
-    extensions : ['', '.js', '.jsx', '.json']
+    extensions : ['', '.js', '.jsx', '.json'],
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
   },
   module : {},
   node: {
@@ -147,6 +151,7 @@ webpackConfig.module.loaders.push({
 webpackConfig.module.loaders.push({
   test    : /\.css$/,
   exclude : null,
+  include : /node_modules/,
   loaders : [
     'style',
     BASE_CSS_LOADER,
