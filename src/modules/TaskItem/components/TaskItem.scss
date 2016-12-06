@@ -29,13 +29,18 @@
     flex: 0 1 auto;
   }
 
-  &__right {
-    justify-content: center;
-    flex-wrap: wrap;
+  &__left {
+    flex-basis: 10%;
   }
 
   &__mid {
+    flex-basis: 70%;
     flex-grow: 1;
+  }
+  
+  &__right {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   &__remove {
@@ -78,6 +83,7 @@
     border: 1px solid #bababa;
     background-color: #efefef;
     border-radius: 4px;
+    white-space: nowrap;
   }
 
   &__remaining {

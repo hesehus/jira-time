@@ -36,6 +36,7 @@ function createDummyIssue (key) {
         remainingEstimate: '2d 14h 51m'
       },
       status: {
+        name: 'Foresporgsel',
         description: 'Foresporgsel'
       }
     }
