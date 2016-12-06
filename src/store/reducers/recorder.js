@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import RecordModel from 'store/models/RecordModel';
 import TaskModel from 'store/models/TaskModel';
 
@@ -28,20 +30,18 @@ export const REMOVE_RECORD = 'REMOVE_RECORD';
 
 export function getElapsedTime ({ startTime, endTime = Date.now() }) {
 
-  if (endTime < startTime) {
+  startTime = moment(startTime);
+  endTime = moment(endTime);
+
+  const diff = endTime.unix() - startTime.unix();
+
+  if (diff < 0) {
     return 'Negative time? You are not that fast.';
   }
 
-  let s = endTime - startTime;
+  const d = moment.duration(diff, 'seconds');
 
-  let ms = s % 1000;
-  s = (s - ms) / 1000;
-  let secs = s % 60;
-  s = (s - secs) / 60;
-  let mins = s % 60;
-  let hrs = (s - mins) / 60;
-
-  return hrs + 'h ' + mins + 'm ' + secs + 's';
+  return `${d.hours()}h ${d.minutes()}m ${d.seconds()}s`;
 }
 
 // ------------------------------------

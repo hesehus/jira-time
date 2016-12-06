@@ -211,7 +211,7 @@ export class RecordItem extends Component {
 
   render () {
 
-    const { record, movingRecord } = this.props;
+    let { record, movingRecord } = this.props;
 
     const someRecordIsMoving = !!movingRecord;
 

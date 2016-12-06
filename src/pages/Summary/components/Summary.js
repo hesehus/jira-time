@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 
 import { getWorkLogs } from 'shared/jiraClient';
 import HistoryRecordItem from 'modules/HistoryRecordItem';
+import HistorySpaceItem from 'modules/HistorySpaceItem';
+import { getElapsedTime } from 'store/reducers/recorder';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -61,31 +63,48 @@ export default class Summary extends Component {
       );
     }
 
+    // Filter out active record
     if (activeRecord) {
       notSyncedRecords = notSyncedRecords.filter(r => r.cuid !== activeRecord.cuid);
     }
 
     let outputRecords = [...notSyncedRecords, ...records];
 
-    // Ensure momentified dates
-    outputRecords = outputRecords.map((r) => {
-      r.startTime = moment(r.startTime);
-      r.endTime = moment(r.endTime || new Date());
-      return r;
-    });
+    outputRecords.push(activeRecord);
 
     // Sort by time started
     outputRecords = outputRecords.sort((a, b) => a.startTime > b.startTime);
 
+    // Calculate duration
     let duration = moment.duration();
-    outputRecords.forEach(r => duration.add(r.endTime.unix() - r.startTime.unix(), 'seconds'));
-    duration.add(moment(activeRecord.endTime || new Date()).unix() - moment(activeRecord.startTime).unix(), 'seconds');
+    outputRecords.forEach((r) => {
+      duration.add(moment(r.endTime || new Date()).unix() - moment(r.startTime).unix(), 'seconds');
+    });
+
+    // Compose list with empty spaces within
+    let outputItems = [];
+    outputRecords.forEach((record, index) => {
+      const prev = outputRecords[index - 1];
+      if (prev) {
+
+        // Consider everything over 1s as a space
+        const duration = moment(record.startTime).unix() - moment(prev.endTime).unix();
+        if (duration > 1) {
+          const elapsedTime = getElapsedTime({
+            startTime: prev.endTime,
+            endTime: record.startTime
+          });
+          outputItems.push(<HistorySpaceItem elapsedTime={elapsedTime} />);
+        }
+      }
+
+      outputItems.push(<HistoryRecordItem record={record} />);
+    });
 
     return (
       <div className='summary'>
         <table className='summary-table'>
-          {outputRecords.map(record => <HistoryRecordItem record={record} />)}
-          {activeRecord ? <HistoryRecordItem record={activeRecord} /> : null}
+          {outputItems}
         </table>
         <div>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
       </div>
