@@ -46,15 +46,22 @@ export default class RecordItem extends Component {
     this.onCommentChange = this.onCommentChange.bind(this);
     this.onSyncClick = this.onSyncClick.bind(this);
 
-    this.onPanStart = this.onPanStart.bind(this);
-    this.onPanMove = this.onPanMove.bind(this);
-    this.onPanEnd = this.onPanEnd.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
   }
 
   componentDidMount () {
-    if (this.refs.outer) {
-      this.mc = new Hammer.Manager(this.refs.outer, {
+    this.bind();
+  }
+
+  componentDidUpdate () {
+    this.bind();
+  }
+
+  bind () {
+    if (this.outer && !this.outer.isBinded) {
+      this.outer.isBinded = true;
+
+      this.mc = new Hammer.Manager(this.outer, {
         cssProps: {
           userSelect: 'text'
         }
@@ -64,24 +71,21 @@ export default class RecordItem extends Component {
         direction: Hammer.DIRECTION_VERTICAL
       }));
 
-      this.mc.on('panstart', this.onPanStart);
-      this.mc.on('panmove', this.onPanMove);
-      this.mc.on('panend', this.onPanEnd);
-    }
+      this.mc.on('panstart', e => this.onPanStart(e));
+      this.mc.on('panmove', e => this.onPanMove(e));
+      this.mc.on('panend', e => this.onPanEnd(e));
 
-    if (!this.documentListener) {
       document.addEventListener('keydown', this.onKeyPress, false);
-      this.documentListener = true;
-    }
 
-    if (this.inputComment && this.props.autofocus) {
-      this.inputComment.select();
-      this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
+      if (this.inputComment && this.props.autofocus) {
+        this.inputComment.select();
+        this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
+      }
     }
   }
 
   componentWillUnmount () {
-    document.removeEventListener('keydown', this.onKeyPress);
+    document.removeEventListener('keydown', e => this.onKeyPress(e));
   }
 
   onKeyPress (e) {
@@ -110,12 +114,12 @@ export default class RecordItem extends Component {
   }
 
   onPanMove (e) {
-    if (this.props.record.moving && this.refs.outer) {
+    if (this.props.record.moving) {
       e.preventDefault();
 
       const { record } = this.props;
 
-      this.refs.outer.style.top = `${e.center.y + 20}px`;
+      e.target.style.top = `${e.center.y + 20}px`;
 
       const target = document.elementFromPoint(e.center.x, e.center.y);
       const closestTask = domClosest(target, '.task-item');
@@ -243,7 +247,7 @@ export default class RecordItem extends Component {
     }
 
     return (
-      <div className={className} ref='outer'>
+      <div className={className} ref={(i) => this.outer = i}>
         <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
         <div className='record-time'>
           <div className='record-dates'>
