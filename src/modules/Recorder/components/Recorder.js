@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Notification } from 'react-notification';
+import { default as swal } from 'sweetalert2'
 
 import { extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
 import RecordModel from 'store/models/RecordModel';
@@ -48,7 +49,11 @@ export default class Recorder extends Component {
         this.props.addTask({ issue: result.issue });
         addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
       } else {
-        alert(result.message);
+        swal(
+          'Heeey..',
+          result.message,
+          'error'
+        );
       }
     });
 
@@ -82,18 +87,20 @@ export default class Recorder extends Component {
     clearInterval(this.elapsedTimeInterval);
   }
 
-  componentDidUpdate () {
-    const { record } = this.props.recorder;
+  componentWillReceiveProps (nextProps) {
+    const { record } = nextProps.recorder;
 
-    if (this.autofocusOnComment && this.refs.comment) {
-      this.refs.comment.select();
-      this.autofocusOnComment = false;
-    }
-
-    if (record.comment !== this.state.comment) {
+    if (record && record.comment !== this.state.comment) {
       this.setState({
         comment: record.comment
       });
+    }
+  }
+
+  componentDidUpdate () {
+    if (this.autofocusOnComment && this.refs.comment) {
+      this.refs.comment.select();
+      this.autofocusOnComment = false;
     }
   }
 
@@ -111,8 +118,11 @@ export default class Recorder extends Component {
         });
       }
     } else {
-      alert(`Hey dude, you are not logged in.
-How do you expect me to verify that this URL you dropped is even valid??`);
+      swal(
+        'Heeey..',
+        'Hey dude, you are not logged in. How do you expect me to validate your shit?',
+        'error'
+      );
     }
   }
 

@@ -1,3 +1,5 @@
+import { default as swal } from 'sweetalert2'
+
 import EventClass from './eventClass';
 
 import { addWorklog } from './jiraClient';
@@ -88,16 +90,27 @@ export default class Sync extends EventClass {
             syncing: false
           });
 
+          /* eslint-disable */
           if (response.status === 403) {
-            alert(`Heey.. Looks like you don't have permissions to log to ${record.taskIssueKey}.
-              Did you change your login password or something?`);
+            swal(
+              'Damn!',
+              `Looks like you don't have permissions to log to ${record.taskIssueKey}.<br />Did you change your login password or something?`,
+              'error'
+            );
           } else if (response.status === 400) {
-            alert(`Heey.. Looks like not all info required to log to ${record.taskIssueKey} was provided.
-              Shape up!`);
+            swal(
+              'Hey...!',
+              `Looks like not all info required to log to ${record.taskIssueKey} was provided.<br />Shape up!`,
+              'error'
+            );
           } else {
-            alert(`Hm. An unkown error occured when attempting to log to ${record.taskIssueKey}.
-              I have no clue why...`);
+            swal(
+              'Whuut?',
+              `The API failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
+              'error'
+            );
           }
+          /* eslint-enable */
 
           this.emit('syncTaskError', {
             record,

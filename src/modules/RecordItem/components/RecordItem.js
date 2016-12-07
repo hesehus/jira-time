@@ -63,14 +63,18 @@ export default class RecordItem extends Component {
     this.bind();
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.record) {
+      if (nextProps.record.comment !== this.state.comment) {
+        this.setState({
+          comment: nextProps.record.comment
+        });
+      }
+    }
+  }
+
   componentDidUpdate () {
     this.bind();
-
-    if (this.props.record.comment !== this.state.comment) {
-      this.setState({
-        comment: this.props.record.comment
-      });
-    }
   }
 
   bind () {
@@ -210,7 +214,7 @@ export default class RecordItem extends Component {
   }
 
   onCommentChange (e) {
-    
+
     this.setState({
       comment: e.target.value
     });
