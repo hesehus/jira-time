@@ -1,11 +1,13 @@
+const moment = require('moment');
+
 const ips = require('lorem-ipsum');
 const helpers = require('../helpers');
 
-var api = {};
+const api = {};
 
 api.getIssue = function (req, res) {
   helpers.delay(function () {
-    res.json(createDummyIssue(req.params.id));
+    res.json(api.createDummyIssue(req.params.id));
   });
 }
 
@@ -27,8 +29,22 @@ api.watchIssue = function (req, res) {
   });
 }
 
-function createDummyIssue (key) {
-  var issue = {
+api.getWorklogs = function (req, res) {
+  helpers.delay(function () {
+    res.json({
+      maxResults: 28,
+      startAt: 0,
+      total: 28,
+      worklogs: [
+        api.createDummyWorklog(req.params.key),
+        api.createDummyWorklog(req.params.key)
+      ]
+    });
+  });
+}
+
+api.createDummyIssue = function (key) {
+  return {
     key: key,
     fields: {
       summary: ips({ count: 2, units: 'sentences' }),
@@ -36,12 +52,24 @@ function createDummyIssue (key) {
         remainingEstimate: '2d 14h 51m'
       },
       status: {
-        description: 'Foresporgsel'
+        name: 'Forespørgsel',
+        description: 'Forespørgsel'
       }
     }
   };
+}
 
-  return issue;
+api.createDummyWorklog = function (key) {
+  return {
+    author: {
+      key: '',
+      name: ''
+    },
+    comment: ips({ count: 1, units: 'sentences' }),
+    started: moment().add(Math.floor(Math.random() * 999), 'seconds').toISOString(),
+    created: moment().toISOString(),
+    timeSpentSeconds: Math.floor(Math.random() * 9999)
+  };
 }
 
 module.exports = api;

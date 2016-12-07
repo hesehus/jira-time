@@ -1,6 +1,6 @@
 const helpers = require('../helpers');
 
-var api = {};
+const api = {};
 
 api.login = function (req, res) {
   helpers.delay(function () {
