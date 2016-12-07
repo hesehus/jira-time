@@ -26,6 +26,7 @@ export default class HistoryRecordItem extends Component {
         <td>{endTime.format('HH:mm')}</td>
         <td>{elapsedTime}</td>
         <td>{record.comment}</td>
+        <td>{record.created ? 'Synced' : 'Not synced' }</td>
       </tr>
     );
   }

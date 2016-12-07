@@ -55,7 +55,7 @@ export default class Summary extends Component {
       );
     }
 
-    if (records && records.length === 0) {
+    if (records && records.length === 0 && notSyncedRecords.length === 0) {
       return (
         <div className='summary summary--no-found'>
           No worklogs found today
@@ -68,8 +68,8 @@ export default class Summary extends Component {
       notSyncedRecords = notSyncedRecords.filter(r => r.cuid !== activeRecord.cuid);
     }
 
+    // Combine the synced and not synced records
     let outputRecords = [...notSyncedRecords, ...records];
-
     outputRecords.push(activeRecord);
 
     // Sort by time started

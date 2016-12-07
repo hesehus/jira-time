@@ -11,7 +11,9 @@ export default function RecordModel ({
   endTime,
   elapsedTime,
   comment = '',
-  timeSpentSeconds = 0
+  timeSpentSeconds = 0,
+  created,
+  updated
 } = {}) {
 
   const model = {
@@ -24,6 +26,8 @@ export default function RecordModel ({
     endTime,
     elapsedTime,
     comment,
+    created, // Jira's created worklog time (When it was synced the first time)
+    updated, // Jira's updated worklog time
     syncing: false
   };
 

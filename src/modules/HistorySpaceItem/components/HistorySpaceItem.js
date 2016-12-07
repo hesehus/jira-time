@@ -11,7 +11,7 @@ export default class HistorySpaceItem extends Component {
   render () {
     return (
       <tr className='history-space-item'>
-        <td className='history-space-item-cell' colSpan='5'>{this.props.elapsedTime}</td>
+        <td className='history-space-item-cell' colSpan='6'>{this.props.elapsedTime}</td>
       </tr>
     );
   }
