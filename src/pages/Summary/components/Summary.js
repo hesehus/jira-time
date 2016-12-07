@@ -70,15 +70,25 @@ export default class Summary extends Component {
 
     // Combine the synced and not synced records
     let outputRecords = [...notSyncedRecords, ...records];
-    outputRecords.push(activeRecord);
+    if (activeRecord) {
+      outputRecords.push(Object.assign({}, activeRecord));
+    }
+
+    // Momentify
+    outputRecords.forEach((r) => {
+      r.startTime = moment(r.startTime);
+      r.endTime = moment(r.endTime);
+    });
 
     // Sort by time started
-    outputRecords = outputRecords.sort((a, b) => moment(a.startTime).unix() > moment(b.startTime).unix());
+    outputRecords = outputRecords.sort((a, b) => {
+      return a.startTime.unix() > b.startTime.unix();
+    });
 
     // Calculate duration
     let duration = moment.duration();
     outputRecords.forEach((r) => {
-      duration.add(moment(r.endTime || new Date()).unix() - moment(r.startTime).unix(), 'seconds');
+      duration.add(r.endTime.unix() - r.startTime.unix(), 'seconds');
     });
 
     // Compose list with empty spaces within
@@ -88,7 +98,7 @@ export default class Summary extends Component {
       if (prev) {
 
         // Consider everything over 1s as a space
-        const duration = moment(record.startTime).unix() - moment(prev.endTime).unix();
+        const duration = record.startTime.unix() - prev.endTime.unix();
         if (duration > 1) {
           const elapsedTime = getElapsedTime({
             startTime: prev.endTime,
