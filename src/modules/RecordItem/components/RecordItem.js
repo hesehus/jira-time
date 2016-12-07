@@ -47,6 +47,16 @@ export default class RecordItem extends Component {
     this.onSyncClick = this.onSyncClick.bind(this);
 
     this.onKeyPress = this.onKeyPress.bind(this);
+
+    this.state = {
+      comment: ''
+    };
+  }
+
+  componentWillMount () {
+    this.setState({
+      comment: this.props.record.comment
+    });
   }
 
   componentDidMount () {
@@ -55,6 +65,12 @@ export default class RecordItem extends Component {
 
   componentDidUpdate () {
     this.bind();
+
+    if (this.props.record.comment !== this.state.comment) {
+      this.setState({
+        comment: this.props.record.comment
+      });
+    }
   }
 
   bind () {
@@ -194,6 +210,11 @@ export default class RecordItem extends Component {
   }
 
   onCommentChange (e) {
+    
+    this.setState({
+      comment: e.target.value
+    });
+
     this.props.setRecordComment({
       cuid: this.props.record.cuid,
       comment: e.target.value
@@ -273,7 +294,7 @@ export default class RecordItem extends Component {
         <textarea
           className='record-comment'
           onChange={this.onCommentChange}
-          value={record.comment}
+          value={this.state.comment}
           disabled={someRecordIsMoving}
           ref={(i) => this.inputComment = i}
         />

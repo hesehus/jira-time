@@ -1,4 +1,3 @@
-const ips = require('lorem-ipsum');
 const helpers = require('../helpers');
 
 const IssueController = require('./issue.controller');

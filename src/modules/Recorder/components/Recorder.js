@@ -28,7 +28,8 @@ export default class Recorder extends Component {
     super(props);
 
     this.state = {
-      addingTasksFromDropOrPaste: processTask.getRemaining()
+      addingTasksFromDropOrPaste: processTask.getRemaining(),
+      comment: ''
     };
 
     this.onDropAndPaste = this.onDropAndPaste.bind(this);
@@ -59,6 +60,8 @@ export default class Recorder extends Component {
   }
 
   componentWillMount () {
+    const { record } = this.props.recorder;
+
     if (!this.state.binded) {
       this.setState({ binded: true, test: 1 });
 
@@ -67,6 +70,10 @@ export default class Recorder extends Component {
 
       this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
     }
+
+    this.setState({
+      comment: record ? record.comment : ''
+    });
   }
 
   componentWillUnmount () {
@@ -76,9 +83,17 @@ export default class Recorder extends Component {
   }
 
   componentDidUpdate () {
+    const { record } = this.props.recorder;
+
     if (this.autofocusOnComment && this.refs.comment) {
       this.refs.comment.select();
       this.autofocusOnComment = false;
+    }
+
+    if (record.comment !== this.state.comment) {
+      this.setState({
+        comment: record.comment
+      });
     }
   }
 
@@ -121,6 +136,11 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     const { record } = this.props.recorder;
 
     if (record) {
+
+      this.setState({
+        comment: e.target.value
+      });
+
       this.props.setRecordComment({
         cuid: record.cuid,
         comment: e.target.value
@@ -155,7 +175,7 @@ How do you expect me to verify that this URL you dropped is even valid??`);
     const comment = (
       <textarea
         className='recorder-comment'
-        value={record ? record.comment : null}
+        value={this.state.comment}
         onChange={this.onCommentChange}
         ref='comment'
       />
