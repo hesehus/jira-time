@@ -81,9 +81,7 @@ export default class Summary extends Component {
     });
 
     // Sort by time started
-    outputRecords = outputRecords.sort((a, b) => {
-      return a.startTime.unix() > b.startTime.unix();
-    });
+    outputRecords = outputRecords.sort((a, b) => a.startTime.unix() - b.startTime.unix());
 
     // Calculate duration
     let duration = moment.duration();
