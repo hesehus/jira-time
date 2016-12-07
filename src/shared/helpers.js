@@ -1,7 +1,7 @@
 import { getIssue } from './jiraClient';
 
 export function getJIRAIssueFromUrl (url = '') {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
 
     const key = extractIssueIdFromUrl(url);
 

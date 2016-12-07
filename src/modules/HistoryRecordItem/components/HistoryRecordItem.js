@@ -22,8 +22,8 @@ export default class HistoryRecordItem extends Component {
     return (
       <tr>
         <td>{record.taskIssueKey}</td>
-        <td>{startTime.format('HH:mm')}</td>
-        <td>{endTime.format('HH:mm')}</td>
+        <td>{startTime.format('HH:mm:ss')}</td>
+        <td>{endTime.format('HH:mm:ss')}</td>
         <td>{elapsedTime}</td>
         <td>{record.comment}</td>
         <td>{record.created ? 'Synced' : 'Not synced' }</td>
