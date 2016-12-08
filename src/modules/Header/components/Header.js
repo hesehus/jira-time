@@ -180,8 +180,8 @@ export default class Header extends Component {
     return (
       <div className='header'>
         <div className='header__left'>
-          {updateAvailable}
           <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
+          {updateAvailable}
         </div>
         <div className='header__center'>
           <Link to='/summary' className={classNameSummary}>
