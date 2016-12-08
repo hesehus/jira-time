@@ -60,48 +60,44 @@ export default class RecordItem extends Component {
   }
 
   componentDidMount () {
-    this.bind();
+    this.mc = new Hammer.Manager(this.outer, {
+      cssProps: {
+        userSelect: 'text'
+      }
+    });
+
+    this.mc.add(new Hammer.Pan({
+      direction: Hammer.DIRECTION_VERTICAL
+    }));
+
+    this.mc.on('panstart', e => this.onPanStart(e));
+    this.mc.on('panmove', e => this.onPanMove(e));
+    this.mc.on('panend', e => this.onPanEnd(e));
+
+    document.addEventListener('keydown', this.onKeyPress, false);
+
+    if (this.inputComment && this.props.autofocus) {
+      this.inputComment.select();
+      this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
+    }
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.record) {
-      if (nextProps.record.comment !== this.state.comment) {
-        this.setState({
-          comment: nextProps.record.comment
-        });
-      }
-    }
-  }
 
-  componentDidUpdate () {
-    this.bind();
-  }
-
-  bind () {
-    if (this.outer && !this.outer.isBinded) {
-      this.outer.isBinded = true;
-
-      this.mc = new Hammer.Manager(this.outer, {
-        cssProps: {
-          userSelect: 'text'
+    /**
+    * We need to wrap this in a timeout since this callback will be fired multiple times
+    * with old values first, which makes for a really weird user experience
+    **/
+    clearTimeout(this.willUpdateCommentTimeout);
+    this.willUpdateCommentTimeout = setTimeout(() => {
+      if (nextProps.record) {
+        if (nextProps.record.comment !== this.state.comment) {
+          this.setState({
+            comment: nextProps.record.comment
+          });
         }
-      });
-
-      this.mc.add(new Hammer.Pan({
-        direction: Hammer.DIRECTION_VERTICAL
-      }));
-
-      this.mc.on('panstart', e => this.onPanStart(e));
-      this.mc.on('panmove', e => this.onPanMove(e));
-      this.mc.on('panend', e => this.onPanEnd(e));
-
-      document.addEventListener('keydown', this.onKeyPress, false);
-
-      if (this.inputComment && this.props.autofocus) {
-        this.inputComment.select();
-        this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
       }
-    }
+    }, 0);
   }
 
   componentWillUnmount () {
