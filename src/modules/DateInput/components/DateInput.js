@@ -25,7 +25,7 @@ export default class DateInput extends Component {
     };
   }
 
-  componentWillMount () {
+  componentWillMount () {
     const dateObject = moment(this.props.date);
 
     const date = dateObject.format('YYYY-MM-DD');
@@ -41,7 +41,7 @@ export default class DateInput extends Component {
 
     const vals = time.split(':');
     const date = new Date(this.state.date);
-    
+
     date.setHours(vals[0]);
     date.setMinutes(vals[1]);
 
@@ -55,7 +55,7 @@ export default class DateInput extends Component {
   }
 
   onDateChange () {
-    
+
     let date;
 
     if (this.refs.date) {
