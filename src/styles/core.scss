@@ -1,5 +1,6 @@
 @import 'base';
-@import '~normalize.css/normalize';
+//@import '~normalize.css/normalize';
+@import './vendor/_bootstrap-custom.scss';
 @import '~sweetalert2/dist/sweetalert2.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
