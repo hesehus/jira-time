@@ -2,7 +2,9 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 
 import { getWorkLogs } from 'shared/jiraClient';
-import SyncedRecordItem from 'modules/SyncedRecordItem';
+import HistoryRecordItem from 'modules/HistoryRecordItem';
+import HistorySpaceItem from 'modules/HistorySpaceItem';
+import { getElapsedTime } from 'store/reducers/recorder';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -12,7 +14,9 @@ export default class Summary extends Component {
 
   static get propTypes () {
     return {
-      profile: PropTypes.object.isRequired
+      profile: PropTypes.object.isRequired,
+      notSyncedRecords: PropTypes.array.isRequired,
+      activeRecord: PropTypes.object
     }
   }
 
@@ -41,6 +45,7 @@ export default class Summary extends Component {
   render () {
 
     const { loading, records } = this.state;
+    let { notSyncedRecords, activeRecord } = this.props;
 
     if (!records || loading) {
       return (
@@ -50,26 +55,58 @@ export default class Summary extends Component {
       );
     }
 
-    if (records && records.length === 0) {
+    if (records && records.length === 0 && notSyncedRecords.length === 0) {
       return (
         <div className='summary summary--no-found'>
-          No worklogs found
+          No worklogs found today
         </div>
       );
     }
 
-    let totalSeconds = 0;
-    records.forEach(r => totalSeconds += r.timeSpentSeconds);
+    // Filter out active record
+    if (activeRecord) {
+      notSyncedRecords = notSyncedRecords.filter(r => r.cuid !== activeRecord.cuid);
+    }
 
-    let hours = Math.floor(totalSeconds / 60 / 60);
-    let minutes = Math.floor((totalSeconds - (hours * 60 * 60)) / 60);
+    // Combine the synced and not synced records
+    let outputRecords = [...notSyncedRecords, ...records];
+    outputRecords.push(activeRecord);
+
+    // Sort by time started
+    outputRecords = outputRecords.sort((a, b) => a.startTime > b.startTime);
+
+    // Calculate duration
+    let duration = moment.duration();
+    outputRecords.forEach((r) => {
+      duration.add(moment(r.endTime || new Date()).unix() - moment(r.startTime).unix(), 'seconds');
+    });
+
+    // Compose list with empty spaces within
+    let outputItems = [];
+    outputRecords.forEach((record, index) => {
+      const prev = outputRecords[index - 1];
+      if (prev) {
+
+        // Consider everything over 1s as a space
+        const duration = moment(record.startTime).unix() - moment(prev.endTime).unix();
+        if (duration > 1) {
+          const elapsedTime = getElapsedTime({
+            startTime: prev.endTime,
+            endTime: record.startTime
+          });
+          outputItems.push(<HistorySpaceItem elapsedTime={elapsedTime} />);
+        }
+      }
+
+      outputItems.push(<HistoryRecordItem record={record} />);
+    });
 
     return (
       <div className='summary'>
         <table className='summary-table'>
-          {records.map(record => <SyncedRecordItem record={record} />)}
+          {outputItems}
         </table>
-        <div>Total: {hours}h {minutes}m</div>
+        <div>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
       </div>
     );
   }
