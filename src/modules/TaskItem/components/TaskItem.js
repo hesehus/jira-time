@@ -228,32 +228,43 @@ export class TaskItem extends Component {
         task.issue.fields.status ? <span className='task-item__status'>{task.issue.fields.status.name}</span> : null
     )
 
+    const description = task.issue.fields.status ? task.issue.fields.status.description : null;
+
     // Output the task
     return (
       <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
-        <div className='task-item-info'>
-          <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-          <span className='task-item__key'>
-            {refreshIcon}
-            <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
-          </span>
-          <span className='task-item__summary'>{task.issue.fields.summary}</span>
-          {status}
-          <input className='task-item__remaining'
-            defaultValue={remainingEstimate}
-            onFocus={this.onRemainignFocus}
-            onBlur={this.onRemainignBlur}
-            ref='inputRemaining'
-            disabled={!!movingRecord}
-          />
-          <button className='task-item__log task-item__log--passive'
-            title='Add a worklog'
-            onClick={this.onStartPassiveLogClick}>
-            <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
-          </button>
-          <button className='task-item__log task-item__log--active'
-            title='Start new worklog'
-            onClick={this.onStartActiveLogClick}>●</button>
+        <div className='task-item__info'>
+          <div className="task-item__left">
+            <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
+            <span className='task-item__key'>
+              {refreshIcon}
+              <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
+            </span>
+          </div>
+          <div className="task-item__mid">
+            <span className='task-item__summary'>{task.issue.fields.summary}</span>
+          </div>
+          <div className="task-item__right">
+            {status}
+            <input className='task-item__remaining'
+              defaultValue={remainingEstimate}
+              onFocus={this.onRemainignFocus}
+              onBlur={this.onRemainignBlur}
+              ref='inputRemaining'
+              disabled={!!movingRecord}
+            />
+            <div className="task-item__btn-group">
+              <button className='task-item__log task-item__log--passive'
+                title='Add a worklog'
+                onClick={this.onStartPassiveLogClick}>
+                <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
+              </button>
+              <button className='task-item__log task-item__log--active'
+                title='Start new worklog'
+                onClick={this.onStartActiveLogClick}>●
+              </button>
+            </div>
+          </div>
         </div>
         <div className='records'>{recordItems}</div>
       </div>

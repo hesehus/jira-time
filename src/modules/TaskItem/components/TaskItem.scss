@@ -14,11 +14,33 @@
     }
   }
 
-  &-info {
+  &__info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px;
+  }
+
+  &__left,
+  &__mid,
+  &__right {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+  }
+
+  &__left {
+    flex-basis: 10%;
+  }
+
+  &__mid {
+    flex-basis: 70%;
+    flex-grow: 1;
+  }
+  
+  &__right {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   &__remove {
@@ -32,6 +54,7 @@
     margin-left: 15px;
     white-space: nowrap;
     display: flex;
+    align-items: center;
   }
 
   &__issue-refresh {
@@ -60,6 +83,7 @@
     border: 1px solid #bababa;
     background-color: #efefef;
     border-radius: 4px;
+    white-space: nowrap;
   }
 
   &__remaining {
@@ -97,5 +121,11 @@
   &__log-icon {
     width: 10px;
     height: 10px;
+  }
+
+  &__btn-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
   }
 }
