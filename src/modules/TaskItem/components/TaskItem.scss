@@ -23,7 +23,6 @@
 
   &__remove {
     flex-shrink: 0;
-    width: 10px;
   }
 
   &__key {
@@ -80,10 +79,8 @@
 
   &__log {
     flex-shrink: 0;
-    width: 20px;
 
     &--passive {
-      width: 10px;
       margin-right: 5px;
     }
 
