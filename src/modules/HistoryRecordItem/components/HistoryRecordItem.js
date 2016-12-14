@@ -3,8 +3,10 @@ import React, { Component, PropTypes } from 'react';
 import TimeInput from 'time-input';
 
 import { getElapsedTime } from 'store/reducers/recorder';
+import Sync from 'shared/sync';
 
 import ExportIcon from 'assets/export.svg';
+import LoadingIcon from 'assets/loading.svg';
 
 import './HistoryRecordItem.scss';
 
@@ -13,7 +15,9 @@ export default class HistoryRecordItem extends Component {
   static propTypes = {
     record: PropTypes.object.isRequired,
     setRecordDate: PropTypes.func.isRequired,
-    onSyncedChange: PropTypes.func.isRequired
+    onSyncedChange: PropTypes.func.isRequired,
+    onSyncedSynced: PropTypes.func.isRequired,
+    onNotSyncedSynced: PropTypes.func.isRequired
   }
 
   constructor (props) {
@@ -21,6 +25,9 @@ export default class HistoryRecordItem extends Component {
 
     this.onStartTimeChange = this.onStartTimeChange.bind(this);
     this.onEndTimeChange = this.onEndTimeChange.bind(this);
+    this.onSyncClick = this.onSyncClick.bind(this);
+
+    this.state = {};
   }
 
   onStartTimeChange (time) {
@@ -34,7 +41,6 @@ export default class HistoryRecordItem extends Component {
 
     startTime.set('hours', vals[0]);
     startTime.set('minute', vals[1]);
-    startTime.set('second', vals[2]);
 
     this.onChange({ startTime, endTime });
   }
@@ -49,7 +55,6 @@ export default class HistoryRecordItem extends Component {
 
     endTime.set('hours', vals[0]);
     endTime.set('minute', vals[1]);
-    endTime.set('second', vals[2]);
 
     this.onChange({ startTime, endTime });
   }
@@ -61,12 +66,45 @@ export default class HistoryRecordItem extends Component {
       endTime: endTime.toDate()
     };
 
-    // Un-synced item. Just update the redux state
     if (!this.isSynced()) {
+      // Un-synced item. Just update the redux state
       this.props.setRecordDate(recordInfo);
     } else {
+      // Synced item. Mark it as dirty
       this.props.onSyncedChange(recordInfo);
     }
+  }
+
+  onSyncClick () {
+    const { record } = this.props;
+
+    const syncer = new Sync({
+      records: [record]
+    });
+
+    /**
+    * This is already synced, and is not in our redux state.
+    * We need to keep track of the state ourself here
+    **/
+    if (record.id) {
+      this.setState({
+        syncing: true
+      });
+
+      syncer.on('logSynced', () => {
+        this.setState({
+          syncing: false
+        });
+
+        this.props.onSyncedSynced(record);
+      });
+    } else {
+      syncer.on('logSynced', ({ worklog }) => {
+        this.props.onNotSyncedSynced({ record, worklog });
+      });
+    }
+
+    syncer.start();
   }
 
   isSynced () {
@@ -76,7 +114,7 @@ export default class HistoryRecordItem extends Component {
   canBeExported () {
     const { record } = this.props;
 
-    return record.isDirty || (!this.isSynced() && !record.active);
+    return record.isDirty || (!this.isSynced() && !record.active);
   }
 
   render () {
@@ -88,18 +126,18 @@ export default class HistoryRecordItem extends Component {
 
     const startTimeDisplay = (
       <TimeInput
-        value={startTime.format('HH:mm:ss')}
-        className='date-inp__input date-inp__input--time-seconds'
+        value={startTime.format('HH:mm')}
+        className='date-inp__input date-inp__input--time'
         onChange={this.onStartTimeChange}
       />
     );
 
-    let endTimeDisplay = endTime.format('HH:mm:ss');
+    let endTimeDisplay = endTime.format('HH:mm');
     if (this.isSynced() || !record.active) {
       endTimeDisplay = (
         <TimeInput
           value={endTimeDisplay}
-          className='date-inp__input date-inp__input--time-seconds'
+          className='date-inp__input date-inp__input--time'
           onChange={this.onEndTimeChange}
         />
       );
@@ -110,6 +148,11 @@ export default class HistoryRecordItem extends Component {
       className += ' history-record--can-be-exported';
     }
 
+    let Icon = ExportIcon;
+    if (record.syncing || this.state.syncing) {
+      Icon = LoadingIcon;
+    }
+
     return (
       <tr className={className}>
         <td>{record.taskIssueKey}</td>
@@ -117,7 +160,14 @@ export default class HistoryRecordItem extends Component {
         <td>{endTimeDisplay}</td>
         <td>{elapsedTime}</td>
         <td>{record.comment}</td>
-        <td><img src={ExportIcon} alt='Export' className='history-record history-record-export' /></td>
+        <td>
+          <img
+            src={Icon}
+            alt='Export'
+            onClick={this.onSyncClick}
+            className='history-record-icon'
+          />
+        </td>
       </tr>
     );
   }

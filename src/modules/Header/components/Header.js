@@ -80,7 +80,7 @@ export default class Header extends Component {
       });
     });
 
-    syncer.on('syncTaskDone', ({ record, nextRecord }) => {
+    syncer.on('logSynced', ({ record, nextRecord }) => {
 
       // Refresh issue info when all the records for the task is synced
       if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {

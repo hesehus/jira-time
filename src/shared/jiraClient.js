@@ -1,7 +1,5 @@
 import moment from 'moment';
 
-import { ensureDate } from './helpers';
-
 import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
 import RecordModel from '../store/models/RecordModel';
 
@@ -233,8 +231,8 @@ export function addWorklog ({ record }) {
 
   let { comment, startTime, endTime } = record;
 
-  startTime = moment(starTime);
-  endTime = moment(starTime);
+  startTime = moment(startTime);
+  endTime = moment(endTime);
 
   let timeSpentSeconds = endTime.diff(startTime, 'seconds');
 
@@ -251,6 +249,53 @@ export function addWorklog ({ record }) {
     .then(response => {
       switch (response.status) {
         case 201 : {
+          resolve(response);
+          break;
+        }
+
+        // No permission to log here
+        case 403 : {
+          reject(response);
+          verifyLoginStatus();
+          break;
+        }
+
+        default : {
+          reject(response);
+        }
+      }
+    })
+    .catch(reject);
+  });
+}
+
+/**
+* Updates synced work log
+* @param record: RecordModel
+* @returns promise
+**/
+export function updateWorklog ({ record }) {
+
+  let { comment, startTime, endTime, id } = record;
+
+  startTime = moment(startTime);
+  endTime = moment(endTime);
+
+  let timeSpentSeconds = endTime.diff(startTime, 'seconds');
+
+  return new Promise((resolve, reject) => {
+    callApi({
+      path: `api/2/issue/${record.taskIssueKey}/worklog/${id}`,
+      method: 'put',
+      body: {
+        comment,
+        timeSpentSeconds,
+        started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+      }
+    })
+    .then(response => {
+      switch (response.status) {
+        case 200 : {
           resolve();
           break;
         }
@@ -305,11 +350,10 @@ export function addCurrentUserAsWatcher ({ taskIssueKey }) {
 }
 
 /**
-* Gets the logs for a given time span
+* Get the logs for a given time span
 * @param taskIssueKey: string
 * @returns promise
 **/
-
 export function getWorkLogs ({ startDate, endDate, username }) {
 
   startDate = moment(startDate);
@@ -354,6 +398,26 @@ export function getWorkLogs ({ startDate, endDate, username }) {
   });
 }
 
+/**
+* Get a single worklog
+* @param key: string
+* @param id: string
+* @returns promise
+**/
+export function getWorkLog ({ key, id }) {
+  return callApi({
+    path: `api/2/issue/${key}/worklog/${id}`
+  })
+  .then(r => r.json());
+}
+
+/**
+* Get all worklogs for an issue for a user
+* @param key: string
+* @param startDate: date
+* @param username: string
+* @returns promise
+**/
 function getWorkLogsForIssue ({ key, startDate, username }) {
   return callApi({
     path: `api/2/issue/${key}/worklog`

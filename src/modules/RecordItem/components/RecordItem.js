@@ -226,7 +226,7 @@ export default class RecordItem extends Component {
 
   onSyncClick () {
     const syncer = new Sync({
-      records: [this.props.record],
+      records: [this.props.record]
     });
 
     syncer.start();

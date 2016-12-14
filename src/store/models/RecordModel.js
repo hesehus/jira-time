@@ -13,9 +13,10 @@ export default function RecordModel ({
   comment = '',
   timeSpentSeconds = 0,
   created,
-  updated
+  updated,
+  id
 } = {}) {
-  
+
   const model = {
     cuid,
     taskCuid: task ? task.cuid : null,
@@ -26,9 +27,10 @@ export default function RecordModel ({
     endTime,
     elapsedTime,
     comment,
-    created, // Jira's created worklog time (When it was synced the first time)
-    updated, // Jira's updated worklog time
-    syncing: false
+    syncing: false,
+    id, // Jiras worklog id
+    created, // Jiras created worklog time (When it was synced the first time)
+    updated // Jiras updated worklog time
   };
 
   if (!model.endTime && timeSpentSeconds) {

@@ -5,6 +5,7 @@ import { getWorkLogs } from 'shared/jiraClient';
 import HistoryRecordItem from 'modules/HistoryRecordItem';
 import HistorySpaceItem from 'modules/HistorySpaceItem';
 import { getElapsedTime } from 'store/reducers/recorder';
+import RecordModel from 'store/models/RecordModel';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -28,6 +29,8 @@ export default class Summary extends Component {
     };
 
     this.onSyncedChange = this.onSyncedChange.bind(this);
+    this.onSyncedSynced = this.onSyncedSynced.bind(this);
+    this.onNotSyncedSynced = this.onNotSyncedSynced.bind(this);
   }
 
   componentDidMount () {
@@ -46,7 +49,7 @@ export default class Summary extends Component {
 
   onSyncedChange (recordInfo) {
 
-    const { records } = this.state;
+    const { records } = this.state;
 
     // Get the updated item
     const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
@@ -57,6 +60,34 @@ export default class Summary extends Component {
 
     this.setState({
       records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]
+    });
+  }
+
+  onSyncedSynced (recordInfo) {
+    const { records } = this.state;
+
+    // Get the updated item
+    const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
+    const record = Object.assign({}, records[recordIndex]);
+    record.isDirty = false;
+
+    this.setState({
+      records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]
+    });
+  }
+
+  /**
+  * Since not synced records will dissapear from the redux state,
+  * we need to adde them manually here at some point
+  **/
+  onNotSyncedSynced ({ record, worklog }) {
+
+    // Since not synced records will dissapear from the redux state, we need to adde them manually here
+    worklog.taskIssueKey = record.taskIssueKey;
+    const newRecord = RecordModel(worklog);
+
+    this.setState({
+      records: [...this.state.records, newRecord]
     });
   }
 
@@ -113,9 +144,9 @@ export default class Summary extends Component {
       const prev = outputRecords[index - 1];
       if (prev) {
 
-        // Consider everything over 1s as a space
+        // Consider everything over 1m as a space
         const duration = record.startTime.unix() - prev.endTime.unix();
-        if (duration > 0) {
+        if (duration > 59) {
           const elapsedTime = getElapsedTime({
             startTime: prev.endTime,
             endTime: record.startTime
@@ -124,7 +155,15 @@ export default class Summary extends Component {
         }
       }
 
-      outputItems.push(<HistoryRecordItem key={record.cuid} record={record} onSyncedChange={this.onSyncedChange} />);
+      outputItems.push((
+        <HistoryRecordItem
+          key={record.cuid}
+          record={record}
+          onSyncedChange={this.onSyncedChange}
+          onSyncedSynced={this.onSyncedSynced}
+          onNotSyncedSynced={this.onNotSyncedSynced}
+        />
+      ));
     });
 
     return (
@@ -132,7 +171,7 @@ export default class Summary extends Component {
         <table className='summary-table'>
           {outputItems}
         </table>
-        <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
+        <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
       </div>
     );
   }

@@ -2,7 +2,7 @@ import { default as swal } from 'sweetalert2'
 
 import EventClass from './eventClass';
 
-import { addWorklog } from './jiraClient';
+import { addWorklog, updateWorklog } from './jiraClient';
 import { ensureDate } from './helpers';
 
 import {
@@ -70,17 +70,27 @@ export default class Sync extends EventClass {
         syncing: true
       }));
 
-      addWorklog({ record })
-        .then((response) => {
+      // Determine if we are updating or adding worklog
+      let adder;
+      if (record.id) {
+        adder = updateWorklog({ record })
+      } else {
+        adder = addWorklog({ record });
+      }
+
+      adder
+        .then(r => r ? r.json() : r)
+        .then((worklog) => {
 
           store.dispatch(removeRecord({
             cuid: record.cuid
           }));
 
-          this.emit('syncTaskDone', {
+          this.emit('logSynced', {
             record,
             nextRecord: this.records[this.index + 1],
-            didSync: true
+            didSync: true,
+            worklog
           });
 
           processNext();
