@@ -231,9 +231,12 @@ export function extractIssueKeysFromText (text) {
 **/
 export function addWorklog ({ record }) {
 
-  const { comment, startTime, endTime } = record;
+  let { comment, startTime, endTime } = record;
 
-  let timeSpentSeconds = Math.floor((ensureDate(endTime) - ensureDate(startTime)) / 1000);
+  startTime = moment(starTime);
+  endTime = moment(starTime);
+
+  let timeSpentSeconds = endTime.diff(startTime, 'seconds');
 
   return new Promise((resolve, reject) => {
     callApi({
