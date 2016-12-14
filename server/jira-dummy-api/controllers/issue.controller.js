@@ -66,7 +66,7 @@ api.createDummyWorklog = function (key) {
       name: ''
     },
     comment: ips({ count: 1, units: 'sentences' }),
-    started: moment().add(Math.floor(Math.random() * 999), 'seconds').toISOString(),
+    started: moment().subtract(Math.floor(Math.random() * 9999), 'seconds').toISOString(),
     created: moment().toISOString(),
     timeSpentSeconds: Math.floor(Math.random() * 9999)
   };

@@ -26,6 +26,8 @@ export default class Summary extends Component {
     this.state = {
       loading: true
     };
+
+    this.onSyncedChange = this.onSyncedChange.bind(this);
   }
 
   componentDidMount () {
@@ -40,6 +42,22 @@ export default class Summary extends Component {
     })
     .then(records => this.setState({ loading: false, records }))
     .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
+  }
+
+  onSyncedChange (recordInfo) {
+
+    const { records } = this.state;
+
+    // Get the updated item
+    const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
+    const record = Object.assign({}, records[recordIndex]);
+    record.startTime = recordInfo.startTime;
+    record.endTime = recordInfo.endTime;
+    record.isDirty = true;
+
+    this.setState({
+      records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]
+    });
   }
 
   render () {
@@ -71,7 +89,7 @@ export default class Summary extends Component {
     // Combine the synced and not synced records
     let outputRecords = [...notSyncedRecords, ...records];
     if (activeRecord) {
-      outputRecords.push(Object.assign({}, activeRecord));
+      outputRecords.push(Object.assign({}, activeRecord, { active: true }));
     }
 
     // Momentify
@@ -97,16 +115,16 @@ export default class Summary extends Component {
 
         // Consider everything over 1s as a space
         const duration = record.startTime.unix() - prev.endTime.unix();
-        if (duration > 1) {
+        if (duration > 0) {
           const elapsedTime = getElapsedTime({
             startTime: prev.endTime,
             endTime: record.startTime
           });
-          outputItems.push(<HistorySpaceItem elapsedTime={elapsedTime} />);
+          outputItems.push(<HistorySpaceItem key={index} elapsedTime={elapsedTime} />);
         }
       }
 
-      outputItems.push(<HistoryRecordItem record={record} />);
+      outputItems.push(<HistoryRecordItem key={record.cuid} record={record} onSyncedChange={this.onSyncedChange} />);
     });
 
     return (
@@ -114,7 +132,7 @@ export default class Summary extends Component {
         <table className='summary-table'>
           {outputItems}
         </table>
-        <div>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
+        <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
       </div>
     );
   }

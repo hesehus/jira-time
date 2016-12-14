@@ -76,47 +76,6 @@
     margin-right: 15px;
   }
 
-  &-date {
-    display: block;
-
-    &:not(:first-child) {
-      margin-top: 5px;
-    }
-
-    &__input {
-      display: inline-block;
-      padding: 0;
-      border: none;
-      background: transparent;
-
-      &::-ms-clear,
-      &::-webkit-clear-button,
-      &::-webkit-outer-spin-button,
-      &::-webkit-inner-spin-button {
-          display:none;
-      }
-    }
-
-    &__today {
-      display: inline-block;
-      cursor: pointer;
-    }
-
-    &__input--date,
-    &__today {
-      width: 130px;
-    }
-
-    &__input--time > input {
-      width: 40px;
-      border: none;
-      padding: 2px 0;
-      text-align: center;
-    }
-
-    &--end {}
-  }
-
   &__elapsed-time {
     min-width: 70px;
     text-align: right;

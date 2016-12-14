@@ -21,8 +21,6 @@ export default class Header extends Component {
       records: PropTypes.array.isRequired,
       currentPath: PropTypes.string.isRequired,
       loggedIn: PropTypes.bool.isRequired,
-      setRecordSync: PropTypes.func.isRequired,
-      removeRecord: PropTypes.func.isRequired,
       refreshIssue: PropTypes.func.isRequired,
       setIssueRefreshing: PropTypes.func.isRequired,
       profile: PropTypes.object.isRequired
@@ -73,9 +71,7 @@ export default class Header extends Component {
     });
 
     const syncer = new Sync({
-      records: this.props.records.map(r => r),
-      setRecordSync: this.props.setRecordSync,
-      removeRecord: this.props.removeRecord
+      records: this.props.records.map(r => r)
     });
 
     syncer.on('syncDone', () => {

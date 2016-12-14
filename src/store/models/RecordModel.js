@@ -15,7 +15,7 @@ export default function RecordModel ({
   created,
   updated
 } = {}) {
-
+  
   const model = {
     cuid,
     taskCuid: task ? task.cuid : null,

@@ -5,14 +5,16 @@ import EventClass from './eventClass';
 import { addWorklog } from './jiraClient';
 import { ensureDate } from './helpers';
 
+import {
+  setRecordSync,
+  removeRecord
+} from 'store/reducers/recorder';
+
 export default class Sync extends EventClass {
-  constructor ({ records, setRecordSync, removeRecord, refreshIssue }) {
+  constructor ({ records }) {
     super();
 
     this.records = records.sort((a, b) => a.taskIssueKey < b.taskIssueKey);
-    this.setRecordSync = setRecordSync;
-    this.removeRecord = removeRecord;
-    this.refreshIssue = refreshIssue;
 
     this.index = 0;
   }
@@ -63,17 +65,17 @@ export default class Sync extends EventClass {
 
       this.emit('syncStart', record);
 
-      this.setRecordSync({
+      store.dispatch(setRecordSync({
         cuid: record.cuid,
         syncing: true
-      });
+      }));
 
       addWorklog({ record })
         .then((response) => {
 
-          this.removeRecord({
+          store.dispatch(removeRecord({
             cuid: record.cuid
-          });
+          }));
 
           this.emit('syncTaskDone', {
             record,
@@ -85,10 +87,10 @@ export default class Sync extends EventClass {
         })
         .catch((response) => {
 
-          this.setRecordSync({
+          store.dispatch(setRecordSync({
             cuid: record.cuid,
             syncing: false
-          });
+          }));
 
           /* eslint-disable */
           if (response.status === 403) {

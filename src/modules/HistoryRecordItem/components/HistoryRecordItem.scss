@@ -1,0 +1,12 @@
+.history-record {
+
+  &-export {
+    opacity: 0;
+    transition: opacity 100ms;
+
+    .history-record--can-be-exported & {
+      opacity: .5;
+      cursor: pointer;
+    }
+  }
+}
