@@ -245,7 +245,7 @@ export class TaskItem extends Component {
           <div className='task-item__right'>
             {status}
             <input className='task-item__remaining'
-              defaultValue={remainingEstimate}
+              value={remainingEstimate}
               onFocus={this.onRemainignFocus}
               onBlur={this.onRemainignBlur}
               ref='inputRemaining'
