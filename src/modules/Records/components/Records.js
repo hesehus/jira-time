@@ -14,16 +14,11 @@ export default class Records extends Component {
 
   render () {
 
-    const { records, focusOnRecordCommentCuid } = this.props;
-
-    let recordItems = records.map((record) => {
-      const autofocus = focusOnRecordCommentCuid === record.cuid;
-      return <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} autofocus={autofocus} />;
-    });
+    const { records } = this.props;
 
     return (
       <div className='records'>
-        {recordItems}
+        {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
       </div>
     );
   }

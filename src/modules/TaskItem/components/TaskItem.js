@@ -62,8 +62,6 @@ export class TaskItem extends Component {
       endTime
     });
 
-    this.focusOnRecordCommentCuid = record.cuid;
-
     this.props.addRecord({
       task,
       record
@@ -74,8 +72,6 @@ export class TaskItem extends Component {
     const { task } = this.props;
 
     const record = RecordModel({ task });
-
-    this.focusOnRecordCommentCuid = record.cuid;
 
     this.props.startRecording({
       task,
@@ -174,10 +170,7 @@ export class TaskItem extends Component {
       className += ' task-item--drop-active';
     }
 
-    const records = <Records taskCuid={task.cuid} focusOnRecordCommentCuid={this.focusOnRecordCommentCuid} />;
-
-    // Reset this always after the list is rendered
-    this.focusOnRecordCommentCuid = '';
+    const records = <Records taskCuid={task.cuid} />;
 
     let refreshIcon;
 
