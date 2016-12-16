@@ -10,14 +10,12 @@ import {
 import {
   addRecord,
   startRecording,
-  getMovingRecord,
-  getRecordsForTask
+  getMovingRecord
 } from 'store/reducers/recorder';
 
 import TaskItem from '../components/TaskItem';
 
-const mapStateToProps = (state, props) => ({
-  records: getRecordsForTask({ state, taskCuid: props.task.cuid }),
+const mapStateToProps = (state) => ({
   movingRecord: getMovingRecord({ state })
 });
 

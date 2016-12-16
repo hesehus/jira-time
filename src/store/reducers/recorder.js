@@ -416,7 +416,7 @@ const ACTION_HANDLERS = {
       return record;
     });
 
-    let record = state.record;
+    let { record } = state;
     if (record && record.cuid === action.cuid) {
       const { startTime, endTime } = record;
       record = Object.assign({}, record, {
@@ -476,24 +476,36 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
 // ------------------------------------
 export function getRecordsForTask ({ state, taskCuid }) {
   const records = [];
+  const activeRecord = state.recorder.record || {};
 
   state.recorder.records.forEach((record) => {
-    if (record.taskCuid === taskCuid) {
+    if (record.taskCuid === taskCuid && record.cuid !== activeRecord.cuid) {
       records.push(record);
     }
   });
+
+  // Add the active record
+  if (activeRecord.taskCuid === taskCuid) {
+    records.push(activeRecord);
+  }
 
   return records;
 }
 
 export function getRecordsWithNoIssue ({ state }) {
   const records = [];
+  const activeRecord = state.recorder.record;
 
   state.recorder.records.forEach((record) => {
-    if (!record.taskIssueKey) {
+    if (!record.taskIssueKey && (!activeRecord || record.cuid !== activeRecord.cuid)) {
       records.push(record);
     }
   });
+
+  // Add the active record
+  if (activeRecord && !activeRecord.taskIssueKey) {
+    records.push(activeRecord);
+  }
 
   return records;
 }

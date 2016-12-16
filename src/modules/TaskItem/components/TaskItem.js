@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import RecordItem from 'modules/RecordItem';
+
+import Records from 'modules/Records';
 import RecordModel from 'store/models/RecordModel';
 
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
@@ -17,7 +18,6 @@ export class TaskItem extends Component {
   static get propTypes () {
     return {
       task: PropTypes.object.isRequired,
-      records: PropTypes.array.isRequired,
       removeTask: PropTypes.func.isRequired,
       addRecord: PropTypes.func.isRequired,
       startRecording: PropTypes.func.isRequired,
@@ -167,21 +167,17 @@ export class TaskItem extends Component {
 
   render () {
 
-    const { task, records, movingRecord } = this.props;
+    const { task, movingRecord } = this.props;
 
     let className = 'task-item';
-
     if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
       className += ' task-item--drop-active';
     }
 
-    let recordItems = records.map((record) => {
-      const autofocus = this.focusOnRecordCommentCuid === record.cuid;
-      return <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} autofocus={autofocus} />;
-    });
+    const records = <Records taskCuid={task.cuid} focusOnRecordCommentCuid={this.focusOnRecordCommentCuid} />;
 
     // Reset this always after the list is rendered
-    this.focusOnRecordCommentCuid = false;
+    this.focusOnRecordCommentCuid = '';
 
     let refreshIcon;
 
@@ -198,7 +194,7 @@ export class TaskItem extends Component {
                 {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
               </span>
             </div>
-            <div className='records'>{recordItems}</div>
+            {records}
           </div>
         );
       }
@@ -225,8 +221,10 @@ export class TaskItem extends Component {
     }
 
     const status = (
-        task.issue.fields.status ? <span className='task-item__status'>{task.issue.fields.status.name}</span> : null
-    )
+        task.issue.fields.status
+          ? <span className='task-item__status'>{task.issue.fields.status.name}</span>
+          : null
+    );
 
     // Output the task
     return (
@@ -264,7 +262,7 @@ export class TaskItem extends Component {
             </div>
           </div>
         </div>
-        <div className='records'>{recordItems}</div>
+        {records}
       </div>
     );
   }
