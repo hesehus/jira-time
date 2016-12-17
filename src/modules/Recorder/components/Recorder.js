@@ -17,7 +17,6 @@ export default class Recorder extends Component {
       addTask: PropTypes.func.isRequired,
       startRecording: PropTypes.func.isRequired,
       stopRecording: PropTypes.func.isRequired,
-      pauseRecording: PropTypes.func.isRequired,
       recorder: PropTypes.object.isRequired,
       setRecordComment: PropTypes.func.isRequired,
       updateRecordElapsed: PropTypes.func.isRequired,
@@ -34,7 +33,6 @@ export default class Recorder extends Component {
     };
 
     this.onDropAndPaste = this.onDropAndPaste.bind(this);
-    this.onPause = this.onPause.bind(this);
     this.onStop = this.onStop.bind(this);
     this.onStart = this.onStart.bind(this);
     this.updateElapsedTime = this.updateElapsedTime.bind(this);
@@ -126,10 +124,6 @@ export default class Recorder extends Component {
     }
   }
 
-  onPause () {
-    this.props.pauseRecording();
-  }
-
   onStop () {
     this.props.stopRecording();
   }
@@ -177,7 +171,6 @@ export default class Recorder extends Component {
     const { record } = this.props.recorder;
 
     // eslint-disable
-    // <button onClick={this.onPause} className='recorder-button recorder-button--pause'>Pause</button>;
     const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
     const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
     // eslint-enable
@@ -199,13 +192,7 @@ export default class Recorder extends Component {
         dismissAfter: 999999,
         message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
       };
-      notifications = (
-        <Notification
-          isActive={options.isActive}
-          dismissAfter={options.dismissAfter}
-          message={options.message}
-        />
-      );
+      notifications = <Notification {...options} />;
     }
 
     let issueInfoDisplay;

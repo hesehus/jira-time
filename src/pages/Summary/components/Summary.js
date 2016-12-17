@@ -47,7 +47,7 @@ export default class Summary extends Component {
     .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
   }
 
-  onSyncedChange (recordInfo) {
+  onSyncedChange (recordInfo, recordIsDirty) {
 
     const { records } = this.state;
 
@@ -56,7 +56,7 @@ export default class Summary extends Component {
     const record = Object.assign({}, records[recordIndex]);
     record.startTime = recordInfo.startTime;
     record.endTime = recordInfo.endTime;
-    record.isDirty = true;
+    record.isDirty = recordIsDirty;
 
     this.setState({
       records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]

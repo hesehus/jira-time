@@ -79,7 +79,7 @@ export default class Sync extends EventClass {
       }
 
       adder
-        .then(r => r ? r.json() : r)
+        .then(r => r && r.json ? r.json() : r)
         .then((worklog) => {
 
           store.dispatch(removeRecord({
@@ -116,9 +116,10 @@ export default class Sync extends EventClass {
               'error'
             );
           } else {
+            console.error(response);
             swal(
               'Whuut?',
-              `The API failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
+              `I failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
               'error'
             );
           }
