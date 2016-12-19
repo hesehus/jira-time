@@ -1,3 +1,5 @@
+@import '../../../styles/core.scss';
+
 .task-item {
   border-bottom: 1px solid #f0f0f0;
   background: #fff;
@@ -19,6 +21,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px;
+    @include media-breakpoint-down(sm) {
+      flex-wrap: wrap;
+    }
   }
 
   &__left,
@@ -31,16 +36,30 @@
 
   &__left {
     flex-basis: 10%;
+    @include media-breakpoint-down(sm) {
+      flex: 0 1 auto;
+    }
   }
 
   &__mid {
     flex-basis: 70%;
     flex-grow: 1;
+    @include media-breakpoint-down(sm) {
+      order: 4;
+      flex: 0 0 100%;
+      padding: 15px;
+
+    }
   }
   
   &__right {
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    @include media-breakpoint-down(sm) {
+      flex: 1 1 auto;
+      justify-content: flex-end;
+      min-width: 50%;
+    }
   }
 
   &__remove {
@@ -74,6 +93,9 @@
     margin: 0 15px;
     flex-shrink: 1;
     flex-grow: 1;
+    @include media-breakpoint-down(sm) {
+      margin: 0;
+    }
   }
 
   &__status {
