@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import TimeInput from 'time-input';
 
-// import './DateInput.scss';
+import './DateInput.scss';
 
 export default class DateInput extends Component {
 
@@ -25,7 +25,7 @@ export default class DateInput extends Component {
     };
   }
 
-  componentWillMount () {
+  componentWillMount () {
     const dateObject = moment(this.props.date);
 
     const date = dateObject.format('YYYY-MM-DD');
@@ -41,7 +41,7 @@ export default class DateInput extends Component {
 
     const vals = time.split(':');
     const date = new Date(this.state.date);
-    
+
     date.setHours(vals[0]);
     date.setMinutes(vals[1]);
 
@@ -55,7 +55,7 @@ export default class DateInput extends Component {
   }
 
   onDateChange () {
-    
+
     let date;
 
     if (this.refs.date) {
@@ -87,27 +87,27 @@ export default class DateInput extends Component {
 
     const { time, date } = this.state;
 
-    const className = `record-date record-date--${this.props.type}`;
+    const className = `date-inp date-inp--${this.props.type}`;
 
     const dateDisplay = (
       <input type='date'
         ref='date'
         defaultValue={date}
         onChange={this.onDateChange}
-        className='record-date__input record-date__input--date'
+        className='date-inp__input date-inp__input--date'
         disabled={this.props.disabled}
        />
     );
 
     let isToday = moment().isSame(moment(date), 'day');
-    let today = <span className='record-date__today' onClick={this.onTodayClick}>Today</span>;
+    let today = <span className='date-inp__today' onClick={this.onTodayClick}>Today</span>;
 
     return (
       <span className={className}>
         {isToday && !this.state.showDate ? today : dateDisplay}
         <TimeInput
           value={time}
-          className='record-date__input record-date__input--time'
+          className='date-inp__input date-inp__input--time'
           onChange={this.onTimeChange}
           disabled={this.props.disabled}
         />

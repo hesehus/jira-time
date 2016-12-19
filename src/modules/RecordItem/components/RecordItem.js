@@ -25,7 +25,6 @@ export default class RecordItem extends Component {
   static propTypes = {
     record: PropTypes.object.isRequired,
     recordCuid: PropTypes.string.isRequired,
-    setRecordSync: PropTypes.func.isRequired,
     removeRecord: PropTypes.func.isRequired,
     setRecordDate: PropTypes.func.isRequired,
     setRecordComment: PropTypes.func.isRequired,
@@ -227,9 +226,7 @@ export default class RecordItem extends Component {
 
   onSyncClick () {
     const syncer = new Sync({
-      records: [this.props.record],
-      setRecordSync: this.props.setRecordSync,
-      removeRecord: this.props.removeRecord
+      records: [this.props.record]
     });
 
     syncer.start();

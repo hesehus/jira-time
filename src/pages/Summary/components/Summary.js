@@ -5,6 +5,7 @@ import { getWorkLogs } from 'shared/jiraClient';
 import HistoryRecordItem from 'modules/HistoryRecordItem';
 import HistorySpaceItem from 'modules/HistorySpaceItem';
 import { getElapsedTime } from 'store/reducers/recorder';
+import RecordModel from 'store/models/RecordModel';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -26,6 +27,10 @@ export default class Summary extends Component {
     this.state = {
       loading: true
     };
+
+    this.onSyncedChange = this.onSyncedChange.bind(this);
+    this.onSyncedSynced = this.onSyncedSynced.bind(this);
+    this.onNotSyncedSynced = this.onNotSyncedSynced.bind(this);
   }
 
   componentDidMount () {
@@ -40,6 +45,50 @@ export default class Summary extends Component {
     })
     .then(records => this.setState({ loading: false, records }))
     .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
+  }
+
+  onSyncedChange (recordInfo) {
+
+    const { records } = this.state;
+
+    // Get the updated item
+    const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
+    const record = Object.assign({}, records[recordIndex]);
+    record.startTime = recordInfo.startTime;
+    record.endTime = recordInfo.endTime;
+    record.isDirty = true;
+
+    this.setState({
+      records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]
+    });
+  }
+
+  onSyncedSynced (recordInfo) {
+    const { records } = this.state;
+
+    // Get the updated item
+    const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
+    const record = Object.assign({}, records[recordIndex]);
+    record.isDirty = false;
+
+    this.setState({
+      records: [...records.slice(0, recordIndex), record, ...records.slice(recordIndex + 1)]
+    });
+  }
+
+  /**
+  * Since not synced records will dissapear from the redux state,
+  * we need to adde them manually here at some point
+  **/
+  onNotSyncedSynced ({ record, worklog }) {
+
+    // Since not synced records will dissapear from the redux state, we need to adde them manually here
+    worklog.taskIssueKey = record.taskIssueKey;
+    const newRecord = RecordModel(worklog);
+
+    this.setState({
+      records: [...this.state.records, newRecord]
+    });
   }
 
   render () {
@@ -71,7 +120,7 @@ export default class Summary extends Component {
     // Combine the synced and not synced records
     let outputRecords = [...notSyncedRecords, ...records];
     if (activeRecord) {
-      outputRecords.push(Object.assign({}, activeRecord));
+      outputRecords.push(Object.assign({}, activeRecord, { active: true }));
     }
 
     // Momentify
@@ -95,18 +144,26 @@ export default class Summary extends Component {
       const prev = outputRecords[index - 1];
       if (prev) {
 
-        // Consider everything over 1s as a space
+        // Consider everything over 1m as a space
         const duration = record.startTime.unix() - prev.endTime.unix();
-        if (duration > 1) {
+        if (duration > 59) {
           const elapsedTime = getElapsedTime({
             startTime: prev.endTime,
             endTime: record.startTime
           });
-          outputItems.push(<HistorySpaceItem elapsedTime={elapsedTime} />);
+          outputItems.push(<HistorySpaceItem key={index} elapsedTime={elapsedTime} />);
         }
       }
 
-      outputItems.push(<HistoryRecordItem record={record} />);
+      outputItems.push((
+        <HistoryRecordItem
+          key={record.cuid}
+          record={record}
+          onSyncedChange={this.onSyncedChange}
+          onSyncedSynced={this.onSyncedSynced}
+          onNotSyncedSynced={this.onNotSyncedSynced}
+        />
+      ));
     });
 
     return (
@@ -114,7 +171,7 @@ export default class Summary extends Component {
         <table className='summary-table'>
           {outputItems}
         </table>
-        <div>Total: {duration.hours()}h {duration.minutes()}m {duration.seconds()}s</div>
+        <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
       </div>
     );
   }

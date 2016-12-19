@@ -32,7 +32,8 @@ class AppContainer extends Component {
       }, false);
 
       document.addEventListener('paste', function onPaste (e) {
-        if (e.target.type !== 'input' && e.target.type !== 'textarea') {
+        const { nodeName } = e.target;
+        if (nodeName !== 'INPUT' && nodeName !== 'TEXTAREA') {
           if (e.clipboardData && e.clipboardData.getData) {
             const text = e.clipboardData.getData('text/plain');
             if (text) {

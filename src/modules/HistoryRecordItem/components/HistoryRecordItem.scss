@@ -1,0 +1,12 @@
+.history-record {
+
+  &-icon {
+    opacity: 0;
+    height: 24px;
+
+    .history-record--can-be-exported & {
+      opacity: .5;
+      cursor: pointer;
+    }
+  }
+}

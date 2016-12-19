@@ -1,2 +1,2 @@
-import View from './components/HistoryRecordItem';
+import View from './containers/HistoryRecordItem';
 export default View;
