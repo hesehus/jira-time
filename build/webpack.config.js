@@ -149,6 +149,13 @@ webpackConfig.module.loaders.push({
   ]
 })
 webpackConfig.module.loaders.push({
+  test    : /\.scss$/,
+  include : /node_modules/,
+  loaders : [
+    'sass?sourceMap'
+  ]
+})
+webpackConfig.module.loaders.push({
   test    : /\.css$/,
   exclude : null,
   include : /node_modules/,

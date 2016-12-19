@@ -1,5 +1,6 @@
+@import './vendor/_bootstrap-custom.scss';
 @import 'base';
-@import '~normalize.css/normalize';
+//@import '~normalize.css/normalize';
 @import '~sweetalert2/dist/sweetalert2.css';
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
 
@@ -54,4 +55,11 @@ input {
   0%  { opacity: 1; }
   50%  { opacity: .25; }
   100%  { opacity: 1; }
+}
+
+// Remove chrome autofill 
+input:-webkit-autofill,
+input:-webkit-autofill:focus  {
+    -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
+    -webkit-text-fill-color: inherit;
 }
