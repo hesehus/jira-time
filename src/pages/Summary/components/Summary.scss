@@ -2,7 +2,8 @@
   flex-grow: 1;
   padding: 30px;
 
-  &--loading {
+  &--loading,
+  &--no-found {
     display: flex;
     justify-content: center;
     align-items: center;

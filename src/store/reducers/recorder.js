@@ -18,7 +18,6 @@ const initialState = {
 export const ADD_RECORDING = 'ADD_RECORDING';
 export const START_RECORDING = 'START_RECORDING';
 export const STOP_RECORDING = 'STOP_RECORDING';
-export const PAUSE_RECORDING = 'PAUSE_RECORDING';
 export const SET_RECORD_SYNC = 'SET_RECORD_SYNC';
 export const SET_RECORD_DATE = 'SET_RECORD_DATE';
 export const SET_RECORD_COMMENT = 'SET_RECORD_COMMENT';
@@ -64,11 +63,6 @@ export function startRecording ({ task, record } = {}) {
 export function stopRecording () {
   return {
     type: STOP_RECORDING
-  };
-};
-export function pauseRecording () {
-  return {
-    type: PAUSE_RECORDING
   };
 };
 export function setRecordSync ({ cuid, syncing }) {
@@ -150,22 +144,13 @@ const ACTION_HANDLERS = {
   },
   [START_RECORDING] : (state, action) => {
 
-    const records = [...state.records];
+    const records = stopRecordingInState({ state });
 
-    // Stop ongoing record
-    if (state.record) {
-      records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-        endTime: Date.now(),
-        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
-      });
-    }
-
-    // Determine which task to log to
-    // const task = action.task || state.task || TaskModel();
+    // Determine which task to start recording
     const task = action.task || TaskModel();
-    const record = action.record || RecordModel({ task });
 
-    records.push(record);
+    // Start new recording
+    const record = action.record || RecordModel({ task });
 
     return {
       record,
@@ -174,39 +159,10 @@ const ACTION_HANDLERS = {
     }
   },
   [STOP_RECORDING] : (state) => {
-
-    const records = [...state.records];
-
-    if (state.record) {
-      records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-        endTime: Date.now(),
-        elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
-      });
-    }
-
     return {
-      record: initialState.record,
       task: initialState.task,
-      records
-    }
-  },
-  [PAUSE_RECORDING] : (state) => {
-
-    if (!state.record) {
-      return state;
-    }
-
-    const records = [...state.records];
-
-    records[records.length - 1] = Object.assign({}, records[records.length - 1], {
-      endTime: Date.now(),
-      elapsedTime: getElapsedTime({ startTime: records[records.length - 1].startTime })
-    });
-
-    return {
       record: initialState.record,
-      task: state.task,
-      records
+      records: stopRecordingInState({ state })
     }
   },
   [REMOVE_TASK] : (state, action) => {
@@ -262,10 +218,11 @@ const ACTION_HANDLERS = {
   },
   [SET_RECORD_DATE] : (state, action) => {
 
+    const { startTime, endTime } = action;
+
     const records = state.records.map((record) => {
 
       if (record.cuid === action.cuid) {
-        const { startTime, endTime } = action;
         return Object.assign({}, record, {
           startTime,
           endTime,
@@ -276,12 +233,10 @@ const ACTION_HANDLERS = {
       return record;
     });
 
-    let record = state.record;
+    let { record } = state;
     if (record && record.cuid === action.cuid) {
-      const { startTime, endTime } = action;
       record = Object.assign({}, record, {
         startTime,
-        endTime,
         elapsedTime: getElapsedTime({ startTime, endTime })
       });
     }
@@ -416,7 +371,7 @@ const ACTION_HANDLERS = {
       return record;
     });
 
-    let record = state.record;
+    let { record } = state;
     if (record && record.cuid === action.cuid) {
       const { startTime, endTime } = record;
       record = Object.assign({}, record, {
@@ -471,29 +426,63 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
   }
 };
 
+function stopRecordingInState ({ state }) {
+  let records = [...state.records];
+
+  // Stop ongoing record
+  let { record } = state;
+  if (record) {
+
+    // Legacy: remove the active record from records
+    const index = records.findIndex(r => r.cuid === record.cuid);
+    if (index !== -1) {
+      records = records.slice(0, index);
+    }
+
+    records.push(Object.assign({}, record, {
+      endTime: Date.now(),
+      elapsedTime: getElapsedTime({ startTime: record.startTime })
+    }));
+  }
+
+  return records;
+}
+
 // ------------------------------------
 // Getters
 // ------------------------------------
 export function getRecordsForTask ({ state, taskCuid }) {
   const records = [];
+  const activeRecord = state.recorder.record || {};
 
   state.recorder.records.forEach((record) => {
-    if (record.taskCuid === taskCuid) {
+    if (record.taskCuid === taskCuid && record.cuid !== activeRecord.cuid) {
       records.push(record);
     }
   });
+
+  // Add the active record
+  if (activeRecord.taskCuid === taskCuid) {
+    records.push(activeRecord);
+  }
 
   return records;
 }
 
 export function getRecordsWithNoIssue ({ state }) {
   const records = [];
+  const activeRecord = state.recorder.record;
 
   state.recorder.records.forEach((record) => {
-    if (!record.taskIssueKey) {
+    if (!record.taskIssueKey && (!activeRecord || record.cuid !== activeRecord.cuid)) {
       records.push(record);
     }
   });
+
+  // Add the active record
+  if (activeRecord && !activeRecord.taskIssueKey) {
+    records.push(activeRecord);
+  }
 
   return records;
 }

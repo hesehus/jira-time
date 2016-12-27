@@ -13,7 +13,16 @@ api.getIssue = function (req, res) {
 
 api.addWorklog = function (req, res) {
   helpers.delay(function () {
-    res.status(201).send();
+    res.status(201).json({
+      id: 123,
+      created: new Date()
+    });
+  });
+}
+
+api.updateWorklog = function (req, res) {
+  helpers.delay(function () {
+    res.status(200).send();
   });
 }
 
@@ -45,6 +54,7 @@ api.getWorklogs = function (req, res) {
 
 api.createDummyIssue = function (key) {
   return {
+    id: 123,
     key: key,
     fields: {
       summary: ips({ count: 2, units: 'sentences' }),
@@ -61,6 +71,7 @@ api.createDummyIssue = function (key) {
 
 api.createDummyWorklog = function (key) {
   return {
+    id: 123,
     author: {
       key: '',
       name: ''

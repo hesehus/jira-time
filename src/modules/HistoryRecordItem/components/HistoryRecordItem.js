@@ -28,6 +28,8 @@ export default class HistoryRecordItem extends Component {
     this.onSyncClick = this.onSyncClick.bind(this);
 
     this.state = {};
+
+    this.originalRecord = Object.assign({}, props.record);
   }
 
   onStartTimeChange (time) {
@@ -66,12 +68,14 @@ export default class HistoryRecordItem extends Component {
       endTime: endTime.toDate()
     };
 
+    // Un-synced item. Just update the redux state
     if (!this.isSynced()) {
-      // Un-synced item. Just update the redux state
       this.props.setRecordDate(recordInfo);
     } else {
-      // Synced item. Mark it as dirty
-      this.props.onSyncedChange(recordInfo);
+      const isDirty = !moment(recordInfo.startTime).isSame(this.originalRecord.startTime) ||
+                      !moment(recordInfo.endTime).isSame(this.originalRecord.endTime);
+
+      this.props.onSyncedChange(recordInfo, isDirty);
     }
   }
 

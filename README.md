@@ -1,10 +1,18 @@
 # Jira Time
 
-An awsome JIRA time log helper
+An awsome JIRA worklog helper
 
 * * *
 
-To start WITH a local JIRA instance running at localhost:8080
+
+Install dependencies:
+
+`npm install`
+or
+`yarn`
+
+
+To start WITH a JIRA instance running at your network (see server/main.js for JIRA URL)
 
 `npm start`
 

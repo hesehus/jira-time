@@ -59,6 +59,8 @@ export default class RecordItem extends Component {
   }
 
   componentDidMount () {
+    const { record } = this.props;
+
     this.mc = new Hammer.Manager(this.outer, {
       cssProps: {
         userSelect: 'text'
@@ -75,7 +77,13 @@ export default class RecordItem extends Component {
 
     document.addEventListener('keydown', this.onKeyPress, false);
 
-    if (this.inputComment && this.props.autofocus) {
+    // Determine if the issue was just updated (less than 100ms ago)
+    let justCreated = false;
+    if (record.createdTime) {
+      justCreated = (new Date() - new Date(record.createdTime)) < 100;
+    }
+
+    if (this.inputComment && justCreated) {
       this.inputComment.select();
       this.inputComment.scrollIntoViewIfNeeded ? this.inputComment.scrollIntoViewIfNeeded() : this.scrollIntoView();
     }

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {
   startRecording,
   stopRecording,
-  pauseRecording,
   setRecordComment,
   updateRecordElapsed
 } from 'store/reducers/recorder';
@@ -16,7 +15,6 @@ const mapDispatchToProps = {
   addTask,
   stopRecording,
   startRecording,
-  pauseRecording,
   setRecordComment,
   updateRecordElapsed
 };
