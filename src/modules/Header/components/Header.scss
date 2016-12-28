@@ -1,10 +1,7 @@
 .header {
-  $bg: #f0f0f0;
-
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
-  background: $bg;
 
   &__center,
   &__right,
@@ -24,21 +21,16 @@
     padding: 0px 15px;
     text-decoration: none;
     cursor: pointer;
-    background: $bg;
     transition: background-color 100ms;
     line-height: 0;
     height: 52px;
     box-sizing: border-box;
 
-    &:hover {
-      background: darken($bg, 5%);
-    }
+    &:hover {}
 
     &--active {
       &,
-      &:hover {
-        background: darken($bg, 10%);
-      }
+      &:hover {}
     }
 
     &--avatar {

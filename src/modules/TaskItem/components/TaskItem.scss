@@ -1,18 +1,23 @@
 @import '_variables.scss';
 
 .task-item {
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .2);
   transition: background 100ms;
+  padding: 20px;
+
+  &:not(:last-child) {
+    margin-bottom: 15px;
+  }
 
   &:hover {
-    background: #fafafa;
+    background: rgba(255, 255, 255, .4);
   }
 
   &--drop-active {
     &,
     &:hover {
-      background: #e0e0e0;
+      background: rgba(255, 255, 255, .75)
     }
   }
 
@@ -91,19 +96,21 @@
   }
 
   &__summary {
+    font-size: .7rem;
     margin: 0 15px;
     flex-shrink: 1;
     flex-grow: 1;
+
     @media (max-width: $screen-sm) {
       margin: 0;
     }
   }
 
   &__status {
-    font-size: .9em;
+    opacity: .6;
+    font-size: .7rem;
     padding: 5px 7px;
-    border: 1px solid #bababa;
-    background-color: #efefef;
+    border: 1px solid #fff;
     border-radius: 4px;
     white-space: nowrap;
   }

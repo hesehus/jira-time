@@ -1,0 +1,28 @@
+.theme {
+
+    &-red {
+        background: radial-gradient(circle, #D56588 0%, #5C3F61 100%);
+    }
+
+    &-blue {
+        background: radial-gradient(circle, #D56588 0%, #5C3F61 100%);
+    }
+
+    &,
+    a {
+        color: #fff;
+    }
+
+    input[type='text'],
+    input[type='search'],
+    textarea {
+        background: transparent;
+        color: #fff;
+    }
+
+    button {
+        background: transparent;
+        border: 1px solid #fff;
+        padding: 5px 10px;
+    }
+}

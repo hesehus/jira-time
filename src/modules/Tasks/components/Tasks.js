@@ -5,7 +5,7 @@ import TasksInLimbo from 'modules/TasksInLimbo';
 
 import './Tasks.scss';
 
-import lazyDog from 'assets/lazy-dog.jpg';
+import lazyDog from 'assets/lazy-dog.png';
 
 export class Tasks extends Component {
 

@@ -1,3 +1,8 @@
-export default {
-    BLUE: 'blue'
+const themes = {
+    BLUE: 'blue',
+    RED: 'red'
 };
+
+Object.freeze(themes);
+
+export default themes;

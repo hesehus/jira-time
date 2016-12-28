@@ -1,5 +1,6 @@
 .tasks {
   flex-grow: 1;
+  padding: 20px;
 
   &-outer {
     flex-grow: 1;
@@ -21,7 +22,9 @@
 
   &__lazy-dog {
     max-width: 100%;
-    height: 100px;
+    height: 150px;
     margin-top: 30px;
+    border: 10px solid rgba(0, 0, 0, .2);
+    border-radius: 50%;
   }
 }

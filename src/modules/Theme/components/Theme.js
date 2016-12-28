@@ -11,7 +11,7 @@ export class Theme extends Component {
     }
 
     render ({ children }) {
-        const theme = `theme-${themes.BLUE}`;
+        const theme = `theme theme-${themes.RED}`;
         return <div className={theme}>{children}</div>;
     }
 }
