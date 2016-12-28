@@ -3,12 +3,12 @@ import keycode from 'keycode';
 
 import Sync from 'shared/sync';
 
-let keyAndPasteEventsBinded;
+let eventsBinded;
 
 export function init () {
-    if (!keyAndPasteEventsBinded) {
+    if (!eventsBinded) {
 
-        keyAndPasteEventsBinded = true;
+        eventsBinded = true;
 
         ['drag',
             'dragend',

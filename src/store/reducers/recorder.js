@@ -429,11 +429,11 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
 function stopRecordingInState ({ state }) {
     let records = [...state.records];
 
-  // Stop ongoing record
+    // Stop ongoing record
     let { record } = state;
     if (record) {
 
-    // Legacy: remove the active record from records
+        // Legacy: remove the active record from records
         const index = records.findIndex(r => r.cuid === record.cuid);
         if (index !== -1) {
             records = records.slice(0, index);
@@ -461,7 +461,7 @@ export function getRecordsForTask ({ state, taskCuid }) {
         }
     });
 
-  // Add the active record
+    // Add the active record
     if (activeRecord.taskCuid === taskCuid) {
         records.push(activeRecord);
     }
@@ -479,7 +479,7 @@ export function getRecordsWithNoIssue ({ state }) {
         }
     });
 
-  // Add the active record
+    // Add the active record
     if (activeRecord && !activeRecord.taskIssueKey) {
         records.push(activeRecord);
     }
@@ -492,8 +492,10 @@ export const getRecords = ({ state }) => state.recorder.records;
 export const getActiveRecord = ({ state }) => state.recorder.record;
 
 export const getMovingRecord = ({ state }) => {
-    const index = state.recorder.records.findIndex(r => r.moving);
-    return state.recorder.records[index];
+    if (state.recorder.record && state.recorder.record.moving) {
+        return state.recorder.record;
+    }
+    return state.recorder.records.find(r => r.moving);
 }
 
 // ------------------------------------
