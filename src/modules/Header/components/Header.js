@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { IndexLink, Link } from 'react-router'
 
-import Sync from 'shared/sync';
-import { getIssue } from 'shared/jiraClient';
+import Sync, { sharedEvents } from 'shared/sync';
 
 import './Header.scss'
 
@@ -33,19 +32,17 @@ export default class Header extends Component {
     this.state = {};
 
     this.onSyncClick = this.onSyncClick.bind(this);
-    document.addEventListener('keydown', function onKeyDown (e) {
-      if (e.ctrlKey) {
-        let charCode = e.keyCode || e.which;
-        let charStr = String.fromCharCode(charCode);
-        if (charStr === 'S') {
-          e.preventDefault();
-          let syncButton = document.getElementById('sync-button');
-          if (syncButton) syncButton.click();
-        }
-      }
-      if (e.altKey) {
 
-      }
+    // Listen for events from the syncer
+    sharedEvents.on('processAllStart', () => {
+      this.setState({
+        syncing: true
+      });
+    });
+    sharedEvents.on('processAllDone', () => {
+      this.setState({
+        syncing: false
+      });
     });
   }
 
@@ -65,50 +62,7 @@ export default class Header extends Component {
   }
 
   onSyncClick () {
-
-    this.setState({
-      syncing: true
-    });
-
-    const syncer = new Sync({
-      records: this.props.records.map(r => r)
-    });
-
-    syncer.on('syncDone', () => {
-      this.setState({
-        syncing: false
-      });
-    });
-
-    syncer.on('logSynced', ({ record, nextRecord }) => {
-
-      // Refresh issue info when all the records for the task is synced
-      if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
-
-        this.props.setIssueRefreshing({
-          cuid: record.taskCuid,
-          refreshing: true
-        });
-
-        getIssue({
-          key: record.taskIssueKey
-        })
-        .then((issue) => {
-          this.props.refreshIssue({
-            cuid: record.taskCuid,
-            issue
-          });
-        })
-        .catch(() => {
-          this.props.setIssueRefreshing({
-            cuid: record.taskCuid,
-            refreshing: false
-          });
-        });
-      }
-    });
-
-    syncer.start();
+    Sync.processAllInState();
   }
 
   render () {

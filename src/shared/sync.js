@@ -2,15 +2,31 @@ import { default as swal } from 'sweetalert2'
 
 import EventClass from './eventClass';
 
-import { addWorklog, updateWorklog } from './jiraClient';
+import { addWorklog, updateWorklog, getIssue } from './jiraClient';
 import { ensureDate } from './helpers';
 
-import {
-  setRecordSync,
-  removeRecord
-} from 'store/reducers/recorder';
+import { getRecords, setRecordSync, removeRecord } from 'store/reducers/recorder';
+import { setIssueRefreshing, refreshIssue } from 'store/reducers/tasks';
+
+export const sharedEvents = new EventClass();
 
 export default class Sync extends EventClass {
+
+  // Static method for handling all records in state
+  static processAllInState = () => {
+
+    const records = getRecords({ state: store.getState() });
+
+    const syncer = new Sync({ records });
+
+    syncer.on('start', () => sharedEvents.emit('processAllStart'));
+    syncer.on('done', () => sharedEvents.emit('processAllDone'));
+
+    syncer.start();
+
+    return syncer;
+  }
+
   constructor ({ records }) {
     super();
 
@@ -20,6 +36,8 @@ export default class Sync extends EventClass {
   }
 
   start () {
+    this.emit('start');
+
     this.syncIterator();
   }
 
@@ -36,7 +54,7 @@ export default class Sync extends EventClass {
     const record = this.records[this.index];
 
     if (!record) {
-      return this.emit('syncDone');
+      return this.emit('done');
     } else {
 
       // No end time specified. Moving on
@@ -86,12 +104,16 @@ export default class Sync extends EventClass {
             cuid: record.cuid
           }));
 
-          this.emit('logSynced', {
+          const status = {
             record,
             nextRecord: this.records[this.index + 1],
             didSync: true,
             worklog
-          });
+          };
+
+          this.emit('logSynced', status);
+
+          this.refreshIssue(status);
 
           processNext();
         })
@@ -133,6 +155,33 @@ export default class Sync extends EventClass {
 
           processNext();
         });
+    }
+  }
+
+  // Refresh issue info when all the records for the task is synced
+  refreshIssue ({ record, nextRecord }) {
+    if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
+
+      store.dispatch(setIssueRefreshing({
+        cuid: record.taskCuid,
+        refreshing: true
+      }));
+
+      getIssue({
+        key: record.taskIssueKey
+      })
+      .then((issue) => {
+        store.dispatch(refreshIssue({
+          cuid: record.taskCuid,
+          issue
+        }));
+      })
+      .catch(() => {
+        store.dispatch(setIssueRefreshing({
+          cuid: record.taskCuid,
+          refreshing: false
+        }));
+      });
     }
   }
 }
