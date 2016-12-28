@@ -1,7 +1,7 @@
 const initialState = {
-  loggedIn: false,
-  username: '',
-  userinfo: {}
+    loggedIn: false,
+    username: '',
+    userinfo: {}
 };
 
 // ------------------------------------
@@ -14,18 +14,18 @@ export const SET_USER_INFO = 'SET_USER_INFO';
 // Actions
 // ------------------------------------
 export function setLoggedIn ({ isLoggedIn, username }) {
-  return {
-    type: SET_LOGGED_IN,
-    isLoggedIn,
-    username
-  }
+    return {
+        type: SET_LOGGED_IN,
+        isLoggedIn,
+        username
+    }
 };
 
 export function setUserInfo ({ userinfo }) {
-  return {
-    type: SET_USER_INFO,
-    userinfo
-  }
+    return {
+        type: SET_USER_INFO,
+        userinfo
+    }
 };
 
 // ------------------------------------
@@ -34,18 +34,18 @@ export function setUserInfo ({ userinfo }) {
 const ACTION_HANDLERS = {};
 
 ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
-  return {
-    ...state,
-    loggedIn: action.isLoggedIn,
-    username: typeof action.username === 'undefined' ? state.username : action.username
-  }
+    return {
+        ...state,
+        loggedIn: action.isLoggedIn,
+        username: typeof action.username === 'undefined' ? state.username : action.username
+    }
 }
 
 ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
-  return {
-    ...state,
-    userinfo: action.userinfo
-  };
+    return {
+        ...state,
+        userinfo: action.userinfo
+    };
 }
 
 // ------------------------------------
@@ -53,7 +53,7 @@ ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
 // ------------------------------------
 export default function profileReducer (state = initialState, action) {
 
-  const handler = ACTION_HANDLERS[action.type]
+    const handler = ACTION_HANDLERS[action.type]
 
-  return handler ? handler(state, action) : state;
+    return handler ? handler(state, action) : state;
 }

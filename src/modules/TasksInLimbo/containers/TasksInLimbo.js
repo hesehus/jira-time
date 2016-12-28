@@ -8,8 +8,8 @@ import {
 import TasksinLimbo from '../components/TasksinLimbo';
 
 const mapStateToProps = (state) => ({
-  movingRecord: getMovingRecord({ state }),
-  recordsWithNoIssue: getRecordsWithNoIssue({ state })
+    movingRecord: getMovingRecord({ state }),
+    recordsWithNoIssue: getRecordsWithNoIssue({ state })
 });
 
 export default connect(mapStateToProps)(TasksinLimbo);

@@ -14,19 +14,19 @@ import {
 import RecordItem from '../components/RecordItem';
 
 const mapStateToProps = (state, props) => {
-  return {
-    activeRecord: getActiveRecord({ state }),
-    movingRecord: getMovingRecord({ state })
-  };
+    return {
+        activeRecord: getActiveRecord({ state }),
+        movingRecord: getMovingRecord({ state })
+    };
 }
 
 const mapDispatchToProps = {
-  removeRecord,
-  setRecordDate,
-  setRecordMoving,
-  setRecordComment,
-  setRecordTask,
-  setRecordMoveTarget
+    removeRecord,
+    setRecordDate,
+    setRecordMoving,
+    setRecordComment,
+    setRecordTask,
+    setRecordMoveTarget
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecordItem);

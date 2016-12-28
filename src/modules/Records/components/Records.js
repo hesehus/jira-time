@@ -6,20 +6,20 @@ import './Records.scss';
 
 export default class Records extends Component {
 
-  static propTypes = {
-    records: PropTypes.array.isRequired,
-    activeRecord: PropTypes.object,
-    focusOnRecordCommentCuid: PropTypes.any
-  }
+    static propTypes = {
+        records: PropTypes.array.isRequired,
+        activeRecord: PropTypes.object,
+        focusOnRecordCommentCuid: PropTypes.any
+    }
 
-  render () {
+    render () {
 
-    const { records } = this.props;
+        const { records } = this.props;
 
-    return (
-      <div className='records'>
-        {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
-      </div>
-    );
-  }
+        return (
+          <div className='records'>
+            {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
+          </div>
+        );
+    }
 }

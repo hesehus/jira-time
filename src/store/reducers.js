@@ -8,19 +8,19 @@ import recorder from './reducers/recorder';
 import profile from './reducers/profile';
 
 export const makeRootReducer = (asyncReducers) => {
-  return combineReducers({
-    app,
-    location,
-    tasks,
-    recorder,
-    profile,
-    ...asyncReducers
-  });
+    return combineReducers({
+        app,
+        location,
+        tasks,
+        recorder,
+        profile,
+        ...asyncReducers
+    });
 };
 
 export const injectReducer = (store, { key, reducer }) => {
-  store.asyncReducers[key] = reducer;
-  store.replaceReducer(makeRootReducer(store.asyncReducers));
+    store.asyncReducers[key] = reducer;
+    store.replaceReducer(makeRootReducer(store.asyncReducers));
 };
 
 export default makeRootReducer;

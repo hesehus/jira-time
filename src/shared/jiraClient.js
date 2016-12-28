@@ -7,7 +7,7 @@ import RecordModel from '../store/models/RecordModel';
 setTimeout(startupCheck, 2000);
 
 function startupCheck () {
-  verifyLoginStatus()
+    verifyLoginStatus()
     .then(updateUserInfo);
 }
 
@@ -16,30 +16,30 @@ function startupCheck () {
 * @returns void
 **/
 function verifyLoginStatus () {
-  return callApi({
-    path: `auth/1/session`
-  })
+    return callApi({
+        path: `auth/1/session`
+    })
   .then((response) => {
 
     // Not authenticated. Log out
-    if (response.status !== 200) {
-      logout();
+      if (response.status !== 200) {
+          logout();
 
-      store.dispatch(setLoggedIn({
-        isLoggedIn: false
-      }));
-    }
+          store.dispatch(setLoggedIn({
+              isLoggedIn: false
+          }));
+      }
 
-    return response;
+      return response;
   });
 }
 
 export function updateUserInfo () {
-  const state = store.getState();
+    const state = store.getState();
 
-  userInfo({ username: state.profile.username })
+    userInfo({ username: state.profile.username })
     .then((userinfo) => {
-      store.dispatch(setUserInfo({ userinfo }));
+        store.dispatch(setUserInfo({ userinfo }));
     });
 }
 
@@ -48,52 +48,52 @@ export function updateUserInfo () {
 **/
 function callApi ({ path, method = 'get', body }) {
 
-  const state = window.store.getState();
+    const state = window.store.getState();
 
-  const headers = {
-    'Content-Type': 'application/json'
-  };
+    const headers = {
+        'Content-Type': 'application/json'
+    };
 
-  if (state.app.authenticationHash) {
-    headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
-  }
+    if (state.app.authenticationHash) {
+        headers['Authorization'] = `Basic ${state.app.authenticationHash}`;
+    }
 
-  return new Promise((resolve, reject) => {
-    fetch(`${state.app.api}/${path}`, {
-      method,
-      headers,
-      body: body ? JSON.stringify(body) : null
-    })
+    return new Promise((resolve, reject) => {
+        fetch(`${state.app.api}/${path}`, {
+            method,
+            headers,
+            body: body ? JSON.stringify(body) : null
+        })
     .then((response) => {
 
-      if (!response) {
-        reject('No response received from API');
-      }
+        if (!response) {
+            reject('No response received from API');
+        }
 
-      switch (response.status) {
+        switch (response.status) {
 
         // In case of API error
         case 500 : {
-          reject(response);
-          break;
+            reject(response);
+            break;
         }
 
         // Not found or not permissions to call this API action
         case 404 : {
-          reject(response);
-          break;
+            reject(response);
+            break;
         }
 
         default : {
-          resolve(response);
-          break;
+            resolve(response);
+            break;
         }
-      }
+        }
     })
     .catch((error) => {
-      reject(error);
+        reject(error);
     });
-  });
+    });
 }
 
 /**
@@ -103,40 +103,40 @@ function callApi ({ path, method = 'get', body }) {
 * @returns promise
 **/
 export function login ({ username, password } = {}) {
-  return callApi({
-    path: 'auth/1/session',
-    method: 'post',
-    body: {
-      username,
-      password
-    }
-  })
+    return callApi({
+        path: 'auth/1/session',
+        method: 'post',
+        body: {
+            username,
+            password
+        }
+    })
   .then((response) => {
 
-    if (!response) {
-      return {
-        success: false,
-        type: 'noResponseFromAPI'
-      };
-    }
+      if (!response) {
+          return {
+              success: false,
+              type: 'noResponseFromAPI'
+          };
+      }
 
-    if (response.status === 401) {
-      return {
-        success: false,
-        type: 'invalidCredentials'
-      };
-    }
+      if (response.status === 401) {
+          return {
+              success: false,
+              type: 'invalidCredentials'
+          };
+      }
 
-    if (response.status === 403) {
-      return {
-        success: false,
-        type: 'tooManyFailedLoginAttempts'
-      };
-    }
+      if (response.status === 403) {
+          return {
+              success: false,
+              type: 'tooManyFailedLoginAttempts'
+          };
+      }
 
-    return {
-      success: true
-    };
+      return {
+          success: true
+      };
   });
 }
 
@@ -146,20 +146,20 @@ export function login ({ username, password } = {}) {
 *
 */
 export function userInfo ({ username }) {
-  return new Promise((resolve, reject) => {
-    callApi({
-      path: `api/2/user?username=${username}`
-    })
+    return new Promise((resolve, reject) => {
+        callApi({
+            path: `api/2/user?username=${username}`
+        })
     .then((response) => {
 
-      if (response.status === 200) {
-        return resolve(response.json());
-      }
+        if (response.status === 200) {
+            return resolve(response.json());
+        }
 
-      reject(response.status);
+        reject(response.status);
     })
     .catch(reject);
-  });
+    });
 }
 
 /**
@@ -167,10 +167,10 @@ export function userInfo ({ username }) {
 * @returns void
 **/
 export function logout () {
-  callApi({
-    path: 'auth/1/session',
-    method: 'delete'
-  });
+    callApi({
+        path: 'auth/1/session',
+        method: 'delete'
+    });
 }
 
 /**
@@ -181,32 +181,32 @@ export function logout () {
 **/
 export function getIssue ({ key, url }) {
 
-  if (!key && url) {
-    key = extractIssueKeysFromText(url)[0];
+    if (!key && url) {
+        key = extractIssueKeysFromText(url)[0];
+
+        if (!key) {
+            return Promise.reject(`Did not find a valid JIRA key in the given url ${url}`);
+        }
+    }
 
     if (!key) {
-      return Promise.reject(`Did not find a valid JIRA key in the given url ${url}`);
+        return Promise.reject(`No valid key passed for getIssue`);
     }
-  }
 
-  if (!key) {
-    return Promise.reject(`No valid key passed for getIssue`);
-  }
-
-  return new Promise((resolve, reject) => {
-    callApi({
-      path: `api/2/issue/${key}`
-    })
+    return new Promise((resolve, reject) => {
+        callApi({
+            path: `api/2/issue/${key}`
+        })
     .then((response) => {
 
-      if (response.status === 200) {
-        return resolve(response.json());
-      }
+        if (response.status === 200) {
+            return resolve(response.json());
+        }
 
-      reject(response.status);
+        reject(response.status);
     })
     .catch(reject);
-  });
+    });
 }
 
 /**
@@ -215,11 +215,11 @@ export function getIssue ({ key, url }) {
 * @returns array
 **/
 export function extractIssueKeysFromText (text) {
-  const matches = text.match(/[a-zA-Z]+[-][0-9]+/g);
-  if (!matches) {
-    return [];
-  }
-  return matches;
+    const matches = text.match(/[a-zA-Z]+[-][0-9]+/g);
+    if (!matches) {
+        return [];
+    }
+    return matches;
 }
 
 /**
@@ -229,44 +229,44 @@ export function extractIssueKeysFromText (text) {
 **/
 export function addWorklog ({ record }) {
 
-  let { comment, startTime, endTime } = record;
+    let { comment, startTime, endTime } = record;
 
-  startTime = moment(startTime);
-  endTime = moment(endTime);
+    startTime = moment(startTime);
+    endTime = moment(endTime);
 
-  let timeSpentSeconds = endTime.diff(startTime, 'seconds');
+    let timeSpentSeconds = endTime.diff(startTime, 'seconds');
 
-  return new Promise((resolve, reject) => {
-    callApi({
-      path: `api/2/issue/${record.taskIssueKey}/worklog`,
-      method: 'post',
-      body: {
-        comment,
-        timeSpentSeconds,
-        started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
-      }
-    })
+    return new Promise((resolve, reject) => {
+        callApi({
+            path: `api/2/issue/${record.taskIssueKey}/worklog`,
+            method: 'post',
+            body: {
+                comment,
+                timeSpentSeconds,
+                started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+            }
+        })
     .then(response => {
-      switch (response.status) {
+        switch (response.status) {
         case 201 : {
-          resolve(response);
-          break;
+            resolve(response);
+            break;
         }
 
         // No permission to log here
         case 403 : {
-          reject(response);
-          verifyLoginStatus();
-          break;
+            reject(response);
+            verifyLoginStatus();
+            break;
         }
 
         default : {
-          reject(response);
+            reject(response);
         }
-      }
+        }
     })
     .catch(reject);
-  });
+    });
 }
 
 /**
@@ -276,44 +276,44 @@ export function addWorklog ({ record }) {
 **/
 export function updateWorklog ({ record }) {
 
-  let { comment, startTime, endTime, id } = record;
+    let { comment, startTime, endTime, id } = record;
 
-  startTime = moment(startTime);
-  endTime = moment(endTime);
+    startTime = moment(startTime);
+    endTime = moment(endTime);
 
-  let timeSpentSeconds = endTime.diff(startTime, 'seconds');
+    let timeSpentSeconds = endTime.diff(startTime, 'seconds');
 
-  return new Promise((resolve, reject) => {
-    callApi({
-      path: `api/2/issue/${record.taskIssueKey}/worklog/${id}`,
-      method: 'put',
-      body: {
-        comment,
-        timeSpentSeconds,
-        started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
-      }
-    })
+    return new Promise((resolve, reject) => {
+        callApi({
+            path: `api/2/issue/${record.taskIssueKey}/worklog/${id}`,
+            method: 'put',
+            body: {
+                comment,
+                timeSpentSeconds,
+                started: moment(startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZZ')
+            }
+        })
     .then(response => {
-      switch (response.status) {
+        switch (response.status) {
         case 200 : {
-          resolve();
-          break;
+            resolve();
+            break;
         }
 
         // No permission to log here
         case 403 : {
-          reject(response);
-          verifyLoginStatus();
-          break;
+            reject(response);
+            verifyLoginStatus();
+            break;
         }
 
         default : {
-          reject(response);
+            reject(response);
         }
-      }
+        }
     })
     .catch(reject);
-  });
+    });
 }
 
 /**
@@ -323,18 +323,18 @@ export function updateWorklog ({ record }) {
 * @returns promise
 **/
 export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) {
-  return callApi({
-    path: `api/2/issue/${id}`,
-    method: 'put',
-    body: {
-      fields: {
-        timetracking: {
-          originalEstimate,
-          remainingEstimate
+    return callApi({
+        path: `api/2/issue/${id}`,
+        method: 'put',
+        body: {
+            fields: {
+                timetracking: {
+                    originalEstimate,
+                    remainingEstimate
+                }
+            }
         }
-      }
-    }
-  });
+    });
 }
 
 /**
@@ -343,10 +343,10 @@ export function setIssueRemaining ({ id, originalEstimate, remainingEstimate }) 
 * @returns promise
 **/
 export function addCurrentUserAsWatcher ({ taskIssueKey }) {
-  return callApi({
-    path: `api/2/issue/${taskIssueKey}/watchers`,
-    method: 'post'
-  });
+    return callApi({
+        path: `api/2/issue/${taskIssueKey}/watchers`,
+        method: 'post'
+    });
 }
 
 /**
@@ -356,46 +356,46 @@ export function addCurrentUserAsWatcher ({ taskIssueKey }) {
 **/
 export function getWorkLogs ({ startDate, endDate, username }) {
 
-  startDate = moment(startDate);
-  endDate = moment(endDate);
+    startDate = moment(startDate);
+    endDate = moment(endDate);
 
-  return new Promise((resolve, reject) => {
-    let jql = `
+    return new Promise((resolve, reject) => {
+        let jql = `
       worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
       worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
       worklogAuthor="${username}"`;
 
-    callApi({
-      path: `api/2/search?jql=${jql}`
-    })
+        callApi({
+            path: `api/2/search?jql=${jql}`
+        })
     .then(r => r.json())
     .then((response) => {
 
-      if (response.errorMessages) {
-        return reject(response.errorMessages);
-      }
+        if (response.errorMessages) {
+            return reject(response.errorMessages);
+        }
 
-      let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
+        let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
 
-      Promise.all(worklogsGetters)
+        Promise.all(worklogsGetters)
         .then((worklogs) => {
 
-          let combined = [];
+            let combined = [];
 
-          worklogs.forEach(w => combined.push(...w));
+            worklogs.forEach(w => combined.push(...w));
 
           // Conform all worklogs to our RecordModel
-          combined = combined.map((w) => {
-            w.startTime = w.started;
-            return RecordModel(w);
-          });
+            combined = combined.map((w) => {
+                w.startTime = w.started;
+                return RecordModel(w);
+            });
 
-          resolve(combined);
+            resolve(combined);
         })
         .catch(reject);
     })
     .catch(reject);
-  });
+    });
 }
 
 /**
@@ -405,9 +405,9 @@ export function getWorkLogs ({ startDate, endDate, username }) {
 * @returns promise
 **/
 export function getWorkLog ({ key, id }) {
-  return callApi({
-    path: `api/2/issue/${key}/worklog/${id}`
-  })
+    return callApi({
+        path: `api/2/issue/${key}/worklog/${id}`
+    })
   .then(r => r.json());
 }
 
@@ -419,14 +419,14 @@ export function getWorkLog ({ key, id }) {
 * @returns promise
 **/
 function getWorkLogsForIssue ({ key, startDate, username }) {
-  return callApi({
-    path: `api/2/issue/${key}/worklog`
-  })
+    return callApi({
+        path: `api/2/issue/${key}/worklog`
+    })
   .then(r => r.json())
   .then(r => r.worklogs.filter(w => w.author.name === username))
   .then(worklogs => worklogs.filter(w => moment(w.started) >= startDate))
   .then(worklogs => worklogs.map((w) => {
-    w.taskIssueKey = key;
-    return w;
+      w.taskIssueKey = key;
+      return w;
   }));
 }

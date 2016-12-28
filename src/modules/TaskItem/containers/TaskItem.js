@@ -16,16 +16,16 @@ import {
 import TaskItem from '../components/TaskItem';
 
 const mapStateToProps = (state) => ({
-  movingRecord: getMovingRecord({ state })
+    movingRecord: getMovingRecord({ state })
 });
 
 const mapDispatchToProps = {
-  removeTask,
-  refreshIssue,
-  setIssueRefreshing,
-  setIssueRemainingEstimate,
-  startRecording,
-  addRecord
+    removeTask,
+    refreshIssue,
+    setIssueRefreshing,
+    setIssueRemainingEstimate,
+    startRecording,
+    addRecord
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);

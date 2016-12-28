@@ -3,7 +3,7 @@ import DeepAssign from 'deep-assign';
 import TaskModel from 'store/models/TaskModel';
 
 const initialState = {
-  tasks: []
+    tasks: []
 };
 
 // ------------------------------------
@@ -19,118 +19,118 @@ export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 // Actions
 // ------------------------------------
 export function addTask ({ issue }) {
-  return {
-    type: ADD_TASK,
-    issue
-  }
+    return {
+        type: ADD_TASK,
+        issue
+    }
 };
 export function removeTask ({ cuid }) {
-  return {
-    type: REMOVE_TASK,
-    cuid
-  }
+    return {
+        type: REMOVE_TASK,
+        cuid
+    }
 };
 export function refreshIssue ({ cuid, issue }) {
-  return {
-    type: REFRESH_ISSUE,
-    cuid,
-    issue
-  }
+    return {
+        type: REFRESH_ISSUE,
+        cuid,
+        issue
+    }
 };
 export function setIssueRefreshing ({ cuid, refreshing, remainingEstimate }) {
-  return {
-    type: SET_ISSUE_REFRESHING,
-    cuid,
-    refreshing,
-    remainingEstimate
-  }
+    return {
+        type: SET_ISSUE_REFRESHING,
+        cuid,
+        refreshing,
+        remainingEstimate
+    }
 };
 export function setIssueRemainingEstimate ({ cuid, remainingEstimate }) {
-  return {
-    type: SET_ISSUE_REMAINING_ESTIMATE,
-    cuid,
-    remainingEstimate
-  }
+    return {
+        type: SET_ISSUE_REMAINING_ESTIMATE,
+        cuid,
+        remainingEstimate
+    }
 };
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [ADD_TASK] : (state, action) => {
+    [ADD_TASK] : (state, action) => {
 
-    const { issue } = action;
+        const { issue } = action;
 
-    return {
-      tasks: [...state.tasks, TaskModel({ issue })]
-    }
-  },
-  [REMOVE_TASK] : (state, action) => {
+        return {
+            tasks: [...state.tasks, TaskModel({ issue })]
+        }
+    },
+    [REMOVE_TASK] : (state, action) => {
 
-    let taskIndex = state.tasks.findIndex(task => task.cuid === action.cuid);
+        let taskIndex = state.tasks.findIndex(task => task.cuid === action.cuid);
 
-    return {
-      tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
-    };
-  },
-  [REFRESH_ISSUE] : (state, action) => {
-    let tasks = state.tasks.map(task => {
-      if (task.cuid === action.cuid) {
-        task = DeepAssign({}, task);
-        task.issue = action.issue;
-        task.issueRefreshing = false;
-      }
-      return task;
-    });
-
-    return {
-      tasks
-    };
-  },
-  [SET_ISSUE_REFRESHING] : (state, action) => {
-
-    let tasks = state.tasks.map(task => {
-      if (task.cuid === action.cuid) {
-
-        const newTask = DeepAssign({}, task, {
-          issueRefreshing: action.refreshing
+        return {
+            tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
+        };
+    },
+    [REFRESH_ISSUE] : (state, action) => {
+        let tasks = state.tasks.map(task => {
+            if (task.cuid === action.cuid) {
+                task = DeepAssign({}, task);
+                task.issue = action.issue;
+                task.issueRefreshing = false;
+            }
+            return task;
         });
 
-        if (newTask.issue && action.remainingEstimate) {
-          newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
-        }
+        return {
+            tasks
+        };
+    },
+    [SET_ISSUE_REFRESHING] : (state, action) => {
 
-        return newTask;
-      }
-      return task;
-    });
+        let tasks = state.tasks.map(task => {
+            if (task.cuid === action.cuid) {
 
-    return {
-      tasks
-    };
-  },
-  [SET_ISSUE_REMAINING_ESTIMATE] : (state, action) => {
+                const newTask = DeepAssign({}, task, {
+                    issueRefreshing: action.refreshing
+                });
 
-    let tasks = state.tasks.map(task => {
-      if (task.cuid === action.cuid) {
-        const newTask = DeepAssign({}, task);
-        newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
-        return newTask;
-      }
-      return task;
-    });
+                if (newTask.issue && action.remainingEstimate) {
+                    newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
+                }
 
-    return {
-      tasks
-    };
-  }
+                return newTask;
+            }
+            return task;
+        });
+
+        return {
+            tasks
+        };
+    },
+    [SET_ISSUE_REMAINING_ESTIMATE] : (state, action) => {
+
+        let tasks = state.tasks.map(task => {
+            if (task.cuid === action.cuid) {
+                const newTask = DeepAssign({}, task);
+                newTask.issue.fields.timetracking.remainingEstimate = action.remainingEstimate;
+                return newTask;
+            }
+            return task;
+        });
+
+        return {
+            tasks
+        };
+    }
 };
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 export default function tasksReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type];
+    const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state;
+    return handler ? handler(state, action) : state;
 }

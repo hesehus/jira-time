@@ -8,178 +8,194 @@ import LoadingIcon from 'assets/loading.svg';
 
 export class Login extends Component {
 
-  static get propTypes () {
-    return {
-      username: PropTypes.string,
-      onLoginSuccess: PropTypes.func,
-      setLoggedIn: PropTypes.func.isRequired,
-      setAuthenticationHash: PropTypes.func.isRequired
+    static get propTypes () {
+        return {
+            username: PropTypes.string,
+            onLoginSuccess: PropTypes.func,
+            setLoggedIn: PropTypes.func.isRequired,
+            setAuthenticationHash: PropTypes.func.isRequired
+        }
     }
-  }
 
-  constructor (props) {
-    super(props);
+    constructor (props) {
+        super(props);
 
-    this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
 
-    this.state = {
-      loggingIn: false,
-      attempts: 0,
-      tooManyFailedLoginAttempts: 0
-    };
-  }
-
-  componentDidMount () {
-    if (this.props.username) {
-      this.refs.password.select();
-    } else {
-      this.refs.username.select();
+        this.state = {
+            loggingIn: false,
+            attempts: 0,
+            tooManyFailedLoginAttempts: 0
+        };
     }
-  }
 
-  onSubmit (event) {
-    event.preventDefault();
-    this.doLogin();
-  }
+    componentDidMount () {
+        if (this.props.username) {
+            this.refs.password.select();
+        } else {
+            this.refs.username.select();
+        }
+    }
 
-  doLogin () {
-    if (!this.state.loggingIn) {
+    onSubmit (event) {
+        event.preventDefault();
+        this.doLogin();
+    }
 
-      this.setState({
-        loggingIn: true,
-        error: null,
-        attempts: this.state.attempts + 1
-      });
-
-      const userInfo = {
-        username: this.refs.username.value,
-        password: this.refs.password.value
-      };
-
-      login(userInfo)
-        .then((resp) => {
-
-          this.setState({ loggingIn: false });
-
-          if (resp.success) {
+    doLogin () {
+        if (!this.state.loggingIn) {
 
             this.setState({
-              error: null,
-              attempts: 0,
-              tooManyFailedLoginAttempts: 0
+                loggingIn: true,
+                error: null,
+                attempts: this.state.attempts + 1
             });
 
-            this.props.setAuthenticationHash(userInfo);
-
-            this.props.setLoggedIn({
-              isLoggedIn: true,
-              username: userInfo.username
-            });
-
-            if (this.props.onLoginSuccess) {
-              this.props.onLoginSuccess({ userInfo });
-            }
-            updateUserInfo();
-
-          } else {
-
-            const errorState = {
-              error: resp.type
+            const userInfo = {
+                username: this.refs.username.value,
+                password: this.refs.password.value
             };
 
-            if (resp.type === 'tooManyFailedLoginAttempts') {
-              errorState.tooManyFailedLoginAttempts = this.state.tooManyFailedLoginAttempts + 1;
-            }
+            login(userInfo)
+        .then((resp) => {
 
-            this.setState(errorState);
-          }
+            this.setState({ loggingIn: false });
+
+            if (resp.success) {
+
+                this.setState({
+                    error: null,
+                    attempts: 0,
+                    tooManyFailedLoginAttempts: 0
+                });
+
+                this.props.setAuthenticationHash(userInfo);
+
+                this.props.setLoggedIn({
+                    isLoggedIn: true,
+                    username: userInfo.username
+                });
+
+                if (this.props.onLoginSuccess) {
+                    this.props.onLoginSuccess({ userInfo });
+                }
+                updateUserInfo();
+
+            } else {
+
+                const errorState = {
+                    error: resp.type
+                };
+
+                if (resp.type === 'tooManyFailedLoginAttempts') {
+                    errorState.tooManyFailedLoginAttempts = this.state.tooManyFailedLoginAttempts + 1;
+                }
+
+                this.setState(errorState);
+            }
         })
         .catch(() => {
-          this.setState({
-            loggingIn: false,
-            error: 'noResponseFromAPI'
-          });
+            this.setState({
+                loggingIn: false,
+                error: 'noResponseFromAPI'
+            });
         });
-    }
-  }
-
-  render () {
-
-    let error;
-
-    if (this.state.error) {
-      if (this.state.error === 'invalidCredentials') {
-
-        if (this.state.attempts === 1) {
-          error = <div className='login-error'>I don't think this is correct</div>;
-        } else {
-          error = <div className='login-error'>I still don't think this is correct</div>;
         }
-
-      } else if (this.state.error === 'tooManyFailedLoginAttempts') {
-
-        if (this.state.tooManyFailedLoginAttempts === 1) {
-          error = (
-            <div className='login-error'>
-              <div className='login-error__header'>Yo. Looks like you have too many failed login attempts!</div>
-              <div>Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.</div>
-              <div className='login-error__footer'>And for the future, <b>remember your credentials dude!</b></div>
-            </div>
-          );
-        } else if (this.state.tooManyFailedLoginAttempts > 5) {
-          error = (
-            <div className='login-error'>
-              <div className='login-error__header'>
-                You are truly impossible!
-                You <u><b>STILL</b></u> have too many failed login attempts!!!!</div>
-              <div>Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.</div>
-              <div className='login-error__footer'>And for the future, <b>remember your credentials dude!</b></div>
-            </div>
-          );
-        } else {
-          error = (
-            <div className='login-error'>
-              <div className='login-error__header'>
-                Things have not changed...
-                You <u>still</u> have too many failed login attempts!</div>
-              <div>Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.</div>
-              <div className='login-error__footer'>And for the future, <b>remember your credentials dude!</b></div>
-            </div>
-          );
-        }
-
-      } else if (this.state.error === 'noResponseFromAPI') {
-        error = (<div className='login-error'>No response from API =(</div>);
-      }
     }
 
-    return (
-      <form className='login' onSubmit={this.onSubmit}>
-        <label className='login-label'>
-          <div className='login-label__text'>Username:</div>
-          <input type='text'
-            ref='username'
-            name='username'
-            defaultValue={this.props.username}
-            disabled={this.state.loggingIn}
-          />
-        </label>
-        <label className='login-label'>
-          <div className='login-label__text'>Password:</div>
-          <input type='password'
-            ref='password'
-            name='password'
-            disabled={this.state.loggingIn}
-          />
-        </label>
+    render () {
 
-        {error}
+        let error;
 
-        {!this.state.loggingIn ? <button>Login</button> : null}
-        {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
-      </form>
-    );
-  }
+        if (this.state.error) {
+            if (this.state.error === 'invalidCredentials') {
+
+                if (this.state.attempts === 1) {
+                    error = <div className='login-error'>I don't think this is correct</div>;
+                } else {
+                    error = <div className='login-error'>I still don't think this is correct</div>;
+                }
+
+            } else if (this.state.error === 'tooManyFailedLoginAttempts') {
+
+                if (this.state.tooManyFailedLoginAttempts === 1) {
+                    error = (
+                      <div className='login-error'>
+                        <div className='login-error__header'>
+                            Yo. Looks like you have too many failed login attempts!
+                        </div>
+                        <div>
+                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                        </div>
+                        <div className='login-error__footer'>
+                            And for the future, <b>remember your credentials dude!</b>
+                        </div>
+                      </div>
+                    );
+                } else if (this.state.tooManyFailedLoginAttempts > 5) {
+                    error = (
+                      <div className='login-error'>
+                        <div className='login-error__header'>
+                            You are truly impossible!
+                            You <u><b>STILL</b></u> have too many failed login attempts!!!!
+                        </div>
+                        <div>
+                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                        </div>
+                        <div className='login-error__footer'>
+                            And for the future, <b>remember your credentials dude!</b>
+                        </div>
+                      </div>
+                    );
+                } else {
+                    error = (
+                      <div className='login-error'>
+                        <div className='login-error__header'>
+                            Things have not changed...
+                            You <u>still</u> have too many failed login attempts!
+                        </div>
+                        <div>
+                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                        </div>
+                        <div className='login-error__footer'>
+                            And for the future, <b>remember your credentials dude!</b>
+                        </div>
+                      </div>
+                    );
+                }
+
+            } else if (this.state.error === 'noResponseFromAPI') {
+                error = (<div className='login-error'>No response from API =(</div>);
+            }
+        }
+
+        return (
+          <form className='login' onSubmit={this.onSubmit}>
+            <label className='login-label'>
+              <div className='login-label__text'>Username:</div>
+              <input type='text'
+                ref='username'
+                name='username'
+                defaultValue={this.props.username}
+                disabled={this.state.loggingIn}
+          />
+            </label>
+            <label className='login-label'>
+              <div className='login-label__text'>Password:</div>
+              <input type='password'
+                ref='password'
+                name='password'
+                disabled={this.state.loggingIn}
+          />
+            </label>
+
+            {error}
+
+            {!this.state.loggingIn ? <button>Login</button> : null}
+            {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
+          </form>
+        );
+    }
 }
 
 export default Login;

@@ -1,6 +1,6 @@
 import Summary from './containers/Summary.js';
 
 export default {
-  path : 'summary',
-  component: Summary
+    path : 'summary',
+    component: Summary
 }

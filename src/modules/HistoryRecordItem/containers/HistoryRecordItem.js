@@ -7,7 +7,7 @@ import { setRecordDate } from 'store/reducers/recorder';
 // const mapStateToProps = () => {};
 
 const mapDispatchToProps = {
-  setRecordDate
+    setRecordDate
 };
 
 export default connect(undefined, mapDispatchToProps)(HistoryRecordItem);

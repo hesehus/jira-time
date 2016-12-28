@@ -112,6 +112,7 @@
     "imports-loader": "^0.6.5",
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
+    "keycode": "^2.1.8",
     "lorem-ipsum": "^1.0.3",
     "material-ui": "~0.16.4",
     "moment": "^2.15.2",

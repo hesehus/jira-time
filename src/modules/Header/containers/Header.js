@@ -7,15 +7,15 @@ import { refreshIssue, setIssueRefreshing } from 'store/reducers/tasks';
 import Header from '../components/Header';
 
 const mapDispatchToProps = {
-  refreshIssue,
-  setIssueRefreshing
+    refreshIssue,
+    setIssueRefreshing
 };
 
 const mapStateToProps = (state) => ({
-  profile: state.profile,
-  records: getRecords({ state }),
-  currentPath: getCurrentPath(state),
-  loggedIn: state.profile.loggedIn
+    profile: state.profile,
+    records: getRecords({ state }),
+    currentPath: getCurrentPath(state),
+    loggedIn: state.profile.loggedIn
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

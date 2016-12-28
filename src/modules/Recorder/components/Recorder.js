@@ -12,214 +12,214 @@ const processTask = new ProcessTask();
 
 export default class Recorder extends Component {
 
-  static get propTypes () {
-    return {
-      addTask: PropTypes.func.isRequired,
-      startRecording: PropTypes.func.isRequired,
-      stopRecording: PropTypes.func.isRequired,
-      recorder: PropTypes.object.isRequired,
-      setRecordComment: PropTypes.func.isRequired,
-      updateRecordElapsed: PropTypes.func.isRequired,
-      isLoggedIn: PropTypes.bool.isRequired
-    };
-  }
+    static get propTypes () {
+        return {
+            addTask: PropTypes.func.isRequired,
+            startRecording: PropTypes.func.isRequired,
+            stopRecording: PropTypes.func.isRequired,
+            recorder: PropTypes.object.isRequired,
+            setRecordComment: PropTypes.func.isRequired,
+            updateRecordElapsed: PropTypes.func.isRequired,
+            isLoggedIn: PropTypes.bool.isRequired
+        };
+    }
 
-  constructor (props) {
-    super(props);
+    constructor (props) {
+        super(props);
 
-    this.state = {
-      addingTasksFromDropOrPaste: processTask.getRemaining(),
-      comment: ''
-    };
+        this.state = {
+            addingTasksFromDropOrPaste: processTask.getRemaining(),
+            comment: ''
+        };
 
-    this.onDropAndPaste = this.onDropAndPaste.bind(this);
-    this.onStop = this.onStop.bind(this);
-    this.onStart = this.onStart.bind(this);
-    this.updateElapsedTime = this.updateElapsedTime.bind(this);
-    this.onCommentChange = this.onCommentChange.bind(this);
+        this.onDropAndPaste = this.onDropAndPaste.bind(this);
+        this.onStop = this.onStop.bind(this);
+        this.onStart = this.onStart.bind(this);
+        this.updateElapsedTime = this.updateElapsedTime.bind(this);
+        this.onCommentChange = this.onCommentChange.bind(this);
 
-    processTask.on('add', (result) => {
-      this.setState({
-        addingTasksFromDropOrPaste: processTask.getRemaining()
-      });
+        processTask.on('add', (result) => {
+            this.setState({
+                addingTasksFromDropOrPaste: processTask.getRemaining()
+            });
 
-      if (result.success) {
-        this.props.addTask({ issue: result.issue });
-        addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
-      } else {
-        swal(
+            if (result.success) {
+                this.props.addTask({ issue: result.issue });
+                addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+            } else {
+                swal(
           'Heeey..',
           result.message,
           'error'
         );
-      }
-    });
+            }
+        });
 
-    processTask.on('end', () => {
-      this.setState({
-        addingTasksFromDropOrPaste: 0
-      });
-    });
-  }
-
-  componentWillMount () {
-    const { record } = this.props.recorder;
-
-    if (!this.state.binded) {
-      this.setState({ binded: true, test: 1 });
-
-      window.__events.on('drop', this.onDropAndPaste);
-      window.__events.on('paste', this.onDropAndPaste);
-
-      this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
+        processTask.on('end', () => {
+            this.setState({
+                addingTasksFromDropOrPaste: 0
+            });
+        });
     }
 
-    this.setState({
-      comment: record ? record.comment : ''
-    });
-  }
+    componentWillMount () {
+        const { record } = this.props.recorder;
 
-  componentWillUnmount () {
-    window.__events.off('drop', this.onDropAndPaste);
-    window.__events.off('paste', this.onDropAndPaste);
-    clearInterval(this.elapsedTimeInterval);
-  }
+        if (!this.state.binded) {
+            this.setState({ binded: true, test: 1 });
 
-  componentWillReceiveProps (nextProps) {
-    const { record } = nextProps.recorder;
+            window.__events.on('drop', this.onDropAndPaste);
+            window.__events.on('paste', this.onDropAndPaste);
 
-    if (record && record.comment !== this.state.comment) {
-      this.setState({
-        comment: record.comment
-      });
-    }
-  }
-
-  componentDidUpdate () {
-    if (this.autofocusOnComment && this.refs.comment) {
-      this.refs.comment.select();
-      this.autofocusOnComment = false;
-    }
-  }
-
-  onDropAndPaste ({ url, text }) {
-    if (this.props.isLoggedIn) {
-
-      const taskKeys = extractIssueKeysFromText(url || text);
-
-      if (!!taskKeys.length) {
-
-        processTask.add(taskKeys);
+            this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
+        }
 
         this.setState({
-          addingTasksFromDropOrPaste: processTask.getRemaining()
+            comment: record ? record.comment : ''
         });
-      }
-    } else {
-      swal(
+    }
+
+    componentWillUnmount () {
+        window.__events.off('drop', this.onDropAndPaste);
+        window.__events.off('paste', this.onDropAndPaste);
+        clearInterval(this.elapsedTimeInterval);
+    }
+
+    componentWillReceiveProps (nextProps) {
+        const { record } = nextProps.recorder;
+
+        if (record && record.comment !== this.state.comment) {
+            this.setState({
+                comment: record.comment
+            });
+        }
+    }
+
+    componentDidUpdate () {
+        if (this.autofocusOnComment && this.refs.comment) {
+            this.refs.comment.select();
+            this.autofocusOnComment = false;
+        }
+    }
+
+    onDropAndPaste ({ url, text }) {
+        if (this.props.isLoggedIn) {
+
+            const taskKeys = extractIssueKeysFromText(url || text);
+
+            if (!!taskKeys.length) {
+
+                processTask.add(taskKeys);
+
+                this.setState({
+                    addingTasksFromDropOrPaste: processTask.getRemaining()
+                });
+            }
+        } else {
+            swal(
         'Heeey..',
         'Hey dude, you are not logged in. How do you expect me to validate your shit?',
         'error'
       );
-    }
-  }
-
-  onStop () {
-    this.props.stopRecording();
-  }
-
-  onStart () {
-    this.props.startRecording({
-      record: RecordModel()
-    });
-
-    this.autofocusOnComment = true;
-  }
-
-  onCommentChange (e) {
-    const { record } = this.props.recorder;
-
-    if (record) {
-
-      this.setState({
-        comment: e.target.value
-      });
-
-      this.props.setRecordComment({
-        cuid: record.cuid,
-        comment: e.target.value
-      });
-    }
-  }
-
-  updateElapsedTime () {
-    const { record } = this.props.recorder;
-
-    if (record) {
-      this.props.updateRecordElapsed({
-        cuid: record.cuid
-      });
-    }
-  }
-
-  render () {
-
-    if (!this.props.isLoggedIn) {
-      return null;
+        }
     }
 
-    const { record } = this.props.recorder;
+    onStop () {
+        this.props.stopRecording();
+    }
+
+    onStart () {
+        this.props.startRecording({
+            record: RecordModel()
+        });
+
+        this.autofocusOnComment = true;
+    }
+
+    onCommentChange (e) {
+        const { record } = this.props.recorder;
+
+        if (record) {
+
+            this.setState({
+                comment: e.target.value
+            });
+
+            this.props.setRecordComment({
+                cuid: record.cuid,
+                comment: e.target.value
+            });
+        }
+    }
+
+    updateElapsedTime () {
+        const { record } = this.props.recorder;
+
+        if (record) {
+            this.props.updateRecordElapsed({
+                cuid: record.cuid
+            });
+        }
+    }
+
+    render () {
+
+        if (!this.props.isLoggedIn) {
+            return null;
+        }
+
+        const { record } = this.props.recorder;
 
     // eslint-disable
-    const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
-    const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
+        const btnStop = <button onClick={this.onStop} className='recorder-button recorder-button--stop'>■</button>;
+        const btnStart = <button onClick={this.onStart} className='recorder-button recorder-button--start'>●</button>;
     // eslint-enable
 
-    const comment = (
-      <textarea
-        className='recorder-comment'
-        value={this.state.comment}
-        onChange={this.onCommentChange}
-        ref='comment'
+        const comment = (
+          <textarea
+            className='recorder-comment'
+            value={this.state.comment}
+            onChange={this.onCommentChange}
+            ref='comment'
       />
     );
 
-    let notifications;
-    const num = this.state.addingTasksFromDropOrPaste;
-    if (num) {
-      const options = {
-        isActive: true,
-        dismissAfter: 999999,
-        message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
-      };
-      notifications = <Notification {...options} />;
-    }
+        let notifications;
+        const num = this.state.addingTasksFromDropOrPaste;
+        if (num) {
+            const options = {
+                isActive: true,
+                dismissAfter: 999999,
+                message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
+            };
+            notifications = <Notification {...options} />;
+        }
 
-    let issueInfoDisplay;
-    if (record) {
-      if (record.taskIssueKey) {
-        issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
-      } else {
-        issueInfoDisplay = <div className='recorder-issue-info'>No issue key? Really? Not cool dude.</div>;
-      }
-    }
+        let issueInfoDisplay;
+        if (record) {
+            if (record.taskIssueKey) {
+                issueInfoDisplay = <div className='recorder-issue-info'>{record.taskIssueKey}</div>;
+            } else {
+                issueInfoDisplay = <div className='recorder-issue-info'>No issue key? Really? Not cool dude.</div>;
+            }
+        }
 
-    return (
-      <div className='recorder recorder--show'>
-        {notifications}
-        <div className='recorder-left'>
-          <div className='recorder-issue-info'>
-            {issueInfoDisplay}
-            <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
+        return (
+          <div className='recorder recorder--show'>
+            {notifications}
+            <div className='recorder-left'>
+              <div className='recorder-issue-info'>
+                {issueInfoDisplay}
+                <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
+              </div>
+              {record ? comment : null}
+            </div>
+            <div className='recorder-buttons'>
+              {record ? btnStop : null}
+              {btnStart}
+            </div>
           </div>
-          {record ? comment : null}
-        </div>
-        <div className='recorder-buttons'>
-          {record ? btnStop : null}
-          {btnStart}
-        </div>
-      </div>
-    )
-  }
+        )
+    }
 }
 

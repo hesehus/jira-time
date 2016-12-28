@@ -12,167 +12,167 @@ import './HistoryRecordItem.scss';
 
 export default class HistoryRecordItem extends Component {
 
-  static propTypes = {
-    record: PropTypes.object.isRequired,
-    setRecordDate: PropTypes.func.isRequired,
-    onSyncedChange: PropTypes.func.isRequired,
-    onSyncedSynced: PropTypes.func.isRequired,
-    onNotSyncedSynced: PropTypes.func.isRequired
-  }
+    static propTypes = {
+        record: PropTypes.object.isRequired,
+        setRecordDate: PropTypes.func.isRequired,
+        onSyncedChange: PropTypes.func.isRequired,
+        onSyncedSynced: PropTypes.func.isRequired,
+        onNotSyncedSynced: PropTypes.func.isRequired
+    }
 
-  constructor (props) {
-    super(props);
+    constructor (props) {
+        super(props);
 
-    this.onStartTimeChange = this.onStartTimeChange.bind(this);
-    this.onEndTimeChange = this.onEndTimeChange.bind(this);
-    this.onSyncClick = this.onSyncClick.bind(this);
+        this.onStartTimeChange = this.onStartTimeChange.bind(this);
+        this.onEndTimeChange = this.onEndTimeChange.bind(this);
+        this.onSyncClick = this.onSyncClick.bind(this);
 
-    this.state = {};
+        this.state = {};
 
-    this.originalRecord = Object.assign({}, props.record);
-  }
+        this.originalRecord = Object.assign({}, props.record);
+    }
 
-  onStartTimeChange (time) {
+    onStartTimeChange (time) {
 
-    const { record } = this.props;
+        const { record } = this.props;
 
-    const startTime = moment(record.startTime);
-    const endTime = moment(record.endTime);
+        const startTime = moment(record.startTime);
+        const endTime = moment(record.endTime);
 
-    const vals = time.split(':');
+        const vals = time.split(':');
 
-    startTime.set('hours', vals[0]);
-    startTime.set('minute', vals[1]);
+        startTime.set('hours', vals[0]);
+        startTime.set('minute', vals[1]);
 
-    this.onChange({ startTime, endTime });
-  }
+        this.onChange({ startTime, endTime });
+    }
 
-  onEndTimeChange (time) {
-    const { record } = this.props;
+    onEndTimeChange (time) {
+        const { record } = this.props;
 
-    const startTime = moment(record.startTime);
-    const endTime = moment(record.endTime);
+        const startTime = moment(record.startTime);
+        const endTime = moment(record.endTime);
 
-    const vals = time.split(':');
+        const vals = time.split(':');
 
-    endTime.set('hours', vals[0]);
-    endTime.set('minute', vals[1]);
+        endTime.set('hours', vals[0]);
+        endTime.set('minute', vals[1]);
 
-    this.onChange({ startTime, endTime });
-  }
+        this.onChange({ startTime, endTime });
+    }
 
-  onChange ({ startTime, endTime }) {
-    const recordInfo = {
-      cuid: this.props.record.cuid,
-      startTime: startTime.toDate(),
-      endTime: endTime.toDate()
-    };
+    onChange ({ startTime, endTime }) {
+        const recordInfo = {
+            cuid: this.props.record.cuid,
+            startTime: startTime.toDate(),
+            endTime: endTime.toDate()
+        };
 
     // Un-synced item. Just update the redux state
-    if (!this.isSynced()) {
-      this.props.setRecordDate(recordInfo);
-    } else {
-      const isDirty = !moment(recordInfo.startTime).isSame(this.originalRecord.startTime) ||
+        if (!this.isSynced()) {
+            this.props.setRecordDate(recordInfo);
+        } else {
+            const isDirty = !moment(recordInfo.startTime).isSame(this.originalRecord.startTime) ||
                       !moment(recordInfo.endTime).isSame(this.originalRecord.endTime);
 
-      this.props.onSyncedChange(recordInfo, isDirty);
+            this.props.onSyncedChange(recordInfo, isDirty);
+        }
     }
-  }
 
-  onSyncClick () {
-    const { record } = this.props;
+    onSyncClick () {
+        const { record } = this.props;
 
-    const syncer = new Sync({
-      records: [record]
-    });
+        const syncer = new Sync({
+            records: [record]
+        });
 
     /**
     * This is already synced, and is not in our redux state.
     * We need to keep track of the state ourself here
     **/
-    if (record.id) {
-      this.setState({
-        syncing: true
-      });
+        if (record.id) {
+            this.setState({
+                syncing: true
+            });
 
-      syncer.on('logSynced', () => {
-        this.setState({
-          syncing: false
-        });
+            syncer.on('logSynced', () => {
+                this.setState({
+                    syncing: false
+                });
 
-        this.props.onSyncedSynced(record);
-      });
-    } else {
-      syncer.on('logSynced', ({ worklog }) => {
-        this.props.onNotSyncedSynced({ record, worklog });
-      });
+                this.props.onSyncedSynced(record);
+            });
+        } else {
+            syncer.on('logSynced', ({ worklog }) => {
+                this.props.onNotSyncedSynced({ record, worklog });
+            });
+        }
+
+        syncer.start();
     }
 
-    syncer.start();
-  }
+    isSynced () {
+        return !!this.props.record.created;
+    }
 
-  isSynced () {
-    return !!this.props.record.created;
-  }
+    canBeExported () {
+        const { record } = this.props;
 
-  canBeExported () {
-    const { record } = this.props;
+        return record.isDirty || (!this.isSynced() && !record.active);
+    }
 
-    return record.isDirty || (!this.isSynced() && !record.active);
-  }
+    render () {
+        const { record } = this.props;
 
-  render () {
-    const { record } = this.props;
+        const startTime = moment(record.startTime);
+        const endTime = moment(record.endTime);
+        const elapsedTime = record.elapsedTime || getElapsedTime({ startTime, endTime });
 
-    const startTime = moment(record.startTime);
-    const endTime = moment(record.endTime);
-    const elapsedTime = record.elapsedTime || getElapsedTime({ startTime, endTime });
-
-    const startTimeDisplay = (
-      <TimeInput
-        value={startTime.format('HH:mm')}
-        className='date-inp__input date-inp__input--time'
-        onChange={this.onStartTimeChange}
+        const startTimeDisplay = (
+          <TimeInput
+            value={startTime.format('HH:mm')}
+            className='date-inp__input date-inp__input--time'
+            onChange={this.onStartTimeChange}
       />
     );
 
-    let endTimeDisplay = endTime.format('HH:mm');
-    if (this.isSynced() || !record.active) {
-      endTimeDisplay = (
-        <TimeInput
-          value={endTimeDisplay}
-          className='date-inp__input date-inp__input--time'
-          onChange={this.onEndTimeChange}
+        let endTimeDisplay = endTime.format('HH:mm');
+        if (this.isSynced() || !record.active) {
+            endTimeDisplay = (
+              <TimeInput
+                value={endTimeDisplay}
+                className='date-inp__input date-inp__input--time'
+                onChange={this.onEndTimeChange}
         />
       );
-    }
+        }
 
-    let className = 'history-record';
-    if (this.canBeExported()) {
-      className += ' history-record--can-be-exported';
-    }
+        let className = 'history-record';
+        if (this.canBeExported()) {
+            className += ' history-record--can-be-exported';
+        }
 
-    let Icon = ExportIcon;
-    if (record.syncing || this.state.syncing) {
-      Icon = LoadingIcon;
-    }
+        let Icon = ExportIcon;
+        if (record.syncing || this.state.syncing) {
+            Icon = LoadingIcon;
+        }
 
-    return (
-      <tr className={className}>
-        <td>{record.taskIssueKey}</td>
-        <td>{startTimeDisplay}</td>
-        <td>{endTimeDisplay}</td>
-        <td>{elapsedTime}</td>
-        <td>{record.comment}</td>
-        <td>
-          <img
-            src={Icon}
-            alt='Export'
-            onClick={this.onSyncClick}
-            className='history-record-icon'
+        return (
+          <tr className={className}>
+            <td>{record.taskIssueKey}</td>
+            <td>{startTimeDisplay}</td>
+            <td>{endTimeDisplay}</td>
+            <td>{elapsedTime}</td>
+            <td>{record.comment}</td>
+            <td>
+              <img
+                src={Icon}
+                alt='Export'
+                onClick={this.onSyncClick}
+                className='history-record-icon'
           />
-        </td>
-      </tr>
-    );
-  }
+            </td>
+          </tr>
+        );
+    }
 }

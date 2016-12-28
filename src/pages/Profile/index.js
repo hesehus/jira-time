@@ -1,6 +1,6 @@
 import Profile from './containers/Profile';
 
 export default {
-  path : 'profile',
-  component: Profile
+    path : 'profile',
+    component: Profile
 }

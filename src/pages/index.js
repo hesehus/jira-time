@@ -5,15 +5,15 @@ import Profile from './Profile';
 import Summary from './Summary';
 
 export const createRoutes = (store) => {
-  return {
-    path        : '/',
-    component   : CoreLayout,
-    indexRoute  : Home,
-    childRoutes : [
-      Profile,
-      Summary
-    ]
-  };
+    return {
+        path        : '/',
+        component   : CoreLayout,
+        indexRoute  : Home,
+        childRoutes : [
+            Profile,
+            Summary
+        ]
+    };
 };
 
 export default createRoutes;
