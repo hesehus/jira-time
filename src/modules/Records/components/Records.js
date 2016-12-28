@@ -17,9 +17,9 @@ export default class Records extends Component {
         const { records } = this.props;
 
         return (
-          <div className='records'>
-            {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
-          </div>
+            <div className='records'>
+                {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
+            </div>
         );
     }
 }

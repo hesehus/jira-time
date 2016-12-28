@@ -96,10 +96,10 @@ export default class RecordItem extends Component {
 
     componentWillReceiveProps (nextProps) {
 
-    /**
-    * We need to wrap this in a timeout since this callback will be fired multiple times
-    * with old values first, which makes for a really weird user experience
-    **/
+        /**
+        * We need to wrap this in a timeout since this callback will be fired multiple times
+        * with old values first, which makes for a really weird user experience
+        **/
         clearTimeout(this.willUpdateCommentTimeout);
         this.willUpdateCommentTimeout = setTimeout(() => {
             if (nextProps.record) {
@@ -263,51 +263,51 @@ export default class RecordItem extends Component {
         let btnSync;
         if (record.syncing) {
             btnSync = (
-              <div className='record__sync record__sync--syncing' title='Syncing!'>
-                <img className='record__sync-icon' src={LoadingIcon} alt='Loading' />
-              </div>
+                <div className='record__sync record__sync--syncing' title='Syncing!'>
+                    <img className='record__sync-icon' src={LoadingIcon} alt='Loading' />
+                </div>
       );
         } else {
             btnSync = (
-              <div className='record__sync' onClick={this.onSyncClick} title='Sync this worklog to JIRA'>
-                <img className='record__sync-icon' src={ExportIcon} alt='Export' />
-              </div>
+                <div className='record__sync' onClick={this.onSyncClick} title='Sync this worklog to JIRA'>
+                    <img className='record__sync-icon' src={ExportIcon} alt='Export' />
+                </div>
       );
         }
 
         return (
-          <div className={className} ref={(i) => this.outer = i}>
-            <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
-            <div className='record-time'>
-              <div className='record-dates'>
-                <DateInput
-                  date={record.startTime}
-                  type='start'
-                  onChange={this.onStartTimeChange}
-                  disabled={someRecordIsMoving}
+            <div className={className} ref={(i) => this.outer = i}>
+                <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
+                <div className='record-time'>
+                    <div className='record-dates'>
+                        <DateInput
+                          date={record.startTime}
+                          type='start'
+                          onChange={this.onStartTimeChange}
+                          disabled={someRecordIsMoving}
             />
-                {record.endTime ? (
-                  <DateInput
-                    date={record.endTime}
-                    type='end'
-                    onChange={this.onEndTimeChange}
-                    disabled={someRecordIsMoving}
+                        {record.endTime ? (
+                            <DateInput
+                              date={record.endTime}
+                              type='end'
+                              onChange={this.onEndTimeChange}
+                              disabled={someRecordIsMoving}
               />
             ) : (
               null
             )}
-              </div>
-              <span className='record__elapsed-time'>{record.elapsedTime}</span>
-            </div>
-            <textarea
-              className='record-comment'
-              onChange={this.onCommentChange}
-              value={this.state.comment}
-              disabled={someRecordIsMoving}
-              ref={(i) => this.inputComment = i}
+                    </div>
+                    <span className='record__elapsed-time'>{record.elapsedTime}</span>
+                </div>
+                <textarea
+                  className='record-comment'
+                  onChange={this.onCommentChange}
+                  value={this.state.comment}
+                  disabled={someRecordIsMoving}
+                  ref={(i) => this.inputComment = i}
         />
-            {btnSync}
-          </div>
+                {btnSync}
+            </div>
         );
     }
 }

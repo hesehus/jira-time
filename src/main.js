@@ -25,7 +25,7 @@ let render = () => {
     const routes = require('./pages/index').default(store);
 
     ReactDOM.render(
-      <AppContainer store={store} routes={routes} />,
+        <AppContainer store={store} routes={routes} />,
     MOUNT_NODE
   );
 };

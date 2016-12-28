@@ -28,6 +28,7 @@
     "padded-blocks"        : 0,
     "trailing-spaces"      : [0, { "skipBlankLines": true }],
     "indent"               : ["error", 4],
+    "react/jsx-indent"     : ["error", 4],
     "no-extra-boolean-cast": "off",
     "no-tabs"              : [1],
     "no-mixed-spaces-and-tabs": [1],

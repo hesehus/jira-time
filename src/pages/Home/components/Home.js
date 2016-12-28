@@ -22,9 +22,9 @@ export class Home extends Component {
 
     render () {
         return (
-          <div className='home'>
-            {this.props.loggedIn ? <Tasks /> : <Login />}
-          </div>
+            <div className='home'>
+                {this.props.loggedIn ? <Tasks /> : <Login />}
+            </div>
         );
     }
 }

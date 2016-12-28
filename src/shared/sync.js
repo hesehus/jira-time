@@ -43,7 +43,7 @@ export default class Sync extends EventClass {
 
     syncIterator () {
 
-    // Moving on to next issue
+        // Moving on to next issue
         const processNext = () => {
             this.index += 1;
             this.syncIterator();
@@ -57,25 +57,25 @@ export default class Sync extends EventClass {
             return this.emit('done');
         } else {
 
-      // No end time specified. Moving on
+            // No end time specified. Moving on
             if (!record.endTime) {
                 console.log('Cannot sync record. No end time', record)
                 return processNext();
             }
 
-      // Must have a comment
+            // Must have a comment
             if (!record.comment) {
                 console.log('Cannot sync record. No comment', record)
                 return processNext();
             }
 
-      // Must have a issue key
+            // Must have a issue key
             if (!record.taskIssueKey) {
                 console.log('Cannot sync record. No task issue key', record)
                 return processNext();
             }
 
-      // Must be at least one minute
+            // Must be at least one minute
             if ((ensureDate(record.endTime) - ensureDate(record.startTime)) < 60000) {
                 console.log('Cannot sync record. Less than a minute', record)
                 return processNext();
@@ -88,7 +88,7 @@ export default class Sync extends EventClass {
                 syncing: true
             }));
 
-      // Determine if we are updating or adding worklog
+            // Determine if we are updating or adding worklog
             let adder;
             if (record.id) {
                 adder = updateWorklog({ record })
@@ -97,68 +97,67 @@ export default class Sync extends EventClass {
             }
 
             adder
-        .then(r => r && r.json ? r.json() : r)
-        .then((worklog) => {
+            .then(r => r && r.json ? r.json() : r)
+            .then((worklog) => {
 
-            store.dispatch(removeRecord({
-                cuid: record.cuid
-            }));
+                store.dispatch(removeRecord({
+                    cuid: record.cuid
+                }));
 
-            const status = {
-                record,
-                nextRecord: this.records[this.index + 1],
-                didSync: true,
-                worklog
-            };
+                const status = {
+                    record,
+                    nextRecord: this.records[this.index + 1],
+                    didSync: true,
+                    worklog
+                };
 
-            this.emit('logSynced', status);
+                this.emit('logSynced', status);
 
-            this.refreshIssue(status);
+                this.refreshIssue(status);
 
-            processNext();
-        })
-        .catch((response) => {
+                processNext();
+            })
+            .catch((response) => {
 
-            store.dispatch(setRecordSync({
-                cuid: record.cuid,
-                syncing: false
-            }));
+                store.dispatch(setRecordSync({
+                    cuid: record.cuid,
+                    syncing: false
+                }));
 
-          /* eslint-disable */
-          if (response.status === 403) {
-            swal(
-              'Damn!',
-              `Looks like you don't have permissions to log to ${record.taskIssueKey}.<br />Did you change your login password or something?`,
-              'error'
-            );
-          } else if (response.status === 400) {
-            swal(
-              'Hey...!',
-              `Looks like not all info required to log to ${record.taskIssueKey} was provided.<br />Shape up!`,
-              'error'
-            );
-          } else {
-            console.error(response);
-            swal(
-              'Whuut?',
-              `I failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
-              'error'
-            );
-          }
-          /* eslint-enable */
+                /* eslint-disable */
+                if (response.status === 403) {
+                    swal(
+                        'Damn!',
+                        `Looks like you don't have permissions to log to ${record.taskIssueKey}.<br />Did you change your login password or something?`,
+                        'error'
+                    );
+                } else if (response.status === 400) {
+                    swal(
+                        'Hey...!',
+                        `Looks like not all info required to log to ${record.taskIssueKey} was provided.<br />Shape up!`,
+                        'error'
+                    );
+                } else {
+                    swal(
+                        'Whuut?',
+                        `I failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
+                        'error'
+                    );
+                }
+                /* eslint-enable */
 
-            this.emit('syncTaskError', {
-                record,
-                nextRecord: this.records[this.index + 1],
-                didSync: false
+                this.emit('syncTaskError', {
+                    record,
+                    nextRecord: this.records[this.index + 1],
+                    didSync: false
+                });
+
+                processNext();
             });
-
-            processNext();
-        });
         }
     }
 
-  // Refresh issue info when all the records for the task is synced
+    // Refresh issue info when all the records for the task is synced
     refreshIssue ({ record, nextRecord }) {
         if (!nextRecord || record.taskCuid !== nextRecord.taskCuid) {
 
@@ -170,18 +169,18 @@ export default class Sync extends EventClass {
             getIssue({
                 key: record.taskIssueKey
             })
-      .then((issue) => {
-          store.dispatch(refreshIssue({
-              cuid: record.taskCuid,
-              issue
-          }));
-      })
-      .catch(() => {
-          store.dispatch(setIssueRefreshing({
-              cuid: record.taskCuid,
-              refreshing: false
-          }));
-      });
+            .then((issue) => {
+                store.dispatch(refreshIssue({
+                    cuid: record.taskCuid,
+                    issue
+                }));
+            })
+            .catch(() => {
+                store.dispatch(setIssueRefreshing({
+                    cuid: record.taskCuid,
+                    refreshing: false
+                }));
+            });
         }
     }
 }

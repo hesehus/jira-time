@@ -45,12 +45,12 @@ export class TasksInLimbo extends Component {
 
     // Output the list of tasks
         return (
-          <div className={className}>
-            <div className='records-header'>{textInLimbo}</div>
-            {recordsWithNoIssue.map((record) => (
-              <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />
+            <div className={className}>
+                <div className='records-header'>{textInLimbo}</div>
+                {recordsWithNoIssue.map((record) => (
+                    <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />
         ))}
-          </div>
+            </div>
         );
     }
 }

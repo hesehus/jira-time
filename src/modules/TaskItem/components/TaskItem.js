@@ -180,31 +180,31 @@ export class TaskItem extends Component {
       // There are errors with the task. Display that instead of issue info
             if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
                 return (
-                  <div className='task-item task-item--errors'>
-                    <div className='task-item-info'>
-                      <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-                      <span className='task-item__summary'>
-                        {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
-                      </span>
+                    <div className='task-item task-item--errors'>
+                        <div className='task-item-info'>
+                            <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
+                            <span className='task-item__summary'>
+                                {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
+                            </span>
+                        </div>
+                        {records}
                     </div>
-                    {records}
-                  </div>
                 );
             }
 
             refreshIcon = (
-              <span className='task-item__issue-refresh'
-                title='Click to refresh the JIRA issue, yo!'
-                onClick={this.onIssueRefreshClick}>
-                <img src={RefreshIcon} alt='Refresh' className='task-item__issue-refresh-image' />
-              </span>
+                <span className='task-item__issue-refresh'
+                  title='Click to refresh the JIRA issue, yo!'
+                  onClick={this.onIssueRefreshClick}>
+                    <img src={RefreshIcon} alt='Refresh' className='task-item__issue-refresh-image' />
+                </span>
       );
         }
         if (task.issueRefreshing) {
             refreshIcon = (
-              <span className='task-item__issue-refresh'>
-                <img src={LoadingIcon} alt='Loading' className='task-item__loading' />
-              </span>
+                <span className='task-item__issue-refresh'>
+                    <img src={LoadingIcon} alt='Loading' className='task-item__loading' />
+                </span>
       );
         }
 
@@ -221,42 +221,42 @@ export class TaskItem extends Component {
 
     // Output the task
         return (
-          <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
-            <div className='task-item__info'>
-              <div className='task-item__left'>
-                <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-                <span className='task-item__key'>
-                  {refreshIcon}
-                  <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
-                </span>
-              </div>
-              <div className='task-item__mid'>
-                <span className='task-item__summary'>{task.issue.fields.summary}</span>
-              </div>
-              <div className='task-item__right'>
-                {status}
-                <input className='task-item__remaining'
-                  value={remainingEstimate}
-                  onFocus={this.onRemainignFocus}
-                  onBlur={this.onRemainignBlur}
-                  ref='inputRemaining'
-                  disabled={!!movingRecord}
+            <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
+                <div className='task-item__info'>
+                    <div className='task-item__left'>
+                        <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
+                        <span className='task-item__key'>
+                            {refreshIcon}
+                            <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
+                        </span>
+                    </div>
+                    <div className='task-item__mid'>
+                        <span className='task-item__summary'>{task.issue.fields.summary}</span>
+                    </div>
+                    <div className='task-item__right'>
+                        {status}
+                        <input className='task-item__remaining'
+                          value={remainingEstimate}
+                          onFocus={this.onRemainignFocus}
+                          onBlur={this.onRemainignBlur}
+                          ref='inputRemaining'
+                          disabled={!!movingRecord}
             />
-                <div className='task-item__btn-group'>
-                  <button className='task-item__log task-item__log--passive'
-                    title='Add a worklog'
-                    onClick={this.onStartPassiveLogClick}>
-                    <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
-                  </button>
-                  <button className='task-item__log task-item__log--active'
-                    title='Start new worklog'
-                    onClick={this.onStartActiveLogClick}>●
+                        <div className='task-item__btn-group'>
+                            <button className='task-item__log task-item__log--passive'
+                              title='Add a worklog'
+                              onClick={this.onStartPassiveLogClick}>
+                                <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
+                            </button>
+                            <button className='task-item__log task-item__log--active'
+                              title='Start new worklog'
+                              onClick={this.onStartActiveLogClick}>●
               </button>
+                        </div>
+                    </div>
                 </div>
-              </div>
+                {records}
             </div>
-            {records}
-          </div>
         );
     }
 }

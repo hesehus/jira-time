@@ -10,6 +10,12 @@ class AppContainer extends Component {
         store   : PropTypes.object.isRequired
     }
 
+    constructor (props) {
+        super(props);
+
+        KeyAndPasteEventsHandler.init();
+    }
+
     shouldComponentUpdate () {
         return false;
     }
@@ -18,12 +24,10 @@ class AppContainer extends Component {
         const { routes, store } = this.props
 
         return (
-          <Provider store={store}>
-            <KeyAndPasteEventsHandler>
-              <Router history={hashHistory} children={routes} />
-            </KeyAndPasteEventsHandler>
-          </Provider>
-        )
+            <Provider store={store}>
+                <Router history={hashHistory} children={routes} />
+            </Provider>
+        );
     }
 }
 

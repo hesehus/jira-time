@@ -120,47 +120,47 @@ export class Login extends Component {
 
                 if (this.state.tooManyFailedLoginAttempts === 1) {
                     error = (
-                      <div className='login-error'>
-                        <div className='login-error__header'>
+                        <div className='login-error'>
+                            <div className='login-error__header'>
                             Yo. Looks like you have too many failed login attempts!
                         </div>
-                        <div>
+                            <div>
                             Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
                         </div>
-                        <div className='login-error__footer'>
+                            <div className='login-error__footer'>
                             And for the future, <b>remember your credentials dude!</b>
+                            </div>
                         </div>
-                      </div>
                     );
                 } else if (this.state.tooManyFailedLoginAttempts > 5) {
                     error = (
-                      <div className='login-error'>
-                        <div className='login-error__header'>
+                        <div className='login-error'>
+                            <div className='login-error__header'>
                             You are truly impossible!
                             You <u><b>STILL</b></u> have too many failed login attempts!!!!
                         </div>
-                        <div>
+                            <div>
                             Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
                         </div>
-                        <div className='login-error__footer'>
+                            <div className='login-error__footer'>
                             And for the future, <b>remember your credentials dude!</b>
+                            </div>
                         </div>
-                      </div>
                     );
                 } else {
                     error = (
-                      <div className='login-error'>
-                        <div className='login-error__header'>
+                        <div className='login-error'>
+                            <div className='login-error__header'>
                             Things have not changed...
                             You <u>still</u> have too many failed login attempts!
                         </div>
-                        <div>
+                            <div>
                             Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
                         </div>
-                        <div className='login-error__footer'>
+                            <div className='login-error__footer'>
                             And for the future, <b>remember your credentials dude!</b>
+                            </div>
                         </div>
-                      </div>
                     );
                 }
 
@@ -170,30 +170,30 @@ export class Login extends Component {
         }
 
         return (
-          <form className='login' onSubmit={this.onSubmit}>
-            <label className='login-label'>
-              <div className='login-label__text'>Username:</div>
-              <input type='text'
-                ref='username'
-                name='username'
-                defaultValue={this.props.username}
-                disabled={this.state.loggingIn}
-          />
-            </label>
-            <label className='login-label'>
-              <div className='login-label__text'>Password:</div>
-              <input type='password'
-                ref='password'
-                name='password'
-                disabled={this.state.loggingIn}
-          />
-            </label>
+            <form className='login' onSubmit={this.onSubmit}>
+                <label className='login-label'>
+                    <div className='login-label__text'>Username:</div>
+                    <input type='text'
+                      ref='username'
+                      name='username'
+                      defaultValue={this.props.username}
+                      disabled={this.state.loggingIn}
+                />
+                </label>
+                <label className='login-label'>
+                    <div className='login-label__text'>Password:</div>
+                    <input type='password'
+                      ref='password'
+                      name='password'
+                      disabled={this.state.loggingIn}
+                />
+                </label>
 
-            {error}
+                {error}
 
-            {!this.state.loggingIn ? <button>Login</button> : null}
-            {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
-          </form>
+                {!this.state.loggingIn ? <button>Login</button> : null}
+                {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
+            </form>
         );
     }
 }

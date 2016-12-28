@@ -98,15 +98,15 @@ export default class Summary extends Component {
 
         if (!records || loading) {
             return (
-              <div className='summary summary--loading'>
-                <img src={LoadingIcon} alt='Loading' />
-              </div>
+                <div className='summary summary--loading'>
+                    <img src={LoadingIcon} alt='Loading' />
+                </div>
             );
         }
 
         if (records && records.length === 0 && notSyncedRecords.length === 0) {
             return (
-              <div className='summary summary--no-found'>
+                <div className='summary summary--no-found'>
           No worklogs found today
         </div>
             );
@@ -156,23 +156,23 @@ export default class Summary extends Component {
             }
 
             outputItems.push((
-              <HistoryRecordItem
-                key={record.cuid}
-                record={record}
-                onSyncedChange={this.onSyncedChange}
-                onSyncedSynced={this.onSyncedSynced}
-                onNotSyncedSynced={this.onNotSyncedSynced}
+                <HistoryRecordItem
+                  key={record.cuid}
+                  record={record}
+                  onSyncedChange={this.onSyncedChange}
+                  onSyncedSynced={this.onSyncedSynced}
+                  onNotSyncedSynced={this.onNotSyncedSynced}
         />
       ));
         });
 
         return (
-          <div className='summary'>
-            <table className='summary-table'>
-              {outputItems}
-            </table>
-            <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
-          </div>
+            <div className='summary'>
+                <table className='summary-table'>
+                    {outputItems}
+                </table>
+                <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
+            </div>
         );
     }
 }

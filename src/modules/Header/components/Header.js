@@ -75,8 +75,8 @@ export default class Header extends Component {
         let updateAvailable;
         if (this.state.serviceWorkerUpdated) {
             updateAvailable = (
-              <div className='update-available' onClick={this.onUpdateAvailableClick}>
-                <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
+                <div className='update-available' onClick={this.onUpdateAvailableClick}>
+                    <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
           Update available!
         </div>
       );
@@ -86,18 +86,18 @@ export default class Header extends Component {
         let sync;
         if (this.state.syncing) {
             sync = (
-              <div className='header__button header__button--syncing' title='Syncing!'>
-                <img className='header__icon' src={LoadingIcon} alt='Loading' />
-              </div>
+                <div className='header__button header__button--syncing' title='Syncing!'>
+                    <img className='header__icon' src={LoadingIcon} alt='Loading' />
+                </div>
             );
         } else if (!!this.props.records.length) {
             sync = (
-              <div id='sync-button'
-                className='header__button'
-                onClick={this.onSyncClick}
-                title='Sync all worklogs to JIRA'>
-                <img className='header__icon' src={ExportIcon} alt='Export' />
-              </div>
+                <div id='sync-button'
+                  className='header__button'
+                  onClick={this.onSyncClick}
+                  title='Sync all worklogs to JIRA'>
+                    <img className='header__icon' src={ExportIcon} alt='Export' />
+                </div>
             );
         }
 
@@ -131,26 +131,26 @@ export default class Header extends Component {
         }
 
         return (
-          <div className='header'>
-            <div className='header__left'>
-              <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
-              {updateAvailable}
+            <div className='header'>
+                <div className='header__left'>
+                    <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
+                    {updateAvailable}
+                </div>
+                <div className='header__center'>
+                    <Link to='/summary' className={classNameSummary}>
+                        <img className='header__icon' src={CalendarIcon} alt='Calendar' />
+                    </Link>
+                    <IndexLink to='/' className={classNameHome}>
+                        <img className='header__icon' src={ListIcon} alt='Home' />
+                    </IndexLink>
+                    <Link to='/profile' className={classNameProfile}>
+                        <img className='header__icon' src={avatarUrl} alt='Profile' />
+                    </Link>
+                </div>
+                <div className='header__right'>
+                    {this.props.loggedIn ? sync : null}
+                </div>
             </div>
-            <div className='header__center'>
-              <Link to='/summary' className={classNameSummary}>
-                <img className='header__icon' src={CalendarIcon} alt='Calendar' />
-              </Link>
-              <IndexLink to='/' className={classNameHome}>
-                <img className='header__icon' src={ListIcon} alt='Home' />
-              </IndexLink>
-              <Link to='/profile' className={classNameProfile}>
-                <img className='header__icon' src={avatarUrl} alt='Profile' />
-              </Link>
-            </div>
-            <div className='header__right'>
-              {this.props.loggedIn ? sync : null}
-            </div>
-          </div>
         );
     }
 }

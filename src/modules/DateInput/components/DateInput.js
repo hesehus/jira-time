@@ -90,12 +90,12 @@ export default class DateInput extends Component {
         const className = `date-inp date-inp--${this.props.type}`;
 
         const dateDisplay = (
-          <input type='date'
-            ref='date'
-            defaultValue={date}
-            onChange={this.onDateChange}
-            className='date-inp__input date-inp__input--date'
-            disabled={this.props.disabled}
+            <input type='date'
+              ref='date'
+              defaultValue={date}
+              onChange={this.onDateChange}
+              className='date-inp__input date-inp__input--date'
+              disabled={this.props.disabled}
        />
     );
 
@@ -103,15 +103,15 @@ export default class DateInput extends Component {
         let today = <span className='date-inp__today' onClick={this.onTodayClick}>Today</span>;
 
         return (
-          <span className={className}>
-            {isToday && !this.state.showDate ? today : dateDisplay}
-            <TimeInput
-              value={time}
-              className='date-inp__input date-inp__input--time'
-              onChange={this.onTimeChange}
-              disabled={this.props.disabled}
+            <span className={className}>
+                {isToday && !this.state.showDate ? today : dateDisplay}
+                <TimeInput
+                  value={time}
+                  className='date-inp__input date-inp__input--time'
+                  onChange={this.onTimeChange}
+                  disabled={this.props.disabled}
         />
-          </span>
+            </span>
         );
     }
 }

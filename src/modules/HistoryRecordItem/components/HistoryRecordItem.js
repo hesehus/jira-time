@@ -129,20 +129,20 @@ export default class HistoryRecordItem extends Component {
         const elapsedTime = record.elapsedTime || getElapsedTime({ startTime, endTime });
 
         const startTimeDisplay = (
-          <TimeInput
-            value={startTime.format('HH:mm')}
-            className='date-inp__input date-inp__input--time'
-            onChange={this.onStartTimeChange}
+            <TimeInput
+              value={startTime.format('HH:mm')}
+              className='date-inp__input date-inp__input--time'
+              onChange={this.onStartTimeChange}
       />
     );
 
         let endTimeDisplay = endTime.format('HH:mm');
         if (this.isSynced() || !record.active) {
             endTimeDisplay = (
-              <TimeInput
-                value={endTimeDisplay}
-                className='date-inp__input date-inp__input--time'
-                onChange={this.onEndTimeChange}
+                <TimeInput
+                  value={endTimeDisplay}
+                  className='date-inp__input date-inp__input--time'
+                  onChange={this.onEndTimeChange}
         />
       );
         }
@@ -158,21 +158,21 @@ export default class HistoryRecordItem extends Component {
         }
 
         return (
-          <tr className={className}>
-            <td>{record.taskIssueKey}</td>
-            <td>{startTimeDisplay}</td>
-            <td>{endTimeDisplay}</td>
-            <td>{elapsedTime}</td>
-            <td>{record.comment}</td>
-            <td>
-              <img
-                src={Icon}
-                alt='Export'
-                onClick={this.onSyncClick}
-                className='history-record-icon'
+            <tr className={className}>
+                <td>{record.taskIssueKey}</td>
+                <td>{startTimeDisplay}</td>
+                <td>{endTimeDisplay}</td>
+                <td>{elapsedTime}</td>
+                <td>{record.comment}</td>
+                <td>
+                    <img
+                      src={Icon}
+                      alt='Export'
+                      onClick={this.onSyncClick}
+                      className='history-record-icon'
           />
-            </td>
-          </tr>
+                </td>
+            </tr>
         );
     }
 }

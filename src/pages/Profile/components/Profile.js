@@ -40,11 +40,11 @@ export class Profile extends Component {
         const { username } = this.props.profile;
 
         return (
-          <div className='profile'>
-            <div>Username: {username}</div>
-            <div>App shortcuts: ALT+a: add issue(s)</div>
-            <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
-          </div>
+            <div className='profile'>
+                <div>Username: {username}</div>
+                <div>App shortcuts: ALT+a: add issue(s)</div>
+                <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
+            </div>
         );
     }
 }

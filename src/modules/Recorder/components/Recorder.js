@@ -176,11 +176,11 @@ export default class Recorder extends Component {
     // eslint-enable
 
         const comment = (
-          <textarea
-            className='recorder-comment'
-            value={this.state.comment}
-            onChange={this.onCommentChange}
-            ref='comment'
+            <textarea
+              className='recorder-comment'
+              value={this.state.comment}
+              onChange={this.onCommentChange}
+              ref='comment'
       />
     );
 
@@ -205,20 +205,20 @@ export default class Recorder extends Component {
         }
 
         return (
-          <div className='recorder recorder--show'>
-            {notifications}
-            <div className='recorder-left'>
-              <div className='recorder-issue-info'>
-                {issueInfoDisplay}
-                <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
-              </div>
-              {record ? comment : null}
+            <div className='recorder recorder--show'>
+                {notifications}
+                <div className='recorder-left'>
+                    <div className='recorder-issue-info'>
+                        {issueInfoDisplay}
+                        <div className='recorder-elapsed-time'>{record ? record.elapsedTime : null}</div>
+                    </div>
+                    {record ? comment : null}
+                </div>
+                <div className='recorder-buttons'>
+                    {record ? btnStop : null}
+                    {btnStart}
+                </div>
             </div>
-            <div className='recorder-buttons'>
-              {record ? btnStop : null}
-              {btnStart}
-            </div>
-          </div>
         )
     }
 }
