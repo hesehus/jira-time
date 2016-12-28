@@ -68,7 +68,7 @@ export default class HistoryRecordItem extends Component {
             endTime: endTime.toDate()
         };
 
-    // Un-synced item. Just update the redux state
+        // Un-synced item. Just update the redux state
         if (!this.isSynced()) {
             this.props.setRecordDate(recordInfo);
         } else {
@@ -86,10 +86,10 @@ export default class HistoryRecordItem extends Component {
             records: [record]
         });
 
-    /**
-    * This is already synced, and is not in our redux state.
-    * We need to keep track of the state ourself here
-    **/
+        /**
+        * This is already synced, and is not in our redux state.
+        * We need to keep track of the state ourself here
+        **/
         if (record.id) {
             this.setState({
                 syncing: true
@@ -133,8 +133,8 @@ export default class HistoryRecordItem extends Component {
               value={startTime.format('HH:mm')}
               className='date-inp__input date-inp__input--time'
               onChange={this.onStartTimeChange}
-      />
-    );
+             />
+        );
 
         let endTimeDisplay = endTime.format('HH:mm');
         if (this.isSynced() || !record.active) {
@@ -143,8 +143,8 @@ export default class HistoryRecordItem extends Component {
                   value={endTimeDisplay}
                   className='date-inp__input date-inp__input--time'
                   onChange={this.onEndTimeChange}
-        />
-      );
+                />
+            );
         }
 
         let className = 'history-record';
@@ -159,11 +159,11 @@ export default class HistoryRecordItem extends Component {
 
         return (
             <tr className={className}>
-                <td>{record.taskIssueKey}</td>
+                <td><a href={'/browse/' + record.taskIssueKey} target='_blank'>{record.taskIssueKey}</a></td>
                 <td>{startTimeDisplay}</td>
                 <td>{endTimeDisplay}</td>
                 <td>{elapsedTime}</td>
-                <td>{record.comment}</td>
+                <td className='history-record-comment'>{record.comment}</td>
                 <td>
                     <img
                       src={Icon}

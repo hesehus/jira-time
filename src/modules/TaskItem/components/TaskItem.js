@@ -152,10 +152,10 @@ export class TaskItem extends Component {
             id: task.issue.key,
             remainingEstimate,
 
-        /*
-          We need to send the original estimate along due to a bug in the JIRA REST API:
-          https://jira.atlassian.com/browse/JRA-30459
-        */
+            /*
+            We need to send the original estimate along due to a bug in the JIRA REST API:
+            https://jira.atlassian.com/browse/JRA-30459
+            */
             originalEstimate: issue.fields.timetracking.originalEstimate
         });
     });
@@ -174,10 +174,10 @@ export class TaskItem extends Component {
 
         let refreshIcon;
 
-    // This task does have a JIRA issue
+        // This task does have a JIRA issue
         if (task.issue) {
 
-      // There are errors with the task. Display that instead of issue info
+            // There are errors with the task. Display that instead of issue info
             if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
                 return (
                     <div className='task-item task-item--errors'>
@@ -198,14 +198,14 @@ export class TaskItem extends Component {
                   onClick={this.onIssueRefreshClick}>
                     <img src={RefreshIcon} alt='Refresh' className='task-item__issue-refresh-image' />
                 </span>
-      );
+            );
         }
         if (task.issueRefreshing) {
             refreshIcon = (
                 <span className='task-item__issue-refresh'>
                     <img src={LoadingIcon} alt='Loading' className='task-item__loading' />
                 </span>
-      );
+            );
         }
 
         let remainingEstimate = task.issue.fields.timetracking.remainingEstimate;
@@ -214,12 +214,12 @@ export class TaskItem extends Component {
         }
 
         const status = (
-        task.issue.fields.status
-          ? <span className='task-item__status'>{task.issue.fields.status.name}</span>
-          : null
-    );
+            task.issue.fields.status
+            ? <span className='task-item__status'>{task.issue.fields.status.name}</span>
+            : null
+        );
 
-    // Output the task
+        // Output the task
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 <div className='task-item__info'>
@@ -241,7 +241,7 @@ export class TaskItem extends Component {
                           onBlur={this.onRemainignBlur}
                           ref='inputRemaining'
                           disabled={!!movingRecord}
-            />
+                        />
                         <div className='task-item__btn-group'>
                             <button className='task-item__log task-item__log--passive'
                               title='Add a worklog'
@@ -251,7 +251,7 @@ export class TaskItem extends Component {
                             <button className='task-item__log task-item__log--active'
                               title='Start new worklog'
                               onClick={this.onStartActiveLogClick}>●
-              </button>
+                            </button>
                         </div>
                     </div>
                 </div>

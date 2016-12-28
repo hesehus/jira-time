@@ -31,7 +31,7 @@ const ACTION_HANDLERS = {
         }
     },
 
-  // Listen for logout
+    // Listen for logout
     [SET_LOGGED_IN] : (state, action) => {
         if (action.isLoggedIn) {
             return state;

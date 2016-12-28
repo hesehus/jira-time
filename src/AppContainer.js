@@ -3,6 +3,7 @@ import { hashHistory, Router } from 'react-router';
 import { Provider, connect } from 'react-redux';
 
 import KeyAndPasteEventsHandler from 'modules/KeyAndPasteEventsHandler';
+import DragAndDropHandler from 'modules/DragAndDropHandler';
 
 class AppContainer extends Component {
     static propTypes = {
@@ -14,6 +15,7 @@ class AppContainer extends Component {
         super(props);
 
         KeyAndPasteEventsHandler.init();
+        DragAndDropHandler.init();
     }
 
     shouldComponentUpdate () {

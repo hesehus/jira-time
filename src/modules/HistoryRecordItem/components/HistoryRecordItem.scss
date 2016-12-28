@@ -1,5 +1,13 @@
 .history-record {
 
+  td {
+    white-space: nowrap;
+
+    &.history-record-comment {
+      white-space: normal;
+    }
+  }
+
   &-icon {
     opacity: 0;
     height: 24px;

@@ -82,7 +82,7 @@ export default class Summary extends Component {
   **/
     onNotSyncedSynced ({ record, worklog }) {
 
-    // Since not synced records will dissapear from the redux state, we need to adde them manually here
+        // Since not synced records will dissapear from the redux state, we need to adde them manually here
         worklog.taskIssueKey = record.taskIssueKey;
         const newRecord = RecordModel(worklog);
 
@@ -107,44 +107,44 @@ export default class Summary extends Component {
         if (records && records.length === 0 && notSyncedRecords.length === 0) {
             return (
                 <div className='summary summary--no-found'>
-          No worklogs found today
-        </div>
+                    No worklogs found today
+                </div>
             );
         }
 
-    // Filter out active record
+        // Filter out active record
         if (activeRecord) {
             notSyncedRecords = notSyncedRecords.filter(r => r.cuid !== activeRecord.cuid);
         }
 
-    // Combine the synced and not synced records
+        // Combine the synced and not synced records
         let outputRecords = [...notSyncedRecords, ...records];
         if (activeRecord) {
             outputRecords.push(Object.assign({}, activeRecord, { active: true }));
         }
 
-    // Momentify
+        // Momentify
         outputRecords.forEach((r) => {
             r.startTime = moment(r.startTime);
             r.endTime = moment(r.endTime);
         });
 
-    // Sort by time started
+        // Sort by time started
         outputRecords = outputRecords.sort((a, b) => a.startTime.unix() - b.startTime.unix());
 
-    // Calculate duration
+        // Calculate duration
         let duration = moment.duration();
         outputRecords.forEach((r) => {
             duration.add(r.endTime.unix() - r.startTime.unix(), 'seconds');
         });
 
-    // Compose list with empty spaces within
+        // Compose list with empty spaces within
         let outputItems = [];
         outputRecords.forEach((record, index) => {
             const prev = outputRecords[index - 1];
             if (prev) {
 
-        // Consider everything over 1m as a space
+                // Consider everything over 1m as a space
                 const duration = record.startTime.unix() - prev.endTime.unix();
                 if (duration > 59) {
                     const elapsedTime = getElapsedTime({
@@ -162,8 +162,8 @@ export default class Summary extends Component {
                   onSyncedChange={this.onSyncedChange}
                   onSyncedSynced={this.onSyncedSynced}
                   onNotSyncedSynced={this.onNotSyncedSynced}
-        />
-      ));
+                />
+            ));
         });
 
         return (

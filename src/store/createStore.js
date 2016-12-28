@@ -6,14 +6,14 @@ import makeRootReducer from './reducers.js';
 import { updateLocation } from './reducers/location';
 
 export default () => {
-  // ======================================================
-  // Middleware Configuration
-  // ======================================================
+    // ======================================================
+    // Middleware Configuration
+    // ======================================================
     const middleware = [thunk];
 
-  // ======================================================
-  // Store Enhancers
-  // ======================================================
+    // ======================================================
+    // Store Enhancers
+    // ======================================================
     const enhancers = [];
     if (__DEV__) {
         const devToolsExtension = window.devToolsExtension;
@@ -22,24 +22,26 @@ export default () => {
         }
     }
 
-  // ======================================================
-  // Store Instantiation and HMR Setup
-  // ======================================================
+    // ======================================================
+    // Store Instantiation and HMR Setup
+    // ======================================================
     const store = createStore(
-    makeRootReducer(),
-    undefined,
-    compose(
-      autoRehydrate(),
-      applyMiddleware(...middleware),
-      ...enhancers
-    )
-  );
+      makeRootReducer(),
+      undefined,
+      compose(
+        autoRehydrate(),
+        applyMiddleware(...middleware),
+        ...enhancers
+      )
+    );
 
-    persistStore(store);
+    persistStore(store, {
+        blacklist: []
+    });
 
     store.asyncReducers = {};
 
-  // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
+    // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
     store.unsubscribeHistory = hashHistory.listen(updateLocation(store));
 
     if (module.hot) {
