@@ -156,11 +156,6 @@ export default class RecordItem extends Component {
             if (closestTask) {
                 taskCuid = closestTask.dataset.cuid;
                 taskIssueKey = closestTask.dataset.taskissuekey;
-                this.targetIsRecordsWithNoIssue = false;
-            } else {
-                if (domClosest(target, '.records--no-issue')) {
-                    this.targetIsRecordsWithNoIssue = true;
-                }
             }
 
             if (this.targetTaskCuid !== taskCuid) {

@@ -11,14 +11,12 @@ export class TasksInLimbo extends Component {
         recordsWithNoIssue: PropTypes.array.isRequired
     }
 
-    render () {
-
-        const { movingRecord, recordsWithNoIssue } = this.props;
+    render ({ movingRecord, recordsWithNoIssue }) {
 
         let textInLimbo;
         switch (recordsWithNoIssue.length) {
         case 0 : {
-            textInLimbo = 'Hurray! No work logs in limbo';
+            textInLimbo = 'No work logs in limbo!';
             break;
         }
         case 1 : {
@@ -37,19 +35,20 @@ export class TasksInLimbo extends Component {
         }
         }
 
-        let className = 'records records--no-issue';
-
+        let className = 'task-item task-item--limbo';
         if (movingRecord && !movingRecord.taskDroppableCuid) {
-            className += ' records--drop-active';
+            className += ' task-item--drop-active';
         }
 
-    // Output the list of tasks
+        // Output the list of tasks
         return (
             <div className={className}>
-                <div className='records-header'>{textInLimbo}</div>
-                {recordsWithNoIssue.map((record) => (
-                    <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />
-        ))}
+                <div className='records records--no-issue'>
+                    <div className='records-header'>{textInLimbo}</div>
+                    {recordsWithNoIssue.map((record) => (
+                        <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />
+                    ))}
+                </div>
             </div>
         );
     }

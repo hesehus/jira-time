@@ -3,9 +3,12 @@
   padding: 5px 10px 5px 48px;
   border-top: 1px solid #f0f0f0;
   align-items: center;
-  font-size: .8rem;
-  background: #fff;
   box-sizing: border-box;
+  
+  &,
+  input[type='text'] {
+    font-size: .7rem;
+  }
 
   &__sync {
     height: 100%;
@@ -22,7 +25,6 @@
         opacity: 1;
       }
     }
-
   }
 
   &--syncing {

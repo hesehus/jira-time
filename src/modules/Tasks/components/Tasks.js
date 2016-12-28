@@ -33,8 +33,8 @@ export class Tasks extends Component {
         // Output the list of tasks
         return (
             <div className='tasks-outer'>
-                <TasksInLimbo />
                 <div className='tasks'>
+                    <TasksInLimbo />
                     {tasks.map((task, index) => <TaskItem key={index} task={task} />)}
                 </div>
             </div>
