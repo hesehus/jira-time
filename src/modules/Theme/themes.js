@@ -1,8 +1,12 @@
-const themes = {
-    BLUE: 'blue',
-    RED: 'red'
-};
-
-Object.freeze(themes);
+const themes = [
+    {
+        key: 'red',
+        name: 'Red'
+    },
+    {
+        key: 'blue',
+        name: 'Blue'
+    }
+];
 
 export default themes;

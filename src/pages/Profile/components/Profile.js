@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 
 import { logout, updateUserInfo } from 'shared/jiraClient';
 
+import ThemeSelector from 'modules/ThemeSelector';
 import Login from 'modules/Login';
 
 import './Profile.scss';
@@ -42,6 +43,7 @@ export class Profile extends Component {
         return (
             <div className='profile'>
                 <div>Username: {username}</div>
+                <ThemeSelector />
                 <div>App shortcuts: ALT+a: add issue(s)</div>
                 <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
             </div>

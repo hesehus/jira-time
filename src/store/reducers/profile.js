@@ -1,7 +1,12 @@
+import themes from 'modules/theme/themes';
+
 const initialState = {
     loggedIn: false,
     username: '',
-    userinfo: {}
+    userinfo: {},
+    preferences: {
+        theme: themes[0].key
+    }
 };
 
 // ------------------------------------
@@ -9,6 +14,7 @@ const initialState = {
 // ------------------------------------
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_USER_INFO = 'SET_USER_INFO';
+export const SET_THEME = 'SET_THEME';
 
 // ------------------------------------
 // Actions
@@ -25,6 +31,13 @@ export function setUserInfo ({ userinfo }) {
     return {
         type: SET_USER_INFO,
         userinfo
+    }
+};
+
+export function setTheme ({ theme }) {
+    return {
+        type: SET_THEME,
+        theme
     }
 };
 
@@ -45,6 +58,16 @@ ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
     return {
         ...state,
         userinfo: action.userinfo
+    };
+}
+
+ACTION_HANDLERS[SET_THEME] = (state, action) => {
+    return {
+        ...state,
+        preferences: {
+            ...state.preferences,
+            theme: action.theme
+        }
     };
 }
 

@@ -1,11 +1,16 @@
+@import '_variables';
+
 .theme {
 
+    // Fallback color if something is wrong with setting the theme
+    background: #777;
+
     &-red {
-        background: radial-gradient(circle, #D56588 0%, #5C3F61 100%);
+        background: $theme-red-background;
     }
 
     &-blue {
-        background: radial-gradient(circle, #D56588 0%, #5C3F61 100%);
+        background: $theme-blue-background;
     }
 
     &,
@@ -18,6 +23,10 @@
     textarea {
         background: transparent;
         color: #fff;
+    }
+
+    textarea {
+        border: 1px solid rgba(255, 255, 255, .5);
     }
 
     button {

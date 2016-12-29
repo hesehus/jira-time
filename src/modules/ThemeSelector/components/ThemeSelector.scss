@@ -1,0 +1,43 @@
+@import '_variables';
+
+.theme-selector {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px 0;
+
+    &-title {
+        text-align: center;
+    }
+
+    &-list {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px 0 0;
+        padding: 0;
+    }
+
+    &-list-item {
+        height: 40px;
+        width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: .5rem;
+        margin: 0 5px;
+        cursor: pointer;
+
+        &--red {
+            background: $theme-red-background;
+        }
+        &--blue {
+            background: $theme-blue-background;
+        }
+
+        &--selected {
+            outline: 1px solid #fff;
+        }
+    }
+}

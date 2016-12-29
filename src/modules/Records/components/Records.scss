@@ -1,12 +1,6 @@
 .records {
 
-  transition: background 100ms;
-
-  &--no-issue {
-    border-bottom: 1px solid #ccc;
-  }
-  
-  &-header {
-    padding: 10px 5px;
-  }
+    &-header:not(:last-child) {
+        margin-bottom: 15px;
+    }
 }
