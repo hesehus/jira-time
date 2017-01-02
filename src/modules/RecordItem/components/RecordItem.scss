@@ -5,6 +5,7 @@
   box-sizing: border-box;
   background: rgba(255, 255, 255, .2);
   border-radius: 6px;
+  transition: background 150ms;
 
   &:not(:last-child) {
     margin-bottom: 5px;
@@ -37,11 +38,9 @@
   }
 
   &--moving {
-    position: absolute;
-    z-index: 1;
-    left: 0;
-    width: 100%;
+    z-index: 99;
     box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+    background: rgba(255, 255, 255, .4);
   }
 
   &-remove {

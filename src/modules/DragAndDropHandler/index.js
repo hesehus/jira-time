@@ -69,7 +69,7 @@ function onPanMove (e) {
     if (record && recordElement) {
         e.preventDefault();
 
-        recordElement.style.top = `${e.center.y + 20}px`;
+        recordElement.style.transform = `translate3d(0px, ${e.deltaY + 60}px, 0) scale(1.01)`;
 
         const target = document.elementFromPoint(e.center.x, e.center.y);
         const closestTask = domClosest(target, '.task-item');
@@ -110,9 +110,15 @@ function onPanEnd (e) {
 function panCleanup () {
     clearSelection();
     document.body.classList.remove('moving');
+
+    if (recordElement) {
+        recordElement.style.transform = ``;
+    }
 }
 
 function cancelPan () {
+    panCleanup();
+    
     targetTaskCuid = null;
     recordElement = null;
 
@@ -123,8 +129,6 @@ function cancelPan () {
             moving: false
         }));
     }
-
-    panCleanup();
 }
 
 // Clears any HTML text selection on the page
