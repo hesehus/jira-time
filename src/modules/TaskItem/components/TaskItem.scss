@@ -101,6 +101,12 @@
     flex-shrink: 1;
     flex-grow: 1;
 
+    // Temporary test with the new design
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
     @media (max-width: $screen-sm) {
       margin: 0;
     }

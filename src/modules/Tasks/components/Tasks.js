@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
+import DraggableTasks from './DraggableTasks';
 import TaskItem from 'modules/TaskItem';
 import TasksInLimbo from 'modules/TasksInLimbo';
 
@@ -34,8 +35,11 @@ export class Tasks extends Component {
         return (
             <div className='tasks-outer'>
                 <div className='tasks'>
-                    <TasksInLimbo />
-                    {tasks.map((task, index) => <TaskItem key={index} task={task} />)}
+                    <div className='tasks-draggable-real'>
+                        <TasksInLimbo />
+                        {tasks.map((task, index) => <TaskItem key={index} task={task} />)}
+                    </div>
+                    <DraggableTasks />
                 </div>
             </div>
         );

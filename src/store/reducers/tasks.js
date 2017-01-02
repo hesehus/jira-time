@@ -14,6 +14,7 @@ export const REMOVE_TASK = 'REMOVE_TASK';
 export const REFRESH_ISSUE = 'REFRESH_ISSUE';
 export const SET_ISSUE_REMAINING_ESTIMATE = 'SET_ISSUE_REMAINING_ESTIMATE';
 export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
+export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 
 // ------------------------------------
 // Actions
@@ -52,6 +53,12 @@ export function setIssueRemainingEstimate ({ cuid, remainingEstimate }) {
         remainingEstimate
     }
 };
+export function setManualSortOrder ({ tasks }) {
+    return {
+        type: SET_MANUAL_SORT_ORDER,
+        tasks
+    }
+};
 
 // ------------------------------------
 // Action Handlers
@@ -71,6 +78,11 @@ const ACTION_HANDLERS = {
 
         return {
             tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
+        };
+    },
+    [SET_MANUAL_SORT_ORDER] : (state, { tasks }) => {
+        return {
+            tasks
         };
     },
     [REFRESH_ISSUE] : (state, action) => {
