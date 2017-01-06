@@ -84,7 +84,7 @@ function onPanMove (event) {
         if (record) {
             event.preventDefault();
 
-            recordElement.style.top = `${event.center.y + 20}px`;
+            recordElement.style.transform = `translate3d(0px, ${event.deltaY + 60}px, 0) scale(1.01)`;
 
             const target = document.elementFromPoint(event.center.x, event.center.y);
             const closestTask = domClosest(target, '.task-item');
@@ -145,10 +145,13 @@ function onPanEnd (e) {
 function panCleanup () {
     clearSelection();
     document.body.classList.remove('moving');
+
+    if (recordElement) {
+        recordElement.style.transform = ``;
+    }
 }
 
 function cancelPan () {
-
     if (recordElement) {
         events.emit('pancancel:record');
 
