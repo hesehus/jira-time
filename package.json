@@ -103,6 +103,7 @@
     "deep-assign": "^2.0.0",
     "dom-closest": "^0.2.0",
     "event-class-es6": "^1.0.3",
+    "event-emitter": "^0.3.4",
     "extract-text-webpack-plugin": "^1.0.0",
     "file-loader": "^0.9.0",
     "fs-extra": "^0.30.0",

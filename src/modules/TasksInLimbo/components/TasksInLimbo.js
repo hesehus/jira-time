@@ -11,7 +11,9 @@ export class TasksInLimbo extends Component {
         recordsWithNoIssue: PropTypes.array.isRequired
     }
 
-    render ({ movingRecord, recordsWithNoIssue }) {
+    render () {
+
+        const { movingRecord, recordsWithNoIssue } = this.props;
 
         let textInLimbo;
         switch (recordsWithNoIssue.length) {

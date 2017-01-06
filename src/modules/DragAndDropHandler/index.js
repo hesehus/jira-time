@@ -2,6 +2,7 @@ import Hammer from 'hammerjs';
 import keycode from 'keycode';
 import domClosest from 'dom-closest';
 
+import events from 'shared/events';
 import {
     setRecordTask,
     setRecordMoving,
@@ -10,6 +11,7 @@ import {
 } from 'store/reducers/recorder';
 
 let eventsBinded;
+let taskElement;
 let recordElement;
 let targetTaskCuid;
 let targetTaskIssueKey;
@@ -43,67 +45,100 @@ function onKeyPress (e) {
     }
 }
 
-function onPanStart (e) {
-    if (e.target.type !== 'textarea' && e.target.type !== 'input') {
-
-        recordElement = domClosest(e.target, '.record');
+function onPanStart (event) {
+    if (event.target.type !== 'textarea' && event.target.type !== 'input') {
+        recordElement = domClosest(event.target, '.record');
         if (recordElement) {
-            e.preventDefault();
-
-            clearSelection();
-
-            document.body.classList.add('moving');
+            doSharedMovingPreparations();
 
             store.dispatch(setRecordMoving({
                 cuid: recordElement.dataset.cuid,
                 moving: true
             }));
 
-            onPanMove(e);
+            onPanMove(event);
+            return;
         }
+
+        taskElement = domClosest(event.target, '.task-item');
+        if (taskElement) {
+            doSharedMovingPreparations();
+
+            return events.emit('panstart:task', {
+                event,
+                element: taskElement
+            });
+        }
+    }
+
+    function doSharedMovingPreparations () {
+        event.preventDefault();
+        clearSelection();
+        document.body.classList.add('moving');
     }
 }
 
-function onPanMove (e) {
-    const record = getMovingRecord({ state: store.getState() });
-    if (record && recordElement) {
-        e.preventDefault();
+function onPanMove (event) {
+    if (recordElement) {
+        const record = getMovingRecord({ state: store.getState() });
+        if (record) {
+            event.preventDefault();
 
-        recordElement.style.top = `${e.center.y + 20}px`;
+            recordElement.style.top = `${event.center.y + 20}px`;
 
-        const target = document.elementFromPoint(e.center.x, e.center.y);
-        const closestTask = domClosest(target, '.task-item');
+            const target = document.elementFromPoint(event.center.x, event.center.y);
+            const closestTask = domClosest(target, '.task-item');
 
-        let taskCuid;
-        let taskIssueKey;
+            let taskCuid;
+            let taskIssueKey;
 
-        if (closestTask) {
-            taskCuid = closestTask.dataset.cuid;
-            taskIssueKey = closestTask.dataset.taskissuekey;
+            if (closestTask) {
+                taskCuid = closestTask.dataset.cuid;
+                taskIssueKey = closestTask.dataset.taskissuekey;
+            }
+
+            if (targetTaskCuid !== taskCuid) {
+                targetTaskCuid = taskCuid;
+                targetTaskIssueKey = taskIssueKey;
+
+                store.dispatch(setRecordMoveTarget({
+                    cuid: record.cuid,
+                    taskCuid
+                }));
+            }
         }
+        return;
+    }
 
-        if (targetTaskCuid !== taskCuid) {
-            targetTaskCuid = taskCuid;
-            targetTaskIssueKey = taskIssueKey;
-
-            store.dispatch(setRecordMoveTarget({
-                cuid: record.cuid,
-                taskCuid
-            }));
-        }
+    if (taskElement) {
+        event.preventDefault();
+        return events.emit('panmove:task', {
+            event,
+            element: taskElement
+        });
     }
 }
 
 function onPanEnd (e) {
-    const record = getMovingRecord({ state: store.getState() });
-    if (record) {
-        store.dispatch(setRecordTask({
-            cuid: record.cuid,
-            taskCuid: targetTaskCuid,
-            taskIssueKey: targetTaskIssueKey
-        }));
+    if (recordElement) {
+        const record = getMovingRecord({ state: store.getState() });
+        if (record) {
+            store.dispatch(setRecordTask({
+                cuid: record.cuid,
+                taskCuid: targetTaskCuid,
+                taskIssueKey: targetTaskIssueKey
+            }));
 
+            e.preventDefault();
+            panCleanup();
+            return;
+        }
+    }
+
+    if (taskElement) {
+        e.preventDefault();
         panCleanup();
+        return events.emit('panend:task', e);
     }
 }
 
@@ -113,18 +148,28 @@ function panCleanup () {
 }
 
 function cancelPan () {
-    targetTaskCuid = null;
-    recordElement = null;
 
-    const record = getMovingRecord({ state: store.getState() });
-    if (record) {
-        store.dispatch(setRecordMoving({
-            cuid: record.cuid,
-            moving: false
-        }));
+    if (recordElement) {
+        events.emit('pancancel:record');
+
+        targetTaskCuid = null;
+        recordElement = null;
+
+        const record = getMovingRecord({ state: store.getState() });
+        if (record) {
+            store.dispatch(setRecordMoving({
+                cuid: record.cuid,
+                moving: false
+            }));
+        }
+    } else if (taskElement) {
+        events.emit('pancancel:task');
+
+        taskElement = null;
     }
 
     panCleanup();
+    clearSelection();
 }
 
 // Clears any HTML text selection on the page

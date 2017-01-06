@@ -23,6 +23,7 @@ export class TaskItem extends Component {
             startRecording: PropTypes.func.isRequired,
             refreshIssue: PropTypes.func.isRequired,
             setIssueRefreshing: PropTypes.func.isRequired,
+            setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object
         };
     }
@@ -34,6 +35,7 @@ export class TaskItem extends Component {
         this.onStartPassiveLogClick = this.onStartPassiveLogClick.bind(this);
         this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
         this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
+        this.onRemainignChange = this.onRemainignChange.bind(this);
         this.onRemainignBlur = this.onRemainignBlur.bind(this);
 
         this.state = {};
@@ -90,25 +92,24 @@ export class TaskItem extends Component {
         getIssue({
             key: task.issue.key
         })
-    .then((issue) => {
+        .then((issue) => {
 
-        this.props.refreshIssue({
-            cuid: task.cuid,
-            issue
-        });
+            this.props.refreshIssue({
+                cuid: task.cuid,
+                issue
+            });
 
-        this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
-    })
-    .catch(() => {
-        this.props.setIssueRefreshing({
-            cuid: task.cuid,
-            refreshing: false
+            this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
+        })
+        .catch(() => {
+            this.props.setIssueRefreshing({
+                cuid: task.cuid,
+                refreshing: false
+            });
         });
-    });
     }
 
-    setRemainingInputValue (remaining) {
-        if (!remaining) remaining = '';
+    setRemainingInputValue (remaining = '') {
         if (!focusingOnRemaining) {
             const remInp = this.refs.inputRemaining;
             if (remInp && remInp.value !== remaining) {
@@ -121,6 +122,18 @@ export class TaskItem extends Component {
         focusingOnRemaining = true;
     }
 
+    onRemainignChange (e) {
+
+        const remainingEstimate = e.target.value;
+
+        const { task } = this.props;
+
+        this.props.setIssueRemainingEstimate({
+            cuid: task.cuid,
+            remainingEstimate
+        });
+    }
+
     onRemainignBlur (e) {
 
         focusingOnRemaining = false;
@@ -131,34 +144,33 @@ export class TaskItem extends Component {
 
         this.props.setIssueRefreshing({
             cuid: task.cuid,
-            refreshing: true,
-            remainingEstimate
+            refreshing: true
         });
 
         getIssue({
             key: task.issue.key
         })
-    .then((issue) => {
+        .then((issue) => {
 
-      // Ensure that our remaining estimate gets persisted
-        issue.fields.timetracking.remainingEstimate = remainingEstimate;
+        // Ensure that our remaining estimate gets persisted
+            issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
-        this.props.refreshIssue({
-            cuid: task.cuid,
-            issue
+            this.props.refreshIssue({
+                cuid: task.cuid,
+                issue
+            });
+
+            setIssueRemaining({
+                id: task.issue.key,
+                remainingEstimate,
+
+                /*
+                We need to send the original estimate along due to a bug in the JIRA REST API:
+                https://jira.atlassian.com/browse/JRA-30459
+                */
+                originalEstimate: issue.fields.timetracking.originalEstimate
+            });
         });
-
-        setIssueRemaining({
-            id: task.issue.key,
-            remainingEstimate,
-
-            /*
-            We need to send the original estimate along due to a bug in the JIRA REST API:
-            https://jira.atlassian.com/browse/JRA-30459
-            */
-            originalEstimate: issue.fields.timetracking.originalEstimate
-        });
-    });
     }
 
     render () {
@@ -238,6 +250,7 @@ export class TaskItem extends Component {
                         <input className='task-item__remaining'
                           value={remainingEstimate}
                           onFocus={this.onRemainignFocus}
+                          onChange={this.onRemainignChange}
                           onBlur={this.onRemainignBlur}
                           ref='inputRemaining'
                           disabled={!!movingRecord}

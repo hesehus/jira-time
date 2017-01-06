@@ -5,10 +5,12 @@ import './Theme.scss';
 export class Theme extends Component {
 
     static propTypes = {
-        profile: PropTypes.object
+        profile: PropTypes.object,
+        children: PropTypes.object
     }
 
-    render ({ children, profile }) {
+    render () {
+        const { children, profile } = this.props;
         const theme = `theme theme-${profile.preferences.theme}`;
         return <div className={theme}>{children}</div>;
     }

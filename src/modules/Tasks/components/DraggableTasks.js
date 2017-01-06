@@ -1,183 +1,180 @@
 import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
 import { Motion, spring } from 'react-motion';
+import { connect } from 'react-redux';
 
+import events from 'shared/events';
 import { setManualSortOrder } from 'store/reducers/tasks';
 import TaskItem from 'modules/TaskItem';
 
 import './DraggableTasks.scss';
 
-function clamp (n, min, max) {
-    return Math.max(Math.min(n, max), min);
-}
-
 const springConfig = { stiffness: 300, damping: 50 };
 
-class Demo extends Component {
+class DraggablaTasks extends Component {
 
     static propTypes = {
-        tasks: PropTypes.array.isRequired,
-        setManualSortOrder: PropTypes.func.isRequired
+        tasks: PropTypes.array.isRequired
     }
 
     constructor (props) {
         super(props);
 
-        this.handleTouchStart = this.handleTouchStart.bind(this);
-        this.handleTouchMove = this.handleTouchMove.bind(this);
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
+        this.onPanStart = this.onPanStart.bind(this);
+        this.onPanMove = this.onPanMove.bind(this);
+        this.onPanEnd = this.onPanEnd.bind(this);
+        this.onPanCancel = this.onPanCancel.bind(this);
 
         this.state = {
-            topDeltaY: 0,
-            mouseY: 0,
+            y: 0,
+            initialYPosition: 0,
+            initialTasks: [],
             isPressed: false,
-            clientRects: []
+            tasksPositions: []
         };
 
-        this.refs = {};
-    }
-
-    componentWillMount () {
-        this.taskItemRefs = [];
+        events.on('tasksPositionsCalculated', ({ tasksPositions }) => {
+            console.log('Task items positions received!', tasksPositions);
+            this.setState({
+                tasksPositions
+            });
+        });
     }
 
     componentDidMount () {
-        window.addEventListener('touchmove', this.handleTouchMove);
-        window.addEventListener('touchend', this.handleMouseUp);
-        window.addEventListener('mousemove', this.handleMouseMove);
-        window.addEventListener('mouseup', this.handleMouseUp);
-        window.addEventListener('resize', this.calculatePositions);
-
-        this.calculatePositions();
+        events.on('panstart:task', this.onPanStart);
+        events.on('panmove:task', this.onPanMove);
+        events.on('panend:task', this.onPanEnd);
+        events.on('pancancel:task', this.onPanCancel);
     }
 
-    calculatePositions () {
-        const realTasksList = this.refs.outer.parentNode.parentNode.querySelector('.tasks-draggable-real');
-        if (!realTasksList) {
-            return console.error('Could not get the real tasks list');
-        }
+    getCurrentMouseRow ({ y, currentHeight }) {
 
-        const clientRects = [];
-        realTasksList.querySelectorAll('.task-item').forEach(realTask => {
-            clientRects.push({
-                cuid: realTask.dataset.cuid,
-                clientRect: realTask.getBoundingClientRect()
-            });
-        });
-
-        this.setState({
-            clientRects
-        });
-    }
-
-    getCurrentMouseRow ({ mouseY }) {
-        const { clientRects } = this.state;
+        const { tasksPositions } = this.state;
 
         // Determine precise row hit
-        for (let i = 0; i < clientRects.length; i++) {
-            let rect = clientRects[i].clientRect;
-            console.log(mouseY, rect.top, rect.top + rect.height);
-            if (mouseY >= rect.top && (rect.top + rect.height) <= rect.bottom) {
+        for (let i = 0; i < tasksPositions.length; i++) {
+            const rect = tasksPositions[i];
+            const { height } = rect.clientRect;
+
+            // Half way up this item
+            if (y <= (rect.top + (height / 2)) && y >= rect.top) {
+                return i;
+            }
+
+            // Over the top of next
+            if (y <= rect.top) {
                 return i;
             }
         }
 
         // Check if over the first item
-        if (mouseY < clientRects[0].top) {
+        if (y < tasksPositions[0].top) {
             return 0;
         }
 
         // No hit. Assume bottom
-        return clientRects.length - 1;
+        return tasksPositions.length - 1;
     }
 
-    handleTouchStart (taskCuid, pressLocation, e) {
-        this.handleMouseDown(taskCuid, pressLocation, e.touches[0]);
-    }
-
-    handleTouchMove (e) {
-        e.preventDefault();
-        this.handleMouseMove(e.touches[0]);
-    }
-
-    handleMouseDown (taskCuid, pressY, { pageY }) {
-        this.setState({
-            topDeltaY: pageY - pressY,
-            mouseY: pressY,
-            isPressed: taskCuid
-        });
-    }
-
-    handleMouseMove (event) {
-        const { isPressed, topDeltaY } = this.state;
-        const { tasks } = this.props;
-
-        if (isPressed) {
-            event.preventDefault();
-
-            const mouseY = event.pageY - topDeltaY;
-            const currentRow = this.getCurrentMouseRow({ mouseY });
-            const currentArrayPosition = tasks.findIndex(t => t.cuid === isPressed);
-            console.log(currentRow);
-
-            if (currentRow !== currentArrayPosition) {
-                let newTasks = [...tasks];
-                let switchWith = newTasks[currentRow];
-
-                newTasks[currentRow] = newTasks[currentArrayPosition];
-                newTasks[currentArrayPosition] = switchWith;
-
-                // this.props.setManualSortOrder({
-                //     tasks: newTasks
-                // });
-            }
-
+    onPanStart ({ element }) {
+        if (element) {
+            const { tasksPositions } = this.state;
+            const { tasks } = this.props;
+            const { cuid } = element.dataset;
+            const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
             this.setState({
-                mouseY
+                y: clientRectEl.top,
+                initialYPosition: clientRectEl.top,
+                isPressed: cuid,
+                initialTasks: [...tasks]
             });
         }
     }
 
-    handleMouseUp () {
+    onPanMove ({ event, element }) {
+        if (element) {
+            const { tasks } = this.props;
+            const { tasksPositions, initialYPosition } = this.state;
+            const { cuid } = element.dataset;
+            const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
+            const currentArrayPosition = tasks.findIndex(t => t.cuid === cuid);
+
+            if (clientRectEl) {
+                const y = initialYPosition + event.deltaY;
+
+                const currentRow = this.getCurrentMouseRow({ y, currentHeight: clientRectEl.clientRect.height });
+
+                if (currentRow !== currentArrayPosition) {
+                    let newTasks = [...tasks];
+                    let switchWith = newTasks[currentRow];
+
+                    if (switchWith) {
+                        newTasks[currentRow] = newTasks[currentArrayPosition];
+                        newTasks[currentArrayPosition] = switchWith;
+
+                        store.dispatch(setManualSortOrder({
+                            tasks: newTasks
+                        }));
+                    }
+                }
+
+                this.setState({
+                    y
+                });
+            }
+        }
+    }
+
+    onPanEnd () {
         this.setState({
             isPressed: false,
-            topDeltaY: 0
+            y: 0,
+            initialYPosition: 0
+        });
+    }
+
+    onPanCancel () {
+        store.dispatch(setManualSortOrder({
+            tasks: this.state.initialTasks
+        }));
+
+        this.setState({
+            isPressed: false,
+            y: 0,
+            initialYPosition: 0,
+            initialTasks: []
         });
     }
 
     render () {
-        const { mouseY, isPressed, clientRects } = this.state;
+        const { y, isPressed, tasksPositions } = this.state;
         const { tasks } = this.props;
 
-        let heightIncrement = 0;
+        if (!tasksPositions) {
+            return null;
+        }
 
         return (
-            <div className='tasks-draggable' ref={el => this.refs.outer = el}>
+            <div className='tasks-draggable' ref={el => this.refOuter = el}>
                 {tasks.map((task, i) => {
 
-                    const rect = clientRects.find(c => c.cuid === task.cuid);
+                    const rect = tasksPositions.find(c => c.cuid === task.cuid);
                     if (!rect) {
-                        return <div />;
+                        return null;
                     }
-
-                    const top = heightIncrement;
-                    heightIncrement += rect.clientRect.height + 15;
 
                     let style;
                     if (task.cuid === isPressed) {
                         style = {
                             scale: spring(1.05, springConfig),
                             shadow: spring(16, springConfig),
-                            y: mouseY
+                            y
                         };
                     } else {
                         style = {
                             scale: spring(1, springConfig),
                             shadow: spring(0, springConfig),
-                            y: spring(top, springConfig)
+                            y: spring(rect.top, springConfig)
                         };
                     }
 
@@ -185,8 +182,6 @@ class Demo extends Component {
                         <Motion style={style} key={task.cuid}>
                             {({ scale, shadow, y }) =>
                                 <div
-                                  onMouseDown={(e) => this.handleMouseDown(task.cuid, y, e)}
-                                  onTouchStart={(e) => this.handleTouchStart(task.cuid, y, e)}
                                   className='tasks-draggable-item'
                                   style={{
                                       height: `${rect.clientRect.height}px`,
@@ -196,7 +191,7 @@ class Demo extends Component {
                                       zIndex: task.cuid === isPressed ? 99 : i
                                   }}
                                 >
-                                    <TaskItem key={i} task={task} />
+                                    <TaskItem task={task} />
                                 </div>
                             }
                         </Motion>
@@ -209,12 +204,8 @@ class Demo extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        tasks: state.tasks.tasks
-    };
-}
-
-const mapDispatchToProps = {
-    setManualSortOrder
+        tasksPositions: state.tasks.tasksPositions
+    }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Demo);
+export default connect(mapStateToProps)(DraggablaTasks);

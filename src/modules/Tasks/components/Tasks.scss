@@ -1,6 +1,9 @@
 .tasks {
   flex-grow: 1;
-  position: relative;
+
+  &-list-wrap {
+    position: relative;
+  }
 
   &-outer {
     flex-grow: 1;
@@ -29,7 +32,7 @@
     border-radius: 50%;
   }
 
-  &-draggable-real {
+  &-real {
     opacity: 0;
   }
 }

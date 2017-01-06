@@ -30,8 +30,9 @@ body {
   &.moving {
     cursor: default;
 
+    &,
     * {
-      user-select: none;
+      user-select: none !important;
     }
   }
 }

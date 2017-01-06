@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 
+import RealTasks from './RealTasks';
 import DraggableTasks from './DraggableTasks';
-import TaskItem from 'modules/TaskItem';
+
 import TasksInLimbo from 'modules/TasksInLimbo';
 
 import './Tasks.scss';
 
 import lazyDog from 'assets/lazy-dog.png';
 
-export class Tasks extends Component {
+export default class Tasks extends Component {
 
     static propTypes = {
         tasks: PropTypes.array.isRequired,
@@ -35,15 +36,13 @@ export class Tasks extends Component {
         return (
             <div className='tasks-outer'>
                 <div className='tasks'>
-                    <div className='tasks-draggable-real'>
-                        <TasksInLimbo />
-                        {tasks.map((task, index) => <TaskItem key={index} task={task} />)}
+                    <TasksInLimbo />
+                    <div className='tasks-list-wrap'>
+                        <RealTasks tasks={tasks} />
+                        <DraggableTasks tasks={tasks} />
                     </div>
-                    <DraggableTasks />
                 </div>
             </div>
         );
     }
 }
-
-export default Tasks;
