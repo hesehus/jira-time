@@ -139,7 +139,7 @@ export default class Summary extends Component {
         });
 
         // Compose list with empty spaces within
-        let outputItems = [];
+        const outputItems = [];
         outputRecords.forEach((record, index) => {
             const prev = outputRecords[index - 1];
             if (prev) {
@@ -169,7 +169,9 @@ export default class Summary extends Component {
         return (
             <div className='summary'>
                 <table className='summary-table'>
-                    {outputItems}
+                    <tbody>
+                        {outputItems}
+                    </tbody>
                 </table>
                 <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
             </div>

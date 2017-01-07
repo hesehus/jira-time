@@ -11,6 +11,10 @@ export default class Tasks extends Component {
         tasks: PropTypes.array.isRequired
     }
 
+    componentDidMount () {
+        this.calculatePositions();
+    }
+
     componentDidUpdate () {
         this.calculatePositions();
     }
@@ -24,6 +28,10 @@ export default class Tasks extends Component {
         const tasksPositions = [];
         let heightIncrement = 0;
         const taskItems = Array.from(this.el.querySelectorAll('.task-item'));
+
+        if (!taskItems.length) {
+            return;
+        }
 
         tasks.forEach((task) => {
             const realTaskItem = taskItems.find(t => t.dataset.cuid === task.cuid);

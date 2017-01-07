@@ -23,6 +23,7 @@ class DraggablaTasks extends Component {
         this.onPanMove = this.onPanMove.bind(this);
         this.onPanEnd = this.onPanEnd.bind(this);
         this.onPanCancel = this.onPanCancel.bind(this);
+        this.onTasksPositionsCalculated = this.onTasksPositionsCalculated.bind(this);
 
         this.state = {
             y: 0,
@@ -32,12 +33,7 @@ class DraggablaTasks extends Component {
             tasksPositions: []
         };
 
-        events.on('tasksPositionsCalculated', ({ tasksPositions }) => {
-            console.log('Task items positions received!', tasksPositions);
-            this.setState({
-                tasksPositions
-            });
-        });
+        events.on('tasksPositionsCalculated', this.onTasksPositionsCalculated);
     }
 
     componentDidMount () {
@@ -45,6 +41,20 @@ class DraggablaTasks extends Component {
         events.on('panmove:task', this.onPanMove);
         events.on('panend:task', this.onPanEnd);
         events.on('pancancel:task', this.onPanCancel);
+    }
+
+    componentWillUnmount () {
+        events.off('tasksPositionsCalculated', this.onTasksPositionsCalculated);
+        events.off('panstart:task', this.onPanStart);
+        events.off('panmove:task', this.onPanMove);
+        events.off('panend:task', this.onPanEnd);
+        events.off('pancancel:task', this.onPanCancel);
+    }
+
+    onTasksPositionsCalculated ({ tasksPositions }) {
+        this.setState({
+            tasksPositions
+        });
     }
 
     getCurrentMouseRow ({ y, currentHeight }) {
