@@ -24,7 +24,8 @@ export class TaskItem extends Component {
             refreshIssue: PropTypes.func.isRequired,
             setIssueRefreshing: PropTypes.func.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
-            movingRecord: PropTypes.object
+            movingRecord: PropTypes.object,
+            movingTask: PropTypes.object
         };
     }
 
@@ -175,7 +176,7 @@ export class TaskItem extends Component {
 
     render () {
 
-        const { task, movingRecord } = this.props;
+        const { task, movingRecord, movingTask } = this.props;
 
         let className = 'task-item';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
@@ -231,6 +232,8 @@ export class TaskItem extends Component {
             : null
         );
 
+        const somethingIsMoving = !!movingRecord || !!movingTask;
+
         // Output the task
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
@@ -253,7 +256,7 @@ export class TaskItem extends Component {
                           onChange={this.onRemainignChange}
                           onBlur={this.onRemainignBlur}
                           ref='inputRemaining'
-                          disabled={!!movingRecord}
+                          disabled={!!somethingIsMoving}
                         />
                         <div className='task-item__btn-group'>
                             <button className='task-item__log task-item__log--passive'

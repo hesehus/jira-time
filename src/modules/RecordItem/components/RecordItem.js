@@ -21,7 +21,8 @@ export default class RecordItem extends Component {
         setRecordTask: PropTypes.func.isRequired,
         activeRecord: PropTypes.object,
         movingRecord: PropTypes.object,
-        autofocus: PropTypes.bool
+        autofocus: PropTypes.bool,
+        movingTask: PropTypes.object
     }
 
     constructor (props) {
@@ -123,9 +124,9 @@ export default class RecordItem extends Component {
 
     render () {
 
-        let { record, movingRecord } = this.props;
+        let { record, movingRecord, movingTask } = this.props;
 
-        const someRecordIsMoving = !!movingRecord;
+        const somethingIsMoving = !!movingRecord || !!movingTask;
 
         let className = 'record';
         if (record.syncing) {
@@ -162,14 +163,14 @@ export default class RecordItem extends Component {
                           date={record.startTime}
                           type='start'
                           onChange={this.onStartTimeChange}
-                          disabled={someRecordIsMoving}
+                          disabled={somethingIsMoving}
                         />
                         {record.endTime ? (
                             <DateInput
                               date={record.endTime}
                               type='end'
                               onChange={this.onEndTimeChange}
-                              disabled={someRecordIsMoving}
+                              disabled={somethingIsMoving}
                             />
                         ) : (
                         null
@@ -181,7 +182,7 @@ export default class RecordItem extends Component {
                   className='record-comment'
                   onChange={this.onCommentChange}
                   value={this.state.comment}
-                  disabled={someRecordIsMoving}
+                  disabled={somethingIsMoving}
                   ref={(i) => this.inputComment = i}
                 />
                 {btnSync}

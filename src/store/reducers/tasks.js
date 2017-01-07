@@ -15,6 +15,7 @@ export const REFRESH_ISSUE = 'REFRESH_ISSUE';
 export const SET_ISSUE_REMAINING_ESTIMATE = 'SET_ISSUE_REMAINING_ESTIMATE';
 export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
+export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 
 // ------------------------------------
 // Actions
@@ -56,6 +57,13 @@ export function setManualSortOrder ({ tasks }) {
     return {
         type: SET_MANUAL_SORT_ORDER,
         tasks
+    }
+};
+export function setTaskMoving ({ cuid, moving }) {
+    return {
+        type: SET_TASK_MOVING,
+        cuid,
+        moving
     }
 };
 
@@ -134,8 +142,30 @@ const ACTION_HANDLERS = {
         return {
             tasks
         };
+    },
+    [SET_TASK_MOVING] : (state, { cuid, moving }) => {
+
+        let tasks = state.tasks.map(task => {
+            if (task.cuid === cuid) {
+                const newTask = DeepAssign({}, task);
+                newTask.moving = moving;
+                return newTask;
+            }
+            return task;
+        });
+
+        return {
+            tasks
+        };
     }
 };
+
+// ------------------------------------
+// Getters
+// ------------------------------------
+export const getMovingTask = ({ state }) => {
+    return state.tasks.tasks.find(task => task.moving);
+}
 
 // ------------------------------------
 // Reducer

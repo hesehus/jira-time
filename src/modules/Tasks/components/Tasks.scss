@@ -1,15 +1,19 @@
 .tasks {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 
   &-list-wrap {
     position: relative;
+    overflow: scroll;
+    flex-grow: 1;
+    padding: 20px;
   }
 
   &-outer {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    padding: 20px;
   }
 
   &--no-tasks {

@@ -11,12 +11,15 @@ import {
   getMovingRecord
 } from 'store/reducers/recorder';
 
+import { getMovingTask } from 'store/reducers/tasks';
+
 import RecordItem from '../components/RecordItem';
 
 const mapStateToProps = (state, props) => {
     return {
         activeRecord: getActiveRecord({ state }),
-        movingRecord: getMovingRecord({ state })
+        movingRecord: getMovingRecord({ state }),
+        movingTask: getMovingTask({ state })
     };
 }
 

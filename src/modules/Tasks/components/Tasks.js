@@ -13,12 +13,31 @@ export default class Tasks extends Component {
 
     static propTypes = {
         tasks: PropTypes.array.isRequired,
-        recordsWithNoIssue: PropTypes.array.isRequired
+        recordsWithNoIssue: PropTypes.array.isRequired,
+        setManualSortOrder: PropTypes.func.isRequired,
+        setTaskMoving: PropTypes.func.isRequired
+    }
+
+    constructor (props) {
+        super(props);
+
+        this.onScroll = this.onScroll.bind(this);
+
+        this.state = {
+            scrollTop: 0
+        };
+    }
+
+    onScroll (event) {
+        this.setState({
+            scrollTop: event.target.scrollTop
+        });
     }
 
     render () {
 
-        const { tasks, recordsWithNoIssue } = this.props;
+        const { tasks, recordsWithNoIssue, setManualSortOrder, setTaskMoving } = this.props;
+        const { scrollTop } = this.state;
 
         // Tell the user to start working
         if (tasks.length === 0 && recordsWithNoIssue.length === 0) {
@@ -37,9 +56,14 @@ export default class Tasks extends Component {
             <div className='tasks-outer'>
                 <div className='tasks'>
                     <TasksInLimbo />
-                    <div className='tasks-list-wrap'>
+                    <div className='tasks-list-wrap' onScroll={this.onScroll}>
                         <RealTasks tasks={tasks} />
-                        <DraggableTasks tasks={tasks} />
+                        <DraggableTasks
+                          tasks={tasks}
+                          setTaskMoving={setTaskMoving}
+                          setManualSortOrder={setManualSortOrder}
+                          parentScrollTop={scrollTop}
+                        />
                     </div>
                 </div>
             </div>

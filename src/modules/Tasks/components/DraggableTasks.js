@@ -3,7 +3,6 @@ import { Motion, spring } from 'react-motion';
 import { connect } from 'react-redux';
 
 import events from 'shared/events';
-import { setManualSortOrder } from 'store/reducers/tasks';
 import TaskItem from 'modules/TaskItem';
 
 import './DraggableTasks.scss';
@@ -13,7 +12,10 @@ const springConfig = { stiffness: 300, damping: 50 };
 class DraggablaTasks extends Component {
 
     static propTypes = {
-        tasks: PropTypes.array.isRequired
+        tasks: PropTypes.array.isRequired,
+        setManualSortOrder: PropTypes.func.isRequired,
+        setTaskMoving: PropTypes.func.isRequired,
+        parentScrollTop: PropTypes.number.isRequired
     }
 
     constructor (props) {
@@ -30,7 +32,8 @@ class DraggablaTasks extends Component {
             initialYPosition: 0,
             initialTasks: [],
             isPressed: false,
-            tasksPositions: []
+            tasksPositions: [],
+            parentScrollTopAtPanStart: 0
         };
 
         events.on('tasksPositionsCalculated', this.onTasksPositionsCalculated);
@@ -89,28 +92,35 @@ class DraggablaTasks extends Component {
     onPanStart ({ element }) {
         if (element) {
             const { tasksPositions } = this.state;
-            const { tasks } = this.props;
+            const { tasks, parentScrollTop, setTaskMoving } = this.props;
             const { cuid } = element.dataset;
             const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
+
             this.setState({
                 y: clientRectEl.top,
                 initialYPosition: clientRectEl.top,
                 isPressed: cuid,
-                initialTasks: [...tasks]
+                initialTasks: [...tasks],
+                parentScrollTopAtPanStart: parentScrollTop
+            });
+
+            setTaskMoving({
+                cuid,
+                moving: true
             });
         }
     }
 
     onPanMove ({ event, element }) {
         if (element) {
-            const { tasks } = this.props;
-            const { tasksPositions, initialYPosition } = this.state;
+            const { tasks, setManualSortOrder, parentScrollTop } = this.props;
+            const { tasksPositions, initialYPosition, parentScrollTopAtPanStart } = this.state;
             const { cuid } = element.dataset;
             const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
             const currentArrayPosition = tasks.findIndex(t => t.cuid === cuid);
 
             if (clientRectEl) {
-                const y = initialYPosition + event.deltaY;
+                const y = initialYPosition + event.deltaY + (parentScrollTop - parentScrollTopAtPanStart);
 
                 const currentRow = this.getCurrentMouseRow({ y, currentHeight: clientRectEl.clientRect.height });
 
@@ -122,9 +132,9 @@ class DraggablaTasks extends Component {
                         newTasks[currentRow] = newTasks[currentArrayPosition];
                         newTasks[currentArrayPosition] = switchWith;
 
-                        store.dispatch(setManualSortOrder({
+                        setManualSortOrder({
                             tasks: newTasks
-                        }));
+                        });
                     }
                 }
 
@@ -136,6 +146,11 @@ class DraggablaTasks extends Component {
     }
 
     onPanEnd () {
+        this.props.setTaskMoving({
+            cuid: this.state.isPressed,
+            moving: false
+        });
+
         this.setState({
             isPressed: false,
             y: 0,
@@ -144,9 +159,14 @@ class DraggablaTasks extends Component {
     }
 
     onPanCancel () {
-        store.dispatch(setManualSortOrder({
+        this.props.setTaskMoving({
+            cuid: this.state.isPressed,
+            moving: false
+        });
+
+        this.props.setManualSortOrder({
             tasks: this.state.initialTasks
-        }));
+        });
 
         this.setState({
             isPressed: false,
