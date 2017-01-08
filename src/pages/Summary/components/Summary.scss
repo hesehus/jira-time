@@ -2,6 +2,11 @@
   flex-grow: 1;
   padding: 30px;
 
+  &,
+  a {
+    font-size: .7rem;
+  }
+
   &--loading,
   &--no-found {
     display: flex;

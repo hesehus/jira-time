@@ -67,25 +67,17 @@ class DraggablaTasks extends Component {
         // Determine precise row hit
         for (let i = 0; i < tasksPositions.length; i++) {
             const rect = tasksPositions[i];
-            const { height } = rect.clientRect;
-
-            // Half way up this item
-            if (y <= (rect.top + (height / 2)) && y >= rect.top) {
-                return i;
-            }
-
-            // Over the top of next
             if (y <= rect.top) {
                 return i;
             }
         }
 
-        // Check if over the first item
+        // Above the first item?
         if (y < tasksPositions[0].top) {
             return 0;
         }
 
-        // No hit. Assume bottom
+        // No hit. Assume at bottom
         return tasksPositions.length - 1;
     }
 

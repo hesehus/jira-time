@@ -26,26 +26,20 @@
     height: 52px;
     box-sizing: border-box;
 
-    &:hover {}
-
-    &--active {
-      &,
-      &:hover {}
-    }
-
     &--avatar {
       padding: 10px 15px;
     }
   }
 
   &__icon {
-    opacity: .5;
+    opacity: .8;
     transition: opacity 100ms;
     height: 24px;
 
     .header__route--active &,
     .header__route--active:hover &,
-    .header__button--avatar & {
+    .header__button--avatar &,
+    .header__button--active & {
       opacity: 1;
     }
 

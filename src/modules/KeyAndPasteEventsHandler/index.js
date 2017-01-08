@@ -48,11 +48,11 @@ export function init () {
                         text: 'Throw some issue keys at me man!',
                         input: 'text'
                     })
-            .then(text => {
-                if (text) {
-                    window.__events.emit('paste', { text });
-                }
-            });
+                    .then(text => {
+                        if (text) {
+                            window.__events.emit('paste', { text });
+                        }
+                    });
                 }
             }
 

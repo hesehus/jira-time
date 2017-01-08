@@ -8,7 +8,7 @@
   &__input {
     display: inline-block;
     padding: 0;
-    border: none;
+    border: none; 
     background: transparent;
 
     &::-ms-clear,
@@ -29,19 +29,20 @@
     &,
     & > input {
       width: 130px;
+      border: none !important;
     }
   }
 
   &__input--time > input {
     width: 40px;
-    border: none;
+    border: none !important;
     padding: 2px 0;
     text-align: center;
   }
 
   &__input--time-seconds > input {
     width: 65px;
-    border: none;
+    border: none !important;
     padding: 2px 0;
     text-align: left;
   }

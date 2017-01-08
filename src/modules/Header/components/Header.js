@@ -11,7 +11,6 @@ import ExportIcon from 'assets/export.svg';
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import CalendarIcon from 'assets/calendar.svg';
-import ChristmasTree from 'assets/christmas-tree.png';
 
 export default class Header extends Component {
 
@@ -32,29 +31,40 @@ export default class Header extends Component {
         this.state = {};
 
         this.onSyncClick = this.onSyncClick.bind(this);
+        this.onProcessAllStart = this.onProcessAllStart.bind(this);
+        this.onProcessAllDone = this.onProcessAllDone.bind(this);
+    }
+
+    componentDidMount () {
+        if (window.__getServiceWorkerStatus) {
+            window.__getServiceWorkerStatus
+            .then((status) => {
+                this.setState({
+                    serviceWorkerUpdated: status.updateAvailable
+                });
+            });
+        }
 
         // Listen for events from the syncer
-        sharedEvents.on('processAllStart', () => {
-            this.setState({
-                syncing: true
-            });
-        });
-        sharedEvents.on('processAllDone', () => {
-            this.setState({
-                syncing: false
-            });
+        sharedEvents.on('processAllStart', this.onProcessAllStart);
+        sharedEvents.on('processAllDone', this.onProcessAllDone);
+    }
+
+    componentWillUnmount () {
+        sharedEvents.off('processAllStart', this.onProcessAllStart);
+        sharedEvents.off('processAllDone', this.onProcessAllDone);
+    }
+
+    onProcessAllStart () {
+        this.setState({
+            syncing: true
         });
     }
 
-    componentWillMount () {
-        if (window.__getServiceWorkerStatus) {
-            window.__getServiceWorkerStatus
-        .then((status) => {
-            this.setState({
-                serviceWorkerUpdated: status.updateAvailable
-            });
+    onProcessAllDone () {
+        this.setState({
+            syncing: false
         });
-        }
     }
 
     onUpdateAvailableClick () {
@@ -87,7 +97,7 @@ export default class Header extends Component {
         if (this.state.syncing) {
             sync = (
                 <div className='header__button header__button--syncing' title='Syncing!'>
-                    <img className='header__icon' src={LoadingIcon} alt='Loading' />
+                    <img className='header__icon header__icon--sync' src={LoadingIcon} alt='Loading' />
                 </div>
             );
         } else if (!!this.props.records.length) {
@@ -96,7 +106,7 @@ export default class Header extends Component {
                   className='header__button'
                   onClick={this.onSyncClick}
                   title='Sync all worklogs to JIRA'>
-                    <img className='header__icon' src={ExportIcon} alt='Export' />
+                    <img className='header__icon header__icon--sync' src={ExportIcon} alt='Export' />
                 </div>
             );
         }
@@ -133,7 +143,6 @@ export default class Header extends Component {
         return (
             <div className='header'>
                 <div className='header__left'>
-                    <img className='header-christmas-tree' src={ChristmasTree} alt='Christmas tree' title='God jul!' />
                     {updateAvailable}
                 </div>
                 <div className='header__center'>
