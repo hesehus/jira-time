@@ -1,0 +1,23 @@
+.record-action-buttons {
+    display: flex;
+    flex-wrap: nowrap;
+
+    &__log-icon {
+        width: 10px;
+        height: 10px;
+    }
+
+    &__log {
+        flex-shrink: 0;
+
+        &--passive {
+            margin-right: 5px;
+        }
+
+        &--active {
+            color: red;
+            font-size: 29px;
+            line-height: 18px;
+        }
+    }
+}

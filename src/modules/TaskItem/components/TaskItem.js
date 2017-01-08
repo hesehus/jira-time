@@ -1,13 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 
 import Records from 'modules/Records';
-import RecordModel from 'store/models/RecordModel';
+import RecordActionButtons from 'modules/RecordActionButtons';
 
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
 
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
-import PlusIcon from 'assets/plus.svg';
 
 import './TaskItem.scss';
 
@@ -19,8 +18,6 @@ export class TaskItem extends Component {
         return {
             task: PropTypes.object.isRequired,
             removeTask: PropTypes.func.isRequired,
-            addRecord: PropTypes.func.isRequired,
-            startRecording: PropTypes.func.isRequired,
             refreshIssue: PropTypes.func.isRequired,
             setIssueRefreshing: PropTypes.func.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
@@ -33,8 +30,6 @@ export class TaskItem extends Component {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
-        this.onStartPassiveLogClick = this.onStartPassiveLogClick.bind(this);
-        this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
         this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
         this.onRemainignChange = this.onRemainignChange.bind(this);
         this.onRemainignBlur = this.onRemainignBlur.bind(this);
@@ -50,36 +45,6 @@ export class TaskItem extends Component {
 
     onRemoveClick () {
         this.props.removeTask({ cuid: this.props.task.cuid });
-    }
-
-    onStartPassiveLogClick () {
-        const { task } = this.props;
-
-        const startTime = new Date();
-        const endTime = new Date();
-        endTime.setMinutes(endTime.getMinutes() + 1);
-
-        const record = RecordModel({
-            task,
-            startTime,
-            endTime
-        });
-
-        this.props.addRecord({
-            task,
-            record
-        });
-    }
-
-    onStartActiveLogClick () {
-        const { task } = this.props;
-
-        const record = RecordModel({ task });
-
-        this.props.startRecording({
-            task,
-            record
-        });
     }
 
     onIssueRefreshClick () {
@@ -153,7 +118,7 @@ export class TaskItem extends Component {
         })
         .then((issue) => {
 
-        // Ensure that our remaining estimate gets persisted
+            // Ensure that our remaining estimate gets persisted
             issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
             this.props.refreshIssue({
@@ -258,17 +223,7 @@ export class TaskItem extends Component {
                           ref='inputRemaining'
                           disabled={!!somethingIsMoving}
                         />
-                        <div className='task-item__btn-group'>
-                            <button className='task-item__log task-item__log--passive'
-                              title='Add a worklog'
-                              onClick={this.onStartPassiveLogClick}>
-                                <img src={PlusIcon} className='task-item__log-icon' alt='Plus' />
-                            </button>
-                            <button className='task-item__log task-item__log--active'
-                              title='Start new worklog'
-                              onClick={this.onStartActiveLogClick}>●
-                            </button>
-                        </div>
+                        <RecordActionButtons task={task} />
                     </div>
                 </div>
                 {records}

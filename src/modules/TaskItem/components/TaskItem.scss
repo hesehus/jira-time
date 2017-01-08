@@ -25,7 +25,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
+
     @media (max-width: $screen-sm) {
       flex-wrap: wrap;
     }
@@ -135,29 +135,5 @@
   &__loading {
     width: 20px;
     opacity: .7;
-  }
-
-  &__log {
-    flex-shrink: 0;
-
-    &--passive {
-      margin-right: 5px;
-    }
-
-    &--active {
-      color: red;
-      font-size: 29px;
-      line-height: 18px;
-    }
-  }
-
-  &__log-icon {
-    width: 10px;
-    height: 10px;
-  }
-
-  &__btn-group {
-    display: flex;
-    flex-wrap: nowrap;
   }
 }
