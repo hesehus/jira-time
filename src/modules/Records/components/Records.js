@@ -22,7 +22,7 @@ export default class Records extends Component {
 
         return (
             <div className='records'>
-                {records.map((record) => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
+                {records.map(record => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
             </div>
         );
     }
