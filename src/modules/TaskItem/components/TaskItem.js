@@ -211,7 +211,9 @@ export class TaskItem extends Component {
                         </span>
                     </div>
                     <div className='task-item__mid'>
-                        <span className='task-item__summary'>{task.issue.fields.summary}</span>
+                        <span className='task-item__summary' title={task.issue.fields.summary}>
+                            {task.issue.fields.summary}
+                        </span>
                     </div>
                     <div className='task-item__right'>
                         {status}
