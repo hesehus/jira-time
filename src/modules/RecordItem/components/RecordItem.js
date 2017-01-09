@@ -19,6 +19,7 @@ export default class RecordItem extends Component {
         setRecordMoving: PropTypes.func.isRequired,
         setRecordMoveTarget: PropTypes.func.isRequired,
         setRecordTask: PropTypes.func.isRequired,
+        stopRecording: PropTypes.func.isRequired,
         activeRecord: PropTypes.object,
         movingRecord: PropTypes.object,
         autofocus: PropTypes.bool,
@@ -33,6 +34,7 @@ export default class RecordItem extends Component {
         this.onRemoveClick = this.onRemoveClick.bind(this);
         this.onCommentChange = this.onCommentChange.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
+        this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
 
         this.state = {
             comment: ''
@@ -114,6 +116,10 @@ export default class RecordItem extends Component {
         this.props.removeRecord({ cuid: this.props.record.cuid });
     }
 
+    onStopRecordingClick () {
+        this.props.stopRecording();
+    }
+
     onSyncClick () {
         const syncer = new Sync({
             records: [this.props.record]
@@ -145,13 +151,20 @@ export default class RecordItem extends Component {
                 <div className='record__sync record__sync--syncing' title='Syncing!'>
                     <img className='record__sync-icon' src={LoadingIcon} alt='Loading' />
                 </div>
-      );
+            );
+        } else if (!record.endTime) {
+            btnSync = (
+                <div className='record__sync record__sync--stop'
+                  onClick={this.onStopRecordingClick}
+                  title='Stop recording'
+                />
+            );
         } else {
             btnSync = (
                 <div className='record__sync' onClick={this.onSyncClick} title='Sync this worklog to JIRA'>
                     <img className='record__sync-icon' src={ExportIcon} alt='Export' />
                 </div>
-      );
+            );
         }
 
         return (

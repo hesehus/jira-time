@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 
 import {
+  stopRecording,
   removeRecord,
   setRecordDate,
   setRecordMoving,
@@ -24,6 +25,7 @@ const mapStateToProps = (state, props) => {
 }
 
 const mapDispatchToProps = {
+    stopRecording,
     removeRecord,
     setRecordDate,
     setRecordMoving,

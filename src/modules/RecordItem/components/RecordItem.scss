@@ -23,13 +23,20 @@
     
     &-icon {
       width: 24px;
-      opacity: .5;
       cursor: pointer;
       transition: opacity 250ms linear;
 
       &:hover {
         opacity: 1;
       }
+    }
+
+    &--stop {
+      background: #fff;
+      width: 15px;
+      height: 15px;
+      margin-left: 12px;
+      margin-right: 6px;
     }
   }
 
