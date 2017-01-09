@@ -157,14 +157,18 @@ export default class HistoryRecordItem extends Component {
             Icon = LoadingIcon;
         }
 
+        // Todo: link to jira worklog edit
+        // /secure/UpdateWorklog!default.jspa?id=55146&worklogId=199872
         return (
             <tr className={className}>
-                <td><a href={'/browse/' + record.taskIssueKey} target='_blank'>{record.taskIssueKey}</a></td>
-                <td>{startTimeDisplay}</td>
-                <td>{endTimeDisplay}</td>
-                <td>{elapsedTime}</td>
-                <td className='history-record-comment'>{record.comment}</td>
-                <td>
+                <td className='history-record-cell'>
+                    <a href={'/browse/' + record.taskIssueKey} target='_blank'>{record.taskIssueKey}</a>
+                </td>
+                <td className='history-record-cell'>{startTimeDisplay}</td>
+                <td className='history-record-cell'>{endTimeDisplay}</td>
+                <td className='history-record-cell'>{elapsedTime}</td>
+                <td className='history-record-cell history-record-cell--comment'>{record.comment}</td>
+                <td className='history-record-cell'>
                     <img
                       src={Icon}
                       alt='Export'

@@ -43,15 +43,15 @@ export default class Summary extends Component {
             endDate,
             username: this.props.profile.username
         })
-    .then(records => this.setState({ loading: false, records }))
-    .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
+        .then(records => this.setState({ loading: false, records }))
+        .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
     }
 
     onSyncedChange (recordInfo, recordIsDirty) {
 
         const { records } = this.state;
 
-    // Get the updated item
+        // Get the updated item
         const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
         const record = Object.assign({}, records[recordIndex]);
         record.startTime = recordInfo.startTime;
@@ -66,7 +66,7 @@ export default class Summary extends Component {
     onSyncedSynced (recordInfo) {
         const { records } = this.state;
 
-    // Get the updated item
+        // Get the updated item
         const recordIndex = records.findIndex(r => r.cuid === recordInfo.cuid);
         const record = Object.assign({}, records[recordIndex]);
         record.isDirty = false;
@@ -76,10 +76,10 @@ export default class Summary extends Component {
         });
     }
 
-  /**
-  * Since not synced records will dissapear from the redux state,
-  * we need to adde them manually here at some point
-  **/
+    /**
+    * Since not synced records will dissapear from the redux state,
+    * we need to adde them manually here at some point
+    **/
     onNotSyncedSynced ({ record, worklog }) {
 
         // Since not synced records will dissapear from the redux state, we need to adde them manually here

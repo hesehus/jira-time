@@ -174,14 +174,12 @@ export default class RecordItem extends Component {
                     <div className='record-dates'>
                         <DateInput
                           date={record.startTime}
-                          type='start'
                           onChange={this.onStartTimeChange}
                           disabled={somethingIsMoving}
                         />
                         {record.endTime ? (
                             <DateInput
                               date={record.endTime}
-                              type='end'
                               onChange={this.onEndTimeChange}
                               disabled={somethingIsMoving}
                             />

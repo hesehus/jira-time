@@ -1,7 +1,9 @@
 .history-record {
 
-  td {
+  &-cell {
     white-space: nowrap;
+    padding: 5px 9px;
+    border: 1px solid #ccc;
 
     &.history-record-comment {
       white-space: normal;
@@ -13,7 +15,7 @@
     height: 24px;
 
     .history-record--can-be-exported & {
-      opacity: .5;
+      opacity: 1;
       cursor: pointer;
     }
   }

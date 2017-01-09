@@ -361,40 +361,40 @@ export function getWorkLogs ({ startDate, endDate, username }) {
 
     return new Promise((resolve, reject) => {
         let jql = `
-      worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
-      worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
-      worklogAuthor="${username}"`;
+        worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
+        worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
+        worklogAuthor="${username}"`;
 
         callApi({
             path: `api/2/search?jql=${jql}`
         })
-    .then(r => r.json())
-    .then((response) => {
+        .then(r => r.json())
+        .then((response) => {
 
-        if (response.errorMessages) {
-            return reject(response.errorMessages);
-        }
+            if (response.errorMessages) {
+                return reject(response.errorMessages);
+            }
 
-        let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
+            let worklogsGetters = response.issues.map(i => getWorkLogsForIssue({ key: i.key, startDate, username }));
 
-        Promise.all(worklogsGetters)
-        .then((worklogs) => {
+            Promise.all(worklogsGetters)
+            .then((worklogs) => {
 
-            let combined = [];
+                let combined = [];
 
-            worklogs.forEach(w => combined.push(...w));
+                worklogs.forEach(w => combined.push(...w));
 
-          // Conform all worklogs to our RecordModel
-            combined = combined.map((w) => {
-                w.startTime = w.started;
-                return RecordModel(w);
-            });
+                // Conform all worklogs to our RecordModel
+                combined = combined.map((w) => {
+                    w.startTime = w.started;
+                    return RecordModel(w);
+                });
 
-            resolve(combined);
+                resolve(combined);
+            })
+            .catch(reject);
         })
         .catch(reject);
-    })
-    .catch(reject);
     });
 }
 
@@ -408,7 +408,7 @@ export function getWorkLog ({ key, id }) {
     return callApi({
         path: `api/2/issue/${key}/worklog/${id}`
     })
-  .then(r => r.json());
+    .then(r => r.json());
 }
 
 /**

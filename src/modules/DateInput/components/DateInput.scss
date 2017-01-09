@@ -19,13 +19,7 @@
     }
   }
 
-  &__today {
-    display: inline-block;
-    cursor: pointer;
-  }
-
-  &__input--date,
-  &__today {
+  &__input--date {
     &,
     & > input {
       width: 130px;
@@ -47,5 +41,24 @@
     text-align: left;
   }
 
-  &--end {}
+  &-date {
+    position: relative;
+
+    &__display {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(100% - 10px);
+      height: 100%;
+      text-align: right;
+    }
+
+    .flatpickr-input[type=text] {
+      border: none;
+      width: 90px;
+      padding: 5px 0;
+      margin-right: 10px;
+      opacity: 0;
+    }
+  }
 }

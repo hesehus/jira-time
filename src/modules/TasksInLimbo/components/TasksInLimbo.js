@@ -1,15 +1,22 @@
 import React, { Component, PropTypes } from 'react';
+import calculateScrollbarWidth from 'scrollbar-width';
 
 import RecordItem from 'modules/RecordItem';
 import RecordActionButtons from 'modules/RecordActionButtons';
 
 import './TasksInLimbo.scss';
 
+let scrollbarWidth;
+
 export class TasksInLimbo extends Component {
 
     static propTypes = {
         movingRecord: PropTypes.object,
         recordsWithNoIssue: PropTypes.array.isRequired
+    }
+
+    componentWillMount () {
+        scrollbarWidth = calculateScrollbarWidth();
     }
 
     render () {
@@ -56,12 +63,14 @@ export class TasksInLimbo extends Component {
 
         // Output the list of tasks
         return (
-            <div className={className}>
-                <div className='task-item--limbo-header'>
-                    {textInLimbo}
-                    <RecordActionButtons />
+            <div style={{ marginRight: `${scrollbarWidth}px` }}>
+                <div className={className}>
+                    <div className='task-item--limbo-header'>
+                        {textInLimbo}
+                        <RecordActionButtons />
+                    </div>
+                    {recordsOutput}
                 </div>
-                {recordsOutput}
             </div>
         );
     }

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import themes from 'modules/theme/themes';
-console.log(themes);
 
 import './ThemeSelector.scss';
 

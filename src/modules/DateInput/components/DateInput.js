@@ -1,14 +1,16 @@
 import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import TimeInput from 'time-input';
+import Flatpickr from 'react-flatpickr'
+
+import 'flatpickr/dist/themes/airbnb.css';
 
 import './DateInput.scss';
 
 export default class DateInput extends Component {
 
     static propTypes = {
-        type: PropTypes.string.isRequired,
-        date: PropTypes.any.isRequired,
+        date: PropTypes.any,
         onChange: PropTypes.func.isRequired,
         disabled: PropTypes.bool
     }
@@ -18,17 +20,17 @@ export default class DateInput extends Component {
 
         this.onDateChange = this.onDateChange.bind(this);
         this.onTimeChange = this.onTimeChange.bind(this);
-        this.onTodayClick = this.onTodayClick.bind(this);
 
         this.state = {
-            date: null
+            date: null,
+            time: null
         };
     }
 
     componentWillMount () {
         const dateObject = moment(this.props.date);
 
-        const date = dateObject.format('YYYY-MM-DD');
+        const date = dateObject.toDate();
         const time = dateObject.format('HH:mm');
 
         this.setState({
@@ -37,13 +39,20 @@ export default class DateInput extends Component {
         });
     }
 
+    static createDateObjectFromDateAndTime ({ date, time }) {
+        date = moment(date).toDate();
+        const timeParts = time.split(':');
+        date.setHours(timeParts[0]);
+        date.setMinutes(timeParts[1]);
+        return date;
+    }
+
     onTimeChange (time) {
 
-        const vals = time.split(':');
-        const date = new Date(this.state.date);
-
-        date.setHours(vals[0]);
-        date.setMinutes(vals[1]);
+        const date = DateInput.createDateObjectFromDateAndTime({
+            date: new Date(this.state.date),
+            time
+        });
 
         this.props.onChange({
             date
@@ -54,19 +63,14 @@ export default class DateInput extends Component {
         });
     }
 
-    onDateChange () {
+    onDateChange ([date]) {
 
-        let date;
+        const { time } = this.state;
 
-        if (this.refs.date) {
-            date = new Date(this.refs.date.value + ' ' + this.refs.time.value);
-        } else {
-            date = new Date(this.state.date);
-
-            const vals = this.refs.time.value.split(':');
-            date.setHours(vals[0]);
-            date.setMinutes(vals[1]);
-        }
+        date = DateInput.createDateObjectFromDateAndTime({
+            date,
+            time
+        });
 
         this.props.onChange({
             date
@@ -77,40 +81,30 @@ export default class DateInput extends Component {
         });
     }
 
-    onTodayClick () {
-        this.setState({
-            showDate: true
-        });
+    getDateDisplay () {
+        const { date } = this.state;
+        if (!date) {
+            return '';
+        }
+        return moment(date).format('ll');
     }
 
     render () {
 
         const { time, date } = this.state;
 
-        const className = `date-inp date-inp--${this.props.type}`;
-
-        const dateDisplay = (
-            <input type='date'
-              ref='date'
-              defaultValue={date}
-              onChange={this.onDateChange}
-              className='date-inp__input date-inp__input--date'
-              disabled={this.props.disabled}
-       />
-    );
-
-        let isToday = moment().isSame(moment(date), 'day');
-        let today = <span className='date-inp__today' onClick={this.onTodayClick}>Today</span>;
-
         return (
-            <span className={className}>
-                {isToday && !this.state.showDate ? today : dateDisplay}
+            <span className='date-inp'>
+                <span className='date-inp-date'>
+                    <span className='date-inp-date__display'>{this.getDateDisplay()}</span>
+                    <Flatpickr onChange={this.onDateChange} options={{ defaultDate: date }} />
+                </span>
                 <TimeInput
                   value={time}
                   className='date-inp__input date-inp__input--time'
                   onChange={this.onTimeChange}
                   disabled={this.props.disabled}
-        />
+            />
             </span>
         );
     }
