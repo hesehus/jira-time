@@ -2,7 +2,9 @@
 
 .task-item {
   border-radius: 6px;
-  background: rgba(255, 255, 255, .2);
+  background-color: rgba(255, 255, 255, .2);
+  //background-image: url('~assets/task-bg.png');
+  //background-blend-mode: soft-light;
   transition: background 100ms;
   padding: 20px;
 

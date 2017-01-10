@@ -29,12 +29,13 @@
         margin: 0 5px;
         cursor: pointer;
 
-        &--red {
-            background: $theme-red-background;
-        }
-        &--blue {
-            background: $theme-blue-background;
-        }
+        &--lightpurple { background: $theme-lightpurple-background; }
+        &--darkpurple { background: $theme-darkpurple-background; }
+        &--blue { background: $theme-blue-background; }
+        &--turquoise { background: $theme-turquoise-background; }
+        &--orange { background: $theme-orange-background; }
+        &--yellow { background: $theme-yellow-background; }
+        &--green { background: $theme-green-background; }
 
         &--selected {
             outline: 1px solid #fff;
