@@ -37,6 +37,12 @@ body {
   }
 }
 
+body {
+  opacity: 0;
+  transform: scale(.99);
+  transition: opacity 200ms, transform 200ms;
+}
+
 *,
 *:before,
 *:after {

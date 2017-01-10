@@ -44,6 +44,19 @@ export default () => {
     // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
     store.unsubscribeHistory = hashHistory.listen(updateLocation(store));
 
+    // Listen for when we have a valid store state, and then fade content in
+    let appShown = false;
+    store.subscribe(() => {
+        if (!appShown) {
+            appShown = true;
+            if (!!store.getState().location) {
+                document.body.style.opacity = 1;
+                document.body.style.transform = 'initial';
+                document.body.style.webkitTransform = 'initial';
+            }
+        }
+    });
+
     if (module.hot) {
         module.hot.accept('./reducers', () => {
             const reducers = require('./reducers').default;
