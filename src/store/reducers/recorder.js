@@ -4,7 +4,7 @@ import RecordModel from 'store/models/RecordModel';
 import TaskModel from 'store/models/TaskModel';
 
 import { REMOVE_TASK } from 'store/reducers/tasks';
-import { SET_LOGGED_IN } from 'store/reducers/profile';
+// import { SET_LOGGED_IN } from 'store/reducers/profile';
 
 const initialState = {
     record: null,
@@ -35,12 +35,28 @@ export function getElapsedTime ({ startTime, endTime = Date.now() }) {
     const diff = endTime.unix() - startTime.unix();
 
     if (diff < 0) {
-        return 'Negative time? You are not that fast.';
+        return 'Dude, negative time?';
+    }
+
+    if (diff < 60) {
+        return '< 1m';
     }
 
     const d = moment.duration(diff, 'seconds');
 
-    return `${d.hours()}h ${d.minutes()}m ${d.seconds()}s`;
+    let outputString = `${d.seconds()}s`;
+
+    if (d.minutes() !== 0) {
+        outputString = `${d.minutes()}m`;
+    }
+    if (d.hours() !== 0) {
+        outputString = `${d.hours()}h ` + outputString;
+    }
+    if (d.days() !== 0) {
+        outputString = `${d.days()}d ` + outputString;
+    }
+
+    return outputString;
 }
 
 // ------------------------------------
@@ -130,15 +146,14 @@ const ACTION_HANDLERS = {
 
         const records = [...state.records];
 
-    // Determine which task to log to
+        // Determine which task to log to
         const task = action.task || TaskModel();
         const record = action.record || RecordModel({ task });
 
         records.push(record);
 
         return {
-            record: state.record,
-            task: state.task,
+            ...state,
             records
         }
     },
@@ -146,13 +161,15 @@ const ACTION_HANDLERS = {
 
         const records = stopRecordingInState({ state });
 
-    // Determine which task to start recording
+        // Determine which task to start recording
         const task = action.task || TaskModel();
 
-    // Start new recording
+        // Start new recording
         const record = action.record || RecordModel({ task });
+        record.elapsedTime = getElapsedTime({ startTime: new Date() });
 
         return {
+            ...state,
             record,
             task,
             records
@@ -160,8 +177,7 @@ const ACTION_HANDLERS = {
     },
     [STOP_RECORDING] : (state) => {
         return {
-            task: initialState.task,
-            record: initialState.record,
+            ...initialState,
             records: stopRecordingInState({ state })
         }
     },
@@ -185,6 +201,7 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
             task,
             records
@@ -211,8 +228,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -242,8 +259,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -268,8 +285,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -302,8 +319,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -327,8 +344,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -352,8 +369,8 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     },
@@ -371,18 +388,16 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let { record } = state;
+        let { record, activeRecordingElapsedTime } = state;
         if (record && record.cuid === action.cuid) {
             const { startTime, endTime } = record;
-            record = Object.assign({}, record, {
-                elapsedTime: getElapsedTime({ startTime, endTime })
-            });
+            activeRecordingElapsedTime = getElapsedTime({ startTime, endTime });
         }
 
         return {
-            record,
-            task: state.task,
-            records
+            ...state,
+            records,
+            activeRecordingElapsedTime
         };
     },
     [REMOVE_RECORD] : (state, action) => {
@@ -401,15 +416,15 @@ const ACTION_HANDLERS = {
         }
 
         return {
+            ...state,
             record,
-            task: state.task,
             records
         };
     }
 };
 
 // Listen for logout. Clear everything if we log out
-ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
+/* ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
     const records = [...state.records];
 
     if (state.record) {
@@ -424,7 +439,7 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
         task: initialState.task,
         records
     }
-};
+}; */
 
 function stopRecordingInState ({ state }) {
     let records = [...state.records];

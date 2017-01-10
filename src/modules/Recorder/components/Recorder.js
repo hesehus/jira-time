@@ -61,7 +61,8 @@ export default class Recorder extends Component {
             window.__events.on('drop', this.onDropAndPaste);
             window.__events.on('paste', this.onDropAndPaste);
 
-            this.elapsedTimeInterval = setInterval(this.updateElapsedTime, 1000);
+            const oneMinute = 1000 * 60;
+            this.elapsedTimeInterval = setInterval(this.updateElapsedTime, oneMinute);
         }
     }
 
