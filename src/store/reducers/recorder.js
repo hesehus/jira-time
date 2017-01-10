@@ -44,7 +44,7 @@ export function getElapsedTime ({ startTime, endTime = Date.now() }) {
 
     const d = moment.duration(diff, 'seconds');
 
-    let outputString = `${d.seconds()}s`;
+    let outputString = '';
 
     if (d.minutes() !== 0) {
         outputString = `${d.minutes()}m`;
@@ -388,16 +388,18 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let { record, activeRecordingElapsedTime } = state;
+        let { record } = state;
         if (record && record.cuid === action.cuid) {
             const { startTime, endTime } = record;
-            activeRecordingElapsedTime = getElapsedTime({ startTime, endTime });
+            record = Object.assign({}, record, {
+                elapsedTime: getElapsedTime({ startTime, endTime })
+            });
         }
 
         return {
             ...state,
             records,
-            activeRecordingElapsedTime
+            record
         };
     },
     [REMOVE_RECORD] : (state, action) => {
