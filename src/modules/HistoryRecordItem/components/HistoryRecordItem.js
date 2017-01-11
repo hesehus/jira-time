@@ -157,12 +157,14 @@ export default class HistoryRecordItem extends Component {
             Icon = LoadingIcon;
         }
 
-        // Todo: link to jira worklog edit
-        // /secure/UpdateWorklog!default.jspa?id=55146&worklogId=199872
+        const editWorklogLink = `/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`;
+
         return (
             <tr className={className}>
                 <td className='history-record-cell'>
-                    <a href={'/browse/' + record.taskIssueKey} target='_blank'>{record.taskIssueKey}</a>
+                    <a href={editWorklogLink} target='_blank'>
+                        {record.taskIssueKey}
+                    </a>
                 </td>
                 <td className='history-record-cell'>{startTimeDisplay}</td>
                 <td className='history-record-cell'>{endTimeDisplay}</td>

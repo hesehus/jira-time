@@ -140,7 +140,7 @@ export default class Sync extends EventClass {
                 } else {
                     swal(
                         'Whuut?',
-                        `I failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />I have no clue why...`,
+                        `I failed spectacularly when attempting to log to ${record.taskIssueKey}.<br />This might be an authentication issue. Try logging out and back in again bro!`,
                         'error'
                     );
                 }
