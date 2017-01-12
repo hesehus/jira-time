@@ -157,14 +157,20 @@ export default class HistoryRecordItem extends Component {
             Icon = LoadingIcon;
         }
 
-        const editWorklogLink = `/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`;
+        let editWorklogLink = record.taskIssueKey;
+        if (record.id) {
+            editWorklogLink = (
+                <a href={`/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`}
+                  target='_blank'>
+                    {record.taskIssueKey}
+                </a>
+            );
+        }
 
         return (
             <tr className={className}>
                 <td className='history-record-cell'>
-                    <a href={editWorklogLink} target='_blank'>
-                        {record.taskIssueKey}
-                    </a>
+                    {editWorklogLink}
                 </td>
                 <td className='history-record-cell'>{startTimeDisplay}</td>
                 <td className='history-record-cell'>{endTimeDisplay}</td>
