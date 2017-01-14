@@ -31,7 +31,6 @@ export class ThemeSelector extends Component {
 
         return (
             <div className='theme-selector'>
-                <div className='theme-selector-title'>Theme:</div>
                 <ul className='theme-selector-list'>
                     {listItems}
                 </ul>

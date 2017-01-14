@@ -11,7 +11,17 @@
          url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.svg#robotoregular') format('svg');
     font-weight: normal;
     font-style: normal;
+}
 
+@font-face {
+    font-family: 'robotoitalic';
+    src: url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.eot');
+    src: url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.woff') format('woff'),
+         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.ttf') format('truetype'),
+         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.svg#robotoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 * {

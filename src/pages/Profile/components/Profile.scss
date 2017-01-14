@@ -8,4 +8,12 @@
   &-logout {
     margin-top: 20px;
   }
+
+  &-avatar {
+    border-radius: 50%;
+    border: 10px solid rgba(0, 0, 0, .5);
+    width: 130px;
+    height: 130px;
+    background-size: cover;
+  }
 }

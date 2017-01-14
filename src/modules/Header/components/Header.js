@@ -5,12 +5,12 @@ import Sync, { sharedEvents } from 'shared/sync';
 
 import './Header.scss'
 
-import ListIcon from 'assets/list.svg';
 import UserIcon from 'assets/user.svg';
-import ExportIcon from 'assets/export.svg';
+import SyncIcon from 'assets/sync.svg';
 import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import CalendarIcon from 'assets/calendar.svg';
+import ListViewIcon from 'assets/list-view.svg';
 
 export default class Header extends Component {
 
@@ -96,17 +96,20 @@ export default class Header extends Component {
         let sync;
         if (this.state.syncing) {
             sync = (
-                <div className='header__button header__button--syncing' title='Syncing!'>
-                    <img className='header__icon header__icon--sync' src={LoadingIcon} alt='Loading' />
-                </div>
+                <div
+                  className='header__button header-sync header-sync--syncing'
+                  title='Syncing...'
+                  style={{ backgroundImage: `url(${LoadingIcon})` }}
+                 />
             );
         } else if (!!this.props.records.length) {
             sync = (
-                <div id='sync-button'
-                  className='header__button'
+                <div
+                  className='header__button header-sync'
                   onClick={this.onSyncClick}
-                  title='Sync all worklogs to JIRA'>
-                    <img className='header__icon header__icon--sync' src={ExportIcon} alt='Export' />
+                  title='Sync all worklogs to JIRA'
+                  style={{ backgroundImage: `url(${SyncIcon})` }}>
+                    Sync
                 </div>
             );
         }
@@ -129,34 +132,23 @@ export default class Header extends Component {
         }
         }
 
-        let avatarUrl = UserIcon;
-
-        const avatarUrls = this.props.profile.userinfo.avatarUrls;
-        const avatarSize = '48x48';
-
-        if (this.props.profile && this.props.profile.userinfo.avatarUrls) {
-            avatarUrl = avatarUrls[avatarSize];
-            avatarUrl = avatarUrl.replace('http://localhost:3000', 'https://jira.hesehus.dk');
-            classNameProfile = classNameProfile + ' header__button--avatar';
-        }
-
         return (
             <div className='header'>
                 <div className='header__left'>
+                    <div className='header-title'>JIRA-time</div>
                     {updateAvailable}
                 </div>
-                <div className='header__center'>
+                <div className='header__center' />
+                <div className='header__right'>
                     <Link to='/summary' className={classNameSummary}>
                         <img className='header__icon' src={CalendarIcon} alt='Calendar' />
                     </Link>
                     <IndexLink to='/' className={classNameHome}>
-                        <img className='header__icon' src={ListIcon} alt='Home' />
+                        <img className='header__icon' src={ListViewIcon} alt='Home' />
                     </IndexLink>
                     <Link to='/profile' className={classNameProfile}>
-                        <img className='header__icon' src={avatarUrl} alt='Profile' />
+                        <img className='header__icon' src={UserIcon} alt='Profile' />
                     </Link>
-                </div>
-                <div className='header__right'>
                     {this.props.loggedIn ? sync : null}
                 </div>
             </div>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="58px" height="27px" viewBox="0 0 58 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2 Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M-1.42102721e-14,19.2992256 L-1.42108547e-14,9.00214558 C-1.42109798e-14,6.79182161 1.78638874,5 3.99806792,5 L22.0870536,5 L34.9651786,5 L50.8603543,5 C53.0677197,5 54.8571429,6.78642019 54.8571429,9.00141601 L54.8571429,25.5632899 C54.8571429,27.7732109 53.0679084,29.5647059 50.8580184,29.5647059 L10.9851735,29.5647059" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="54.8571429" height="24.5647059" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="RECORD" transform="translate(-723.000000, -24.000000)" stroke="#FFFFFF">
+            <g id="Header">
+                <g id="sync" transform="translate(723.000000, 21.000000)">
+                    <g id="Group-2-Copy">
+                        <g id="Group" transform="translate(52.333431, 8.607371) rotate(45.000000) translate(-52.333431, -8.607371) translate(47.333431, 1.607371)" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.55714286,0.409411765 L4.55714286,12.6917647" id="Line"></path>
+                            <path d="M4.55714286,0.409411765 L8.7,4.50352941" id="Line"></path>
+                            <path d="M0.414285714,0.409411765 L4.55714286,4.50352941" id="Line-Copy-2" transform="translate(2.485714, 2.456471) scale(-1, 1) translate(-2.485714, -2.456471) "></path>
+                        </g>
+                        <use id="Rectangle-4" mask="url(#mask-2)" stroke-width="2" transform="translate(27.428571, 17.282353) rotate(-180.000000) translate(-27.428571, -17.282353) " xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

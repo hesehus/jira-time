@@ -4,6 +4,7 @@ import { logout, updateUserInfo } from 'shared/jiraClient';
 
 import ThemeSelector from 'modules/ThemeSelector';
 import Login from 'modules/Login';
+import UserIcon from 'assets/user.svg';
 
 import './Profile.scss';
 
@@ -35,16 +36,29 @@ export class Profile extends Component {
     render () {
 
         if (!this.props.profile.loggedIn) {
-            return (<Login />);
+            return <Login />;
         }
 
-        const { username } = this.props.profile;
+        const { userinfo } = this.props.profile;
+        const { avatarUrls } = userinfo;
+
+        let avatarUrl = UserIcon;
+        const avatarSize = '48x48';
+        if (avatarUrls) {
+            avatarUrl = avatarUrls[avatarSize].replace('http://localhost:3000', 'https://jira.hesehus.dk');
+        }
 
         return (
             <div className='profile'>
-                <div>Username: {username}</div>
+                <div className='profile-avatar' style={{ backgroundImage: `url(${avatarUrl})` }} />
                 <ThemeSelector />
-                <div>App shortcuts: ALT+a: add issue(s)</div>
+                <div>
+                    App shortcuts
+                    <ul>
+                        <li>ALT+a: add issue(s)</li>
+                        <li>CTR+S: sync all worklogs</li>
+                    </ul>
+                </div>
                 <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
             </div>
         );

@@ -1,1 +1,19 @@
-<?xml version="1.0" ?><svg baseProfile="tiny" height="24px" id="Layer_1" version="1.2" viewBox="0 0 24 24" width="24px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M17,9c0-1.381-0.56-2.631-1.464-3.535C14.631,4.56,13.381,4,12,4S9.369,4.56,8.464,5.465C7.56,6.369,7,7.619,7,9  s0.56,2.631,1.464,3.535C9.369,13.44,10.619,14,12,14s2.631-0.56,3.536-1.465C16.44,11.631,17,10.381,17,9z"/><path d="M6,19c0,1,2.25,2,6,2c3.518,0,6-1,6-2c0-2-2.354-4-6-4C8.25,15,6,17,6,19z"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <title>User</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="RECORD" transform="translate(-664.000000, -19.000000)" stroke="#FFFFFF">
+            <g id="Header">
+                <g id="User" transform="translate(665.000000, 20.000000)">
+                    <path d="M0,15 C0,6.716 6.716,0 15,0 C23.284,0 30,6.716 30,15 C30,23.284 23.284,30 15,30 C6.716,30 0,23.284 0,15 L0,15 Z" id="Stroke-6105"></path>
+                    <path d="M24.5455,26.5339 L24.5455,24.9229 C24.5455,23.8459 23.9685,22.8509 23.0335,22.3169 L17.6475,19.2419" id="Stroke-6099"></path>
+                    <path d="M12.3525,19.2422 L6.9665,22.3172 C6.0315,22.8512 5.4545,23.8452 5.4545,24.9222 L5.4545,26.5342" id="Stroke-6101"></path>
+                    <path d="M15,20 L15,20 C12.239,20 10,17.761 10,15 L10,12 C10,9.239 12.239,7 15,7 C17.761,7 20,9.239 20,12 L20,15 C20,17.761 17.761,20 15,20 L15,20 Z" id="Stroke-6103"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

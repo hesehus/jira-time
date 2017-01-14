@@ -12,6 +12,12 @@
 
   &__left {
     align-items: center;
+    padding-left: 20px;
+  }
+
+  &-title {
+    font-size: 1.65rem;
+    font-family: robotoitalic, sans-serif;
   }
 
   &__button {
@@ -31,8 +37,23 @@
     }
   }
 
+  &-sync {
+    background-repeat: no-repeat;
+    background-size: 61px auto;
+    background-position: 10px center;
+    font-size: .8rem;
+    padding-left: 20px;
+    padding-right: 30px;
+    min-width: 82px;
+
+    &--syncing {
+      background-size: 30px auto;
+      background-position: center;
+    }
+  }
+
   &__icon {
-    opacity: .8;
+    opacity: .7;
     transition: opacity 100ms;
     height: 24px;
 
@@ -48,10 +69,6 @@
       height: 32px;
     }
   }
-
-  &-christmas-tree {
-    height: 40px;
-  }
 }
 
 .update-available {
@@ -59,11 +76,11 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  font-size: .8rem;
 
   &-icon {
     display: inline-block;
     width: 25px;
-    margin-right: 10px;
     position: relative;
     top: -1px;
   }
