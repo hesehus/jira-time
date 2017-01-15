@@ -45,7 +45,7 @@ export class Profile extends Component {
         let avatarUrl = UserIcon;
         const avatarSize = '48x48';
         if (avatarUrls) {
-            avatarUrl = avatarUrls[avatarSize].replace('http://localhost:3000', 'https://jira.hesehus.dk');
+            avatarUrl = avatarUrls[avatarSize].replace('http://localhost:3000', '/');
         }
 
         return (

@@ -3,12 +3,23 @@
 @import '~sweetalert2/dist/sweetalert2.css';
 
 @font-face {
+    font-family: 'robotoregular';
+    src: url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot');
+    src: url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.woff') format('woff'),
+         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.ttf') format('truetype'),
+         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.svg#robotoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'robotothin';
-    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.eot');
-    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.woff') format('woff'),
-         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.ttf') format('truetype'),
-         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.svg#robotothin') format('svg');
+    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-Thin-webfont.eot');
+    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-Thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-Thin-webfont.woff') format('woff'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-Thin-webfont.ttf') format('truetype'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-Thin-webfont.svg#robotothin') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -34,7 +45,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'robotothin', sans-serif;
+  font-family: 'robotoregular', sans-serif;
   font-size: 18px;
 
   &.moving {
