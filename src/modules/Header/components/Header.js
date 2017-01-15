@@ -75,6 +75,10 @@ export default class Header extends Component {
         Sync.processAllInState();
     }
 
+    someRecordsCanBeSynced () {
+        return !!this.props.records.find(r => !!r.endTime && !!r.comment);
+    }
+
     render () {
 
         if (!this.props.loggedIn) {
@@ -87,9 +91,9 @@ export default class Header extends Component {
             updateAvailable = (
                 <div className='update-available' onClick={this.onUpdateAvailableClick}>
                     <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
-          Update available!
-        </div>
-      );
+                    Update available!
+                </div>
+            );
         }
 
         // Show sync icon if there are items to sync
@@ -102,12 +106,20 @@ export default class Header extends Component {
                   style={{ backgroundImage: `url(${LoadingIcon})` }}
                  />
             );
-        } else if (!!this.props.records.length) {
+        } else {
+            let className = 'header__button header-sync';
+            let onClick = this.onSyncClick;
+            let title = 'Sync all worklogs to JIRA';
+            if (!this.someRecordsCanBeSynced()) {
+                className += ' header-sync--inactive';
+                onClick = null;
+                title = 'No worklogs to sync, yo!';
+            }
             sync = (
                 <div
-                  className='header__button header-sync'
-                  onClick={this.onSyncClick}
-                  title='Sync all worklogs to JIRA'
+                  className={className}
+                  onClick={onClick}
+                  title={title}
                   style={{ backgroundImage: `url(${SyncIcon})` }}>
                     Sync
                 </div>
@@ -149,7 +161,7 @@ export default class Header extends Component {
                     <Link to='/profile' className={classNameProfile}>
                         <img className='header__icon' src={UserIcon} alt='Profile' />
                     </Link>
-                    {this.props.loggedIn ? sync : null}
+                    {sync}
                 </div>
             </div>
         );

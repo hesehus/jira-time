@@ -56,6 +56,8 @@
     padding: 2px 4px;
     margin-right: 10px;
     flex-shrink: 0;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .5);
   }
 
   &-time {

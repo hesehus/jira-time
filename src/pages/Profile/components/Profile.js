@@ -50,7 +50,7 @@ export class Profile extends Component {
 
         return (
             <div className='profile'>
-                <div className='profile-avatar' style={{ backgroundImage: `url(${avatarUrl})` }} />
+                <img className='profile-avatar' src={avatarUrl} alt={userinfo.name} />
                 <ThemeSelector />
                 <div>
                     App shortcuts
@@ -59,7 +59,7 @@ export class Profile extends Component {
                         <li>CTR+S: sync all worklogs</li>
                     </ul>
                 </div>
-                <button className='profile-logout' onClick={this.onLogoutClick}>Log out</button>
+                <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
             </div>
         );
     }

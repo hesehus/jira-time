@@ -12,28 +12,4 @@
     &-orange { background: $theme-orange-background; }
     &-yellow { background: $theme-yellow-background; }
     &-green { background: $theme-green-background; }
-
-    &,
-    a {
-        color: #fff;
-    }
-
-    input[type='text'],
-    input[type='search'],
-    input[type='password'],
-    textarea {
-        background: transparent;
-        color: #fff;
-        border: 1px solid rgba(255, 255, 255, .5);
-    }
-
-    textarea {
-        border: 1px solid rgba(255, 255, 255, .5);
-    }
-
-    button {
-        background: transparent;
-        border: 1px solid #fff;
-        padding: 5px 10px;
-    }
 }

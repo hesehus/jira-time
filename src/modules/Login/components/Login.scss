@@ -5,15 +5,35 @@
   align-items: center;
   justify-content: center;
   padding: 0 5%;
+  width: 330px;
+
+  input {
+    width: 100%;
+  }
 
   &-label {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   &-label__text {
     display: block;
     margin-bottom: 5px;
+    padding-left: 30px;
+    font-size: .8rem;
+
+    &::before,
+    &::after {
+      content: '-';
+      display: inline-block;
+    }
+
+    &::before {
+      margin-right: 5px;
+    }
+    &::after {
+      margin-left: 5px;
+    }
   }
 
   &-error {
@@ -29,7 +49,27 @@
     }
   }
 
-  &-loading {
-    height: 23px;
+  &-btn {
+    position: relative;
+    
+    img {
+      $size: 25px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin-top: -($size/2);
+      margin-left: -($size/2);
+      width: $size;
+      opacity: 0;
+    }
+
+    &--logging-in {
+      span {
+        opacity: 0;
+      }
+      img {
+        opacity: 1;
+      }
+    }
   }
 }

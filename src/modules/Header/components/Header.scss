@@ -2,6 +2,9 @@
   flex-shrink: 0;
   display: flex;
   justify-content: space-between;
+  height: 70px;
+  background-color: rgba(0, 0, 0, .2);
+  margin-bottom: 13px;
 
   &__center,
   &__right,
@@ -17,7 +20,7 @@
 
   &-title {
     font-size: 1.65rem;
-    font-family: robotoitalic, sans-serif;
+    font-family: robotothinitalic, sans-serif;
   }
 
   &__button {
@@ -29,7 +32,6 @@
     cursor: pointer;
     transition: background-color 100ms;
     line-height: 0;
-    height: 52px;
     box-sizing: border-box;
 
     &--avatar {
@@ -40,7 +42,7 @@
   &-sync {
     background-repeat: no-repeat;
     background-size: 61px auto;
-    background-position: 10px center;
+    background-position: 8px center;
     font-size: .8rem;
     padding-left: 20px;
     padding-right: 30px;
@@ -49,6 +51,11 @@
     &--syncing {
       background-size: 30px auto;
       background-position: center;
+    }
+
+    &--inactive {
+      opacity: .5;
+      cursor: default;
     }
   }
 

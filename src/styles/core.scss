@@ -3,23 +3,23 @@
 @import '~sweetalert2/dist/sweetalert2.css';
 
 @font-face {
-    font-family: 'robotoregular';
-    src: url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot');
-    src: url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.woff') format('woff'),
-         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.ttf') format('truetype'),
-         url('../static/fonts/roboto/roboto_regular_macroman/Roboto-Regular-webfont.svg#robotoregular') format('svg');
+    font-family: 'robotothin';
+    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.eot');
+    src: url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.woff') format('woff'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.ttf') format('truetype'),
+         url('../static/fonts/roboto/roboto_thin_macroman/Roboto-thin-webfont.svg#robotothin') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'robotoitalic';
-    src: url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.eot');
-    src: url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.woff') format('woff'),
-         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.ttf') format('truetype'),
-         url('../static/fonts/roboto/roboto_italic_macroman/Roboto-Italic-webfont.svg#robotoregular') format('svg');
+    font-family: 'robotothinitalic';
+    src: url('../static/fonts/roboto/roboto_thinitalic_macroman/Roboto-ThinItalic-webfont.eot');
+    src: url('../static/fonts/roboto/roboto_thinitalic_macroman/Roboto-ThinItalic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../static/fonts/roboto/roboto_thinitalic_macroman/Roboto-ThinItalic-webfont.woff') format('woff'),
+         url('../static/fonts/roboto/roboto_thinitalic_macroman/Roboto-ThinItalic-webfont.ttf') format('truetype'),
+         url('../static/fonts/roboto/roboto_thinitalic_macroman/Roboto-ThinItalic-webfont.svg#robotothinitalic') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -34,7 +34,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: 'robotoregular', sans-serif;
+  font-family: 'robotothin', sans-serif;
   font-size: 18px;
 
   &.moving {
@@ -51,12 +51,7 @@ body {
   opacity: 0;
   transform: scale(.99);
   transition: opacity 200ms, transform 200ms;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
+  color: #fff;
 }
 
 input {
@@ -91,4 +86,35 @@ input:-webkit-autofill,
 input:-webkit-autofill:focus  {
     -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
     -webkit-text-fill-color: inherit;
+}
+
+a {
+    color: #fff;
+}
+
+input[type='text'],
+input[type='search'],
+input[type='password'] {
+    padding: 18px 30px;
+    color: #4A4A4A;
+    font-size: 1.2rem;
+    background-color: #fff;
+    border: none;
+    border-radius: 49px;
+}
+
+textarea {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .5);
+}
+
+.btn {
+    display: inline-block;
+    border: none;
+    padding: 18px 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 13px 0 rgba(0,0,0,0.4);
+    border-radius: 49px;
+    color: #4A4A4A;
+    font-size: 1.2rem;
 }

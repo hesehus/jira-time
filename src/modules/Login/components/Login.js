@@ -4,7 +4,7 @@ import './Login.scss';
 
 import { login, updateUserInfo } from 'shared/jiraClient';
 
-import LoadingIcon from 'assets/loading.svg';
+import LoadingIcon from 'assets/loading-black.svg';
 
 export class Login extends Component {
 
@@ -169,10 +169,12 @@ export class Login extends Component {
             }
         }
 
+        const btnClassName = this.state.loggingIn ? 'btn login-btn login-btn--logging-in' : 'btn login-btn';
+
         return (
             <form className='login' onSubmit={this.onSubmit}>
                 <label className='login-label'>
-                    <div className='login-label__text'>Username:</div>
+                    <div className='login-label__text'>Username</div>
                     <input type='text'
                       ref='username'
                       name='username'
@@ -181,7 +183,7 @@ export class Login extends Component {
                 />
                 </label>
                 <label className='login-label'>
-                    <div className='login-label__text'>Password:</div>
+                    <div className='login-label__text'>Password</div>
                     <input type='password'
                       ref='password'
                       name='password'
@@ -191,8 +193,10 @@ export class Login extends Component {
 
                 {error}
 
-                {!this.state.loggingIn ? <button>Login</button> : null}
-                {this.state.loggingIn ? <img src={LoadingIcon} alt='Loading' className='login-loading' /> : null}
+                <button className={btnClassName}>
+                    <span>Login</span>
+                    <img src={LoadingIcon} alt='Loading' className='login-loading' />
+                </button>
             </form>
         );
     }

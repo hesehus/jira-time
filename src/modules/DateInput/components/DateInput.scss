@@ -32,6 +32,9 @@
     border: none !important;
     padding: 2px 0;
     text-align: center;
+    background: transparent;
+    color: #fff;
+    font-size: .8rem;
   }
 
   &__input--time-seconds > input {
