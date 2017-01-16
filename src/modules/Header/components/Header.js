@@ -152,12 +152,12 @@ export default class Header extends Component {
                 </div>
                 <div className='header__center' />
                 <div className='header__right'>
-                    <Link to='/summary' className={classNameSummary}>
-                        <img className='header__icon' src={CalendarIcon} alt='Calendar' />
-                    </Link>
                     <IndexLink to='/' className={classNameHome}>
                         <img className='header__icon' src={ListViewIcon} alt='Home' />
                     </IndexLink>
+                    <Link to='/summary' className={classNameSummary}>
+                        <img className='header__icon' src={CalendarIcon} alt='Calendar' />
+                    </Link>
                     <Link to='/profile' className={classNameProfile}>
                         <img className='header__icon' src={UserIcon} alt='Profile' />
                     </Link>
