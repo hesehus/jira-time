@@ -6,7 +6,7 @@
   //background-image: url('~assets/task-bg.png');
   //background-blend-mode: soft-light;
   transition: background 100ms;
-  padding: 20px;
+  padding: 10px 15px;
 
   &:not(:last-child) {
     margin-bottom: 15px;
@@ -83,7 +83,7 @@
     display: flex;
     align-items: center;
     text-transform: uppercase;
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   &__issue-refresh {
