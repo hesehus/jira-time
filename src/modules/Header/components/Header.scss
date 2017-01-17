@@ -6,6 +6,9 @@
   background-color: rgba(0, 0, 0, .2);
   margin-bottom: 13px;
 
+  // Enable window drag for header for when wrapped in nativefier
+  -webkit-app-region: drag;
+
   &__center,
   &__right,
   &__left {
@@ -33,6 +36,7 @@
     transition: background-color 100ms;
     line-height: 0;
     box-sizing: border-box;
+    -webkit-app-region: no-drag;
 
     &--avatar {
       padding: 10px 15px;
@@ -84,6 +88,7 @@
   display: flex;
   align-items: center;
   font-size: .8rem;
+  -webkit-app-region: no-drag;
 
   &-icon {
     display: inline-block;
