@@ -13,6 +13,11 @@ export default class Tasks extends Component {
 
     componentDidMount () {
         this.calculatePositions();
+        window.addEventListener('resize', this.calculatePositions.bind(this));
+    }
+
+    componentWillUnmount () {
+        window.removeEventListener('resize', this.calculatePositions.bind(this));
     }
 
     componentDidUpdate () {
@@ -20,6 +25,7 @@ export default class Tasks extends Component {
     }
 
     calculatePositions () {
+        console.log('test');
         if (!this.el) {
             return;
         }

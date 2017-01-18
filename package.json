@@ -111,6 +111,8 @@
     "html-webpack-plugin": "^2.22.0",
     "http-proxy-middleware": "^0.17.2",
     "imports-loader": "^0.6.5",
+    "inferno": "~1.2.0",
+    "inferno-compat": "~1.2.0",
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
     "keycode": "^2.1.8",
