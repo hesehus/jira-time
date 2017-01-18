@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import calculateScrollbarWidth from 'scrollbar-width';
-
 import RecordItem from 'modules/RecordItem';
 import RecordActionButtons from 'modules/RecordActionButtons';
 
@@ -16,7 +14,6 @@ export class TasksInLimbo extends Component {
     }
 
     componentWillMount () {
-        scrollbarWidth = calculateScrollbarWidth();
     }
 
     render () {
@@ -63,7 +60,7 @@ export class TasksInLimbo extends Component {
 
         // Output the list of tasks
         return (
-            <div style={{ marginRight: `${scrollbarWidth}px` }}>
+            <div>
                 <div className={className}>
                     <div className='task-item--limbo-header'>
                         {textInLimbo}

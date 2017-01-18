@@ -25,7 +25,6 @@ export default class Tasks extends Component {
     }
 
     calculatePositions () {
-        console.log('test');
         if (!this.el) {
             return;
         }

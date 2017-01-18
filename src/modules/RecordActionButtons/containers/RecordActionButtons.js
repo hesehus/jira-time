@@ -5,11 +5,20 @@ import {
   startRecording
 } from 'store/reducers/recorder';
 
+import {
+  removeTask,
+  refreshIssue,
+  setIssueRefreshing
+} from 'store/reducers/tasks';
+
 import RecordActionButtons from '../components/RecordActionButtons';
 
 const mapDispatchToProps = {
     startRecording,
-    addRecord
+    addRecord,
+    removeTask,
+    refreshIssue,
+    setIssueRefreshing
 };
 
 export default connect(null, mapDispatchToProps)(RecordActionButtons);

@@ -1,19 +1,31 @@
 @import '_variables.scss';
 
 .task-item {
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, .2);
-  //background-image: url('~assets/task-bg.png');
-  //background-blend-mode: soft-light;
-  transition: background 400ms ease;
+  position: relative;
+  z-index: 0;
   padding: 10px 15px;
+
+  &:before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #FFF;
+      border-radius: 6px;
+      opacity: 0.2;
+      transform: translateZ(0);
+      transition: opacity 400ms ease;
+  }
+
+  &:hover:before {
+    opacity: 0.3;
+  }
 
   &:not(:last-child) {
     margin-bottom: 15px;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, .3);
   }
 
   &--drop-active {
@@ -38,6 +50,7 @@
     // align-items: center;
     flex: 0 1 auto;
     min-width: 0;
+    padding-right: 10px;
 
     @media (max-width: $screen-sm) {
       flex: 0 1 auto;
@@ -91,9 +104,7 @@
   &__summary {
       font-size: .8rem;
       flex: 1 1 auto;
-
-      // Temporary test with the new design
-      //max-width: 250px;
+      color: rgba(255,255,255,0.6);
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;

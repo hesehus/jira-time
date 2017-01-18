@@ -40,14 +40,12 @@
 }
 
 ::-webkit-scrollbar {
-  width: 16px;
-  height: 16px;
+  width: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 6px;
-  -webkit-box-shadow: inset 1px 1px 0 rgba(0,0,0,0.10),inset 0 -1px 0 rgba(0,0,0,0.07);
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 1px 1px 0 rgba(0,0,0,0.10),inset 0 -1px 0 rgba(0,0,0,0.07);
 }
 
 html,
@@ -103,7 +101,7 @@ input {
   100%  { opacity: 1; }
 }
 
-// Remove chrome autofill 
+// Remove chrome autofill
 input:-webkit-autofill,
 input:-webkit-autofill:focus  {
     -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */

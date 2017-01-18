@@ -6,7 +6,6 @@ import RecordActionButtons from 'modules/RecordActionButtons';
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
 
 import LoadingIcon from 'assets/loading.svg';
-import RefreshIcon from 'assets/refresh.svg';
 
 import './TaskItem.scss';
 
@@ -17,9 +16,6 @@ export class TaskItem extends Component {
     static get propTypes () {
         return {
             task: PropTypes.object.isRequired,
-            removeTask: PropTypes.func.isRequired,
-            refreshIssue: PropTypes.func.isRequired,
-            setIssueRefreshing: PropTypes.func.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object
@@ -29,8 +25,6 @@ export class TaskItem extends Component {
     constructor (props) {
         super(props);
 
-        this.onRemoveClick = this.onRemoveClick.bind(this);
-        this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
         this.onRemainignChange = this.onRemainignChange.bind(this);
         this.onRemainignBlur = this.onRemainignBlur.bind(this);
 
@@ -41,38 +35,6 @@ export class TaskItem extends Component {
         if (this.props.task && this.props.task.issue) {
             this.setRemainingInputValue(this.props.task.issue.fields.timetracking.remainingEstimate);
         }
-    }
-
-    onRemoveClick () {
-        this.props.removeTask({ cuid: this.props.task.cuid });
-    }
-
-    onIssueRefreshClick () {
-        const { task } = this.props;
-
-        this.props.setIssueRefreshing({
-            cuid: task.cuid,
-            refreshing: true
-        });
-
-        getIssue({
-            key: task.issue.key
-        })
-        .then((issue) => {
-
-            this.props.refreshIssue({
-                cuid: task.cuid,
-                issue
-            });
-
-            this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
-        })
-        .catch(() => {
-            this.props.setIssueRefreshing({
-                cuid: task.cuid,
-                refreshing: false
-            });
-        });
     }
 
     setRemainingInputValue (remaining = '') {
@@ -169,15 +131,8 @@ export class TaskItem extends Component {
                     </div>
                 );
             }
-
-            refreshIcon = (
-                <span className='task-item__issue-refresh'
-                  title='Click to refresh the JIRA issue, yo!'
-                  onClick={this.onIssueRefreshClick}>
-                    <img src={RefreshIcon} alt='Refresh' className='task-item__issue-refresh-image' />
-                </span>
-            );
         }
+
         if (task.issueRefreshing) {
             refreshIcon = (
                 <span className='task-item__issue-refresh'>
@@ -204,8 +159,6 @@ export class TaskItem extends Component {
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 <div className='task-item__info'>
                     <div className='task-item__left'>
-                        {/* <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-                        {refreshIcon} */}
                         <div className='task-item__key'>
                             <a className="task-item__link" href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
                         </div>
@@ -217,7 +170,7 @@ export class TaskItem extends Component {
                         {status}
                         <div className='task-item__remaining'>
                             <input className='task-item__remaining-input'
-                              value={remainingEstimate}
+                              value={remainingEstimate || ''}
                               onFocus={this.onRemainignFocus}
                               onChange={this.onRemainignChange}
                               onBlur={this.onRemainignBlur}
