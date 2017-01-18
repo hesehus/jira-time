@@ -204,27 +204,27 @@ export class TaskItem extends Component {
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 <div className='task-item__info'>
                     <div className='task-item__left'>
-                        <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
-                        <span className='task-item__key'>
-                            {refreshIcon}
-                            <a href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
-                        </span>
-                    </div>
-                    <div className='task-item__mid'>
-                        <span className='task-item__summary' title={task.issue.fields.summary}>
+                        {/* <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
+                        {refreshIcon} */}
+                        <div className='task-item__key'>
+                            <a className="task-item__link" href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
+                        </div>
+                        <div className='task-item__summary' title={task.issue.fields.summary}>
                             {task.issue.fields.summary}
-                        </span>
+                        </div>
                     </div>
                     <div className='task-item__right'>
                         {status}
-                        <input className='task-item__remaining'
-                          value={remainingEstimate}
-                          onFocus={this.onRemainignFocus}
-                          onChange={this.onRemainignChange}
-                          onBlur={this.onRemainignBlur}
-                          ref='inputRemaining'
-                          disabled={!!somethingIsMoving}
-                        />
+                        <div className='task-item__remaining'>
+                            <input className='task-item__remaining-input'
+                              value={remainingEstimate}
+                              onFocus={this.onRemainignFocus}
+                              onChange={this.onRemainignChange}
+                              onBlur={this.onRemainignBlur}
+                              ref='inputRemaining'
+                              disabled={!!somethingIsMoving}
+                            />
+                        </div>
                         <RecordActionButtons task={task} />
                     </div>
                 </div>

@@ -5,7 +5,7 @@
   background-color: rgba(255, 255, 255, .2);
   //background-image: url('~assets/task-bg.png');
   //background-blend-mode: soft-light;
-  transition: background 100ms;
+  transition: background 400ms ease;
   padding: 20px;
 
   &:not(:last-child) {
@@ -33,24 +33,22 @@
     }
   }
 
-  &__left,
-  &__mid,
-  &__right {
-    display: flex;
-    align-items: center;
-    flex: 0 1 auto;
-  }
-
   &__left {
-    flex-basis: 10%;
+    // display: flex;
+    // align-items: center;
+    flex: 0 1 auto;
+    min-width: 0;
+
     @media (max-width: $screen-sm) {
       flex: 0 1 auto;
     }
   }
 
   &__mid {
-    flex-basis: 70%;
-    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+
     @media (max-width: $screen-sm) {
       order: 4;
       flex: 0 0 100%;
@@ -58,10 +56,14 @@
 
     }
   }
-  
+
   &__right {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
     justify-content: center;
     flex-wrap: nowrap;
+
     @media (max-width: $screen-sm) {
       flex: 1 1 auto;
       justify-content: flex-end;
@@ -78,12 +80,31 @@
   &__key {
     flex-shrink: 0;
     min-width: 130px;
-    margin-left: 15px;
+    //margin-left: 15px;
     white-space: nowrap;
     display: flex;
     align-items: center;
     text-transform: uppercase;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  &__summary {
+      font-size: .8rem;
+      flex: 1 1 auto;
+
+      // Temporary test with the new design
+      //max-width: 250px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      @media (max-width: $screen-sm) {
+          margin: 0;
+      }
+  }
+
+  &__link {
+      text-decoration: none;
   }
 
   &__issue-refresh {
@@ -101,22 +122,6 @@
     opacity: .7;
   }
 
-  &__summary {
-    font-size: .8rem;
-    margin: 0 15px;
-    flex-shrink: 1;
-    flex-grow: 1;
-
-    // Temporary test with the new design
-    max-width: 250px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    @media (max-width: $screen-sm) {
-      margin: 0;
-    }
-  }
 
   &__status {
     opacity: .6;
@@ -130,13 +135,17 @@
   &__remaining {
     width: 90px;
     font-size: .8rem;
-    margin-right: 15px;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    border: none;
-    text-align: right;
-    background: transparent;
+
+  }
+
+  &__remaining-input {
+      width: 100%;
+      border: none;
+      text-align: right;
+      background: transparent;
   }
 
   &__loading {
