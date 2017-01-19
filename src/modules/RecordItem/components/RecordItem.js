@@ -36,15 +36,7 @@ export default class RecordItem extends Component {
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
 
-        this.state = {
-            comment: ''
-        };
-    }
-
-    componentWillMount () {
-        this.setState({
-            comment: this.props.record.comment
-        });
+        this.state = {};
     }
 
     componentDidMount () {
@@ -66,24 +58,6 @@ export default class RecordItem extends Component {
         }
     }
 
-    componentWillReceiveProps (nextProps) {
-
-        /**
-        * We need to wrap this in a timeout since this callback will be fired multiple times
-        * with old values first, which makes for a really weird user experience
-        **/
-        clearTimeout(this.willUpdateCommentTimeout);
-        this.willUpdateCommentTimeout = setTimeout(() => {
-            if (nextProps.record) {
-                if (nextProps.record.comment !== this.state.comment) {
-                    this.setState({
-                        comment: nextProps.record.comment
-                    });
-                }
-            }
-        }, 0);
-    }
-
     onStartTimeChange ({ date }) {
         this.props.setRecordDate({
             cuid: this.props.record.cuid,
@@ -100,16 +74,26 @@ export default class RecordItem extends Component {
         });
     }
 
-    onCommentChange (e) {
+    onCommentChange (e, force) {
 
         this.setState({
-            comment: e.target.value
+            commentSelectionStart: e.target.selectionStart,
+            commentSelectionEnd: e.target.selectionEnd
         });
 
         this.props.setRecordComment({
             cuid: this.props.record.cuid,
             comment: e.target.value
         });
+    }
+
+    componentDidUpdate () {
+        const { commentSelectionStart, commentSelectionEnd } = this.state;
+
+        if (commentSelectionStart) {
+            this.inputComment.selectionStart = commentSelectionStart;
+            this.inputComment.selectionEnd = commentSelectionEnd;
+        }
     }
 
     onRemoveClick () {
@@ -192,7 +176,7 @@ export default class RecordItem extends Component {
                 <textarea
                   className='record-comment'
                   onChange={this.onCommentChange}
-                  value={this.state.comment}
+                  value={record.comment}
                   disabled={somethingIsMoving}
                   ref={(i) => this.inputComment = i}
                 />
