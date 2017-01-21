@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+import calculateScrollbarWidth from 'scrollbar-width';
 
+import TasksHeader from 'modules/TasksHeader';
+import lazyDog from 'assets/lazy-dog.png';
+import TasksInLimbo from 'modules/TasksInLimbo';
 import RealTasks from './RealTasks';
 import DraggableTasks from './DraggableTasks';
 
-import TasksInLimbo from 'modules/TasksInLimbo';
-
 import './Tasks.scss';
 
-import lazyDog from 'assets/lazy-dog.png';
+let scrollbarWidth;
 
 export default class Tasks extends Component {
 
@@ -26,6 +28,10 @@ export default class Tasks extends Component {
         this.state = {
             scrollTop: 0
         };
+    }
+
+    componentWillMount () {
+        scrollbarWidth = calculateScrollbarWidth();
     }
 
     onScroll (event) {
@@ -55,7 +61,10 @@ export default class Tasks extends Component {
         return (
             <div className='tasks-outer'>
                 <div className='tasks'>
-                    <TasksInLimbo />
+                    <div style={{ marginRight: `${scrollbarWidth}px` }}>
+                        <TasksHeader />
+                        <TasksInLimbo />
+                    </div>
                     <div className='tasks-list-wrap' onScroll={this.onScroll}>
                         <RealTasks tasks={tasks} />
                         <DraggableTasks

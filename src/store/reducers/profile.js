@@ -1,12 +1,19 @@
 import themes from 'modules/theme/themes';
 
+import { SET_MANUAL_SORT_ORDER } from './tasks';
+
 const initialState = {
     loggedIn: false,
     username: '',
     userinfo: {},
     preferences: {
-        theme: themes[0].key
+        theme: themes[0].key,
+        tasksSortOrder: null
     }
+};
+
+export const CONSTANTS = {
+    hej: 1
 };
 
 // ------------------------------------
@@ -15,6 +22,7 @@ const initialState = {
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_THEME = 'SET_THEME';
+export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 
 // ------------------------------------
 // Actions
@@ -41,6 +49,13 @@ export function setTheme ({ theme }) {
     }
 };
 
+export function setTasksSortOrder ({ tasksSortOrder }) {
+    return {
+        type: SET_TASKS_SORT_ORDER,
+        tasksSortOrder
+    }
+};
+
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -52,14 +67,14 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
         loggedIn: action.isLoggedIn,
         username: typeof action.username === 'undefined' ? state.username : action.username
     }
-}
+};
 
 ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
     return {
         ...state,
         userinfo: action.userinfo
     };
-}
+};
 
 ACTION_HANDLERS[SET_THEME] = (state, action) => {
     return {
@@ -69,14 +84,39 @@ ACTION_HANDLERS[SET_THEME] = (state, action) => {
             theme: action.theme
         }
     };
-}
+};
+
+ACTION_HANDLERS[SET_TASKS_SORT_ORDER] = (state, { tasksSortOrder }) => {
+    return {
+        ...state,
+        preferences: {
+            ...state.preferences,
+            tasksSortOrder
+        }
+    };
+};
+
+ACTION_HANDLERS[SET_MANUAL_SORT_ORDER] = (state, action) => {
+    return {
+        ...state,
+        preferences: {
+            ...state.preferences,
+            tasksSortOrder: 'manual'
+        }
+    };
+};
+
+// ------------------------------------
+// Getters
+// ------------------------------------
+export const getTasksSortOrder = state => state.profile.preferences.tasksSortOrder;
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 export default function profileReducer (state = initialState, action) {
 
-    const handler = ACTION_HANDLERS[action.type]
+    const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;
 }

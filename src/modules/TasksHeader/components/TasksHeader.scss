@@ -1,0 +1,11 @@
+.tasks-header {
+    height: 20px;
+    margin: 0 35px 20px;
+    display: flex;
+    justify-content: space-between;
+    // font-size: 1rem;
+
+    &-sorting {
+        cursor: pointer;
+    }
+}

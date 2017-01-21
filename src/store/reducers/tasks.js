@@ -2,6 +2,13 @@ import DeepAssign from 'deep-assign';
 
 import TaskModel from 'store/models/TaskModel';
 
+// Cannot import this const from the profile reducer. Not sure why
+// import { SET_TASKS_SORT_ORDER } from './profile';
+const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
+
+export const TASKS_SORT_ORDERS = ['asc', 'desc'];
+Object.freeze(TASKS_SORT_ORDERS);
+
 const initialState = {
     tasks: []
 };
@@ -153,6 +160,19 @@ const ACTION_HANDLERS = {
             }
             return task;
         });
+
+        return {
+            tasks
+        };
+    },
+    [SET_TASKS_SORT_ORDER]: (state, { tasksSortOrder }) => {
+        const tasks = [...state.tasks];
+
+        if (tasksSortOrder === 'asc') {
+            tasks.sort((a, b) => a.issue.key > b.issue.key);
+        } else {
+            tasks.sort((a, b) => a.issue.key < b.issue.key)
+        };
 
         return {
             tasks
