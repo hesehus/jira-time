@@ -28,7 +28,8 @@ export function init () {
         });
 
         mc.add(new Hammer.Pan({
-            direction: Hammer.DIRECTION_VERTICAL
+            direction: Hammer.DIRECTION_VERTICAL,
+            threshold: 5
         }));
 
         mc.on('panstart', onPanStart);

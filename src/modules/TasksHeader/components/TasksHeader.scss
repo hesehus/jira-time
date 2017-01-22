@@ -17,8 +17,11 @@
         width: 17px;
         margin-left: 3px;
         transition: transform 250ms;
-        transform: rotate(0deg);
+        transform: rotate(-90deg);
 
+        .tasks-header-sorting--asc & {
+            transform: rotate(0deg);
+        }
         .tasks-header-sorting--desc & {
             transform: rotate(-180deg);
         }
