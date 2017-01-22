@@ -25,13 +25,13 @@ export const updateLocation = ({ dispatch }) => {
 // ------------------------------------
 // Getters
 // ------------------------------------
-export const getCurrentPath = state => state.location.pathname;
+export const getCurrentPath = state => state.location ? state.location.pathname : '/';
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 export default function locationReducer (state = initialState, action) {
-    return action.type === LOCATION_CHANGE
+    return action.type === LOCATION_CHANGE && action.payload.action !== 'POP'
     ? action.payload
     : state;
 }
