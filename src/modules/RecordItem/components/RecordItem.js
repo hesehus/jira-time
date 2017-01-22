@@ -101,7 +101,6 @@ export default class RecordItem extends Component {
     onCommentKeyDown (e) {
         if (keycode(e) === 'tab') {
             e.preventDefault();
-            console.log(e);
 
             const draggableTasks = document.querySelector('.tasks-draggable');
             const limboTask = document.querySelector('.task-item--limbo');

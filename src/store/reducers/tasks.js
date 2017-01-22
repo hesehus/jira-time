@@ -95,6 +95,11 @@ const ACTION_HANDLERS = {
 
         const { issue } = action;
 
+        // Prevent adding tasks with issue keys that we have already
+        if (state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase())) {
+            return state;
+        }
+
         return {
             ...state,
             tasks: [...state.tasks, TaskModel({ issue })]

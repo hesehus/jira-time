@@ -16,7 +16,6 @@ export default class Tasks extends Component {
     static propTypes = {
         tasks: PropTypes.array.isRequired,
         tasksSearch: PropTypes.string,
-        recordsWithNoIssue: PropTypes.array.isRequired,
         setManualSortOrder: PropTypes.func.isRequired,
         setTaskMoving: PropTypes.func.isRequired,
         unfilteredTasksCount: PropTypes.number.isRequired
@@ -47,7 +46,6 @@ export default class Tasks extends Component {
         const {
             tasks,
             tasksSearch,
-            recordsWithNoIssue,
             setManualSortOrder,
             setTaskMoving,
             unfilteredTasksCount
@@ -56,7 +54,7 @@ export default class Tasks extends Component {
 
         let tasksListOutput;
 
-        if (tasks.length === 0 && recordsWithNoIssue.length === 0) {
+        if (tasks.length === 0) {
             if (unfilteredTasksCount > 0) {
                 tasksListOutput = (
                     <div className='tasks-list-wrap tasks-list-wrap--center'>

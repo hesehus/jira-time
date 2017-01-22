@@ -5,8 +5,12 @@
     padding: 5px 9px;
     border: 1px solid #ccc;
 
-    &.history-record-comment {
+    &--comment {
       white-space: normal;
+    }
+
+    &--issue-key {
+      text-transform: uppercase;
     }
   }
 
