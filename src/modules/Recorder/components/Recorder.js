@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { Notification } from 'react-notification';
 import { default as swal } from 'sweetalert2'
 
 import { extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';
@@ -23,16 +22,20 @@ export default class Recorder extends Component {
     constructor (props) {
         super(props);
 
+        const remaining = processTask.getRemaining();
         this.state = {
-            addingTasksFromDropOrPaste: processTask.getRemaining()
+            tasksAddingRemaining: remaining,
+            tasksAtStart: remaining
         };
 
         this.onDropAndPaste = this.onDropAndPaste.bind(this);
         this.updateElapsedTime = this.updateElapsedTime.bind(this);
 
         processTask.on('add', (result) => {
+            const remaining = processTask.getRemaining();
+
             this.setState({
-                addingTasksFromDropOrPaste: processTask.getRemaining()
+                tasksAddingRemaining: remaining
             });
 
             if (result.success) {
@@ -49,7 +52,7 @@ export default class Recorder extends Component {
 
         processTask.on('end', () => {
             this.setState({
-                addingTasksFromDropOrPaste: 0
+                tasksAddingRemaining: 0
             });
         });
     }
@@ -81,8 +84,10 @@ export default class Recorder extends Component {
 
                 processTask.add(taskKeys);
 
+                const remaining = processTask.getRemaining();
                 this.setState({
-                    addingTasksFromDropOrPaste: processTask.getRemaining()
+                    tasksAddingRemaining: remaining,
+                    tasksAtStart: remaining
                 });
             }
         } else {
@@ -110,22 +115,51 @@ export default class Recorder extends Component {
             return null;
         }
 
-        let notifications;
-        const num = this.state.addingTasksFromDropOrPaste;
-        if (num) {
-            const options = {
-                isActive: true,
-                dismissAfter: 999999,
-                message: `Yo, hold on. I'm real busy trying to add ${num} ${num > 1 ? 'tasks' : 'task'}`
-            };
-            notifications = <Notification {...options} />;
+        let notifications = [];
+
+        const { tasksAddingRemaining, tasksAtStart } = this.state;
+        if (tasksAddingRemaining) {
+            if (tasksAddingRemaining > 10) {
+                notifications.push((
+                    <div className='notification'>
+                        {
+                            `Wow dude! ${tasksAtStart} tasks?
+                            You must be crazy busy!
+                            Take a well deserved break while I'm setting this up (${tasksAddingRemaining}
+                            more to go)...`
+                        }
+                    </div>
+                ));
+            } else {
+                if (tasksAtStart > 10) {
+                    notifications.push((
+                        <div className='notification'>
+                            {`Allright man. Only ${tasksAddingRemaining} more...`}
+                        </div>
+                    ));
+                } else {
+                    notifications.push((
+                        <div className='notification'>
+                            {
+                                `Yo dude!
+                                I'm real busy trying to add ${tasksAddingRemaining}
+                                ${tasksAddingRemaining > 1 ? 'tasks' : 'task'}...`
+                            }
+                        </div>
+                    ));
+                }
+            }
         }
 
-        return (
-            <div className='recorder recorder--show'>
-                {notifications}
-            </div>
-        )
+        if (!!notifications.length) {
+            return (
+                <div className='recorder recorder--show'>
+                    {notifications}
+                </div>
+            );
+        }
+
+        return <div className='recorder' />;
     }
 }
 
