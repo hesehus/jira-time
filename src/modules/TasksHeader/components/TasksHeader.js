@@ -27,7 +27,7 @@ export default class TasksHeader extends Component {
         }
 
         this.props.setTasksSortOrder({
-            tasksSortOrder
+            sortOrder: tasksSortOrder
         });
     }
 

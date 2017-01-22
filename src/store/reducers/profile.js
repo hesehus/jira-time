@@ -1,19 +1,12 @@
 import themes from 'modules/theme/themes';
 
-import { SET_MANUAL_SORT_ORDER } from './tasks';
-
 const initialState = {
     loggedIn: false,
     username: '',
     userinfo: {},
     preferences: {
-        theme: themes[0].key,
-        tasksSortOrder: null
+        theme: themes[0].key
     }
-};
-
-export const CONSTANTS = {
-    hej: 1
 };
 
 // ------------------------------------
@@ -22,7 +15,6 @@ export const CONSTANTS = {
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_THEME = 'SET_THEME';
-export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 
 // ------------------------------------
 // Actions
@@ -46,13 +38,6 @@ export function setTheme ({ theme }) {
     return {
         type: SET_THEME,
         theme
-    }
-};
-
-export function setTasksSortOrder ({ tasksSortOrder }) {
-    return {
-        type: SET_TASKS_SORT_ORDER,
-        tasksSortOrder
     }
 };
 
@@ -85,31 +70,6 @@ ACTION_HANDLERS[SET_THEME] = (state, action) => {
         }
     };
 };
-
-ACTION_HANDLERS[SET_TASKS_SORT_ORDER] = (state, { tasksSortOrder }) => {
-    return {
-        ...state,
-        preferences: {
-            ...state.preferences,
-            tasksSortOrder
-        }
-    };
-};
-
-ACTION_HANDLERS[SET_MANUAL_SORT_ORDER] = (state, action) => {
-    return {
-        ...state,
-        preferences: {
-            ...state.preferences,
-            tasksSortOrder: 'manual'
-        }
-    };
-};
-
-// ------------------------------------
-// Getters
-// ------------------------------------
-export const getTasksSortOrder = state => state.profile.preferences.tasksSortOrder;
 
 // ------------------------------------
 // Reducer

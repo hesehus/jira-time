@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import TasksHeader from '../components/TasksHeader';
 
-import { getTasksSortOrder, setTasksSortOrder } from 'store/reducers/profile';
+import { getTasksSortOrder, setTasksSortOrder } from 'store/reducers/tasks';
 
 const mapStateToProps = (state) => {
     return {
