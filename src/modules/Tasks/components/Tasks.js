@@ -15,9 +15,11 @@ export default class Tasks extends Component {
 
     static propTypes = {
         tasks: PropTypes.array.isRequired,
+        tasksSearch: PropTypes.string,
         recordsWithNoIssue: PropTypes.array.isRequired,
         setManualSortOrder: PropTypes.func.isRequired,
-        setTaskMoving: PropTypes.func.isRequired
+        setTaskMoving: PropTypes.func.isRequired,
+        unfilteredTasksCount: PropTypes.number.isRequired
     }
 
     constructor (props) {
@@ -42,17 +44,44 @@ export default class Tasks extends Component {
 
     render () {
 
-        const { tasks, recordsWithNoIssue, setManualSortOrder, setTaskMoving } = this.props;
+        const {
+            tasks,
+            tasksSearch,
+            recordsWithNoIssue,
+            setManualSortOrder,
+            setTaskMoving,
+            unfilteredTasksCount
+        } = this.props;
         const { scrollTop } = this.state;
 
-        // Tell the user to start working
+        let tasksListOutput;
+
         if (tasks.length === 0 && recordsWithNoIssue.length === 0) {
-            return (
-                <div className='tasks-outer'>
-                    <div className='tasks tasks--no-tasks'>
-                        <div>You have not added any tasks, you lazy dog.</div>
-                        <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
+            if (unfilteredTasksCount > 0) {
+                tasksListOutput = (
+                    <div className='tasks-list-wrap tasks-list-wrap--center'>
+                        <div>{`Dude, there is no such thing as "${tasksSearch}"`}</div>
                     </div>
+                );
+            } else {
+                // Tell the user to start working
+                tasksListOutput = (
+                    <div className='tasks-list-wrap tasks-list-wrap--center'>
+                        <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
+                        <div>You have not added any tasks, you lazy dog.</div>
+                    </div>
+                );
+            }
+        } else {
+            tasksListOutput = (
+                <div className='tasks-list-wrap' onScroll={this.onScroll}>
+                    <RealTasks tasks={tasks} />
+                    <DraggableTasks
+                      tasks={tasks}
+                      setTaskMoving={setTaskMoving}
+                      setManualSortOrder={setManualSortOrder}
+                      parentScrollTop={scrollTop}
+                    />
                 </div>
             );
         }
@@ -65,15 +94,7 @@ export default class Tasks extends Component {
                         <TasksHeader />
                         <TasksInLimbo />
                     </div>
-                    <div className='tasks-list-wrap' onScroll={this.onScroll}>
-                        <RealTasks tasks={tasks} />
-                        <DraggableTasks
-                          tasks={tasks}
-                          setTaskMoving={setTaskMoving}
-                          setManualSortOrder={setManualSortOrder}
-                          parentScrollTop={scrollTop}
-                        />
-                    </div>
+                    {tasksListOutput}
                 </div>
             </div>
         );

@@ -1,11 +1,35 @@
 .tasks-header {
-    height: 20px;
-    margin: 0 35px 20px;
+    height: 30px;
+    margin: 0 35px 15px 20px;
     display: flex;
     justify-content: space-between;
-    // font-size: 1rem;
+    align-items: center;
+    font-size: .8rem;
 
     &-sorting {
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 5px 15px;
+    }
+
+    &-sorting-icon {
+        width: 17px;
+        margin-left: 3px;
+        transition: transform 250ms;
+        transform: rotate(0deg);
+
+        .tasks-header-sorting--desc & {
+            transform: rotate(-180deg);
+        }
+    }
+
+    &-search {
+        font-size: .7rem;
+        padding: 3px 25px 3px 8px;
+        background-image: url('../../../assets/search.svg');
+        background-repeat: no-repeat;
+        background-position: calc(100% - 5px) center;
+        background-size: 19px auto;
     }
 }

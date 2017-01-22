@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import keycode from 'keycode';
 
 import Sync from 'shared/sync';
 import DateInput from 'modules/DateInput';
@@ -33,6 +34,7 @@ export default class RecordItem extends Component {
         this.onEndTimeChange = this.onEndTimeChange.bind(this);
         this.onRemoveClick = this.onRemoveClick.bind(this);
         this.onCommentChange = this.onCommentChange.bind(this);
+        this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
 
@@ -55,6 +57,15 @@ export default class RecordItem extends Component {
             } else {
                 this.scrollIntoView();
             }
+        }
+    }
+
+    componentDidUpdate () {
+        const { commentSelectionStart, commentSelectionEnd } = this.state;
+
+        if (commentSelectionStart) {
+            this.inputComment.selectionStart = commentSelectionStart;
+            this.inputComment.selectionEnd = commentSelectionEnd;
         }
     }
 
@@ -87,12 +98,28 @@ export default class RecordItem extends Component {
         });
     }
 
-    componentDidUpdate () {
-        const { commentSelectionStart, commentSelectionEnd } = this.state;
+    onCommentKeyDown (e) {
+        if (keycode(e) === 'tab') {
+            e.preventDefault();
+            console.log(e);
 
-        if (commentSelectionStart) {
-            this.inputComment.selectionStart = commentSelectionStart;
-            this.inputComment.selectionEnd = commentSelectionEnd;
+            const draggableTasks = document.querySelector('.tasks-draggable');
+            const limboTask = document.querySelector('.task-item--limbo');
+            if (draggableTasks && limboTask) {
+                const allRecordsInLimbo = Array.from(limboTask.querySelectorAll('.record[data-cuid]'));
+                const allRecordsOnPage = Array.from(draggableTasks.querySelectorAll('.record[data-cuid]'));
+                const allRecords = [...allRecordsInLimbo, ...allRecordsOnPage];
+                const currentRecordPosition = allRecords.findIndex((record) => {
+                    return record.dataset.cuid === this.recordElement.dataset.cuid;
+                });
+                const nextRecordItem = allRecords[currentRecordPosition + (e.shiftKey ? -1 : 1)];
+                if (nextRecordItem) {
+                    const nextRecordComment = nextRecordItem.querySelector('.record-comment');
+                    if (nextRecordComment) {
+                        nextRecordComment.select();
+                    }
+                }
+            }
         }
     }
 
@@ -152,7 +179,7 @@ export default class RecordItem extends Component {
         }
 
         return (
-            <div className={className} data-cuid={record.cuid}>
+            <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
                 <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
                 <div className='record-time'>
                     <div className='record-dates'>
@@ -176,6 +203,7 @@ export default class RecordItem extends Component {
                 <textarea
                   className='record-comment'
                   onChange={this.onCommentChange}
+                  onKeyDown={this.onCommentKeyDown}
                   value={record.comment}
                   disabled={somethingIsMoving}
                   ref={(i) => this.inputComment = i}

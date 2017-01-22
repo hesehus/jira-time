@@ -2,16 +2,18 @@ import { connect } from 'react-redux';
 
 import TasksHeader from '../components/TasksHeader';
 
-import { getTasksSortOrder, setTasksSortOrder } from 'store/reducers/tasks';
+import { getTasksSortOrder, setTasksSortOrder, setTasksSearch } from 'store/reducers/tasks';
 
 const mapStateToProps = (state) => {
     return {
-        tasksSortOrder: getTasksSortOrder(state)
+        tasksSortOrder: getTasksSortOrder(state),
+        tasksSearch: state.tasks.search
     };
 };
 
 const mapDispatchToProps = {
-    setTasksSortOrder
+    setTasksSortOrder,
+    setTasksSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksHeader);

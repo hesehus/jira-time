@@ -178,6 +178,7 @@ export class Login extends Component {
                     <input type='text'
                       ref='username'
                       name='username'
+                      className='input-field'
                       defaultValue={this.props.username}
                       disabled={this.state.loggingIn}
                 />
@@ -187,6 +188,7 @@ export class Login extends Component {
                     <input type='password'
                       ref='password'
                       name='password'
+                      className='input-field'
                       disabled={this.state.loggingIn}
                 />
                 </label>

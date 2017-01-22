@@ -8,7 +8,8 @@ Object.freeze(TASKS_SORT_ORDERS);
 
 const initialState = {
     tasks: [],
-    sortOrder: null
+    sortOrder: null,
+    search: ''
 };
 
 // ------------------------------------
@@ -22,6 +23,7 @@ export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
+export const SET_SEARCH = 'SET_SEARCH';
 
 // ------------------------------------
 // Actions
@@ -78,6 +80,12 @@ export function setTasksSortOrder ({ sortOrder }) {
         sortOrder
     }
 };
+export function setTasksSearch ({ search }) {
+    return {
+        type: SET_SEARCH,
+        search
+    }
+};
 
 // ------------------------------------
 // Action Handlers
@@ -103,6 +111,7 @@ const ACTION_HANDLERS = {
     },
     [SET_MANUAL_SORT_ORDER] : (state, { tasks }) => {
         return {
+            ...state,
             tasks,
             sortOrder: initialState.sortOrder
         };
@@ -187,8 +196,15 @@ const ACTION_HANDLERS = {
         };
 
         return {
+            ...state,
             sortOrder,
             tasks
+        };
+    },
+    [SET_SEARCH]: (state, { search }) => {
+        return {
+            ...state,
+            search
         };
     }
 };
@@ -200,6 +216,11 @@ export const getMovingTask = ({ state }) => {
     return state.tasks.tasks.find(task => task.moving);
 }
 export const getTasksSortOrder = state => state.tasks.sortOrder;
+export const getTasksFilteredBySearch = ({ state }) => {
+    return state.tasks.tasks.filter((task) => {
+        return task.issue.key.includes(state.tasks.search);
+    });
+};
 
 // ------------------------------------
 // Reducer
