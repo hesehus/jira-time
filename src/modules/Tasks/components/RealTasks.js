@@ -54,6 +54,12 @@ export default class Tasks extends Component {
         });
 
         events.emit('tasksPositionsCalculated', { tasksPositions });
+
+        // Ensure that we update on all changes on the store (could be limited to record count)
+        store.subscribe(() => {
+            clearTimeout(this.calculateTimeout);
+            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 25);
+        });
     }
 
     render () {

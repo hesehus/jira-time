@@ -55,7 +55,7 @@ api.getWorklogs = function (req, res) {
 api.createDummyIssue = function (key) {
     return {
         id: 123,
-        key: key,
+        key: key.toUpperCase(),
         fields: {
             summary: ips({ count: 2, units: 'sentences' }),
             timetracking: {
