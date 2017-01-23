@@ -4,8 +4,7 @@ import LoadingIcon from 'assets/loading.svg';
 import PlusIcon from 'assets/plus.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import RecordModel from 'store/models/RecordModel';
-import { getIssue, setIssueRemaining } from 'shared/jiraClient';
-
+import { getIssue } from 'shared/jiraClient';
 import './RecordActionButtons.scss';
 
 export default class RecordActionButtons extends Component {
@@ -62,7 +61,6 @@ export default class RecordActionButtons extends Component {
         });
     }
 
-
     onIssueRefreshClick () {
         const { task } = this.props;
 
@@ -100,7 +98,7 @@ export default class RecordActionButtons extends Component {
             iconToUserForRefresh = LoadingIcon;
         }
 
-        let actionsForTaskWithIssue= [];
+        let actionsForTaskWithIssue = [];
         if (task) {
             actionsForTaskWithIssue = [
                 <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>,

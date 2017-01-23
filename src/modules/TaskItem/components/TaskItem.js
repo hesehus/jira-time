@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-
 import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
-
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
-
-import LoadingIcon from 'assets/loading.svg';
-
 import './TaskItem.scss';
 
 let focusingOnRemaining = false;
@@ -18,7 +13,9 @@ export class TaskItem extends Component {
             task: PropTypes.object.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object,
-            movingTask: PropTypes.object
+            movingTask: PropTypes.object,
+            setIssueRefreshing: PropTypes.func.isRequired,
+            refreshIssue: PropTypes.func.isRequired
         };
     }
 
@@ -112,8 +109,6 @@ export class TaskItem extends Component {
 
         const records = <Records taskCuid={task.cuid} />;
 
-        let refreshIcon;
-
         // This task does have a JIRA issue
         if (task.issue) {
 
@@ -131,14 +126,6 @@ export class TaskItem extends Component {
                     </div>
                 );
             }
-        }
-
-        if (task.issueRefreshing) {
-            refreshIcon = (
-                <span className='task-item__issue-refresh'>
-                    <img src={LoadingIcon} alt='Loading' className='task-item__loading' />
-                </span>
-            );
         }
 
         let remainingEstimate = task.issue.fields.timetracking.remainingEstimate;
@@ -160,7 +147,11 @@ export class TaskItem extends Component {
                 <div className='task-item__info'>
                     <div className='task-item__left'>
                         <div className='task-item__key'>
-                            <a className="task-item__link" href={'/browse/' + task.issue.key} target='_blank'>{task.issue.key}</a>
+                            <a className='task-item__link'
+                              href={'/browse/' + task.issue.key}
+                              target='_blank'>
+                                {task.issue.key}
+                            </a>
                         </div>
                         <div className='task-item__summary' title={task.issue.fields.summary}>
                             {task.issue.fields.summary}
