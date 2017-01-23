@@ -222,8 +222,9 @@ export const getMovingTask = ({ state }) => {
 }
 export const getTasksSortOrder = state => state.tasks.sortOrder;
 export const getTasksFilteredBySearch = ({ state }) => {
+    const search = state.tasks.search.toLowerCase();
     return state.tasks.tasks.filter((task) => {
-        return task.issue.key.includes(state.tasks.search);
+        return task.issue.key.toLowerCase().includes(search);
     });
 };
 

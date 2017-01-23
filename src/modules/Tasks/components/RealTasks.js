@@ -49,6 +49,10 @@ export default class Tasks extends Component {
         });
 
         events.emit('tasksPositionsCalculated', { tasksPositions });
+
+        store.subscribe(() => {
+            this.calculatePositions();
+        });
     }
 
     render () {
