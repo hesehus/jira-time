@@ -1,6 +1,6 @@
 .tasks-header {
     height: 30px;
-    margin: 0 35px 15px 20px;
+    margin: 0 15px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,6 +11,7 @@
         display: flex;
         align-items: center;
         padding: 5px 15px;
+        user-select: none;
     }
 
     &-sorting-icon {
