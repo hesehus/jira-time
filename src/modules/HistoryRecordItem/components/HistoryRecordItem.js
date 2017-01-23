@@ -169,7 +169,7 @@ export default class HistoryRecordItem extends Component {
 
         return (
             <tr className={className}>
-                <td className='history-record-cell'>
+                <td className='history-record-cell history-record-cell--issue-key'>
                     {editWorklogLink}
                 </td>
                 <td className='history-record-cell'>{startTimeDisplay}</td>

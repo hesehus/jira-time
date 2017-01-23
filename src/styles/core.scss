@@ -75,8 +75,29 @@ body {
   color: #fff;
 }
 
-input {
-  padding: 7px 10px;
+// Remove chrome autofill 
+input:-webkit-autofill,
+input:-webkit-autofill:focus  {
+    -webkit-box-shadow:0 0 0 50px white inset;
+    -webkit-text-fill-color: inherit;
+}
+
+a {
+    color: #fff;
+}
+
+input,
+textarea {
+  color: #333;
+}
+
+.input-field {
+  padding: 18px 30px;
+  color: #4A4A4A;
+  font-size: 1.2rem;
+  background-color: #fff;
+  border: none;
+  border-radius: 49px;
 
   &::-webkit-clear-button {
     display: none;
@@ -102,39 +123,12 @@ input {
   100%  { opacity: 1; }
 }
 
-// Remove chrome autofill
-input:-webkit-autofill,
-input:-webkit-autofill:focus  {
-    -webkit-box-shadow:0 0 0 50px white inset; /* Change the color to your own background color */
-    -webkit-text-fill-color: inherit;
-}
-
-a {
-    color: #fff;
-}
-
-input[type='text'],
-input[type='search'],
-input[type='password'] {
-    padding: 18px 30px;
-    color: #4A4A4A;
-    font-size: 1.2rem;
-    background-color: #fff;
-    border: none;
-    border-radius: 49px;
-}
-
-textarea {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, .5);
-}
-
 .btn {
     display: inline-block;
     border: none;
     padding: 18px 30px;
     background-color: #fff;
-    box-shadow: 0 2px 13px 0 rgba(0,0,0,0.4);
+    box-shadow: 0 2px 13px 0 rgba(0, 0, 0, .4);
     border-radius: 49px;
     color: #4A4A4A;
     font-size: 1.2rem;

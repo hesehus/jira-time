@@ -2,8 +2,14 @@ import DeepAssign from 'deep-assign';
 
 import TaskModel from 'store/models/TaskModel';
 
+// Defining the different types of sorting we have
+export const TASKS_SORT_ORDERS = ['asc', 'desc'];
+Object.freeze(TASKS_SORT_ORDERS);
+
 const initialState = {
-    tasks: []
+    tasks: [],
+    sortOrder: null,
+    search: ''
 };
 
 // ------------------------------------
@@ -16,6 +22,8 @@ export const SET_ISSUE_REMAINING_ESTIMATE = 'SET_ISSUE_REMAINING_ESTIMATE';
 export const SET_ISSUE_REFRESHING = 'SET_ISSUE_REFRESHING';
 export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 export const SET_TASK_MOVING = 'SET_TASK_MOVING';
+export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
+export const SET_SEARCH = 'SET_SEARCH';
 
 // ------------------------------------
 // Actions
@@ -66,6 +74,18 @@ export function setTaskMoving ({ cuid, moving }) {
         moving
     }
 };
+export function setTasksSortOrder ({ sortOrder }) {
+    return {
+        type: SET_TASKS_SORT_ORDER,
+        sortOrder
+    }
+};
+export function setTasksSearch ({ search }) {
+    return {
+        type: SET_SEARCH,
+        search
+    }
+};
 
 // ------------------------------------
 // Action Handlers
@@ -75,7 +95,13 @@ const ACTION_HANDLERS = {
 
         const { issue } = action;
 
+        // Prevent adding tasks with issue keys that we have already
+        if (state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase())) {
+            return state;
+        }
+
         return {
+            ...state,
             tasks: [...state.tasks, TaskModel({ issue })]
         }
     },
@@ -84,12 +110,15 @@ const ACTION_HANDLERS = {
         let taskIndex = state.tasks.findIndex(task => task.cuid === action.cuid);
 
         return {
+            ...state,
             tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
         };
     },
     [SET_MANUAL_SORT_ORDER] : (state, { tasks }) => {
         return {
-            tasks
+            ...state,
+            tasks,
+            sortOrder: initialState.sortOrder
         };
     },
     [REFRESH_ISSUE] : (state, action) => {
@@ -103,6 +132,7 @@ const ACTION_HANDLERS = {
         });
 
         return {
+            ...state,
             tasks
         };
     },
@@ -121,6 +151,7 @@ const ACTION_HANDLERS = {
         });
 
         return {
+            ...state,
             tasks
         };
     },
@@ -140,6 +171,7 @@ const ACTION_HANDLERS = {
         });
 
         return {
+            ...state,
             tasks
         };
     },
@@ -155,7 +187,29 @@ const ACTION_HANDLERS = {
         });
 
         return {
+            ...state,
             tasks
+        };
+    },
+    [SET_TASKS_SORT_ORDER]: (state, { sortOrder }) => {
+        const tasks = [...state.tasks];
+
+        if (sortOrder === 'asc') {
+            tasks.sort((a, b) => a.issue.key > b.issue.key);
+        } else {
+            tasks.sort((a, b) => a.issue.key < b.issue.key)
+        };
+
+        return {
+            ...state,
+            sortOrder,
+            tasks
+        };
+    },
+    [SET_SEARCH]: (state, { search }) => {
+        return {
+            ...state,
+            search
         };
     }
 };
@@ -166,6 +220,12 @@ const ACTION_HANDLERS = {
 export const getMovingTask = ({ state }) => {
     return state.tasks.tasks.find(task => task.moving);
 }
+export const getTasksSortOrder = state => state.tasks.sortOrder;
+export const getTasksFilteredBySearch = ({ state }) => {
+    return state.tasks.tasks.filter((task) => {
+        return task.issue.key.includes(state.tasks.search);
+    });
+};
 
 // ------------------------------------
 // Reducer

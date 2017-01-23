@@ -52,14 +52,14 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
         loggedIn: action.isLoggedIn,
         username: typeof action.username === 'undefined' ? state.username : action.username
     }
-}
+};
 
 ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
     return {
         ...state,
         userinfo: action.userinfo
     };
-}
+};
 
 ACTION_HANDLERS[SET_THEME] = (state, action) => {
     return {
@@ -69,14 +69,14 @@ ACTION_HANDLERS[SET_THEME] = (state, action) => {
             theme: action.theme
         }
     };
-}
+};
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
 export default function profileReducer (state = initialState, action) {
 
-    const handler = ACTION_HANDLERS[action.type]
+    const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;
 }

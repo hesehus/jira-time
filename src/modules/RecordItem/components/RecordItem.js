@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import keycode from 'keycode';
 
 import Sync from 'shared/sync';
 import DateInput from 'modules/DateInput';
@@ -33,18 +34,11 @@ export default class RecordItem extends Component {
         this.onEndTimeChange = this.onEndTimeChange.bind(this);
         this.onRemoveClick = this.onRemoveClick.bind(this);
         this.onCommentChange = this.onCommentChange.bind(this);
+        this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
 
-        this.state = {
-            comment: ''
-        };
-    }
-
-    componentWillMount () {
-        this.setState({
-            comment: this.props.record.comment
-        });
+        this.state = {};
     }
 
     componentDidMount () {
@@ -66,22 +60,13 @@ export default class RecordItem extends Component {
         }
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentDidUpdate () {
+        const { commentSelectionStart, commentSelectionEnd } = this.state;
 
-        /**
-        * We need to wrap this in a timeout since this callback will be fired multiple times
-        * with old values first, which makes for a really weird user experience
-        **/
-        clearTimeout(this.willUpdateCommentTimeout);
-        this.willUpdateCommentTimeout = setTimeout(() => {
-            if (nextProps.record) {
-                if (nextProps.record.comment !== this.state.comment) {
-                    this.setState({
-                        comment: nextProps.record.comment
-                    });
-                }
-            }
-        }, 0);
+        if (commentSelectionStart) {
+            this.inputComment.selectionStart = commentSelectionStart;
+            this.inputComment.selectionEnd = commentSelectionEnd;
+        }
     }
 
     onStartTimeChange ({ date }) {
@@ -100,16 +85,41 @@ export default class RecordItem extends Component {
         });
     }
 
-    onCommentChange (e) {
+    onCommentChange (e, force) {
 
         this.setState({
-            comment: e.target.value
+            commentSelectionStart: e.target.selectionStart,
+            commentSelectionEnd: e.target.selectionEnd
         });
 
         this.props.setRecordComment({
             cuid: this.props.record.cuid,
             comment: e.target.value
         });
+    }
+
+    onCommentKeyDown (e) {
+        if (keycode(e) === 'tab') {
+            e.preventDefault();
+
+            const draggableTasks = document.querySelector('.tasks-draggable');
+            const limboTask = document.querySelector('.task-item--limbo');
+            if (draggableTasks && limboTask) {
+                const allRecordsInLimbo = Array.from(limboTask.querySelectorAll('.record[data-cuid]'));
+                const allRecordsOnPage = Array.from(draggableTasks.querySelectorAll('.record[data-cuid]'));
+                const allRecords = [...allRecordsInLimbo, ...allRecordsOnPage];
+                const currentRecordPosition = allRecords.findIndex((record) => {
+                    return record.dataset.cuid === this.recordElement.dataset.cuid;
+                });
+                const nextRecordItem = allRecords[currentRecordPosition + (e.shiftKey ? -1 : 1)];
+                if (nextRecordItem) {
+                    const nextRecordComment = nextRecordItem.querySelector('.record-comment');
+                    if (nextRecordComment) {
+                        nextRecordComment.select();
+                    }
+                }
+            }
+        }
     }
 
     onRemoveClick () {
@@ -168,7 +178,7 @@ export default class RecordItem extends Component {
         }
 
         return (
-            <div className={className} data-cuid={record.cuid}>
+            <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
                 <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
                 <div className='record-time'>
                     <div className='record-dates'>
@@ -192,7 +202,8 @@ export default class RecordItem extends Component {
                 <textarea
                   className='record-comment'
                   onChange={this.onCommentChange}
-                  value={this.state.comment}
+                  onKeyDown={this.onCommentKeyDown}
+                  value={record.comment}
                   disabled={somethingIsMoving}
                   ref={(i) => this.inputComment = i}
                 />

@@ -1,19 +1,15 @@
 import React, { Component, PropTypes } from 'react';
+
 import RecordItem from 'modules/RecordItem';
 import RecordActionButtons from 'modules/RecordActionButtons';
 
 import './TasksInLimbo.scss';
 
-let scrollbarWidth;
-
-export class TasksInLimbo extends Component {
+export default class TasksInLimbo extends Component {
 
     static propTypes = {
         movingRecord: PropTypes.object,
         recordsWithNoIssue: PropTypes.array.isRequired
-    }
-
-    componentWillMount () {
     }
 
     render () {
@@ -72,5 +68,3 @@ export class TasksInLimbo extends Component {
         );
     }
 }
-
-export default TasksInLimbo;
