@@ -193,13 +193,31 @@ const ACTION_HANDLERS = {
     },
     [SET_TASKS_SORT_ORDER]: (state, { sortOrder }) => {
         const tasks = [...state.tasks];
+        function naturalCompare(a, b) {
+            let ax = [], bx = [];
+
+            a.issue.key.replace(/(\d+)|(\D+)/g, function(_, $1, $2) { ax.push([$1 || Infinity, $2 || ""]) });
+            b.issue.key.replace(/(\d+)|(\D+)/g, function(_, $1, $2) { bx.push([$1 || Infinity, $2 || ""]) });
+            
+            while(ax.length && bx.length) {
+                let an = ax.shift();
+                let bn = bx.shift();
+                let nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+                if(nn) return nn;
+            }
+
+            return ax.length - bx.length;
+        }
+
 
         if (sortOrder === 'asc') {
-            tasks.sort((a, b) => a.issue.key > b.issue.key);
+            tasks.sort(naturalCompare);
+            tasks.map(task=>console.log(task.issue.key));
         } else {
-            tasks.sort((a, b) => a.issue.key < b.issue.key)
+            tasks.sort(naturalCompare).reverse();
+            tasks.map(task=>console.log(task.issue.key));
         };
-
+        console.log(tasks);
         return {
             ...state,
             sortOrder,

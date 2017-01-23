@@ -101,7 +101,6 @@ export class TaskItem extends Component {
     render () {
 
         const { task, movingRecord, movingTask } = this.props;
-
         let className = 'task-item';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task-item--drop-active';
