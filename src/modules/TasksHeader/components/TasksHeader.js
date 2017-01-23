@@ -90,6 +90,7 @@ export default class TasksHeader extends Component {
                 </div>
                 <input
                   className='input-field tasks-header-search'
+                  type='search'
                   value={tasksSearch}
                   onChange={this.onInputChange}
                   onFocus={() => this.inputFocusing = true}
