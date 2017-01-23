@@ -193,28 +193,13 @@ const ACTION_HANDLERS = {
     },
     [SET_TASKS_SORT_ORDER]: (state, { sortOrder }) => {
         const tasks = [...state.tasks];
-        function naturalCompare (a, b) {
-            let ax = [];
-            let bx = [];
-
-            a.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { ax.push([$1 || Infinity, $2 || '']) });
-            b.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { bx.push([$1 || Infinity, $2 || '']) });
-
-            while (ax.length && bx.length) {
-                let an = ax.shift();
-                let bn = bx.shift();
-                let nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
-                if (nn) return nn;
-            }
-            return ax.length - bx.length;
-        }
-
 
         if (sortOrder === 'asc') {
             tasks.sort(naturalCompare);
         } else {
             tasks.sort(naturalCompare).reverse();
-        };
+        }
+
         return {
             ...state,
             sortOrder,
@@ -228,6 +213,22 @@ const ACTION_HANDLERS = {
         };
     }
 };
+
+function naturalCompare (a, b) {
+    let ax = [];
+    let bx = [];
+
+    a.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { ax.push([$1 || Infinity, $2 || '']) });
+    b.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { bx.push([$1 || Infinity, $2 || '']) });
+
+    while (ax.length && bx.length) {
+        let an = ax.shift();
+        let bn = bx.shift();
+        let nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+        if (nn) return nn;
+    }
+    return ax.length - bx.length;
+}
 
 // ------------------------------------
 // Getters

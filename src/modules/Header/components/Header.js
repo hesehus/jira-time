@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { IndexLink, Link } from 'react-router'
+import { IndexLink, Link, hashHistory } from 'react-router'
 
 import Sync, { sharedEvents } from 'shared/sync';
 
@@ -17,7 +17,6 @@ export default class Header extends Component {
     static get propTypes () {
         return {
             records: PropTypes.array.isRequired,
-            currentPath: PropTypes.string.isRequired,
             loggedIn: PropTypes.bool.isRequired,
             refreshIssue: PropTypes.func.isRequired,
             setIssueRefreshing: PropTypes.func.isRequired,
@@ -33,6 +32,7 @@ export default class Header extends Component {
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onProcessAllStart = this.onProcessAllStart.bind(this);
         this.onProcessAllDone = this.onProcessAllDone.bind(this);
+        this.onHashChange = this.onHashChange.bind(this);
     }
 
     componentDidMount () {
@@ -48,11 +48,22 @@ export default class Header extends Component {
         // Listen for events from the syncer
         sharedEvents.on('processAllStart', this.onProcessAllStart);
         sharedEvents.on('processAllDone', this.onProcessAllDone);
+
+        this.onHashChange();
+        this.hashHistoryUnlisten = hashHistory.listen(this.onHashChange);
     }
 
     componentWillUnmount () {
         sharedEvents.off('processAllStart', this.onProcessAllStart);
         sharedEvents.off('processAllDone', this.onProcessAllDone);
+
+        this.hashHistoryUnlisten();
+    }
+
+    onHashChange () {
+        this.setState({
+            currentPathname: hashHistory.getCurrentLocation().pathname
+        });
     }
 
     onProcessAllStart () {
@@ -130,7 +141,7 @@ export default class Header extends Component {
         let classNameProfile = 'header__button';
         let classNameSummary = 'header__button';
 
-        switch (this.props.currentPath) {
+        switch (this.state.currentPathname) {
         case '/profile' : {
             classNameProfile += ' header__button--active';
             break;

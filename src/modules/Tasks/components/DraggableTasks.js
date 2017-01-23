@@ -87,10 +87,11 @@ class DraggablaTasks extends Component {
             const { tasks, parentScrollTop, setTaskMoving } = this.props;
             const { cuid } = element.dataset;
             const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
+            const top = clientRectEl ? clientRectEl.top : 0;
 
             this.setState({
-                y: clientRectEl.top,
-                initialYPosition: clientRectEl.top,
+                y: top,
+                initialYPosition: top,
                 isPressed: cuid,
                 initialTasks: [...tasks],
                 parentScrollTopAtPanStart: parentScrollTop

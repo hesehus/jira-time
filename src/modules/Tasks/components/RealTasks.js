@@ -56,9 +56,16 @@ export default class Tasks extends Component {
         events.emit('tasksPositionsCalculated', { tasksPositions });
 
         // Ensure that we update on all changes on the store (could be limited to record count)
+        let numberOfRecords = store.getState().recorder.records.length;
         store.subscribe(() => {
             clearTimeout(this.calculateTimeout);
-            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 25);
+            this.calculateTimeout = setTimeout(() => {
+                let newNumberOfRecords = store.getState().recorder.records.length;
+                if (newNumberOfRecords !== numberOfRecords) {
+                    newNumberOfRecords = numberOfRecords;
+                    this.calculatePositions();
+                }
+            }, 25);
         });
     }
 
