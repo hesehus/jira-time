@@ -217,14 +217,13 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 // Getters
 // ------------------------------------
-export const getMovingTask = ({ state }) => {
-    return state.tasks.tasks.find(task => task.moving);
-}
+export const getMovingTask = ({ state }) => state.tasks.tasks.find(task => task.moving);
 export const getTasksSortOrder = state => state.tasks.sortOrder;
 export const getTasksFilteredBySearch = ({ state }) => {
     const search = state.tasks.search.toLowerCase();
     return state.tasks.tasks.filter((task) => {
-        return task.issue.key.toLowerCase().includes(search);
+        return task.issue.key.toLowerCase().includes(search) ||
+               task.issue.fields.summary.toLowerCase().includes(search);
     });
 };
 
