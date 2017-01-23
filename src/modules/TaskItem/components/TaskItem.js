@@ -118,7 +118,7 @@ export class TaskItem extends Component {
                         <div className='task-item-info'>
                             <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>
                             <span className='task-item__summary'>
-                                {task.issue.errorMessages.map((e, i) => <div key={i}>{e}</div>)}
+                                {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
                             </span>
                         </div>
                         {records}

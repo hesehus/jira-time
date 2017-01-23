@@ -5,20 +5,17 @@
     justify-content: space-between;
     align-items: center;
     font-size: .8rem;
-
     &-sorting {
         cursor: pointer;
         display: flex;
         align-items: center;
         padding: 5px 15px;
     }
-
     &-sorting-icon {
         width: 17px;
         margin-left: 3px;
         transition: transform 250ms;
         transform: rotate(-90deg);
-
         .tasks-header-sorting--asc & {
             transform: rotate(0deg);
         }
@@ -26,10 +23,18 @@
             transform: rotate(-180deg);
         }
     }
-
     &-search {
+        position: relative;
+    }
+    &-search-delete {
+        position: absolute;
+        color:#777;
+        right: 7px;
+        cursor: pointer;
+    }
+    &-search-input {
         font-size: .7rem;
-        padding: 3px 8px 3px 25px;
+        padding: 3px 20px 3px 25px;
         background-image: url('../../../assets/search.svg');
         background-repeat: no-repeat;
         background-position: 5px center;

@@ -209,7 +209,6 @@ const ACTION_HANDLERS = {
             return ax.length - bx.length;
         }
 
-
         if (sortOrder === 'asc') {
             tasks.sort(naturalCompare);
         } else {
