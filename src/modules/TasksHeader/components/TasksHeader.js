@@ -121,7 +121,8 @@ export default class TasksHeader extends Component {
                       ref={e => this.search = e}
                     />
                     {
-                         this.state.deleteButton ? <span className='tasks-header-search-delete' onClick={this.onDeleteSearchText}>x</span> : null
+                         this.state.deleteButton ? <span className='tasks-header-search-delete'
+                           onClick={this.onDeleteSearchText}>x</span> : null
                     }
                 </div>
             </div>
