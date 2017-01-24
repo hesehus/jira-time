@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import events from 'shared/events';
 import TaskItem from 'modules/TaskItem';
 
+import { getClosestTaskFromPosition } from 'modules/DragAndDropHandler';
+
 import './DraggableTasks.scss';
 
 const springConfig = { stiffness: 300, damping: 50 };
@@ -61,25 +63,6 @@ class DraggablaTasks extends Component {
         });
     }
 
-    getCurrentMouseRow ({ mouseY, yCenterAtDrag, currentHeight }) {
-
-        const { tasksPositions } = this.state;
-
-        // Determine the closest row
-        let closestRow = 0;
-        let diff;
-        for (let i = 0; i < tasksPositions.length; i++) {
-            const rect = tasksPositions[i];
-            const diffForThisTask = Math.abs(yCenterAtDrag - rect.center);
-            if (i === 0 || diffForThisTask < diff) {
-                closestRow = i;
-                diff = diffForThisTask;
-            }
-        }
-
-        return closestRow;
-    }
-
     onPanStart ({ element }) {
         if (element) {
             const { tasksPositions } = this.state;
@@ -114,11 +97,10 @@ class DraggablaTasks extends Component {
             if (clientRectEl) {
                 const y = initialYPosition + event.deltaY + (parentScrollTop - parentScrollTopAtPanStart);
 
-                const currentRow = this.getCurrentMouseRow({
-                    mouseY: y,
-                    currentHeight: clientRectEl.clientRect.height,
-                    yCenterAtDrag: y + (clientRectEl.clientRect.height / 2)
+                const closestTask = getClosestTaskFromPosition({
+                    y: (y + (clientRectEl.clientRect.height / 2))
                 });
+                const currentRow = closestTask.index;
 
                 if (currentRow !== currentArrayPosition) {
                     let newTasks = [...tasks];

@@ -15,19 +15,16 @@
         border-radius: 6px;
         opacity: 0.2;
         transform: translateZ(0);
-        transition: opacity 400ms ease;
+        transition: opacity 250ms ease;
     }
-    &:hover:before {
+    body:not(.moving) &:hover:before {
         opacity: 0.3;
+    }
+    &--drop-active:before {
+        opacity: .4;
     }
     &:not(:last-child) {
         margin-bottom: 15px;
-    }
-    &--drop-active {
-        &,
-        &:hover {
-            background: rgba(255, 255, 255, .4)
-        }
     }
     &__info {
         display: flex;

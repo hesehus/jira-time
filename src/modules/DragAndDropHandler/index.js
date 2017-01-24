@@ -10,11 +10,16 @@ import {
     setRecordMoveTarget
 } from 'store/reducers/recorder';
 
+import { getTasksFilteredBySearch } from 'store/reducers/tasks';
+
 let eventsBinded;
 let taskElement;
 let recordElement;
+let recordElementInitialCenterPosition;
 let targetTaskCuid;
 let targetTaskIssueKey;
+let tasksPositions = [];
+let tasksFilteredBySearch = [];
 
 export function init () {
     if (!eventsBinded) {
@@ -37,7 +42,27 @@ export function init () {
         mc.on('panend', onPanEnd);
 
         document.addEventListener('keydown', onKeyPress, false);
+
+        events.on('tasksPositionsCalculated', p => tasksPositions = p.tasksPositions);
     }
+}
+
+// Determine the closest task when a mouseY value is given
+export function getClosestTaskFromPosition ({ y }) {
+    let index = 0;
+    let diff;
+    for (let i = 0; i < tasksPositions.length; i++) {
+        const rect = tasksPositions[i];
+        const diffForThisTask = Math.abs(y - rect.center);
+        if (i === 0 || diffForThisTask < diff) {
+            index = i;
+            diff = diffForThisTask;
+        }
+    }
+    return {
+        index,
+        task: tasksFilteredBySearch[index]
+    };
 }
 
 function onKeyPress (e) {
@@ -48,16 +73,25 @@ function onKeyPress (e) {
 
 function onPanStart (event) {
     if (event.target.type !== 'textarea' && event.target.type !== 'input') {
+
+        tasksFilteredBySearch = getTasksFilteredBySearch({ state: store.getState() });
+
         recordElement = domClosest(event.target, '.record');
         if (recordElement) {
-            doSharedMovingPreparations();
+            if (!!tasksPositions.length) {
+                doSharedMovingPreparations();
 
-            store.dispatch(setRecordMoving({
-                cuid: recordElement.dataset.cuid,
-                moving: true
-            }));
+                store.dispatch(setRecordMoving({
+                    cuid: recordElement.dataset.cuid,
+                    moving: true
+                }));
 
-            onPanMove(event);
+                // Get the distance from the mouse center, to the record center
+                const rect = recordElement.getBoundingClientRect();
+                recordElementInitialCenterPosition = rect.top + (rect.height / 2);
+
+                onPanMove(event);
+            }
             return;
         }
 
@@ -85,28 +119,24 @@ function onPanMove (event) {
         if (record) {
             event.preventDefault();
 
-            recordElement.style.transform = `translate3d(0px, ${event.deltaY + 60}px, 0) scale(1.01)`;
+            recordElement.style.transform = `translate3d(0px, ${event.deltaY}px, 0) scale(1.08)`;
 
-            const target = document.elementFromPoint(event.center.x, event.center.y);
-            const closestTask = domClosest(target, '.task-item');
+            const y = (recordElementInitialCenterPosition + event.deltaY) - tasksPositions[0].clientRect.top;
 
-            let taskCuid;
-            let taskIssueKey;
+            if (y > 20) {
+                const closestTask = getClosestTaskFromPosition({ y });
 
-            if (closestTask) {
-                taskCuid = closestTask.dataset.cuid;
-                taskIssueKey = closestTask.dataset.taskissuekey;
+                targetTaskCuid = closestTask.task.cuid;
+                targetTaskIssueKey = closestTask.task.issue.key;
+            } else {
+                targetTaskCuid = null;
+                targetTaskIssueKey = null
             }
 
-            if (targetTaskCuid !== taskCuid) {
-                targetTaskCuid = taskCuid;
-                targetTaskIssueKey = taskIssueKey;
-
-                store.dispatch(setRecordMoveTarget({
-                    cuid: record.cuid,
-                    taskCuid
-                }));
-            }
+            store.dispatch(setRecordMoveTarget({
+                cuid: record.cuid,
+                taskCuid: targetTaskCuid
+            }));
         }
         return;
     }
