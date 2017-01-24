@@ -103,13 +103,16 @@ export default class RecordActionButtons extends Component {
         if (task) {
             actionsForTaskWithIssue = [
 
-                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove' onClick={this.onRemoveClick}>
+                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
+                  onClick={this.onRemoveClick}>
                     <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
                 </button>,
                 <span className='record-action-buttons__log record-action-buttons__log--refresh'
                   title='Click to refresh the JIRA issue'
                   onClick={this.onIssueRefreshClick}>
-                    <img src={iconToUserForRefresh} className='record-action-buttons__log-icon record-action-buttons__log-icon--refresh' alt='Refresh'/>
+                    <img src={iconToUserForRefresh}
+                      className='record-action-buttons__log-icon record-action-buttons__log-icon--refresh'
+                      alt='Refresh' />
                 </span>
 
             ];
@@ -126,7 +129,9 @@ export default class RecordActionButtons extends Component {
                 <button className='record-action-buttons__log'
                   title='Start new worklog'
                   onClick={this.onStartActiveLogClick}>
-                     <img src={RecordIcon} className='record-action-buttons__log-icon record-action-buttons__log-icon--record' alt='Record' />
+                    <img src={RecordIcon}
+                      className='record-action-buttons__log-icon record-action-buttons__log-icon--record'
+                      alt='Record' />
                 </button>
             </div>
         );
