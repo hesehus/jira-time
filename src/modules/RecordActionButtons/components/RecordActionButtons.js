@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import LoadingIcon from 'assets/loading.svg';
 import PlusIcon from 'assets/plus.svg';
+import RecordIcon from 'assets/record.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import RecordModel from 'store/models/RecordModel';
 import { getIssue } from 'shared/jiraClient';
@@ -101,27 +102,36 @@ export default class RecordActionButtons extends Component {
         let actionsForTaskWithIssue = [];
         if (task) {
             actionsForTaskWithIssue = [
-                <button className='task-item__remove' onClick={this.onRemoveClick}>x</button>,
-                <span className='task-item__issue-refresh'
-                  title='Click to refresh the JIRA issue, yo!'
+
+                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
+                  onClick={this.onRemoveClick}>
+                    <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
+                </button>,
+                <span className='record-action-buttons__log record-action-buttons__log--refresh'
+                  title='Click to refresh the JIRA issue'
                   onClick={this.onIssueRefreshClick}>
-                    <img src={iconToUserForRefresh} alt='Refresh' className='task-item__issue-refresh-image' />
+                    <img src={iconToUserForRefresh}
+                      className='record-action-buttons__log-icon record-action-buttons__log-icon--refresh'
+                      alt='Refresh' />
                 </span>
+
             ];
         }
 
         return (
             <div className='record-action-buttons'>
                 {actionsForTaskWithIssue}
-                <button className='record-action-buttons__log record-action-buttons__log--passive'
+                <button className='record-action-buttons__log'
                   title='Add a worklog'
                   onClick={this.onStartPassiveLogClick}>
                     <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Plus' />
                 </button>
-                <button className='record-action-buttons__log record-action-buttons__log--active'
+                <button className='record-action-buttons__log'
                   title='Start new worklog'
                   onClick={this.onStartActiveLogClick}>
-                    ●
+                    <img src={RecordIcon}
+                      className='record-action-buttons__log-icon record-action-buttons__log-icon--record'
+                      alt='Record' />
                 </button>
             </div>
         );
