@@ -20,11 +20,18 @@ export default class TasksHeader extends Component {
 
         this.onSortClick = this.onSortClick.bind(this);
         this.onInputChange = this.onInputChange.bind(this);
+        this.onDeleteSearchText = this.onDeleteSearchText.bind(this);
         this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
+        this.state = {
+            deleteButton: false
+        }
     }
 
     componentDidMount () {
         document.addEventListener('keydown', this.onDocumentKeyDown, false);
+        if (this.search.value.length) {
+            this.setState({ deleteButton: true });
+        }
     }
 
     componentWillUnmount () {
@@ -42,6 +49,7 @@ export default class TasksHeader extends Component {
         } else if (code === 'esc') {
             if (this.inputFocusing) {
                 this.search.blur();
+                this.onDeleteSearchText();
             }
         }
     }
@@ -59,9 +67,24 @@ export default class TasksHeader extends Component {
             sortOrder: tasksSortOrder
         });
     }
-
+    onDeleteSearchText () {
+        this.search.value = '';
+        this.props.setTasksSearch({ search: '' });
+        this.setState({
+            deleteButton: false
+        });
+    }
     onInputChange (e) {
         this.props.setTasksSearch({ search: e.target.value });
+        if (e.target.value.length) {
+            this.setState({
+                deleteButton: true
+            });
+        } else {
+            this.setState({
+                deleteButton: false
+            });
+        }
     }
 
     render () {
@@ -88,15 +111,20 @@ export default class TasksHeader extends Component {
                       alt={sortOrderDisplay}
                     />
                 </div>
-                <input
-                  className='input-field tasks-header-search'
-                  type='search'
-                  value={tasksSearch}
-                  onChange={this.onInputChange}
-                  onFocus={() => this.inputFocusing = true}
-                  onBlur={() => this.inputFocusing = false}
-                  ref={e => this.search = e}
-                />
+                <div className='tasks-header-search'>
+                    <input
+                      className='input-field tasks-header-search-input'
+                      value={tasksSearch}
+                      onChange={this.onInputChange}
+                      onFocus={() => this.inputFocusing = true}
+                      onBlur={() => this.inputFocusing = false}
+                      ref={e => this.search = e}
+                    />
+                    {
+                         this.state.deleteButton ? <span className='tasks-header-search-delete'
+                           onClick={this.onDeleteSearchText}>x</span> : null
+                    }
+                </div>
             </div>
         );
     }
