@@ -5,7 +5,6 @@ import { getWorkLogs } from 'shared/jiraClient';
 import HistoryRecordItem from 'modules/HistoryRecordItem';
 import HistorySpaceItem from 'modules/HistorySpaceItem';
 import { getElapsedTime } from 'store/reducers/recorder';
-import RecordModel from 'store/models/RecordModel';
 
 import LoadingIcon from 'assets/loading.svg';
 
@@ -82,9 +81,13 @@ export default class Summary extends Component {
     **/
     onNotSyncedSynced ({ record, worklog }) {
 
-        // Since not synced records will dissapear from the redux state, we need to adde them manually here
-        worklog.taskIssueKey = record.taskIssueKey;
-        const newRecord = RecordModel(worklog);
+        // Since the not synced record will disappear from the redux state, we need to add it manually here
+        const newRecord = {
+            ...record,
+            id: worklog.id,
+            created: worklog.created,
+            updated: worklog.updated
+        };
 
         this.setState({
             records: [...this.state.records, newRecord]
