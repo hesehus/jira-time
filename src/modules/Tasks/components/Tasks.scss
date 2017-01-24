@@ -6,6 +6,7 @@
   &-list-wrap {
     position: relative;
     overflow-y: scroll;
+    overflow-x: hidden;
     flex-grow: 1;
     padding: 0 20px 20px;
     margin-top: 15px;
