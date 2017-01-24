@@ -22,16 +22,10 @@ export default class TasksHeader extends Component {
         this.onInputChange = this.onInputChange.bind(this);
         this.onDeleteSearchText = this.onDeleteSearchText.bind(this);
         this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
-        this.state = {
-            deleteButton: false
-        }
     }
 
     componentDidMount () {
         document.addEventListener('keydown', this.onDocumentKeyDown, false);
-        if (this.search.value.length) {
-            this.setState({ deleteButton: true });
-        }
     }
 
     componentWillUnmount () {
@@ -68,23 +62,10 @@ export default class TasksHeader extends Component {
         });
     }
     onDeleteSearchText () {
-        this.search.value = '';
         this.props.setTasksSearch({ search: '' });
-        this.setState({
-            deleteButton: false
-        });
     }
     onInputChange (e) {
         this.props.setTasksSearch({ search: e.target.value });
-        if (e.target.value.length) {
-            this.setState({
-                deleteButton: true
-            });
-        } else {
-            this.setState({
-                deleteButton: false
-            });
-        }
     }
 
     render () {
@@ -121,7 +102,7 @@ export default class TasksHeader extends Component {
                       ref={e => this.search = e}
                     />
                     {
-                         this.state.deleteButton ? <span className='tasks-header-search-delete'
+                         !!tasksSearch.length ? <span className='tasks-header-search-delete'
                            onClick={this.onDeleteSearchText}>x</span> : null
                     }
                 </div>
