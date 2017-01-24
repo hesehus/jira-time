@@ -3,6 +3,7 @@ import keycode from 'keycode';
 
 import { TASKS_SORT_ORDERS } from 'store/reducers/tasks';
 import IconDown from 'assets/down.svg';
+import PlusIcon from 'assets/plus-black.svg';
 
 import './TasksHeader.scss';
 
@@ -101,10 +102,12 @@ export default class TasksHeader extends Component {
                       onBlur={() => this.inputFocusing = false}
                       ref={e => this.search = e}
                     />
-                    {
-                         !!tasksSearch.length ? <span className='tasks-header-search-delete'
-                           onClick={this.onDeleteSearchText}>x</span> : null
-                    }
+                    <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')}
+                      onClick={this.onDeleteSearchText}>
+                        <img src={PlusIcon} alt='Delete search input'
+                          className='tasks-header-search-delete__icon'
+                        />
+                    </span>
                 </div>
             </div>
         );

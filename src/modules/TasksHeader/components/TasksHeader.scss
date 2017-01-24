@@ -30,12 +30,31 @@
     &-search-delete {
         position: absolute;
         color:#777;
-        right: 7px;
+        right: 0;
+        top: 0;
         cursor: pointer;
+        width: 23px;
+        height: 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 150ms, opacity 150ms;
+        transform: scale(.9);
+        opacity: 0;
+
+        &--show {
+            opacity: 1;
+            transform: 0;
+        }
+
+        &__icon {
+            width: 14px;
+            transform: rotate(45deg);
+        }
     }
     &-search-input {
         font-size: .7rem;
-        padding: 3px 20px 3px 25px;
+        padding: 3px 25px;
         background-image: url('../../../assets/search.svg');
         background-repeat: no-repeat;
         background-position: 5px center;
