@@ -61,25 +61,23 @@ class DraggablaTasks extends Component {
         });
     }
 
-    getCurrentMouseRow ({ y, currentHeight }) {
+    getCurrentMouseRow ({ mouseY, yCenterAtDrag, currentHeight }) {
 
         const { tasksPositions } = this.state;
 
-        // Determine precise row hit
+        // Determine the closest row
+        let closestRow = 0;
+        let diff;
         for (let i = 0; i < tasksPositions.length; i++) {
             const rect = tasksPositions[i];
-            if (y <= rect.top) {
-                return i;
+            const diffForThisTask = Math.abs(yCenterAtDrag - rect.center);
+            if (i === 0 || diffForThisTask < diff) {
+                closestRow = i;
+                diff = diffForThisTask;
             }
         }
 
-        // Above the first item?
-        if (y < tasksPositions[0].top) {
-            return 0;
-        }
-
-        // No hit. Assume at bottom
-        return tasksPositions.length - 1;
+        return closestRow;
     }
 
     onPanStart ({ element }) {
@@ -116,7 +114,11 @@ class DraggablaTasks extends Component {
             if (clientRectEl) {
                 const y = initialYPosition + event.deltaY + (parentScrollTop - parentScrollTopAtPanStart);
 
-                const currentRow = this.getCurrentMouseRow({ y, currentHeight: clientRectEl.clientRect.height });
+                const currentRow = this.getCurrentMouseRow({
+                    mouseY: y,
+                    currentHeight: clientRectEl.clientRect.height,
+                    yCenterAtDrag: y + (clientRectEl.clientRect.height / 2)
+                });
 
                 if (currentRow !== currentArrayPosition) {
                     let newTasks = [...tasks];

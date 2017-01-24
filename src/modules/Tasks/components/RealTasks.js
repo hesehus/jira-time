@@ -46,6 +46,7 @@ export default class Tasks extends Component {
                 tasksPositions.push({
                     cuid: task.cuid,
                     top: heightIncrement,
+                    center: heightIncrement + (clientRect.height / 2),
                     clientRect
                 });
 
