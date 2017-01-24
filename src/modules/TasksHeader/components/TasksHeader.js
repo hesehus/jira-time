@@ -102,7 +102,7 @@ export default class TasksHeader extends Component {
                       onBlur={() => this.inputFocusing = false}
                       ref={e => this.search = e}
                     />
-                    <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')}
+                    <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')} // eslint-disable-line
                       onClick={this.onDeleteSearchText}>
                         <img src={PlusIcon} alt='Delete search input'
                           className='tasks-header-search-delete__icon'
