@@ -13,6 +13,7 @@ class DraggablaTasks extends Component {
 
     static propTypes = {
         tasks: PropTypes.array.isRequired,
+        unfilteredTasks: PropTypes.array.isRequired,
         setManualSortOrder: PropTypes.func.isRequired,
         setTaskMoving: PropTypes.func.isRequired,
         parentScrollTop: PropTypes.number.isRequired
@@ -106,7 +107,7 @@ class DraggablaTasks extends Component {
 
     onPanMove ({ event, element }) {
         if (element) {
-            const { tasks, setManualSortOrder, parentScrollTop } = this.props;
+            const { tasks, unfilteredTasks, setManualSortOrder, parentScrollTop } = this.props;
             const { tasksPositions, initialYPosition, parentScrollTopAtPanStart } = this.state;
             const { cuid } = element.dataset;
             const clientRectEl = tasksPositions.find(c => c.cuid === cuid);
@@ -125,8 +126,13 @@ class DraggablaTasks extends Component {
                         newTasks[currentRow] = newTasks[currentArrayPosition];
                         newTasks[currentArrayPosition] = switchWith;
 
+                        // Get the unfiltered tasks (excluding the current filtered tasks)
+                        const unfilteredTasksToAdd = unfilteredTasks.filter((task) => {
+                            return !newTasks.find(t => task.cuid === t.cuid);
+                        });
+
                         setManualSortOrder({
-                            tasks: newTasks
+                            tasks: [...newTasks, ...unfilteredTasksToAdd]
                         });
                     }
                 }
