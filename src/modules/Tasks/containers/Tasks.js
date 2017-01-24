@@ -7,7 +7,7 @@ import Tasks from '../components/Tasks';
 const mapStateToProps = (state) => ({
     tasks: getTasksFilteredBySearch({ state }),
     tasksSearch: state.tasks.search,
-    unfilteredTasksCount: state.tasks.tasks.length
+    unfilteredTasks: state.tasks.tasks
 });
 
 const mapDispatchToProps = {

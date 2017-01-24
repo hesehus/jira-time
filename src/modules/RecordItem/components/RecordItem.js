@@ -33,7 +33,7 @@ export default class RecordItem extends Component {
         this.onStartTimeChange = this.onStartTimeChange.bind(this);
         this.onEndTimeChange = this.onEndTimeChange.bind(this);
         this.onRemoveClick = this.onRemoveClick.bind(this);
-        this.onCommentChange = this.onCommentChange.bind(this);
+        this.onCommentBlur = this.onCommentBlur.bind(this);
         this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
@@ -60,15 +60,6 @@ export default class RecordItem extends Component {
         }
     }
 
-    componentDidUpdate () {
-        const { commentSelectionStart, commentSelectionEnd } = this.state;
-
-        if (commentSelectionStart) {
-            this.inputComment.selectionStart = commentSelectionStart;
-            this.inputComment.selectionEnd = commentSelectionEnd;
-        }
-    }
-
     onStartTimeChange ({ date }) {
         this.props.setRecordDate({
             cuid: this.props.record.cuid,
@@ -85,11 +76,10 @@ export default class RecordItem extends Component {
         });
     }
 
-    onCommentChange (e, force) {
+    onCommentBlur (e, force) {
 
         this.setState({
-            commentSelectionStart: e.target.selectionStart,
-            commentSelectionEnd: e.target.selectionEnd
+            commentSelectionStart: e.target.selectionStart
         });
 
         this.props.setRecordComment({
@@ -116,9 +106,11 @@ export default class RecordItem extends Component {
                     const nextRecordComment = nextRecordItem.querySelector('.record-comment');
                     if (nextRecordComment) {
                         nextRecordComment.select();
+                        return;
                     }
                 }
             }
+            e.target.blur();
         }
     }
 
@@ -199,11 +191,11 @@ export default class RecordItem extends Component {
                     </div>
                     <span className='record__elapsed-time'>{record.elapsedTime}</span>
                 </div>
-                <textarea
+                <input
                   className='record-comment'
-                  onChange={this.onCommentChange}
+                  onBlur={this.onCommentBlur}
                   onKeyDown={this.onCommentKeyDown}
-                  value={record.comment}
+                  defaultValue={record.comment}
                   disabled={somethingIsMoving}
                   ref={(i) => this.inputComment = i}
                 />

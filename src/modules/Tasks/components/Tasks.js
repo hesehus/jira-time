@@ -18,7 +18,7 @@ export default class Tasks extends Component {
         tasksSearch: PropTypes.string,
         setManualSortOrder: PropTypes.func.isRequired,
         setTaskMoving: PropTypes.func.isRequired,
-        unfilteredTasksCount: PropTypes.number.isRequired
+        unfilteredTasks: PropTypes.array.isRequired
     }
 
     constructor (props) {
@@ -48,14 +48,14 @@ export default class Tasks extends Component {
             tasksSearch,
             setManualSortOrder,
             setTaskMoving,
-            unfilteredTasksCount
+            unfilteredTasks
         } = this.props;
         const { scrollTop } = this.state;
 
         let tasksListOutput;
 
         if (tasks.length === 0) {
-            if (unfilteredTasksCount > 0) {
+            if (unfilteredTasks.length > 0) {
                 tasksListOutput = (
                     <div className='tasks-list-wrap tasks-list-wrap--center'>
                         <div>{`Dude, there is no such thing as "${tasksSearch}"`}</div>
@@ -76,6 +76,7 @@ export default class Tasks extends Component {
                     <RealTasks tasks={tasks} />
                     <DraggableTasks
                       tasks={tasks}
+                      unfilteredTasks={unfilteredTasks}
                       setTaskMoving={setTaskMoving}
                       setManualSortOrder={setManualSortOrder}
                       parentScrollTop={scrollTop}
