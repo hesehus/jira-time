@@ -1,25 +1,38 @@
 .record-action-buttons {
     display: flex;
     flex-wrap: nowrap;
+    align-items: center;
 
     &__log-icon {
-        width: 10px;
-        height: 10px;
+        width: 15px;
+        height: 15px;
+
+        &--refresh{
+            width: 20px;
+            height: 20px;
+        }
+
+        &--record{
+            width: 14px;
+            height: 14px;
+        }
     }
 
     &__log {
         flex-shrink: 0;
         background: transparent;
         border: 1px solid rgba(255, 255, 255, .5);
+        margin-right: 5px;
 
-        &--passive {
-            margin-right: 5px;
+        &--refresh{
+            border: none;
+            display: flex;
         }
 
-        &--active {
-            color: red;
-            font-size: 29px;
-            line-height: 18px;
+        &--remove {
+            img{
+                transform: rotate(45deg);
+            }
         }
     }
 }
