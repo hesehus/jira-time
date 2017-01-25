@@ -86,7 +86,7 @@ export default class DateInput extends Component {
         if (!date) {
             return '';
         }
-        return moment(date).format('ll');
+        return moment(date).format('MMM M');
     }
 
     render () {

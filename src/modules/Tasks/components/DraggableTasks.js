@@ -204,7 +204,7 @@ class DraggablaTasks extends Component {
                                       zIndex: task.cuid === isPressed ? 99 : i
                                   }}
                                 >
-                                    <TaskItem task={task} />
+                                    <TaskItem task={task} index={i} />
                                 </div>
                             }
                         </Motion>
