@@ -186,6 +186,7 @@ function cancelPan () {
     if (recordElement) {
         events.emit('pancancel:record');
 
+        recordElement.style.transform = ``;
         targetTaskCuid = null;
         recordElement = null;
 
