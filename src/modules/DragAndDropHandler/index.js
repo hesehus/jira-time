@@ -95,14 +95,17 @@ function onPanStart (event) {
             return;
         }
 
-        taskElement = domClosest(event.target, '.task-item');
-        if (taskElement) {
-            doSharedMovingPreparations();
+        const tasksAreFiltered = !!store.getState().tasks.search;
+        if (!tasksAreFiltered) {
+            taskElement = domClosest(event.target, '.task-item');
+            if (taskElement) {
+                doSharedMovingPreparations();
 
-            return events.emit('panstart:task', {
-                event,
-                element: taskElement
-            });
+                return events.emit('panstart:task', {
+                    event,
+                    element: taskElement
+                });
+            }
         }
     }
 
