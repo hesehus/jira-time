@@ -9,12 +9,13 @@ export default class Records extends Component {
     static propTypes = {
         records: PropTypes.array.isRequired,
         activeRecord: PropTypes.object,
-        focusOnRecordCommentCuid: PropTypes.any
+        focusOnRecordCommentCuid: PropTypes.any,
+        taskIndex: PropTypes.number
     }
 
     render () {
 
-        const { records } = this.props;
+        const { records, taskIndex } = this.props;
 
         if (!records.length) {
             return null;
@@ -22,7 +23,15 @@ export default class Records extends Component {
 
         return (
             <div className='records'>
-                {records.map(record => <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />)}
+                {records.map((record, i) => (
+                    <RecordItem
+                      recordCuid={record.cuid}
+                      record={record}
+                      key={record.cuid}
+                      taskIndex={taskIndex}
+                      recordIndex={i}
+                    />
+                ))}
             </div>
         );
     }

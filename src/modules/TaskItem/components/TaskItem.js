@@ -11,6 +11,7 @@ export class TaskItem extends Component {
     static get propTypes () {
         return {
             task: PropTypes.object.isRequired,
+            index: PropTypes.number,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object,
@@ -100,13 +101,13 @@ export class TaskItem extends Component {
 
     render () {
 
-        const { task, movingRecord, movingTask } = this.props;
+        const { task, movingRecord, movingTask, index } = this.props;
         let className = 'task-item';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task-item--drop-active';
         }
 
-        const records = <Records taskCuid={task.cuid} />;
+        const records = <Records taskCuid={task.cuid} taskIndex={index} />;
 
         // This task does have a JIRA issue
         if (task.issue) {

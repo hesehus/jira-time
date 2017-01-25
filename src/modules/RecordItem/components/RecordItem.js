@@ -24,7 +24,9 @@ export default class RecordItem extends Component {
         activeRecord: PropTypes.object,
         movingRecord: PropTypes.object,
         autofocus: PropTypes.bool,
-        movingTask: PropTypes.object
+        movingTask: PropTypes.object,
+        taskIndex: PropTypes.number,
+        recordIndex: PropTypes.number
     }
 
     constructor (props) {
@@ -37,6 +39,7 @@ export default class RecordItem extends Component {
         this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
+        this.getCommentTabIndex = this.getCommentTabIndex.bind(this);
 
         this.state = {};
     }
@@ -58,6 +61,12 @@ export default class RecordItem extends Component {
                 this.scrollIntoView();
             }
         }
+        
+        this.setDatesTabIndex();
+    }
+
+    componentDidUpdate () {
+        this.setDatesTabIndex();
     }
 
     onStartTimeChange ({ date }) {
@@ -89,7 +98,8 @@ export default class RecordItem extends Component {
     }
 
     onCommentKeyDown (e) {
-        if (keycode(e) === 'tab') {
+        const command = keycode(e);
+        if ((command === 'down' || command === 'up') && e.altKey) {
             e.preventDefault();
 
             const draggableTasks = document.querySelector('.tasks-draggable');
@@ -101,14 +111,14 @@ export default class RecordItem extends Component {
                 const currentRecordPosition = allRecords.findIndex((record) => {
                     return record.dataset.cuid === this.recordElement.dataset.cuid;
                 });
-                const nextRecordItem = allRecords[currentRecordPosition + (e.shiftKey ? -1 : 1)];
+                const nextRecordItem = allRecords[currentRecordPosition + (command === 'up' ? -1 : 1)];
                 if (nextRecordItem) {
                     const nextRecordComment = nextRecordItem.querySelector('.record-comment');
                     if (nextRecordComment) {
                         nextRecordComment.select();
-                        return;
                     }
                 }
+                return;
             }
             e.target.blur();
         }
@@ -128,6 +138,24 @@ export default class RecordItem extends Component {
         });
 
         syncer.start();
+    }
+
+    getTabIndexBase () {
+        return ((this.props.taskIndex + 1) + this.props.recordIndex) * 10;
+    }
+
+    setDatesTabIndex () {
+        const [inputStart, inputEnd] = Array.from(this.recordDates.querySelectorAll('input:not(.flatpickr-input)'));
+        if (inputStart) {
+            inputStart.tabIndex = this.getTabIndexBase() + 1;
+        }
+        if (inputEnd) {
+            inputEnd.tabIndex = this.getTabIndexBase() + 2;
+        }
+    }
+
+    getCommentTabIndex () {
+        return this.getTabIndexBase() + 3;
     }
 
     render () {
@@ -173,7 +201,7 @@ export default class RecordItem extends Component {
             <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
                 <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
                 <div className='record-time'>
-                    <div className='record-dates'>
+                    <div className='record-dates' ref={e => this.recordDates = e}>
                         <DateInput
                           date={record.startTime}
                           onChange={this.onStartTimeChange}
@@ -197,7 +225,8 @@ export default class RecordItem extends Component {
                   onKeyDown={this.onCommentKeyDown}
                   defaultValue={record.comment}
                   disabled={somethingIsMoving}
-                  ref={(i) => this.inputComment = i}
+                  tabIndex={this.getCommentTabIndex()}
+                  ref={e => this.inputComment = e}
                 />
                 {btnSync}
             </div>
