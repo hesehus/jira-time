@@ -23,7 +23,8 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [ATTEMPT_LOGIN] : (state, action) => state
+    [ATTEMPT_LOGIN] : (state, action) => state,
+    SERVER_HYDRATE : (state, { login }) => login
 };
 
 // ------------------------------------

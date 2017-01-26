@@ -211,7 +211,8 @@ const ACTION_HANDLERS = {
             ...state,
             search
         };
-    }
+    },
+    SERVER_HYDRATE : (state, { tasks }) => tasks
 };
 
 function naturalCompare (a, b) {

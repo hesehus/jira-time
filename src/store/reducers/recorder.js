@@ -422,7 +422,8 @@ const ACTION_HANDLERS = {
             record,
             records
         };
-    }
+    },
+    SERVER_HYDRATE : (state, { recorder }) => recorder
 };
 
 // Listen for logout. Clear everything if we log out

@@ -7,6 +7,8 @@ import ProcessTask from './ProcessTask';
 import './Recorder.scss';
 
 const processTask = new ProcessTask();
+let ws;
+let syncId;
 
 export default class Recorder extends Component {
 
@@ -15,7 +17,8 @@ export default class Recorder extends Component {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
             updateRecordElapsed: PropTypes.func.isRequired,
-            isLoggedIn: PropTypes.bool.isRequired
+            isLoggedIn: PropTypes.bool.isRequired,
+            setSyncId: PropTypes.func.isRequired
         };
     }
 
@@ -69,10 +72,74 @@ export default class Recorder extends Component {
         }
     }
 
+    componentDidMount () {
+        // this.initRemoteSync();
+    }
+
     componentWillUnmount () {
         window.__events.off('drop', this.onDropAndPaste);
         window.__events.off('paste', this.onDropAndPaste);
         clearInterval(this.elapsedTimeInterval);
+    }
+
+    initRemoteSync () {
+        if (!ws && this.props.isLoggedIn) {
+            this.setState({
+                wsConnecting: true
+            });
+
+            ws = new WebSocket('ws://' + location.hostname + ':8080');
+            ws.onopen = () => {
+
+                this.setState({
+                    wsConnecting: false,
+                    showWsConnected: true
+                });
+
+                ws.onmessage = (message) => {
+
+                    const serverState = JSON.parse(message.data);
+                    const state = store.getState();
+                    console.log('received from server', serverState.app.syncId, syncId);
+                    if (serverState.app.syncId !== syncId) {
+                        if (serverState.profile.username === state.profile.username) {
+                            console.log('Username matched. Lets sync!');
+                            store.dispatch({
+                                type: 'SERVER_HYDRATE',
+                                ...serverState
+                            });
+                        }
+                    }
+                }
+
+                store.subscribe(() => {
+
+                    // TODO: do not send data again if we just received it
+                    const state = store.getState();
+
+                    /**
+                     * The local syncId is equal to the state syncId. This means that the change origin
+                     * is local and we should push the changes to the server
+                    **/
+                    if (state.app.syncId === syncId) {
+                        console.log('Send updates to server!');
+                        syncId = Date.now();
+                        state.app.syncId = syncId;
+
+                        // Send update to server
+                        ws.send(JSON.stringify(state));
+                    } else {
+                        /**
+                         * Since the syncIds do not match, it means that the change origin was the server
+                         * and we should not send this back to the server
+                        **/
+                        syncId = state.app.syncId;
+                    }
+                });
+            }
+        } else {
+            setTimeout(() => this.initRemoteSync(), 1000);
+        }
     }
 
     onDropAndPaste ({ url, text }) {
@@ -117,7 +184,8 @@ export default class Recorder extends Component {
 
         let notifications = [];
 
-        const { tasksAddingRemaining, tasksAtStart } = this.state;
+        const { tasksAddingRemaining, tasksAtStart, showWsConnected, wsConnecting } = this.state;
+
         if (tasksAddingRemaining) {
             if (tasksAddingRemaining > 10) {
                 notifications.push((
@@ -149,6 +217,13 @@ export default class Recorder extends Component {
                     ));
                 }
             }
+        }
+
+        if (wsConnecting) {
+            notifications.push(<div className='notification'>Connecting to remote sync...</div>);
+        }
+        if (showWsConnected) {
+            notifications.push(<div className='notification'>Connected!</div>);
         }
 
         if (!!notifications.length) {

@@ -14,6 +14,7 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
     "start:dummyapi": "better-npm-run start:dummyapi",
+    "start:prod": "better-npm-run start:prod",
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
@@ -65,6 +66,13 @@
         "DEBUG": "app:*"
       }
     },
+    "start:prod": {
+      "command": "node bin/ws-server",
+      "env": {
+        "NODE_ENV": "production",
+        "DEBUG": "app:*"
+      }
+    },
     "start:dummyapi": {
       "command": "node bin/server",
       "env": {
@@ -109,6 +117,7 @@
     "fs-extra": "^0.30.0",
     "hammerjs": "^2.0.8",
     "html-webpack-plugin": "^2.22.0",
+    "http": "0.0.0",
     "http-proxy-middleware": "^0.17.2",
     "imports-loader": "^0.6.5",
     "inferno": "~1.2.0",
@@ -138,9 +147,11 @@
     "style-loader": "^0.13.1",
     "sweetalert2": "~6.2.0",
     "time-input": "^1.3.1",
+    "url": "^0.11.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
     "whatwg-fetch": "^1.0.0",
+    "ws": "^1.1.1",
     "yargs": "^5.0.0"
   },
   "devDependencies": {

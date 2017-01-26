@@ -8,6 +8,7 @@ import {
 } from 'store/reducers/recorder';
 
 import { addTask } from 'store/reducers/tasks';
+import { setSyncId } from 'store/reducers/app';
 
 import Recorder from '../components/Recorder';
 
@@ -16,7 +17,8 @@ const mapDispatchToProps = {
     stopRecording,
     startRecording,
     setRecordComment,
-    updateRecordElapsed
+    updateRecordElapsed,
+    setSyncId
 };
 
 const mapStateToProps = (state) => ({
