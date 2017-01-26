@@ -13,8 +13,10 @@ export default ee;
 
 export function initWebsocketConnection () {
     ee.emit('connecting');
-    ws = new WebSocket('ws://' + location.hostname + ':8080');
-    window.ws = ws;
+    // const protocol = location.hostname.includes('localhost') ? 'ws' : 'wss';
+    // ws = new WebSocket(protocol + '://' + location.hostname + ':8080');
+    ws = new WebSocket('ws://hk-pc2.hesehus.dk:8080');
+
     ws.addEventListener('close', (e) => {
 
         ee.emit('closeOrError');
@@ -25,10 +27,10 @@ export function initWebsocketConnection () {
         // }, 2000);
     });
 
-    /*ws.addEventListener('error', (e) => {
-        console.log('server connection error', e);
-        ws = false;
-    });*/
+    // ws.addEventListener('error', (e) => {
+    //     console.log('server connection error', e);
+    //     ws = false;
+    // });
 
     ws.onopen = () => {
 
@@ -49,7 +51,7 @@ export function initWebsocketConnection () {
             const serverState = JSON.parse(message.data);
             const state = store.getState();
             console.log('received from server', serverState.app.syncId, syncId);
-            if (serverState.app.syncId !== syncId) {
+            if (serverState.app.syncId > syncId) {
                 if (serverState.profile.username === state.profile.username) {
                     console.log('Username matched. Lets sync!');
                     store.dispatch({

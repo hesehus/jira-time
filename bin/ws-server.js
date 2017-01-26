@@ -1,8 +1,7 @@
 const EventEmitter = require('event-emitter');
-const debug = require('debug')('app:server');
 const WebSocketServer = require('ws').Server;
 const wss = new WebSocketServer({ port: 8080 });
-debug('Websocket server listening on port 8080...');
+console.log('Websocket server listening on port 8080...');
 
 const ee = new EventEmitter({});
 
@@ -18,13 +17,13 @@ wss.on('connection', function connection (ws) {
             if (messageJson.init) {
                 username = messageJson.username;
                 sendInitialState();
-                debug(`Connection establised for "${username}"`);
+                console.log(`Connection establised for "${username}"`);
             } else {
                 addOrReplace(messageJson);
-                debug(`State updated for "${username}"`);
+                console.log(`State updated for "${username}"`);
             }
         } catch (e) {
-            debug(e);
+            console.log(e);
         }
     });
 
@@ -38,7 +37,7 @@ wss.on('connection', function connection (ws) {
     function sendInitialState () {
         const initialState = allStates.find(s => s.profile.username === username);
         if (initialState) {
-            debug(`Sending initial state to "${username}"`);
+            console.log(`Sending initial state to "${username}"`);
             ws.send(JSON.stringify(initialState));
         }
     }
