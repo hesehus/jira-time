@@ -10,20 +10,19 @@ const allStates = [];
 
 wss.on('connection', function connection (ws) {
     let username;
-    // let syncId;
 
     ws.on('message', function incoming (message) {
         try {
-            const state = JSON.parse(message);
-            if (!username) {
-                username = state.profile.username;
+            const messageJson = JSON.parse(message);
+
+            if (messageJson.init) {
+                username = messageJson.username;
+                sendInitialState();
+                debug(`Connection establised for "${username}"`);
+            } else {
+                addOrReplace(messageJson);
+                debug(`State updated for "${username}"`);
             }
-
-            // syncId = state.syncId;
-            addOrReplace(state);
-
-            // Pass this data to other devices
-            // ws.send(message);
         } catch (e) {
             debug(e);
         }
@@ -31,20 +30,26 @@ wss.on('connection', function connection (ws) {
 
     ee.on('update', (state) => {
         if (username === state.profile.username) {
-            console.log('send to client!');
             ws.send(JSON.stringify(state));
         }
     });
+
+    // Send the initial state
+    function sendInitialState () {
+        const initialState = allStates.find(s => s.profile.username === username);
+        if (initialState) {
+            debug(`Sending initial state to "${username}"`);
+            ws.send(JSON.stringify(initialState));
+        }
+    }
 });
 
 function addOrReplace (state) {
     const existingIndex = allStates.findIndex(s => s.profile.username === state.profile.username);
     if (existingIndex >= 0) {
         allStates[existingIndex] = state;
-        console.log('State replaced!');
     } else {
         allStates.push(state);
-        console.log('State added!');
     }
     ee.emit('update', state);
 }
