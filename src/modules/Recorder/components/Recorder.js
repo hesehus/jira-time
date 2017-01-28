@@ -32,6 +32,9 @@ export default class Recorder extends Component {
 
         this.onDropAndPaste = this.onDropAndPaste.bind(this);
         this.updateElapsedTime = this.updateElapsedTime.bind(this);
+        this.onWsConnecting = this.onWsConnecting.bind(this);
+        this.onWsConnected = this.onWsConnected.bind(this);
+        this.onWsCloseOrError = this.onWsCloseOrError.bind(this);
 
         processTask.on('add', (result) => {
             const remaining = processTask.getRemaining();
@@ -72,35 +75,40 @@ export default class Recorder extends Component {
     }
 
     componentDidMount () {
-        ws.on('connecting', () => {
-            this.setState({
-                wsConnecting: true,
-                showWsConnected: false,
-                wsClosed: false
-            });
-        });
-
-        ws.on('connected', () => {
-            this.setState({
-                wsConnecting: false,
-                showWsConnected: true,
-                wsClosed: false
-            });
-        });
-
-        ws.on('closeOrError', () => {
-            this.setState({
-                wsConnecting: false,
-                showWsConnected: false,
-                wsClosed: true
-            });
-        });
+        ws.on('connecting', this.onWsConnecting);
+        ws.on('connected', this.onWsConnected);
+        ws.on('closeOrError', this.onWsCloseOrError);
     }
 
     componentWillUnmount () {
         window.__events.off('drop', this.onDropAndPaste);
         window.__events.off('paste', this.onDropAndPaste);
+        ws.off('connecting', this.onWsConnecting);
+        ws.off('connected', this.onWsConnected);
+        ws.off('closeOrError', this.onWsCloseOrError);
         clearInterval(this.elapsedTimeInterval);
+    }
+
+    onWsConnecting () {
+        this.setState({
+            wsConnecting: true,
+            showWsConnected: false,
+            wsClosed: false
+        });
+    }
+    onWsConnected () {
+        this.setState({
+            wsConnecting: false,
+            showWsConnected: true,
+            wsClosed: false
+        });
+    }
+    onWsCloseOrError () {
+        this.setState({
+            wsConnecting: false,
+            showWsConnected: false,
+            wsClosed: true
+        });
     }
 
     onDropAndPaste ({ url, text }) {

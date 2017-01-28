@@ -1,36 +1,33 @@
 import EventEmitter from 'event-emitter';
+import cuid from 'cuid';
 
 let ws;
 let syncId;
+let unsubscribeFromStoreUpdates;
 let sendTimeout;
-let minTimeBetweenStateUpdates = 1000;
+let minTimeBetweenStateUpdates = 0;
+
+let syncUserId = window.syncUserId || cuid();
+window.syncUserId = syncUserId;
 
 const ee = new EventEmitter({});
-
-// setTimeout(initWebsocketConnection, 2000);
-
 export default ee;
+
+// Initiate websocket connection in 2 sec
+// setTimeout(initWebsocketConnection, 2000);
 
 export function initWebsocketConnection () {
     ee.emit('connecting');
-    // const protocol = location.hostname.includes('localhost') ? 'ws' : 'wss';
-    // ws = new WebSocket(protocol + '://' + location.hostname + ':8080');
-    ws = new WebSocket('ws://hk-pc2.hesehus.dk:8080');
+    ws = new WebSocket('ws://' + location.hostname + ':8080');
+    // ws = new WebSocket('ws://hk-pc2.hesehus.dk:8080');
 
-    ws.addEventListener('close', (e) => {
+    ws.addEventListener('close', closeConnection);
 
-        ee.emit('closeOrError');
-        console.log('server connection closed.', e);
-
-        // setTimeout(() => {
-        //     initWebsocketConnection();
-        // }, 2000);
+    ws.addEventListener('error', (e) => {
+        console.log('server connection error', e);
+        closeConnection();
+        // ws = false;
     });
-
-    // ws.addEventListener('error', (e) => {
-    //     console.log('server connection error', e);
-    //     ws = false;
-    // });
 
     ws.onopen = () => {
 
@@ -42,18 +39,32 @@ export function initWebsocketConnection () {
         **/
         send({
             init: true,
-            username: store.getState().profile.username
+            username: store.getState().profile.username,
+            syncUserId
         });
 
         // Receving a message from the server
         ws.addEventListener('message', (message) => {
 
-            const serverState = JSON.parse(message.data);
+            let serverState;
+            try {
+                serverState = JSON.parse(message.data);
+            } catch (error) {
+                console.error('Malformed websocket response', message);
+            }
+
+            if (!serverState) {
+                return;
+            }
+
             const state = store.getState();
-            console.log('received from server', serverState.app.syncId, syncId);
-            if (serverState.app.syncId > syncId) {
+
+            // console.log('received from server', serverState.app.syncId, syncId);
+            if (serverState.syncUserId && serverState.syncUserId !== syncUserId) {
                 if (serverState.profile.username === state.profile.username) {
-                    console.log('Username matched. Lets sync!');
+                    console.log('State received from server. Hydrate!', serverState);
+                    delete serverState.syncUserId;
+
                     store.dispatch({
                         type: 'SERVER_HYDRATE',
                         ...serverState
@@ -63,7 +74,7 @@ export function initWebsocketConnection () {
             }
         });
 
-        store.subscribe(() => {
+        unsubscribeFromStoreUpdates = store.subscribe(() => {
             clearTimeout(sendTimeout);
             sendTimeout = setTimeout(() => {
                 const state = store.getState();
@@ -73,13 +84,16 @@ export function initWebsocketConnection () {
                  * the state change is local and we should push the changes to the server
                 **/
                 if (state.app.syncId === syncId) {
-                    console.log('Send updates to server!');
                     ee.emit('send-remote');
                     syncId = Date.now();
                     state.app.syncId = syncId;
+                    console.log('Send updates to server!', state);
 
                     // Send update to server
-                    send(state);
+                    send({
+                        syncUserId,
+                        ...state
+                    });
                 } else {
                     /**
                      * Since the syncIds do not match, it means that the change origin was the server
@@ -92,8 +106,29 @@ export function initWebsocketConnection () {
     }
 
     function send (message) {
-        if (ws.send) {
-            ws.send(JSON.stringify(message));
+        if (ws && ws.send) {
+            if (ws.readyState === WebSocket.OPEN) {
+                try {
+                    ws.send(JSON.stringify(message));
+                } catch (error) {
+                    console.error(error);
+                    closeConnection();
+                }
+            } else {
+                closeConnection();
+            }
+        } else {
+            closeConnection();
         }
+    }
+
+    function closeConnection () {
+        if (unsubscribeFromStoreUpdates) {
+            unsubscribeFromStoreUpdates();
+        }
+        ws.close();
+
+        ee.emit('closeOrError');
+        console.log('Server connection closed.');
     }
 }

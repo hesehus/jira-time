@@ -161,7 +161,6 @@ export default class Header extends Component {
                     <div className='header-title'>JIRA-time</div>
                     {updateAvailable}
                 </div>
-                <div className='header__center' />
                 <div className='header__right'>
                     <IndexLink to='/' className={classNameHome}>
                         <img className='header__icon' src={ListViewIcon} alt='Home' />

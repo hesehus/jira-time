@@ -100,6 +100,7 @@ export default class TasksHeader extends Component {
                       onChange={this.onInputChange}
                       onFocus={() => this.inputFocusing = true}
                       onBlur={() => this.inputFocusing = false}
+                      type='search'
                       ref={e => this.search = e}
                     />
                     <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')} // eslint-disable-line

@@ -1,3 +1,5 @@
+@import 'variables';
+
 .header {
   flex-shrink: 0;
   display: flex;
@@ -9,7 +11,6 @@
   // Enable window drag for header for when wrapped in nativefier
   -webkit-app-region: drag;
 
-  &__center,
   &__right,
   &__left {
     display: flex;

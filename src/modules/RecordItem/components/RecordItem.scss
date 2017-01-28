@@ -1,7 +1,8 @@
 .record {
-  display: flex;
   padding: 5px 10px;
+  display: flex;
   align-items: center;
+  flex-wrap: wrap;
   box-sizing: border-box;
   background: rgba(255, 255, 255, .2);
   border-radius: 6px;

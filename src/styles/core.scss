@@ -1,5 +1,5 @@
-@import './vendor/_bootstrap-custom.scss';
 @import 'base';
+@import './vendor/_bootstrap-custom.scss';
 @import '~sweetalert2/dist/sweetalert2.css';
 
 @font-face {
@@ -61,7 +61,7 @@ body {
   padding: 0;
   height: 100%;
   font-family: 'robotoregular', sans-serif;
-  font-size: 18px;
+  font-size: 14px;
 
   &.moving {
     cursor: default;
@@ -70,6 +70,10 @@ body {
     * {
       user-select: none !important;
     }
+  }
+
+  @media (min-width: $screen-sm-min) {
+    font-size: 18px;
   }
 }
 
