@@ -5,7 +5,7 @@ import PlusIcon from 'assets/plus.svg';
 import RecordIcon from 'assets/record.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import RecordModel from 'store/models/RecordModel';
-import { getIssue } from 'shared/jiraClient';
+import { refreshJiraIssue } from 'shared/taskHelper';
 import './RecordActionButtons.scss';
 
 export default class RecordActionButtons extends Component {
@@ -16,7 +16,8 @@ export default class RecordActionButtons extends Component {
         startRecording: PropTypes.func.isRequired,
         removeTask: PropTypes.func.isRequired,
         refreshIssue: PropTypes.func.isRequired,
-        setIssueRefreshing: PropTypes.func.isRequired
+        setIssueRefreshing: PropTypes.func.isRequired,
+        onRemainingUpdated: PropTypes.func
     }
 
     constructor (props) {
@@ -63,30 +64,16 @@ export default class RecordActionButtons extends Component {
     }
 
     onIssueRefreshClick () {
-        const { task } = this.props;
+        const { task, onRemainingUpdated } = this.props;
 
-        this.props.setIssueRefreshing({
-            cuid: task.cuid,
-            refreshing: true
-        });
-
-        getIssue({
-            key: task.issue.key
+        refreshJiraIssue({
+            taskCuid: task.cuid,
+            taskIssueKey: task.issue.key
         })
         .then((issue) => {
-
-            this.props.refreshIssue({
-                cuid: task.cuid,
-                issue
-            });
-
-            this.setRemainingInputValue(issue.fields.timetracking.remainingEstimate);
-        })
-        .catch(() => {
-            this.props.setIssueRefreshing({
-                cuid: task.cuid,
-                refreshing: false
-            });
+            if (onRemainingUpdated) {
+                onRemainingUpdated(issue.fields.timetracking.remainingEstimate);
+            }
         });
     }
 

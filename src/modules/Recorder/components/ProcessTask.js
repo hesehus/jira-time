@@ -39,29 +39,28 @@ export default class ProcessTask extends EventClass {
         }
 
         getIssue({ key })
-    .then((issue) => {
+            .then((issue) => {
+                next();
 
-        next();
+                if (issue) {
+                    this.emit('add', {
+                        success: true,
+                        issue
+                    });
+                } else {
+                    this.emit('add', {
+                        success: false,
+                        message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
+                    });
+                }
+            })
+            .catch(() => {
+                this.emit('add', {
+                    success: false,
+                    message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
+                });
 
-        if (issue) {
-            this.emit('add', {
-                success: true,
-                issue
+                next();
             });
-        } else {
-            this.emit('add', {
-                success: false,
-                message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
-            });
-        }
-    })
-    .catch(() => {
-        this.emit('add', {
-            success: false,
-            message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
-        });
-
-        next();
-    });
     }
 }

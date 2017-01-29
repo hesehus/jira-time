@@ -5,7 +5,7 @@ console.log('Websocket server listening on port 8080...');
 
 const ee = new EventEmitter({});
 
-const allStates = [];
+let allStates = [];
 
 wss.on('connection', function connection (ws) {
     let username;
@@ -29,11 +29,16 @@ wss.on('connection', function connection (ws) {
                     sendInitialState();
 
                     ee.on('update', listenForStateUpdates);
-                } else {
-                    console.log(`Connection establised for "${username}" (${syncUserId})`);
+                    ee.on('updatedTaskIssue', listenForTaskIssueUpdates);
                 }
+            } else if (messageJson.issueUpdate) {
+                updateJiraIssue({
+                    issue: messageJson.issue,
+                    syncUserId
+                });
+                console.log(`Received Jira issue update from "${username}" (${syncUserId})`);
             } else {
-                addOrReplace(messageJson);
+                addOrReplaceState(messageJson);
                 console.log(`State updated for "${username}" (${syncUserId})`);
             }
         } catch (e) {
@@ -45,6 +50,11 @@ wss.on('connection', function connection (ws) {
         if (username === state.profile.username && syncUserId !== state.syncUserId) {
             send(state);
         }
+    }
+
+    function listenForTaskIssueUpdates (state) {
+        state.taskIssueUpdate = true;
+        send(state);
     }
 
     // Send the initial state
@@ -87,7 +97,7 @@ wss.on('connection', function connection (ws) {
     }
 });
 
-function addOrReplace (state) {
+function addOrReplaceState (state) {
     const existingIndex = allStates.findIndex(s => s.profile.username === state.profile.username);
     if (existingIndex >= 0) {
         allStates[existingIndex] = state;
@@ -95,4 +105,19 @@ function addOrReplace (state) {
         allStates.push(state);
     }
     ee.emit('update', state);
+}
+
+function updateJiraIssue ({ issue, syncUserId }) {
+    allStates = allStates.map((state) => {
+        if (state.syncUserId !== syncUserId) {
+            state.tasks.tasks = state.tasks.tasks.map((task) => {
+                if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
+                    task.issue = issue;
+                }
+                return task;
+            });
+            ee.emit('updatedTaskIssue', state);
+        }
+        return state;
+    });
 }

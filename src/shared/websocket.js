@@ -14,7 +14,18 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection in 2 sec
-// setTimeout(initWebsocketConnection, 2000);
+setTimeout(initWebsocketConnection, 2000);
+
+export function sendIssueUpdate (issue) {
+    send({
+        issueUpdate: true,
+        syncUserId,
+        issue
+    });
+
+    // Return the issue given in order for this function to be used in a promise chain
+    return issue;
+}
 
 export function initWebsocketConnection () {
     ee.emit('connecting');
@@ -29,7 +40,7 @@ export function initWebsocketConnection () {
         // ws = false;
     });
 
-    ws.onopen = () => {
+    ws.addEventListener('open', () => {
 
         ee.emit('connected');
 
@@ -60,10 +71,13 @@ export function initWebsocketConnection () {
             const state = store.getState();
 
             // console.log('received from server', serverState.app.syncId, syncId);
-            if (serverState.syncUserId && serverState.syncUserId !== syncUserId) {
+            if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
                 if (serverState.profile.username === state.profile.username) {
                     console.log('State received from server. Hydrate!', serverState);
+
+                    // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
                     delete serverState.syncUserId;
+                    delete serverState.taskIssueUpdate;
 
                     store.dispatch({
                         type: 'SERVER_HYDRATE',
@@ -103,29 +117,31 @@ export function initWebsocketConnection () {
                 }
             }, minTimeBetweenStateUpdates);
         });
-    }
+    });
+}
 
-    function send (message) {
-        if (ws && ws.send) {
-            if (ws.readyState === WebSocket.OPEN) {
-                try {
-                    ws.send(JSON.stringify(message));
-                } catch (error) {
-                    console.error(error);
-                    closeConnection();
-                }
-            } else {
+function send (message) {
+    if (ws && ws.send) {
+        if (ws.readyState === WebSocket.OPEN) {
+            try {
+                ws.send(JSON.stringify(message));
+            } catch (error) {
+                console.error(error);
                 closeConnection();
             }
         } else {
             closeConnection();
         }
+    } else {
+        closeConnection();
     }
+}
 
-    function closeConnection () {
-        if (unsubscribeFromStoreUpdates) {
-            unsubscribeFromStoreUpdates();
-        }
+function closeConnection () {
+    if (unsubscribeFromStoreUpdates) {
+        unsubscribeFromStoreUpdates();
+    }
+    if (ws) {
         ws.close();
 
         ee.emit('closeOrError');

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
-import { getIssue, setIssueRemaining } from 'shared/jiraClient';
+import { updateRemainingEstimate } from 'shared/taskHelper';
 import './TaskItem.scss';
 
 let focusingOnRemaining = false;
@@ -14,9 +14,7 @@ export class TaskItem extends Component {
             index: PropTypes.number,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object,
-            movingTask: PropTypes.object,
-            setIssueRefreshing: PropTypes.func.isRequired,
-            refreshIssue: PropTypes.func.isRequired
+            movingTask: PropTypes.object
         };
     }
 
@@ -25,6 +23,7 @@ export class TaskItem extends Component {
 
         this.onRemainignChange = this.onRemainignChange.bind(this);
         this.onRemainignBlur = this.onRemainignBlur.bind(this);
+        this.setRemainingInputValue = this.setRemainingInputValue.bind(this);
 
         this.state = {};
     }
@@ -68,34 +67,10 @@ export class TaskItem extends Component {
 
         const { task } = this.props;
 
-        this.props.setIssueRefreshing({
-            cuid: task.cuid,
-            refreshing: true
-        });
-
-        getIssue({
-            key: task.issue.key
-        })
-        .then((issue) => {
-
-            // Ensure that our remaining estimate gets persisted
-            issue.fields.timetracking.remainingEstimate = remainingEstimate;
-
-            this.props.refreshIssue({
-                cuid: task.cuid,
-                issue
-            });
-
-            setIssueRemaining({
-                id: task.issue.key,
-                remainingEstimate,
-
-                /*
-                We need to send the original estimate along due to a bug in the JIRA REST API:
-                https://jira.atlassian.com/browse/JRA-30459
-                */
-                originalEstimate: issue.fields.timetracking.originalEstimate
-            });
+        updateRemainingEstimate({
+            taskCuid: task.cuid,
+            taskIssueKey: task.issue.key,
+            remainingEstimate
         });
     }
 
@@ -169,7 +144,7 @@ export class TaskItem extends Component {
                               disabled={!!somethingIsMoving}
                             />
                         </div>
-                        <RecordActionButtons task={task} />
+                        <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>
                 </div>
                 {records}

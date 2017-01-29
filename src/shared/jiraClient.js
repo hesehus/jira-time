@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
 import RecordModel from '../store/models/RecordModel';
+import { sendIssueUpdate } from 'shared/websocket';
 
 // Check the session in a few seconds
 setTimeout(startupCheck, 2000);
@@ -197,16 +198,17 @@ export function getIssue ({ key, url }) {
         callApi({
             path: `api/2/issue/${key}`
         })
-    .then((response) => {
+        .then((response) => {
 
-        if (response.status === 200) {
-            return resolve(response.json());
-        }
+            if (response.status === 200) {
+                return resolve(response.json());
+            }
 
-        reject(response.status);
+            reject(response.status);
+        })
+        .catch(reject);
     })
-    .catch(reject);
-    });
+    .then(issue => sendIssueUpdate(issue));
 }
 
 /**
