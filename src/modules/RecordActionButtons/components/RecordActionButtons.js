@@ -37,7 +37,7 @@ export default class RecordActionButtons extends Component {
         if (numberOfRecords > 0) {
             let worklogName = numberOfRecords === 1 ? 'worklog' : 'worklogs';
             swal({
-                title: 'Wow dude! Are you sure?',
+                title: 'Hold on dude! Are you sure?',
                 text: `You have ${numberOfRecords} ${worklogName} on this task`,
                 type: 'warning',
                 showCancelButton: true,

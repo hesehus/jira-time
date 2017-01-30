@@ -517,7 +517,11 @@ export const getMovingRecord = ({ state }) => {
 }
 
 export const getNumberOfRecords = ({ state, taskCuid }) => {
-    return state.recorder.records.filter(r => r.taskCuid === taskCuid).length;
+    let recordsCount = state.recorder.records.filter(r => r.taskCuid === taskCuid).length;
+    if (state.recorder.record && state.recorder.record.taskCuid === taskCuid) {
+        recordsCount++;
+    }
+    return recordsCount;
 }
 
 // ------------------------------------
