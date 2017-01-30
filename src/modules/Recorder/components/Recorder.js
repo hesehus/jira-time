@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import { default as swal } from 'sweetalert2'
+import React, { Component, PropTypes } from 'react';
+import { default as swal } from 'sweetalert2';
 
 import ws, { initWebsocketConnection } from 'shared/websocket';
 import { extractIssueKeysFromText, addCurrentUserAsWatcher } from 'shared/jiraClient';

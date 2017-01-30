@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { default as swal } from 'sweetalert2';
 
 import LoadingIcon from 'assets/loading.svg';
 import PlusIcon from 'assets/plus.svg';
@@ -17,7 +18,8 @@ export default class RecordActionButtons extends Component {
         removeTask: PropTypes.func.isRequired,
         refreshIssue: PropTypes.func.isRequired,
         setIssueRefreshing: PropTypes.func.isRequired,
-        onRemainingUpdated: PropTypes.func
+        onRemainingUpdated: PropTypes.func,
+        numberOfRecords: PropTypes.number
     }
 
     constructor (props) {
@@ -30,7 +32,26 @@ export default class RecordActionButtons extends Component {
     }
 
     onRemoveClick () {
-        this.props.removeTask({ cuid: this.props.task.cuid });
+        const { numberOfRecords, removeTask, task } = this.props;
+
+        if (numberOfRecords > 0) {
+            let worklogName = numberOfRecords === 1 ? 'worklog' : 'worklogs';
+            swal({
+                title: 'Wow dude! Are you sure?',
+                text: `You have ${numberOfRecords} ${worklogName} on this task`,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, get rid of it all!'
+            }).then(function () {
+                removeTask({ cuid: task.cuid });
+            }).catch(() => {
+                // Ah, good thing we asked this question then =)
+            });
+        } else {
+            removeTask({ cuid: task.cuid });
+        }
     }
 
     onStartPassiveLogClick () {
@@ -89,19 +110,17 @@ export default class RecordActionButtons extends Component {
         let actionsForTaskWithIssue = [];
         if (task) {
             actionsForTaskWithIssue = [
-
-                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
-                  onClick={this.onRemoveClick}>
-                    <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
-                </button>,
                 <span className='record-action-buttons__log record-action-buttons__log--refresh'
                   title='Click to refresh the JIRA issue'
                   onClick={this.onIssueRefreshClick}>
                     <img src={iconToUserForRefresh}
                       className='record-action-buttons__log-icon record-action-buttons__log-icon--refresh'
                       alt='Refresh' />
-                </span>
-
+                </span>,
+                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
+                  onClick={this.onRemoveClick}>
+                    <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
+                </button>
             ];
         }
 

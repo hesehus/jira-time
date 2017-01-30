@@ -516,6 +516,10 @@ export const getMovingRecord = ({ state }) => {
     return state.recorder.records.find(r => r.moving);
 }
 
+export const getNumberOfRecords = ({ state, taskCuid }) => {
+    return state.recorder.records.filter(r => r.taskCuid === taskCuid).length;
+}
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
