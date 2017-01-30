@@ -14,7 +14,7 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection in 2 sec
-// setTimeout(initWebsocketConnection, 2000);
+setTimeout(initWebsocketConnection, 2000);
 
 export function sendIssueUpdate (issue) {
     send({

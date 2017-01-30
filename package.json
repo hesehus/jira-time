@@ -14,7 +14,7 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
     "start:dummyapi": "better-npm-run start:dummyapi",
-    "start:ws": "better-npm-run start:ws",
+    "start:prod": "better-npm-run start:prod",
     "dev": "better-npm-run dev",
     "test": "better-npm-run test",
     "test:dev": "npm run test -- --watch",
@@ -66,8 +66,8 @@
         "DEBUG": "app:*"
       }
     },
-    "start:ws": {
-      "command": "node bin/ws-server",
+    "start:prod": {
+      "command": "node bin/server",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
