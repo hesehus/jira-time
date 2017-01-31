@@ -4,6 +4,10 @@ const themes = [
         name: 'Light purple'
     },
     {
+        key: 'darkpurple',
+        name: 'Dark purple'
+    },
+    {
         key: 'blue',
         name: 'Blue'
     },
@@ -16,16 +20,16 @@ const themes = [
         name: 'Orange'
     },
     {
-        key: 'darkpurple',
-        name: 'Dark purple'
-    },
-    {
         key: 'yellow',
         name: 'Yellow'
     },
     {
         key: 'green',
         name: 'Green'
+    },
+    {
+        key: 'dark',
+        name: 'Dark'
     }
 ];
 
