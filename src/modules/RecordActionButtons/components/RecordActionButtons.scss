@@ -26,11 +26,16 @@
 
         &--refresh{
             border: none;
+            cursor: pointer;
             display: flex;
+            width: 28px;
+            height: 28px;
+            align-items: center;
+            justify-content: center;
         }
 
         &--remove {
-            img{
+            img {
                 transform: rotate(45deg);
             }
         }

@@ -162,13 +162,13 @@ export default class Header extends Component {
                     {updateAvailable}
                 </div>
                 <div className='header__right'>
-                    <IndexLink to='/' className={classNameHome}>
+                    <IndexLink to='/' className={classNameHome} title='Tasks'>
                         <img className='header__icon' src={ListViewIcon} alt='Home' />
                     </IndexLink>
-                    <Link to='/summary' className={classNameSummary}>
+                    <Link to='/summary' className={classNameSummary} title='Summary'>
                         <img className='header__icon' src={CalendarIcon} alt='Calendar' />
                     </Link>
-                    <Link to='/profile' className={classNameProfile}>
+                    <Link to='/profile' className={classNameProfile} title='Profile'>
                         <img className='header__icon' src={UserIcon} alt='Profile' />
                     </Link>
                     {sync}

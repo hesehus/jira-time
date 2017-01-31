@@ -118,6 +118,7 @@ export default class RecordActionButtons extends Component {
                       alt='Refresh' />
                 </span>,
                 <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
+                  title='Remove task'
                   onClick={this.onRemoveClick}>
                     <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
                 </button>

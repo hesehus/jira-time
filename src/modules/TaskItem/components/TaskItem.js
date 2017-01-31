@@ -142,6 +142,7 @@ export class TaskItem extends Component {
                               onBlur={this.onRemainignBlur}
                               ref='inputRemaining'
                               disabled={!!somethingIsMoving}
+                              title='Remaining estimate'
                             />
                         </div>
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />

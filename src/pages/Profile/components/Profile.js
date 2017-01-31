@@ -50,15 +50,15 @@ export class Profile extends Component {
 
         return (
             <div className='profile'>
-                <img className='profile-avatar' src={avatarUrl} alt={userinfo.name} />
+                <img className='profile-avatar' src={avatarUrl} alt={userinfo.name} title={userinfo.name} />
                 <ThemeSelector />
                 <div>
                     App shortcuts
                     <ul>
-                        <li>ALT+a: add issue(s)</li>
-                        <li>ALT+(up/down): navigate between worklog comments</li>
-                        <li>CTR+F: search in tasks list</li>
-                        <li>CTR+S: sync all worklogs</li>
+                        <li>ALT+a : add issue(s)</li>
+                        <li>ALT+(up/down) : navigate between worklog comments</li>
+                        <li>CTR+F : search in tasks list</li>
+                        <li>CTR+S : sync all worklogs</li>
                     </ul>
                 </div>
                 <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
