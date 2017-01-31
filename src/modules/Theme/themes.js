@@ -26,6 +26,10 @@ const themes = [
     {
         key: 'green',
         name: 'Green'
+    },
+    {
+        key: 'dark',
+        name: 'Dark'
     }
 ];
 
