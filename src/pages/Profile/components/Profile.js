@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import moment from 'moment';
 
 import { logout, updateUserInfo } from 'shared/jiraClient';
 
@@ -42,7 +43,8 @@ export class Profile extends Component {
 
         const { userinfo } = this.props.profile;
         const { avatarUrls } = userinfo;
-        const { version, changes = [] } = changelog[0];
+        const { version, changes = [], date } = changelog[0];
+        const changelogTitle = moment(date).format('lll') + ':\n' + changes.join('/n');
 
         let avatarUrl = UserIcon;
         const avatarSize = '48x48';
@@ -64,7 +66,7 @@ export class Profile extends Component {
                     </ul>
                 </div>
                 <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
-                <div className='app-version' title={'Changes:\n' + changes.join('/n')}>Version: {version}</div>
+                <div className='app-version' title={changelogTitle}>Version: {version}</div>
             </div>
         );
     }
