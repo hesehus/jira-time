@@ -4,7 +4,7 @@ var Service = require('node-windows').Service;
 var svc = new Service({
     name: 'JIRA-time',
     description: 'Express and websocket server listening on port 3000 and 8080',
-    script: 'D:\\Projects\\jira-time\\server\\main.js',
+    script: 'D:\\Projects\\jira-time\\bin\\server.js',
     env: {
         name: 'NODE_ENV',
         value: 'production'
