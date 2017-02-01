@@ -5,6 +5,7 @@ import { logout, updateUserInfo } from 'shared/jiraClient';
 import ThemeSelector from 'modules/ThemeSelector';
 import Login from 'modules/Login';
 import UserIcon from 'assets/user.svg';
+import changelog from 'shared/changelog.json';
 
 import './Profile.scss';
 
@@ -41,6 +42,7 @@ export class Profile extends Component {
 
         const { userinfo } = this.props.profile;
         const { avatarUrls } = userinfo;
+        const { version, changes = [] } = changelog[0];
 
         let avatarUrl = UserIcon;
         const avatarSize = '48x48';
@@ -55,13 +57,14 @@ export class Profile extends Component {
                 <div>
                     App shortcuts
                     <ul>
-                        <li>"a": add issue(s)</li>
-                        <li>"up/down"" in comments: navigate between worklog comments</li>
-                        <li>CTR+F : search in tasks list</li>
+                        <li>"A": add issue(s)</li>
+                        <li>"UP/DOWN" in comments: navigate between worklog comments</li>
+                        <li>CTR+S : search in tasks list</li>
                         <li>CTR+S : sync all worklogs</li>
                     </ul>
                 </div>
                 <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
+                <div className='app-version' title={'Changes:\n' + changes.join('/n')}>Version: {version}</div>
             </div>
         );
     }
