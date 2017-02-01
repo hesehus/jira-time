@@ -99,7 +99,7 @@ export default class RecordItem extends Component {
 
     onCommentKeyDown (e) {
         const command = keycode(e);
-        if ((command === 'down' || command === 'up') && e.altKey) {
+        if ((command === 'down' || command === 'up')) {
             e.preventDefault();
 
             const draggableTasks = document.querySelector('.tasks-draggable');

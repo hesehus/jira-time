@@ -55,8 +55,8 @@ export class Profile extends Component {
                 <div>
                     App shortcuts
                     <ul>
-                        <li>ALT+a : add issue(s)</li>
-                        <li>ALT+(up/down) : navigate between worklog comments</li>
+                        <li>"a": add issue(s)</li>
+                        <li>"up/down"" in comments: navigate between worklog comments</li>
                         <li>CTR+F : search in tasks list</li>
                         <li>CTR+S : sync all worklogs</li>
                     </ul>

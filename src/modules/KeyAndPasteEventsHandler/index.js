@@ -27,8 +27,7 @@ export function init () {
         }, false);
 
         document.addEventListener('paste', function onPaste (e) {
-            const { nodeName } = e.target;
-            if (nodeName !== 'INPUT' && nodeName !== 'TEXTAREA') {
+            if (targetIsNotEditable(e.target)) {
                 if (e.clipboardData && e.clipboardData.getData) {
                     const text = e.clipboardData.getData('text/plain');
                     if (text) {
@@ -41,8 +40,8 @@ export function init () {
         document.addEventListener('keydown', function onKeyUp (e) {
             const code = keycode(e);
 
-            if (e.altKey) {
-                if (code === 'a') {
+            if (code === 'a') {
+                if (targetIsNotEditable(e.target)) {
                     swal({
                         title: 'Add issue',
                         text: 'Throw some issue keys at me man!',
@@ -52,7 +51,8 @@ export function init () {
                         if (text) {
                             window.__events.emit('paste', { text });
                         }
-                    });
+                    })
+                    .catch(() => { console.log('close..') });
                 }
             }
 
@@ -63,6 +63,11 @@ export function init () {
             }
         }, false);
     }
+}
+
+function targetIsNotEditable (element) {
+    const { nodeName } = element;
+    return nodeName !== 'INPUT' && nodeName !== 'TEXTAREA';
 }
 
 export default {
