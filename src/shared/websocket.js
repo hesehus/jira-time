@@ -14,7 +14,7 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection in 2 sec
-// setTimeout(initWebsocketConnection, 2000);
+setTimeout(initWebsocketConnection, 2000);
 
 export function sendIssueUpdate (issue) {
     send({
@@ -29,8 +29,12 @@ export function sendIssueUpdate (issue) {
 
 export function initWebsocketConnection () {
     ee.emit('connecting');
-    ws = new WebSocket('ws://' + location.hostname + ':8080');
-    // ws = new WebSocket('ws://hk-pc2.hesehus.dk:8080');
+
+    let hostname = 'hpc-123';
+    if (location.hostname === 'localhost') {
+        hostname = 'localhost';
+    }
+    ws = new WebSocket('ws://' + hostname + ':8080');
 
     ws.addEventListener('close', closeConnection);
 
