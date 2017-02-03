@@ -121,19 +121,19 @@ export class TaskItem extends Component {
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 <div className='task-item__info'>
                     <div className='task-item__left'>
-                        <div className='task-item__key'>
+                        <div className='task-item__key-and-status'>
                             <a className='task-item__link'
                               href={'/browse/' + task.issue.key}
                               target='_blank'>
                                 {task.issue.key}
                             </a>
+                            {status}
                         </div>
                         <div className='task-item__summary' title={task.issue.fields.summary}>
                             {task.issue.fields.summary}
                         </div>
                     </div>
                     <div className='task-item__right'>
-                        {status}
                         <div className='task-item__remaining'>
                             <input className='task-item__remaining-input'
                               value={remainingEstimate || ''}

@@ -141,4 +141,19 @@ textarea {
     border-radius: 49px;
     color: #4A4A4A;
     font-size: 1.2rem;
+    transition: all 100ms;
+
+    &:active {
+      transform: scale(.98);
+    }
+
+    &--xs {
+      font-size: .7rem;
+      padding: 3px 10px;
+      box-shadow: 0 1px 6px 0 rgba(0, 0, 0, .4);
+
+      &:active {
+        transform: scale(.95);
+      }
+    }
 }

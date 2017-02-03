@@ -1,9 +1,5 @@
 .profile {
   flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 
   &-logout {
     margin-top: 20px;
@@ -11,11 +7,31 @@
   }
 
   &-avatar {
+    text-align: center;
+  }
+  &-avatar-img {
     border-radius: 50%;
     border: 5px solid rgba(0, 0, 0, .2);
     width: 50px;
     height: 50px;
     background-size: cover;
+  }
+
+  &-bottom {
+    text-align: center;
+  }
+
+  &-shortcuts {
+    margin: 0 auto;
+    max-width: calc(100% - 40px);
+    text-align: left;
+    line-height: 1.2rem;
+  }
+  &-shortcuts-heading {
+    text-transform: uppercase;
+  }
+  &-shortcuts-cell {
+    padding: 5px;
   }
 }
 

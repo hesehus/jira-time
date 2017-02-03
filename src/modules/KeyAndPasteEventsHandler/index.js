@@ -43,8 +43,8 @@ export function init () {
             if (code === 'a') {
                 if (targetIsNotEditable(e.target)) {
                     swal({
-                        title: 'Add issue',
-                        text: 'Throw some issue keys at me man!',
+                        title: 'Give me some tasks!',
+                        text: 'Tasks... yum yum!',
                         input: 'text'
                     })
                     .then(text => {

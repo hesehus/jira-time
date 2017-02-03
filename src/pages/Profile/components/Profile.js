@@ -54,19 +54,33 @@ export class Profile extends Component {
 
         return (
             <div className='profile'>
-                <img className='profile-avatar' src={avatarUrl} alt={userinfo.name} title={userinfo.name} />
-                <ThemeSelector />
-                <div>
-                    App shortcuts
-                    <ul>
-                        <li>"A": add issue(s)</li>
-                        <li>"UP/DOWN" in comments: navigate between worklog comments</li>
-                        <li>CTR+S : search in tasks list</li>
-                        <li>CTR+S : sync all worklogs</li>
-                    </ul>
+                <div className='profile-avatar'>
+                    <img className='profile-avatar-img' src={avatarUrl} alt={userinfo.name} title={userinfo.name} />
                 </div>
-                <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
-                <div className='app-version' title={changelogTitle}>Version: {version}</div>
+                <ThemeSelector />
+                <div className='profile-bottom'>
+                    <div className='profile-shortcuts-heading'>App shortcuts</div>
+                    <table className='profile-shortcuts'>
+                        <tr>
+                            <td className='profile-shortcuts-cell'>A:</td>
+                            <td className='profile-shortcuts-cell'>add issue(s)</td>
+                        </tr>
+                        <tr>
+                            <td className='profile-shortcuts-cell'>UP/DOWN in comment:</td>
+                            <td className='profile-shortcuts-cell'>navigate between worklog comments</td>
+                        </tr>
+                        <tr>
+                            <td className='profile-shortcuts-cell'>CTR+F:</td>
+                            <td className='profile-shortcuts-cell'>search in tasks list</td>
+                        </tr>
+                        <tr>
+                            <td className='profile-shortcuts-cell'>CTR+S:</td>
+                            <td className='profile-shortcuts-cell'>sync all worklogs</td>
+                        </tr>
+                    </table>
+                    <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
+                    <div className='app-version' title={changelogTitle}>Version: {version}</div>
+                </div>
             </div>
         );
     }

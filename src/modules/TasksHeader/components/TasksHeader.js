@@ -93,22 +93,24 @@ export default class TasksHeader extends Component {
                       alt={sortOrderDisplay}
                     />
                 </div>
-                <div className='tasks-header-search'>
-                    <input
-                      className='input-field tasks-header-search-input'
-                      value={tasksSearch}
-                      onChange={this.onInputChange}
-                      onFocus={() => this.inputFocusing = true}
-                      onBlur={() => this.inputFocusing = false}
-                      type='search'
-                      ref={e => this.search = e}
-                    />
-                    <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')} // eslint-disable-line
-                      onClick={this.onDeleteSearchText}>
-                        <img src={PlusIcon} alt='Delete search input'
-                          className='tasks-header-search-delete__icon'
+                <div className='tasks-header-right'>
+                    <div className='tasks-header-search'>
+                        <input
+                          className='input-field tasks-header-search-input'
+                          value={tasksSearch}
+                          onChange={this.onInputChange}
+                          onFocus={() => this.inputFocusing = true}
+                          onBlur={() => this.inputFocusing = false}
+                          type='search'
+                          ref={e => this.search = e}
                         />
-                    </span>
+                        <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')} // eslint-disable-line
+                          onClick={this.onDeleteSearchText}>
+                            <img src={PlusIcon} alt='Delete search input'
+                              className='tasks-header-search-delete__icon'
+                            />
+                        </span>
+                    </div>
                 </div>
             </div>
         );

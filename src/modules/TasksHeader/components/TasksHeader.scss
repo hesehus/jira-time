@@ -24,9 +24,19 @@
             transform: rotate(-180deg);
         }
     }
+
+    &-right {
+        display: flex;
+
+        > *:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+
     &-search {
         position: relative;
     }
+
     &-search-delete {
         position: absolute;
         color:#777;
