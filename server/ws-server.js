@@ -34,7 +34,7 @@ module.exports = function startWebsocketServer (app) {
 
                         log(`Websocket connection establised for "${username}" (${syncUserId})`);
 
-                        sendInitialState();
+                        setupInitialState(messageJson);
 
                         ee.on('update', listenForStateUpdates);
                         ee.on('updatedTaskIssue', listenForTaskIssueUpdates);
@@ -46,7 +46,7 @@ module.exports = function startWebsocketServer (app) {
                     });
                     log(`Received Jira issue update from "${username}" (${syncUserId})`);
                 } else {
-                    addOrReplaceState(messageJson);
+                    addOrReplaceState({ state: messageJson });
                     log(`State updated for "${username}" (${syncUserId})`);
                 }
             } catch (e) {
@@ -66,11 +66,15 @@ module.exports = function startWebsocketServer (app) {
         }
 
         // Send the initial state
-        function sendInitialState () {
+        function setupInitialState (state) {
+            delete state.init;
             const initialState = allStates.find(s => s.profile.username === username);
             if (initialState) {
                 log(`Sending initial server state to "${username}" (${syncUserId})`);
                 send(initialState);
+            } else {
+                // No previous state was found. Lets add it
+                addOrReplaceState({ state, emitEvent: false });
             }
         }
 
@@ -105,19 +109,21 @@ module.exports = function startWebsocketServer (app) {
         }
     });
 
-    function addOrReplaceState (state) {
+    function addOrReplaceState ({ state, emitEvent = true }) {
         const existingIndex = allStates.findIndex(s => s.profile.username === state.profile.username);
         if (existingIndex >= 0) {
             allStates[existingIndex] = state;
         } else {
             allStates.push(state);
         }
-        ee.emit('update', state);
+        if (emitEvent) {
+            ee.emit('update', state);
+        }
     }
 
     function updateJiraIssue ({ issue, syncUserId }) {
         allStates = allStates.map((state) => {
-            if (state.syncUserId !== syncUserId) {
+            if (state.syncUserId !== syncUserId && !!state.tasks.tasks.length) {
                 state.tasks.tasks = state.tasks.tasks.map((task) => {
                     if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
                         task.issue = issue;

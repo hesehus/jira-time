@@ -74,7 +74,7 @@
       }
     },
     "start:dummyapi": {
-      "command": "node bin/server",
+      "command": "node --inspect bin/server",
       "env": {
         "DUMMY_API": "1",
         "DEBUG": "app:*"

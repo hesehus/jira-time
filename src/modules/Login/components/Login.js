@@ -122,13 +122,13 @@ export class Login extends Component {
                     error = (
                         <div className='login-error'>
                             <div className='login-error__header'>
-                            Yo. Looks like you have too many failed login attempts!
-                        </div>
+                                Yo. Looks like you have too many failed login attempts!
+                            </div>
                             <div>
-                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                        </div>
+                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                            </div>
                             <div className='login-error__footer'>
-                            And for the future, <b>remember your credentials dude!</b>
+                                And for the future, <b>remember your credentials dude!</b>
                             </div>
                         </div>
                     );
@@ -136,14 +136,14 @@ export class Login extends Component {
                     error = (
                         <div className='login-error'>
                             <div className='login-error__header'>
-                            You are truly impossible!
-                            You <u><b>STILL</b></u> have too many failed login attempts!!!!
-                        </div>
+                                You are truly impossible!
+                                You <u><b>STILL</b></u> have too many failed login attempts!!!!
+                            </div>
                             <div>
-                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                        </div>
+                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                            </div>
                             <div className='login-error__footer'>
-                            And for the future, <b>remember your credentials dude!</b>
+                                And for the future, <b>remember your credentials dude!</b>
                             </div>
                         </div>
                     );
@@ -151,14 +151,14 @@ export class Login extends Component {
                     error = (
                         <div className='login-error'>
                             <div className='login-error__header'>
-                            Things have not changed...
-                            You <u>still</u> have too many failed login attempts!
-                        </div>
+                                Things have not changed...
+                                You <u>still</u> have too many failed login attempts!
+                            </div>
                             <div>
-                            Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                        </div>
+                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
+                            </div>
                             <div className='login-error__footer'>
-                            And for the future, <b>remember your credentials dude!</b>
+                                And for the future, <b>remember your credentials dude!</b>
                             </div>
                         </div>
                     );

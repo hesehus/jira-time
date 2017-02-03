@@ -5,7 +5,7 @@ let ws;
 let syncId;
 let unsubscribeFromStoreUpdates;
 let sendTimeout;
-let minTimeBetweenStateUpdates = 0;
+let minTimeBetweenStateUpdates = 1000;
 
 let syncUserId = window.syncUserId || cuid();
 window.syncUserId = syncUserId;
@@ -28,13 +28,15 @@ export function sendIssueUpdate (issue) {
 }
 
 export function initWebsocketConnection () {
+
+    // We cannot connect to a socket server when the site is hosted by JIRA.
+    if (location.hostname === 'jira.hesehus.dk') {
+        return;
+    }
+
     ee.emit('connecting');
 
-    let hostname = 'hpc-123';
-    if (location.hostname === 'localhost') {
-        hostname = 'localhost';
-    }
-    ws = new WebSocket('ws://' + hostname + ':8080');
+    ws = new WebSocket('ws://' + location.hostname + ':8080');
 
     ws.addEventListener('close', closeConnection);
 
@@ -52,9 +54,11 @@ export function initWebsocketConnection () {
          * Send the init command the username since it is being used
          * as identifier for the future messages
         **/
+        const state = store.getState();
         send({
+            ...state,
             init: true,
-            username: store.getState().profile.username,
+            username: state.profile.username,
             syncUserId
         });
 
@@ -105,7 +109,6 @@ export function initWebsocketConnection () {
                     ee.emit('send-remote');
                     syncId = Date.now();
                     state.app.syncId = syncId;
-                    console.log('Send updates to server!', state);
 
                     // Send update to server
                     send({
@@ -129,6 +132,7 @@ function send (message) {
         if (ws.readyState === WebSocket.OPEN) {
             try {
                 ws.send(JSON.stringify(message));
+                console.log('Send to server!', message);
             } catch (error) {
                 console.error(error);
                 closeConnection();
