@@ -11,13 +11,20 @@ export default class Tasks extends Component {
         tasks: PropTypes.array.isRequired
     }
 
+    constructor (props) {
+        super(props);
+        this.calculatePositions = this.calculatePositions.bind(this);
+    }
+
     componentDidMount () {
         this.calculatePositions();
-        window.addEventListener('resize', this.calculatePositions.bind(this));
+        window.addEventListener('resize', this.calculatePositions);
+        events.on('record-item-animate', this.calculatePositions);
     }
 
     componentWillUnmount () {
-        window.removeEventListener('resize', this.calculatePositions.bind(this));
+        window.removeEventListener('resize', this.calculatePositions);
+        events.off('record-item-animate', this.calculatePositions);
     }
 
     componentDidUpdate () {

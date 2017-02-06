@@ -1,3 +1,7 @@
+.record-wrap {
+  position: relative;
+}
+
 .record {
   padding: 5px 10px;
   display: flex;
@@ -8,9 +12,10 @@
   border-radius: 6px;
   transition: background 150ms;
   position: relative;
+  height: 100%;
 
-  &:not(:last-child) {
-    margin-bottom: 5px;
+  .record-wrap:not(:first-child) & {
+    margin-top: 5px;
   }
   
   &,
@@ -22,6 +27,8 @@
     height: 100%;
     padding: 0 0 0 10px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
     
     &-icon {
       width: 20px;

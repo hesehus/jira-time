@@ -19,7 +19,8 @@ export class TaskItem extends Component {
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object,
             removeTask: PropTypes.func.isRequired,
-            numberOfRecords: PropTypes.number
+            records: PropTypes.array,
+            numberOfRecordsWithNoIssue: PropTypes.number.isRequired
         };
     }
 
@@ -82,13 +83,13 @@ export class TaskItem extends Component {
 
     onRemoveClick () {
 
-        const { numberOfRecords, removeTask, task } = this.props;
+        const { records, removeTask, task } = this.props;
 
-        if (numberOfRecords > 0) {
-            let worklogName = numberOfRecords === 1 ? 'worklog' : 'worklogs';
+        if (records.length > 0) {
+            let worklogName = records.length === 1 ? 'worklog' : 'worklogs';
             swal({
                 title: 'Hold on dude! Are you sure?',
-                text: `You have ${numberOfRecords} ${worklogName} on this task`,
+                text: `You have ${records.length} ${worklogName} on this task`,
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -107,13 +108,13 @@ export class TaskItem extends Component {
 
     render () {
 
-        const { task, movingRecord, movingTask, index } = this.props;
+        const { task, movingRecord, movingTask, index, records, numberOfRecordsWithNoIssue } = this.props;
         let className = 'task-item';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task-item--drop-active';
         }
 
-        const records = <Records taskCuid={task.cuid} taskIndex={index} />;
+        const recordsOutput = <Records records={records} taskIndex={index + numberOfRecordsWithNoIssue} />;
 
         // This task does have a JIRA issue
         if (task.issue) {
@@ -130,7 +131,7 @@ export class TaskItem extends Component {
                                 {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
                             </span>
                         </div>
-                        {records}
+                        {recordsOutput}
                     </div>
                 );
             }
@@ -184,7 +185,7 @@ export class TaskItem extends Component {
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>
                 </div>
-                {records}
+                {recordsOutput}
             </div>
         );
     }

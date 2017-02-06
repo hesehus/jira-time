@@ -6,7 +6,7 @@ import { logout, updateUserInfo } from 'shared/jiraClient';
 import ThemeSelector from 'modules/ThemeSelector';
 import Login from 'modules/Login';
 import UserIcon from 'assets/user.svg';
-import changelog from 'shared/changelog.json';
+import changelog from 'changelog.json';
 
 import './Profile.scss';
 

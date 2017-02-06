@@ -10,6 +10,10 @@
         border: none;
         padding: 0;
         cursor: pointer;
+
+        &:last-child {
+            margin-right: 0;
+        }
     }
 
     &-start-new {

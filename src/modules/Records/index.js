@@ -1,2 +1,2 @@
-import View from './containers/Records';
+import View from './components/Records';
 export default View;

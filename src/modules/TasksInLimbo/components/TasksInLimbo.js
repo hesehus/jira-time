@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import RecordItem from 'modules/RecordItem';
+import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
 
 import './TasksInLimbo.scss';
@@ -43,17 +43,6 @@ export default class TasksInLimbo extends Component {
             className += ' task-item--drop-active';
         }
 
-        let recordsOutput;
-        if (recordsWithNoIssue.length > 0) {
-            recordsOutput = (
-                <div className='records records--no-issue'>
-                    {recordsWithNoIssue.map((record) => (
-                        <RecordItem recordCuid={record.cuid} record={record} key={record.cuid} />
-                    ))}
-                </div>
-            );
-        }
-
         // Output the list of tasks
         return (
             <div>
@@ -62,7 +51,7 @@ export default class TasksInLimbo extends Component {
                         {textInLimbo}
                         <RecordActionButtons />
                     </div>
-                    {recordsOutput}
+                    <Records records={recordsWithNoIssue} taskIndex={0} />
                 </div>
             </div>
         );

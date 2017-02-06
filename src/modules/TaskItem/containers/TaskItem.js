@@ -8,15 +8,18 @@ import {
   getMovingTask
 } from 'store/reducers/tasks';
 
-import { getMovingRecord, getNumberOfRecords } from 'store/reducers/recorder';
+import { getMovingRecord, getRecordsForTask, getRecordsWithNoIssue } from 'store/reducers/recorder';
 
 import TaskItem from '../components/TaskItem';
 
-const mapStateToProps = (state, props) => ({
-    movingRecord: getMovingRecord({ state }),
-    movingTask: getMovingTask({ state }),
-    numberOfRecords: props.task ? getNumberOfRecords({ state, taskCuid: props.task.cuid }) : 0
-});
+const mapStateToProps = (state, props) => {
+    return {
+        movingRecord: getMovingRecord({ state }),
+        movingTask: getMovingTask({ state }),
+        records: getRecordsForTask({ state, taskCuid: props.task.cuid }),
+        numberOfRecordsWithNoIssue: getRecordsWithNoIssue({ state }).length
+    }
+};
 
 const mapDispatchToProps = {
     removeTask,
