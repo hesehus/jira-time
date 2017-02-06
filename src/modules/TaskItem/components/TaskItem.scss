@@ -26,6 +26,26 @@
     &:not(:last-child) {
         margin-bottom: 15px;
     }
+
+    &-delete {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 6px;
+        cursor: pointer;
+        opacity: 0;
+        transform: scale(.5);
+        transition: all 150ms;
+
+        .task-item:hover & {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    &-delete-icon {
+        display: block;
+    }
+
     &__info {
         display: flex;
         justify-content: space-between;
@@ -66,11 +86,7 @@
             min-width: 50%;
         }
     }
-    &__remove {
-        flex-shrink: 0;
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, .5);
-    }
+    
     &__key-and-status {
         flex-shrink: 0;
         min-width: 130px;
@@ -112,6 +128,7 @@
         border-radius: 4px;
         white-space: nowrap;
         margin-left: 20px;
+        text-transform: none;
 
         @media (max-width: $screen-sm) {
             margin-left: 10px;

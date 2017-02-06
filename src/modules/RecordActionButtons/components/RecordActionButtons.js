@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { default as swal } from 'sweetalert2';
 
 import LoadingIcon from 'assets/loading.svg';
-import PlusIcon from 'assets/plus.svg';
+import AddButton from 'assets/add-button.svg';
 import RecordIcon from 'assets/record.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import RecordModel from 'store/models/RecordModel';
@@ -18,40 +17,15 @@ export default class RecordActionButtons extends Component {
         removeTask: PropTypes.func.isRequired,
         refreshIssue: PropTypes.func.isRequired,
         setIssueRefreshing: PropTypes.func.isRequired,
-        onRemainingUpdated: PropTypes.func,
-        numberOfRecords: PropTypes.number
+        onRemainingUpdated: PropTypes.func
     }
 
     constructor (props) {
         super(props);
 
-        this.onRemoveClick = this.onRemoveClick.bind(this);
         this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
         this.onStartPassiveLogClick = this.onStartPassiveLogClick.bind(this);
         this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
-    }
-
-    onRemoveClick () {
-        const { numberOfRecords, removeTask, task } = this.props;
-
-        if (numberOfRecords > 0) {
-            let worklogName = numberOfRecords === 1 ? 'worklog' : 'worklogs';
-            swal({
-                title: 'Hold on dude! Are you sure?',
-                text: `You have ${numberOfRecords} ${worklogName} on this task`,
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, get rid of it all!'
-            }).then(function () {
-                removeTask({ cuid: task.cuid });
-            }).catch(() => {
-                // Ah, good thing we asked this question then =)
-            });
-        } else {
-            removeTask({ cuid: task.cuid });
-        }
     }
 
     onStartPassiveLogClick () {
@@ -110,34 +84,32 @@ export default class RecordActionButtons extends Component {
         let actionsForTaskWithIssue = [];
         if (task) {
             actionsForTaskWithIssue = [
-                <span className='record-action-buttons__log record-action-buttons__log--refresh'
+                <span className='record-action-buttons-btn'
                   title='Click to refresh the JIRA issue'
                   onClick={this.onIssueRefreshClick}>
                     <img src={iconToUserForRefresh}
-                      className='record-action-buttons__log-icon record-action-buttons__log-icon--refresh'
+                      className='record-action-buttons-small-icon'
                       alt='Refresh' />
-                </span>,
-                <button className='task-item__remove record-action-buttons__log record-action-buttons__log--remove'
-                  title='Remove task'
-                  onClick={this.onRemoveClick}>
-                    <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Remove' />
-                </button>
+                </span>
             ];
         }
 
         return (
             <div className='record-action-buttons'>
                 {actionsForTaskWithIssue}
-                <button className='record-action-buttons__log'
+                <button className='record-action-buttons-btn'
                   title='Add a worklog'
                   onClick={this.onStartPassiveLogClick}>
-                    <img src={PlusIcon} className='record-action-buttons__log-icon' alt='Plus' />
+                    <img src={AddButton}
+                      className='record-action-buttons-small-icon record-action-buttons-small-icon--add-passive'
+                      alt='Plus'
+                    />
                 </button>
-                <button className='record-action-buttons__log'
+                <button className='record-action-buttons-btn'
                   title='Start new worklog'
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}
-                      className='record-action-buttons__log-icon record-action-buttons__log-icon--record'
+                      className='record-action-buttons--start-new'
                       alt='Record' />
                 </button>
             </div>

@@ -4,8 +4,9 @@ import keycode from 'keycode';
 import Sync from 'shared/sync';
 import DateInput from 'modules/DateInput';
 
-import ExportIcon from 'assets/export.svg';
+import ExportIcon from 'assets/export-compact.svg';
 import LoadingIcon from 'assets/loading.svg';
+import DeleteIcon from 'assets/delete.svg';
 
 import './RecordItem.scss';
 
@@ -199,7 +200,9 @@ export default class RecordItem extends Component {
 
         return (
             <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
-                <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>x</button>
+                <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>
+                    <img src={DeleteIcon} alt='Delete' className='record-remove-icon' />
+                </button>
                 <div className='record-time'>
                     <div className='record-dates' ref={e => this.recordDates = e}>
                         <DateInput

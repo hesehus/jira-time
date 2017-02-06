@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M2.43534751e-19,16.1504481 L3.01032591e-20,7.82572665 C-2.65663647e-20,5.61537415 1.78165044,3.82352941 4.00213259,3.82352941 L8.6277553,3.82352941 L13.6582729,3.82352941 L17.4264815,3.82352941 C19.6367747,3.82352941 21.4285714,5.61077273 21.4285714,7.8315573 L21.4285714,20.9919721 C21.4285714,23.2055448 19.6339648,25 17.4200761,25 L9.79270994,25" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="21.4285714" height="21.1764706" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="DELETE" transform="translate(-592.000000, -275.000000)" stroke="#FFFFFF">
+            <g id="Group-2" transform="translate(592.000000, 273.000000)">
+                <g id="Group" transform="translate(16.980203, 8.391940) rotate(45.000000) translate(-16.980203, -8.391940) translate(12.980203, 1.891940)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3.70710678,1.06004796 L3.70710678,11.6482833" id="Line"></path>
+                    <path d="M3.92857143,0.352941176 L7.5,3.88235294" id="Line"></path>
+                    <path d="M0.357142857,0.352941176 L3.92857143,3.88235294" id="Line-Copy-2" transform="translate(2.142857, 2.117647) scale(-1, 1) translate(-2.142857, -2.117647) "></path>
+                </g>
+                <use id="Rectangle-4" mask="url(#mask-2)" stroke-width="4" transform="translate(10.714286, 14.411765) rotate(-180.000000) translate(-10.714286, -14.411765) " xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

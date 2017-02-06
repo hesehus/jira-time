@@ -3,41 +3,25 @@
     flex-wrap: nowrap;
     align-items: center;
 
-    &__log-icon {
-        width: 15px;
-        height: 15px;
-
-        &--refresh{
-            width: 20px;
-            height: 20px;
-        }
-
-        &--record{
-            width: 14px;
-            height: 14px;
-        }
-    }
-
-    &__log {
+    &-btn {
         flex-shrink: 0;
         background: transparent;
-        border: 1px solid rgba(255, 255, 255, .5);
-        margin-right: 5px;
+        margin-right: 10px;
+        border: none;
+        padding: 0;
+    }
 
-        &--refresh{
-            border: none;
-            cursor: pointer;
-            display: flex;
-            width: 28px;
-            height: 28px;
-            align-items: center;
-            justify-content: center;
-        }
+    &-start-new {
+        width: 50px;
+        height: 50px;
+    }
 
-        &--remove {
-            img {
-                transform: rotate(45deg);
-            }
+    &-small-icon {
+        display: block;
+        width: 20px;
+
+        &--add-passive {
+            width: 22px;
         }
     }
 }

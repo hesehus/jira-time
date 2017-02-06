@@ -2,8 +2,7 @@ import { connect } from 'react-redux';
 
 import {
   addRecord,
-  startRecording,
-  getNumberOfRecords
+  startRecording
 } from 'store/reducers/recorder';
 
 import {
@@ -14,12 +13,6 @@ import {
 
 import RecordActionButtons from '../components/RecordActionButtons';
 
-const mapStateToProps = (state, props) => {
-    return {
-        numberOfRecords: props.task ? getNumberOfRecords({ state, taskCuid: props.task.cuid }) : 0
-    }
-};
-
 const mapDispatchToProps = {
     startRecording,
     addRecord,
@@ -28,4 +21,4 @@ const mapDispatchToProps = {
     setIssueRefreshing
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecordActionButtons);
+export default connect(null, mapDispatchToProps)(RecordActionButtons);
