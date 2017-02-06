@@ -137,9 +137,9 @@ export default class Header extends Component {
             );
         }
 
-        let classNameHome = 'header__button';
-        let classNameProfile = 'header__button';
-        let classNameSummary = 'header__button';
+        let classNameHome = 'header__button header__button--home';
+        let classNameProfile = 'header__button header__button--profile';
+        let classNameSummary = 'header__button header__button--summary';
 
         switch (this.state.currentPathname) {
         case '/profile' : {
