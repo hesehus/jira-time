@@ -84,7 +84,7 @@
 }
 
 .update-available {
-  margin-left: 10px;
+  margin-left: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -93,8 +93,9 @@
 
   &-icon {
     display: inline-block;
-    width: 25px;
+    width: 15px;
     position: relative;
     top: -1px;
+    margin-right: 5px;
   }
 }
