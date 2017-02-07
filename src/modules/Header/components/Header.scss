@@ -69,6 +69,10 @@
 
     &--profile::before {
       margin-left: -(($size / 2) - 1px);
+
+      @media (max-width: $screen-md) {
+          margin-left: -($size / 2);
+      }
     }
 
     &--avatar::before {

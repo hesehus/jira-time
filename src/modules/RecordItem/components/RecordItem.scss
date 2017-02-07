@@ -13,10 +13,6 @@
   transition: background 150ms;
   position: relative;
   height: 100%;
-
-  .record-wrap:not(:first-child) & {
-    margin-top: 5px;
-  }
   
   &,
   input[type='text'] {
