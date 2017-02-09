@@ -1,6 +1,13 @@
 [
     
     {
+        "version": "1.1.1",
+        "date": "2017-02-06T15:00:00+01:00",
+        "changes": [
+            "New build to fix update issue@mac"
+        ]
+    },
+    {
         "version": "1.1.0",
         "date": "2017-02-06T15:00:00+01:00",
         "changes": [
