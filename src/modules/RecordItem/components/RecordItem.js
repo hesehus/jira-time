@@ -40,7 +40,6 @@ export default class RecordItem extends Component {
         this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
-        this.getCommentTabIndex = this.getCommentTabIndex.bind(this);
 
         this.state = {};
     }
@@ -62,12 +61,6 @@ export default class RecordItem extends Component {
                 this.scrollIntoView();
             }
         }
-
-        this.setDatesTabIndex();
-    }
-
-    componentDidUpdate () {
-        this.setDatesTabIndex();
     }
 
     onStartTimeChange ({ date }) {
@@ -141,24 +134,6 @@ export default class RecordItem extends Component {
         syncer.start();
     }
 
-    getTabIndexBase () {
-        return ((this.props.taskIndex + 1) + this.props.recordIndex) * 10;
-    }
-
-    setDatesTabIndex () {
-        const [inputStart, inputEnd] = Array.from(this.recordDates.querySelectorAll('input:not(.flatpickr-input)'));
-        if (inputStart) {
-            inputStart.tabIndex = this.getTabIndexBase() + 1;
-        }
-        if (inputEnd) {
-            inputEnd.tabIndex = this.getTabIndexBase() + 2;
-        }
-    }
-
-    getCommentTabIndex () {
-        return this.getTabIndexBase() + 3;
-    }
-
     render () {
 
         let { record, movingRecord, movingTask } = this.props;
@@ -192,15 +167,19 @@ export default class RecordItem extends Component {
             );
         } else {
             btnSync = (
-                <div className='record__sync' onClick={this.onSyncClick} title='Sync this worklog to JIRA'>
+                <button tabIndex='-1'
+                  className='record__sync'
+                  onClick={this.onSyncClick}
+                  title='Sync this worklog to JIRA'
+                >
                     <img className='record__sync-icon' src={ExportIcon} alt='Export' />
-                </div>
+                </button>
             );
         }
 
         return (
             <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
-                <button className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>
+                <button tabIndex='-1' className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>
                     <img src={DeleteIcon} alt='Delete' className='record-remove-icon' />
                 </button>
                 <div className='record-time'>
@@ -228,7 +207,7 @@ export default class RecordItem extends Component {
                   onKeyDown={this.onCommentKeyDown}
                   defaultValue={record.comment}
                   disabled={somethingIsMoving}
-                  tabIndex={this.getCommentTabIndex()}
+                  tabIndex='0'
                   ref={e => this.inputComment = e}
                 />
                 {btnSync}

@@ -1,6 +1,16 @@
 [
     
     {
+        "version": "1.2.0",
+        "date": "2017-02-17T15:00:00+01:00",
+        "changes": [
+            "Fixed performance issue when moving records and tasks",
+            "New logo!",
+            "Default theme color changed to dark blue",
+            "Moved task item interactive elements out of tabbing flow"
+        ]
+    },
+    {
         "version": "1.1.1",
         "date": "2017-02-06T15:00:00+01:00",
         "changes": [

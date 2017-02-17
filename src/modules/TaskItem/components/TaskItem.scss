@@ -3,6 +3,12 @@
     position: relative;
     z-index: 0;
     padding: 10px 15px;
+    
+    .tasks-draggable & {
+        // Hint to the browser that we will be animate using transforms
+        will-change: height, transform;
+    }
+
     &:before {
         content: '';
         position: absolute;
@@ -36,6 +42,9 @@
         opacity: 0;
         transform: scale(.5);
         transition: all 150ms;
+        background: transparent;
+        border: none;
+        appearance: none;
 
         .task-item:hover & {
             opacity: 1;

@@ -40,7 +40,7 @@ export function init () {
         document.addEventListener('keydown', function onKeyUp (e) {
             const code = keycode(e);
 
-            if (code === 'a') {
+            if (code === 'a' && !e.ctrlKey) {
                 if (targetIsNotEditable(e.target)) {
                     swal({
                         title: 'Give me some tasks!',

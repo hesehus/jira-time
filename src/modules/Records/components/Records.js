@@ -56,8 +56,7 @@ export default class Records extends Component {
               }))}
             >
                 {interpolatedStyles => {
-                    events.emit('record-item-animate');
-
+                    events.emitRecordItemAnimate();
                     return (
                         <div className='records'>
                             {interpolatedStyles.map((interpolated) => {

@@ -84,13 +84,15 @@ export default class RecordActionButtons extends Component {
         let actionsForTaskWithIssue = [];
         if (task) {
             actionsForTaskWithIssue = [
-                <span className='record-action-buttons-btn'
+                <button className='record-action-buttons-btn'
                   title='Click to refresh the JIRA issue'
-                  onClick={this.onIssueRefreshClick}>
+                  onClick={this.onIssueRefreshClick}
+                  tabIndex='-1'
+                >
                     <img src={iconToUserForRefresh}
                       className='record-action-buttons-small-icon'
                       alt='Refresh' />
-                </span>
+                </button>
             ];
         }
 
@@ -98,6 +100,7 @@ export default class RecordActionButtons extends Component {
             <div className='record-action-buttons'>
                 {actionsForTaskWithIssue}
                 <button className='record-action-buttons-btn'
+                  tabIndex='-1'
                   title='Add a worklog'
                   onClick={this.onStartPassiveLogClick}>
                     <img src={AddButton}
@@ -106,6 +109,7 @@ export default class RecordActionButtons extends Component {
                     />
                 </button>
                 <button className='record-action-buttons-btn'
+                  tabIndex='-1'
                   title='Start new worklog'
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}

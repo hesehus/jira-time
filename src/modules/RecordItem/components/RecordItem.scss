@@ -25,6 +25,9 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
+    appearance: none;
+    background: transparent;
+    border: none;
     
     &-icon {
       width: 20px;
@@ -71,6 +74,7 @@
     transform: scale(.5);
     transition: all 150ms;
 
+    &:focus,
     .record:hover & {
       opacity: 1;
       transform: none;

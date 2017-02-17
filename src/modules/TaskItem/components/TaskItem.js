@@ -115,6 +115,16 @@ export class TaskItem extends Component {
         }
 
         const recordsOutput = <Records records={records} taskIndex={index + numberOfRecordsWithNoIssue} />;
+        const deleteButton = (
+            <button tabIndex='-1'
+              type='button'
+              className='task-item-delete'
+              title='Delete work log'
+              onClick={this.onRemoveClick}
+            >
+                <img src={DeleteIcon} alt='Delete' className='task-item-delete-icon' />
+            </button>
+        );
 
         // This task does have a JIRA issue
         if (task.issue) {
@@ -123,9 +133,7 @@ export class TaskItem extends Component {
             if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
                 return (
                     <div className='task-item task-item--errors'>
-                        <span className='task-item-delete' title='Delete work log' onClick={this.onRemoveClick}>
-                            <img src={DeleteIcon} alt='Delete' className='task-item-delete-icon' />
-                        </span>
+                        {deleteButton}
                         <div className='task-item-info'>
                             <span className='task-item__summary'>
                                 {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
@@ -153,15 +161,15 @@ export class TaskItem extends Component {
         // Output the task
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
-                <span className='task-item-delete' title='Delete work log' onClick={this.onRemoveClick}>
-                    <img src={DeleteIcon} alt='Delete' className='task-item-delete-icon' />
-                </span>
+                {deleteButton}
                 <div className='task-item__info'>
                     <div className='task-item__left'>
                         <div className='task-item__key-and-status'>
                             <a className='task-item__link'
                               href={'/browse/' + task.issue.key}
-                              target='_blank'>
+                              target='_blank'
+                              tabIndex='-1'
+                            >
                                 {task.issue.key}
                             </a>
                             {status}
@@ -180,6 +188,7 @@ export class TaskItem extends Component {
                               ref='inputRemaining'
                               disabled={!!somethingIsMoving}
                               title='Remaining estimate'
+                              tabIndex='-1'
                             />
                         </div>
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />

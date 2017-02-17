@@ -22,9 +22,24 @@
     padding-left: 20px;
   }
 
+  &-logo {
+    height: 35px;
+    margin-right: 10px;
+  }
+
   &-title {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &-title-text {
     font-size: 1.65rem;
     font-family: robotothinitalic, sans-serif;
+
+    @media (max-width: $screen-sm) {
+        display: none;
+    }
   }
 
   &__button {

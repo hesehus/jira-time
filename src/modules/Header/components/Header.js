@@ -5,6 +5,7 @@ import Sync, { sharedEvents } from 'shared/sync';
 
 import './Header.scss'
 
+import AppLogoIcon from 'assets/logo-100.png';
 import UserIcon from 'assets/user.svg';
 import SyncIcon from 'assets/sync.svg';
 import LoadingIcon from 'assets/loading.svg';
@@ -158,7 +159,10 @@ export default class Header extends Component {
         return (
             <div className='header'>
                 <div className='header__left'>
-                    <div className='header-title'>JIRA-time</div>
+                    <div className='header-title'>
+                        <img className='header-logo' src={AppLogoIcon} alt='Abstract hour glass' />
+                        <span className='header-title-text'>JIRA-time</span>
+                    </div>
                     {updateAvailable}
                 </div>
                 <div className='header__right'>

@@ -20,15 +20,22 @@ export default class Tasks extends Component {
         this.calculatePositions();
         window.addEventListener('resize', this.calculatePositions);
         events.on('record-item-animate', this.calculatePositions);
+
+        // Ensure that we update on all changes on the store
+        this.storeUnsubscribe = store.subscribe(() => {
+            clearTimeout(this.calculateTimeout);
+            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 25);
+        });
     }
 
     componentWillUnmount () {
         window.removeEventListener('resize', this.calculatePositions);
         events.off('record-item-animate', this.calculatePositions);
+        this.storeUnsubscribe();
     }
 
     componentDidUpdate () {
-        this.calculatePositions();
+        // this.calculatePositions();
     }
 
     calculatePositions () {
@@ -62,12 +69,6 @@ export default class Tasks extends Component {
         });
 
         events.emit('tasksPositionsCalculated', { tasksPositions });
-
-        // Ensure that we update on all changes on the store
-        store.subscribe(() => {
-            clearTimeout(this.calculateTimeout);
-            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 25);
-        });
     }
 
     render () {
