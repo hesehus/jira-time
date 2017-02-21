@@ -5,10 +5,11 @@ import Sync, { sharedEvents } from 'shared/sync';
 
 import './Header.scss'
 
+import Loader from 'modules/Loader';
+
 import AppLogoIcon from 'assets/logo-100.png';
 import UserIcon from 'assets/user.svg';
 import SyncIcon from 'assets/sync.svg';
-import LoadingIcon from 'assets/loading.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import CalendarIcon from 'assets/calendar.svg';
 import ListViewIcon from 'assets/list-view.svg';
@@ -108,35 +109,30 @@ export default class Header extends Component {
             );
         }
 
-        // Show sync icon if there are items to sync
-        let sync;
-        if (this.state.syncing) {
-            sync = (
-                <div
-                  className='header__button header-sync header-sync--syncing'
-                  title='Syncing...'
-                  style={{ backgroundImage: `url(${LoadingIcon})` }}
-                 />
-            );
-        } else {
-            let className = 'header__button header-sync';
-            let onClick = this.onSyncClick;
-            let title = 'Sync all worklogs to JIRA';
-            if (!this.someRecordsCanBeSynced()) {
-                className += ' header-sync--inactive';
-                onClick = null;
-                title = 'No worklogs to sync, yo!';
-            }
-            sync = (
-                <div
-                  className={className}
-                  onClick={onClick}
-                  title={title}
-                  style={{ backgroundImage: `url(${SyncIcon})` }}>
-                    Sync
-                </div>
-            );
+        // Define the sync button
+        let className = 'header__button header-sync';
+        let onClick = this.onSyncClick;
+        let title = 'Sync all worklogs to JIRA';
+
+        if (!this.someRecordsCanBeSynced()) {
+            className += ' header-sync--inactive';
+            onClick = null;
+            title = 'No worklogs to sync, yo!';
+        } else if (this.state.syncing) {
+            className += ' header-sync--syncing';
+            onClick = null;
+            title = 'Syncing!';
         }
+
+        let sync = (
+            <div
+              className={className}
+              onClick={onClick}
+              title={title}
+              style={{ backgroundImage: `url(${SyncIcon})` }}>
+                {this.state.syncing ? <Loader size='tiny' /> : 'Sync'}
+            </div>
+        );
 
         let classNameHome = 'header__button header__button--home';
         let classNameProfile = 'header__button header__button--profile';

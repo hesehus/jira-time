@@ -6,7 +6,7 @@ import HistoryRecordItem from 'modules/HistoryRecordItem';
 import HistorySpaceItem from 'modules/HistorySpaceItem';
 import { getElapsedTime } from 'store/reducers/recorder';
 
-import LoadingIcon from 'assets/loading.svg';
+import Loader from 'modules/Loader';
 
 import './Summary.scss';
 
@@ -102,7 +102,7 @@ export default class Summary extends Component {
         if (!records || loading) {
             return (
                 <div className='summary summary--loading'>
-                    <img src={LoadingIcon} alt='Loading' />
+                    <Loader />
                 </div>
             );
         }

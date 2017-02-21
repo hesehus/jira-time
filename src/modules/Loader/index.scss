@@ -1,0 +1,23 @@
+@import 'variables';
+
+.loader {
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    margin: 0;
+    border-top: 2px solid rgba(0, 0, 0, 0);
+    border-right: 2px solid rgba(0, 0, 0, 0);
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    border-left: 2px solid currentColor;
+    transform: translateZ(0);
+    animation: loaderKeyframe 0.5s infinite linear;
+}
+@keyframes loaderKeyframe {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

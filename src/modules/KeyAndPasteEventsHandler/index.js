@@ -58,6 +58,7 @@ export function init () {
 
             if (e.ctrlKey) {
                 if (code === 's') {
+                    e.preventDefault();
                     Sync.processAllInState();
                 }
             }

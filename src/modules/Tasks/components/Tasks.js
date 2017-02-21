@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import calculateScrollbarWidth from 'scrollbar-width';
 
 import TasksHeader from 'modules/TasksHeader';
+import Loader from 'modules/Loader';
 import lazyDog from 'assets/lazy-dog.png';
 import TasksInLimbo from 'modules/TasksInLimbo';
 import RealTasks from './RealTasks';
@@ -35,6 +36,18 @@ export default class Tasks extends Component {
         scrollbarWidth = calculateScrollbarWidth();
     }
 
+    componentDidMount () {
+        this.mountTimeout = setTimeout(() => {
+            this.setState({
+                delayedMount: true
+            });
+        }, 25);
+    }
+
+    componentWillUnmount () {
+        clearTimeout(this.mountTimeout);
+    }
+
     onScroll (event) {
         this.setState({
             scrollTop: event.target.scrollTop
@@ -50,7 +63,16 @@ export default class Tasks extends Component {
             setTaskMoving,
             unfilteredTasks
         } = this.props;
-        const { scrollTop } = this.state;
+        const { delayedMount, scrollTop } = this.state;
+
+        // Show loading spinner when mounted the first time and there are a lot of items
+        if (!delayedMount && tasks.length > 10) {
+            return (
+                <div className='tasks-outer tasks-outer--loading'>
+                    <Loader />
+                </div>
+            );
+        }
 
         let tasksListOutput;
 

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
-import LoadingIcon from 'assets/loading.svg';
+import Loader from 'modules/Loader';
+
 import AddButton from 'assets/add-button.svg';
 import RecordIcon from 'assets/record.svg';
 import RefreshIcon from 'assets/refresh.svg';
@@ -76,29 +77,34 @@ export default class RecordActionButtons extends Component {
 
         const { task } = this.props;
 
-        let iconToUserForRefresh = RefreshIcon;
-        if (task && task.issueRefreshing) {
-            iconToUserForRefresh = LoadingIcon;
-        }
-
-        let actionsForTaskWithIssue = [];
+        let refreshElement;
         if (task) {
-            actionsForTaskWithIssue = [
-                <button className='record-action-buttons-btn'
-                  title='Click to refresh the JIRA issue'
-                  onClick={this.onIssueRefreshClick}
-                  tabIndex='-1'
-                >
-                    <img src={iconToUserForRefresh}
-                      className='record-action-buttons-small-icon'
-                      alt='Refresh' />
-                </button>
-            ];
+            if (task.issueRefreshing) {
+                refreshElement = (
+                    <span className='record-action-buttons-btn'>
+                        <span className='record-action-buttons-small-icon'>
+                            <Loader size='small' />
+                        </span>
+                    </span>
+                );
+            } else {
+                refreshElement = (
+                    <button className='record-action-buttons-btn'
+                      title='Click to refresh the JIRA issue'
+                      onClick={this.onIssueRefreshClick}
+                      tabIndex='-1'
+                    >
+                        <img src={RefreshIcon}
+                          className='record-action-buttons-small-icon'
+                          alt='Refresh' />
+                    </button>
+                );
+            }
         }
 
         return (
             <div className='record-action-buttons'>
-                {actionsForTaskWithIssue}
+                {refreshElement}
                 <button className='record-action-buttons-btn'
                   tabIndex='-1'
                   title='Add a worklog'

@@ -26,6 +26,11 @@
     flex-direction: column;
   }
 
+  &-outer--loading {
+    align-items: center;
+    justify-content: center;
+  }
+
   &__item {
     padding: 5px;
     border-bottom: 1px solid #ccc;

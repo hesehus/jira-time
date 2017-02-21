@@ -102,16 +102,19 @@
     font-size: .8rem;
     padding-left: 20px;
     padding-right: 30px;
-    min-width: 82px;
-
-    &--syncing {
-      background-size: 30px auto;
-      background-position: center;
-    }
+    width: 82px; // Shit dude, fixed width on button with text? Crazy stupid stuff!
 
     &--inactive {
       opacity: .5;
       cursor: default;
+    }
+
+    &--syncing {
+      cursor: default;
+    }
+    
+    &::before {
+      display: none;
     }
   }
 
