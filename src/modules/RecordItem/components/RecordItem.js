@@ -7,8 +7,12 @@ import DateInput from 'modules/DateInput';
 import ExportIcon from 'assets/export-compact.svg';
 import LoadingIcon from 'assets/loading.svg';
 import DeleteIcon from 'assets/delete.svg';
+import MicIcon from 'assets/mic.svg';
+import MicRedIcon from 'assets/mic-red.svg';
 
 import './RecordItem.scss';
+
+const shouldAllowSpeechRecording = 'webkitSpeechRecognition' in window && 'ontouchstart' in document.documentElement;
 
 export default class RecordItem extends Component {
 
@@ -40,6 +44,7 @@ export default class RecordItem extends Component {
         this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
+        this.onSpeechRecordClick = this.onSpeechRecordClick.bind(this);
 
         this.state = {};
     }
@@ -134,6 +139,31 @@ export default class RecordItem extends Component {
         syncer.start();
     }
 
+    onSpeechRecordClick () {
+        if (!this.sr) {
+            this.sr = new webkitSpeechRecognition(); // eslint-disable-line
+            this.sr.lang = 'da-DK';
+            this.sr.onresult = ({ results }) => {
+                if (results.length > 0) {
+                    this.props.setRecordComment({
+                        cuid: this.props.record.cuid,
+                        comment: results[0][0].transcript
+                    });
+                    console.log(results[0]);
+                }
+            }
+        }
+
+        if (this.state.srActive) {
+            this.sr.stop();
+        } else {
+            this.sr.start();
+        }
+        this.setState({
+            srActive: !this.state.srActive
+        });
+    }
+
     render () {
 
         let { record, movingRecord, movingTask } = this.props;
@@ -177,6 +207,15 @@ export default class RecordItem extends Component {
             );
         }
 
+        let btnMic;
+        if (shouldAllowSpeechRecording) {
+            btnMic = (
+                <span style={{ padding: '10px 20px' }} onClick={this.onSpeechRecordClick}>
+                    <img src={this.state.srActive ? MicRedIcon : MicIcon} alt='Microfone' />
+                </span>
+            );
+        }
+
         return (
             <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
                 <button tabIndex='-1' className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>
@@ -210,6 +249,7 @@ export default class RecordItem extends Component {
                   tabIndex='0'
                   ref={e => this.inputComment = e}
                 />
+                {btnMic}
                 {btnSync}
             </div>
         );
