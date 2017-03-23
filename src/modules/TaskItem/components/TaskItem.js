@@ -132,7 +132,11 @@ export class TaskItem extends Component {
                         </div>
                     </div>
                     <div className='task-item__right'>
-                        <TimeTrackingInfo task={task} somethingIsMoving={somethingIsMoving} setIssueRemainingEstimate={setIssueRemainingEstimate} />
+                        <TimeTrackingInfo
+                          task={task}
+                          somethingIsMoving={somethingIsMoving}
+                          setIssueRemainingEstimate={setIssueRemainingEstimate}
+                        />
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>
                 </div>
