@@ -98,9 +98,11 @@ export default class Header extends Component {
             return <div />;
         }
 
+        const { syncing, serviceWorkerUpdated, currentPathname } = this.state;
+
         // Signal that there is a new version ready to be installed
         let updateAvailable;
-        if (this.state.serviceWorkerUpdated) {
+        if (serviceWorkerUpdated) {
             updateAvailable = (
                 <div className='update-available' onClick={this.onUpdateAvailableClick}>
                     <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
@@ -118,7 +120,7 @@ export default class Header extends Component {
             className += ' header-sync--inactive';
             onClick = null;
             title = 'No worklogs to sync, yo!';
-        } else if (this.state.syncing) {
+        } else if (syncing) {
             className += ' header-sync--syncing';
             onClick = null;
             title = 'Syncing!';
@@ -130,7 +132,7 @@ export default class Header extends Component {
               onClick={onClick}
               title={title}
               style={{ backgroundImage: `url(${SyncIcon})` }}>
-                {this.state.syncing ? <Loader size='tiny' /> : 'Sync'}
+                {syncing ? <Loader size='tiny' /> : 'Sync'}
             </div>
         );
 
@@ -138,7 +140,7 @@ export default class Header extends Component {
         let classNameProfile = 'header__button header__button--profile';
         let classNameSummary = 'header__button header__button--summary';
 
-        switch (this.state.currentPathname) {
+        switch (currentPathname) {
         case '/profile' : {
             classNameProfile += ' header__button--active';
             break;
