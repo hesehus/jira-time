@@ -48,7 +48,7 @@ export default class TimeTrackingInfo extends Component {
             remainingEstimate = null;
         }
 
-        let usedEstimatePct = (remainingEstimateSeconds / originalEstimateSeconds) * 100;
+        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
         if (usedEstimatePct > 100) {
             usedEstimatePct = 100;
         }
