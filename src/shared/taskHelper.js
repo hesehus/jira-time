@@ -17,15 +17,6 @@ export function updateRemainingEstimate ({ taskCuid, taskIssueKey, remainingEsti
         key: taskIssueKey
     })
     .then((issue) => {
-
-        // Ensure that our remaining estimate gets persisted
-        // issue.fields.timetracking.remainingEstimate = remainingEstimate;
-
-        // store.dispatch(refreshIssue({
-        //     cuid: taskCuid,
-        //     issue
-        // }));
-
         return setIssueRemaining({
             id: taskIssueKey,
             remainingEstimate,
