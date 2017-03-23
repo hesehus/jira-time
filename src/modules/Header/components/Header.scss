@@ -101,7 +101,8 @@
     background-position: 8px center;
     font-size: .8rem;
     padding-left: 20px;
-    padding-right: 30px;
+    padding-right: 25px;
+    margin-right: 5px;
     width: 82px; // Shit dude, fixed width on button with text? Crazy stupid stuff!
 
     &--inactive {
@@ -111,6 +112,9 @@
 
     &--syncing {
       cursor: default;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     &::before {

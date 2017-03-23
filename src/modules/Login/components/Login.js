@@ -4,6 +4,7 @@ import './Login.scss';
 
 import { login, updateUserInfo } from 'shared/jiraClient';
 
+import LogoIcon from 'assets/logo.png';
 import LoadingIcon from 'assets/loading-black.svg';
 
 export class Login extends Component {
@@ -173,6 +174,7 @@ export class Login extends Component {
 
         return (
             <form className='login' onSubmit={this.onSubmit}>
+                <img src={LogoIcon} alt='Jira Time logo' className='login-icon' />
                 <label className='login-label'>
                     <div className='login-label__text'>Username</div>
                     <input type='text'

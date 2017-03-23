@@ -1,3 +1,5 @@
+@import 'variables';
+
 .login {
   flex-grow: 1;
   display: flex;
@@ -5,7 +7,18 @@
   align-items: center;
   justify-content: center;
   padding: 0 5%;
-  width: 330px;
+  max-width: 330px;
+  margin: 0 auto;
+
+  &-icon {
+    width: 150px;
+    margin-bottom: 25px;
+
+    @media (min-width: $screen-md) {
+      margin-bottom: 50px;
+      width: 272px;
+    }
+  }
 
   input {
     width: 100%;
@@ -14,6 +27,8 @@
   &-label {
     display: block;
     margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
   }
 
   &-label__text {
