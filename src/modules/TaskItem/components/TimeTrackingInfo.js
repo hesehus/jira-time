@@ -44,23 +44,24 @@ export default class TimeTrackingInfo extends Component {
             originalEstimate,
             originalEstimateSeconds
         } = task.issue.fields.timetracking;
-        if (!remainingEstimate || remainingEstimate === 'undefined') {
-            remainingEstimate = null;
-        }
 
-        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
-        if (usedEstimatePct > 100) {
-            usedEstimatePct = 100;
-        }
-
-        if (!originalEstimate) {
+        if (!remainingEstimate || remainingEstimate === 'undefined' || !originalEstimate) {
             return null;
         }
 
+        // Determine the % of task completion
+        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
+        if (usedEstimatePct > 100) {
+            usedEstimatePct = 100;
+        } else if (usedEstimatePct < 0) {
+            usedEstimatePct = 0;
+        }
+        usedEstimatePct = Math.floor(usedEstimatePct);
+
         return (
-            <div className='time-tracking-info'
-              title={`${remainingEstimate} remaining of the original ${originalEstimate}`}>
-                <div className='time-tracking-info-progress-text'>
+            <div className='time-tracking-info'>
+                <div className='time-tracking-info-progress-text'
+                  title={`${remainingEstimate} remaining of the original ${originalEstimate}`}>
                     <span className='time-tracking-info-progress-text-remaining'
                       contentEditable={!somethingIsMoving}
                       onFocus={this.onRemainignFocus}
@@ -70,7 +71,7 @@ export default class TimeTrackingInfo extends Component {
                     >{remainingEstimate || ''}</span>
                     / {originalEstimate}
                 </div>
-                <div className='time-tracking-info-progress-bar'>
+                <div className='time-tracking-info-progress-bar' title={`${usedEstimatePct}% of the time is spent`}>
                     <div className='time-tracking-info-progress-bar__status' style={{ width: usedEstimatePct + '%' }} />
                 </div>
             </div>
