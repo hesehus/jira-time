@@ -72,7 +72,7 @@ function onKeyPress (e) {
 }
 
 function onPanStart (event) {
-    if (event.target.type !== 'textarea' && event.target.type !== 'input') {
+    if (event.target.type !== 'textarea' && event.target.type !== 'input' && event.target.contentEditable !== 'true') {
 
         tasksFilteredBySearch = getTasksFilteredBySearch({ state: store.getState() });
 

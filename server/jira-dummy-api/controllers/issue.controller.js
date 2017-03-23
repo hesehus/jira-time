@@ -59,7 +59,10 @@ api.createDummyIssue = function (key) {
         fields: {
             summary: ips({ count: 2, units: 'sentences' }),
             timetracking: {
-                remainingEstimate: '2d 14h 51m'
+                remainingEstimate: '2d 14h 51m',
+                remainingEstimateSeconds: 500,
+                originalEstimate: '3d',
+                originalEstimateSeconds: 600
             },
             status: {
                 name: 'Forespørgsel',

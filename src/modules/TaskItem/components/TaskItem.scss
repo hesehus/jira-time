@@ -148,22 +148,7 @@
             text-overflow: ellipsis;
         }
     }
-    &__remaining {
-        width: 90px;
-        font-size: .8rem;
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        color: #fff;
-    }
-    &__remaining-input {
-        width: 100%;
-        border: none;
-        text-align: right;
-        background: transparent;
-        margin:0 15px;
-        color: white;
-    }
+
     &__loading {
         width: 20px;
         opacity: .7;

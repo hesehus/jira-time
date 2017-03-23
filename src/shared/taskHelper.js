@@ -19,17 +19,23 @@ export function updateRemainingEstimate ({ taskCuid, taskIssueKey, remainingEsti
     .then((issue) => {
 
         // Ensure that our remaining estimate gets persisted
-        issue.fields.timetracking.remainingEstimate = remainingEstimate;
+        // issue.fields.timetracking.remainingEstimate = remainingEstimate;
 
-        store.dispatch(refreshIssue({
-            cuid: taskCuid,
-            issue
-        }));
+        // store.dispatch(refreshIssue({
+        //     cuid: taskCuid,
+        //     issue
+        // }));
 
-        setIssueRemaining({
+        return setIssueRemaining({
             id: taskIssueKey,
             remainingEstimate,
             originalEstimate: issue.fields.timetracking.originalEstimate
+        });
+    })
+    .then(() => {
+        return refreshJiraIssue({
+            taskCuid,
+            taskIssueKey
         });
     })
     .catch(() => {

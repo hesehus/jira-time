@@ -3,11 +3,10 @@ import { default as swal } from 'sweetalert2';
 
 import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
-import { updateRemainingEstimate } from 'shared/taskHelper';
 import DeleteIcon from 'assets/delete.svg';
-import './TaskItem.scss';
+import TimeTrackingInfo from './TimeTrackingInfo';
 
-let focusingOnRemaining = false;
+import './TaskItem.scss';
 
 export class TaskItem extends Component {
 
@@ -27,58 +26,9 @@ export class TaskItem extends Component {
     constructor (props) {
         super(props);
 
-        this.onRemainignChange = this.onRemainignChange.bind(this);
-        this.onRemainignBlur = this.onRemainignBlur.bind(this);
-        this.setRemainingInputValue = this.setRemainingInputValue.bind(this);
         this.onRemoveClick = this.onRemoveClick.bind(this);
 
         this.state = {};
-    }
-
-    componentWillUpdate () {
-        if (this.props.task && this.props.task.issue) {
-            this.setRemainingInputValue(this.props.task.issue.fields.timetracking.remainingEstimate);
-        }
-    }
-
-    setRemainingInputValue (remaining = '') {
-        if (!focusingOnRemaining) {
-            const remInp = this.refs.inputRemaining;
-            if (remInp && remInp.value !== remaining) {
-                remInp.value = remaining;
-            }
-        }
-    }
-
-    onRemainignFocus (e) {
-        focusingOnRemaining = true;
-    }
-
-    onRemainignChange (e) {
-
-        const remainingEstimate = e.target.value;
-
-        const { task } = this.props;
-
-        this.props.setIssueRemainingEstimate({
-            cuid: task.cuid,
-            remainingEstimate
-        });
-    }
-
-    onRemainignBlur (e) {
-
-        focusingOnRemaining = false;
-
-        const remainingEstimate = e.target.value;
-
-        const { task } = this.props;
-
-        updateRemainingEstimate({
-            taskCuid: task.cuid,
-            taskIssueKey: task.issue.key,
-            remainingEstimate
-        });
     }
 
     onRemoveClick () {
@@ -108,7 +58,15 @@ export class TaskItem extends Component {
 
     render () {
 
-        const { task, movingRecord, movingTask, index, records, numberOfRecordsWithNoIssue } = this.props;
+        const { task,
+            movingRecord,
+            movingTask,
+            index,
+            records,
+            numberOfRecordsWithNoIssue,
+            setIssueRemainingEstimate
+        } = this.props;
+
         let className = 'task-item';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task-item--drop-active';
@@ -145,11 +103,6 @@ export class TaskItem extends Component {
             }
         }
 
-        let remainingEstimate = task.issue.fields.timetracking.remainingEstimate;
-        if (!remainingEstimate || remainingEstimate === 'undefined') {
-            remainingEstimate = null;
-        }
-
         const status = (
             task.issue.fields.status
             ? <span className='task-item__status'>{task.issue.fields.status.name}</span>
@@ -179,18 +132,7 @@ export class TaskItem extends Component {
                         </div>
                     </div>
                     <div className='task-item__right'>
-                        <div className='task-item__remaining'>
-                            <input className='task-item__remaining-input'
-                              value={remainingEstimate || ''}
-                              onFocus={this.onRemainignFocus}
-                              onChange={this.onRemainignChange}
-                              onBlur={this.onRemainignBlur}
-                              ref='inputRemaining'
-                              disabled={!!somethingIsMoving}
-                              title='Remaining estimate'
-                              tabIndex='-1'
-                            />
-                        </div>
+                        <TimeTrackingInfo task={task} somethingIsMoving={somethingIsMoving} setIssueRemainingEstimate={setIssueRemainingEstimate} />
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>
                 </div>
