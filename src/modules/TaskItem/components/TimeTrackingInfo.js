@@ -20,19 +20,37 @@ export default class TimeTrackingInfo extends Component {
 
     onRemainignBlur (e) {
 
-        const remainingEstimate = e.target.innerText;
+        let remainingEstimate = e.target.innerText;
         const { task } = this.props;
 
-        updateRemainingEstimate({
-            taskCuid: task.cuid,
-            taskIssueKey: task.issue.key,
-            remainingEstimate
-        }).then(() => {
-            return refreshJiraIssue({
+        // Default the value to 0h
+        if (!remainingEstimate) {
+            remainingEstimate = '0h';
+            e.target.innerHTML = remainingEstimate;
+        }
+
+        if (remainingEstimate !== task.issue.fields.timetracking.remainingEstimate) {
+            updateRemainingEstimate({
                 taskCuid: task.cuid,
-                taskIssueKey: task.issue.key
+                taskIssueKey: task.issue.key,
+                remainingEstimate
+            }).then(() => {
+                return refreshJiraIssue({
+                    taskCuid: task.cuid,
+                    taskIssueKey: task.issue.key
+                });
             });
-        });
+        }
+    }
+
+    getUsedEstimatePercentage (originalEstimateSeconds, remainingEstimateSeconds) {
+        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
+        if (usedEstimatePct > 100) {
+            usedEstimatePct = 100;
+        } else if (usedEstimatePct < 0) {
+            usedEstimatePct = 0;
+        }
+        return Math.floor(usedEstimatePct);
     }
 
     render () {
@@ -49,27 +67,20 @@ export default class TimeTrackingInfo extends Component {
             return null;
         }
 
-        // Determine the % of task completion
-        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
-        if (usedEstimatePct > 100) {
-            usedEstimatePct = 100;
-        } else if (usedEstimatePct < 0) {
-            usedEstimatePct = 0;
-        }
-        usedEstimatePct = Math.floor(usedEstimatePct);
+        let usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
 
         return (
             <div className='time-tracking-info'>
                 <div className='time-tracking-info-progress-text'
-                  title={`${remainingEstimate} remaining of the original ${originalEstimate}`}>
+                  title={`Original estimate: ${originalEstimate}. Remaining: ${remainingEstimate}`}>
+                    <span className='time-tracking-info-progress-text-original'>{originalEstimate}</span>
                     <span className='time-tracking-info-progress-text-remaining'
                       contentEditable={!somethingIsMoving}
                       onFocus={this.onRemainignFocus}
                       onBlur={this.onRemainignBlur}
                       ref='inputRemaining'
                       tabIndex='-1'
-                    >{remainingEstimate || ''}</span>
-                    / {originalEstimate}
+                    >{remainingEstimate}</span>
                 </div>
                 <div className='time-tracking-info-progress-bar' title={`${usedEstimatePct}% of the time is spent`}>
                     <div className='time-tracking-info-progress-bar__status' style={{ width: usedEstimatePct + '%' }} />
