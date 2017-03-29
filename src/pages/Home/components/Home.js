@@ -15,7 +15,6 @@ export class Home extends Component {
 
     static get propTypes () {
         return {
-            app: PropTypes.object.isRequired,
             loggedIn: PropTypes.bool.isRequired
         }
     }

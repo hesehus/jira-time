@@ -13,13 +13,11 @@ export class TaskItem extends Component {
     static get propTypes () {
         return {
             task: PropTypes.object.isRequired,
-            index: PropTypes.number,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object,
             removeTask: PropTypes.func.isRequired,
-            records: PropTypes.array,
-            numberOfRecordsWithNoIssue: PropTypes.number.isRequired
+            records: PropTypes.array
         };
     }
 
@@ -61,9 +59,7 @@ export class TaskItem extends Component {
         const { task,
             movingRecord,
             movingTask,
-            index,
             records,
-            numberOfRecordsWithNoIssue,
             setIssueRemainingEstimate
         } = this.props;
 
@@ -72,7 +68,6 @@ export class TaskItem extends Component {
             className += ' task-item--drop-active';
         }
 
-        const recordsOutput = <Records records={records} taskIndex={index + numberOfRecordsWithNoIssue} />;
         const deleteButton = (
             <button tabIndex='-1'
               type='button'
@@ -97,7 +92,7 @@ export class TaskItem extends Component {
                                 {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
                             </span>
                         </div>
-                        {recordsOutput}
+                        <Records records={records} />
                     </div>
                 );
             }
@@ -140,7 +135,7 @@ export class TaskItem extends Component {
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>
                 </div>
-                {recordsOutput}
+                <Records records={records} />
             </div>
         );
     }

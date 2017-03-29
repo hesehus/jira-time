@@ -19,10 +19,7 @@ export default class Header extends Component {
     static get propTypes () {
         return {
             records: PropTypes.array.isRequired,
-            loggedIn: PropTypes.bool.isRequired,
-            refreshIssue: PropTypes.func.isRequired,
-            setIssueRefreshing: PropTypes.func.isRequired,
-            profile: PropTypes.object.isRequired
+            loggedIn: PropTypes.bool.isRequired
         };
     }
 

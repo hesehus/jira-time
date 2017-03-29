@@ -5,8 +5,7 @@ import './index.scss';
 export default class Loader extends Component {
 
     static propTypes = {
-        size: PropTypes.string,
-        color: PropTypes.string
+        size: PropTypes.string
     }
 
     render () {

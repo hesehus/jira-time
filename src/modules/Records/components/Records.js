@@ -9,14 +9,12 @@ import './Records.scss';
 export default class Records extends Component {
 
     static propTypes = {
-        records: PropTypes.array.isRequired,
-        focusOnRecordCommentCuid: PropTypes.any,
-        taskIndex: PropTypes.number
+        records: PropTypes.array.isRequired
     }
 
     render () {
 
-        const { records, taskIndex } = this.props;
+        const { records } = this.props;
 
         return (
             <TransitionMotion
@@ -36,23 +34,18 @@ export default class Records extends Component {
                       marginTop: spring(0)
                   };
               }}
-              styles={records.map((record, i) => ({
+              styles={records.map((record, index) => ({
                   key: `record-${record.cuid}`,
                   style: {
                       opacity: spring(1),
                       scale: spring(1),
                       height: spring(53), // At the moment we have a fixed height of 53px for all record items
-                      marginTop: i === 0 ? spring(10) : spring(5)
+                      marginTop: index === 0 ? spring(10) : spring(5)
                   },
-                  data: (
-                      <RecordItem
-                        recordCuid={record.cuid}
-                        record={record}
-                        key={record.cuid}
-                        taskIndex={taskIndex}
-                        recordIndex={i}
-                      />
-                  )
+                  data: {
+                      record,
+                      index
+                  }
               }))}
             >
                 {interpolatedStyles => {
@@ -72,7 +65,10 @@ export default class Records extends Component {
                                       }}
                                       className='record-wrap'
                                     >
-                                        {interpolated.data}
+                                        <RecordItem
+                                          record={interpolated.data.record}
+                                          key={interpolated.data.record.cuid}
+                                        />
                                     </div>
                                 );
                             })}

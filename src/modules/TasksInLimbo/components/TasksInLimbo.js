@@ -51,7 +51,7 @@ export default class TasksInLimbo extends Component {
                         {textInLimbo}
                         <RecordActionButtons />
                     </div>
-                    <Records records={recordsWithNoIssue} taskIndex={0} />
+                    <Records records={recordsWithNoIssue} />
                 </div>
             </div>
         );

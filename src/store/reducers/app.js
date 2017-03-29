@@ -3,7 +3,8 @@ import { SET_LOGGED_IN } from 'store/reducers/profile';
 const initialState = {
     api: '/rest',
     authenticationHash: null,
-    syncId: 0 // Used for when syncing to server
+    syncId: 0, // Used to identify client when syncing to server,
+    updateTime: 0 // The last time the state was updated
 };
 
 // ------------------------------------
@@ -56,9 +57,7 @@ const ACTION_HANDLERS = {
             api: state.api,
             authenticationHash: null
         };
-    },
-
-    SERVER_HYDRATE : (state, { app }) => app
+    }
 };
 
 // ------------------------------------
@@ -66,6 +65,22 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 export default function appReducer (state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type];
+
+    // Update the last updated time if a useful action is executed
+    if (![
+        '@@INIT',
+        'persist/REHYDRATE',
+        'SERVER_STATE_PUSH',
+        'UPDATE_RECORD_ELAPSED',
+        'LOCATION_CHANGE',
+        'SET_USER_INFO'].includes(action.type)) {
+        if (!action.type.includes('@@redux')) {
+            state = {
+                ...state,
+                updateTime: Date.now()
+            };
+        }
+    }
 
     return handler ? handler(state, action) : state;
 }

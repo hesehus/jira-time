@@ -18,20 +18,13 @@ export default class RecordItem extends Component {
 
     static propTypes = {
         record: PropTypes.object.isRequired,
-        recordCuid: PropTypes.string.isRequired,
         removeRecord: PropTypes.func.isRequired,
         setRecordDate: PropTypes.func.isRequired,
         setRecordComment: PropTypes.func.isRequired,
-        setRecordMoving: PropTypes.func.isRequired,
-        setRecordMoveTarget: PropTypes.func.isRequired,
-        setRecordTask: PropTypes.func.isRequired,
         stopRecording: PropTypes.func.isRequired,
         activeRecord: PropTypes.object,
         movingRecord: PropTypes.object,
-        autofocus: PropTypes.bool,
-        movingTask: PropTypes.object,
-        taskIndex: PropTypes.number,
-        recordIndex: PropTypes.number
+        movingTask: PropTypes.object
     }
 
     constructor (props) {
@@ -40,11 +33,11 @@ export default class RecordItem extends Component {
         this.onStartTimeChange = this.onStartTimeChange.bind(this);
         this.onEndTimeChange = this.onEndTimeChange.bind(this);
         this.onRemoveClick = this.onRemoveClick.bind(this);
-        this.onCommentBlur = this.onCommentBlur.bind(this);
         this.onCommentKeyDown = this.onCommentKeyDown.bind(this);
         this.onSyncClick = this.onSyncClick.bind(this);
         this.onStopRecordingClick = this.onStopRecordingClick.bind(this);
         this.onSpeechRecordClick = this.onSpeechRecordClick.bind(this);
+        this.onCommentChange = this.onCommentChange.bind(this);
 
         this.state = {};
     }
@@ -84,12 +77,7 @@ export default class RecordItem extends Component {
         });
     }
 
-    onCommentBlur (e, force) {
-
-        this.setState({
-            commentSelectionStart: e.target.selectionStart
-        });
-
+    onCommentChange (e) {
         this.props.setRecordComment({
             cuid: this.props.record.cuid,
             comment: e.target.value
@@ -242,9 +230,9 @@ export default class RecordItem extends Component {
                 </div>
                 <input
                   className='record-comment'
-                  onBlur={this.onCommentBlur}
+                  onChange={this.onCommentChange}
                   onKeyDown={this.onCommentKeyDown}
-                  defaultValue={record.comment}
+                  value={record.comment}
                   disabled={somethingIsMoving}
                   tabIndex='0'
                   ref={e => this.inputComment = e}

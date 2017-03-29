@@ -71,7 +71,7 @@ ACTION_HANDLERS[SET_THEME] = (state, action) => {
     };
 };
 
-ACTION_HANDLERS.SERVER_HYDRATE = (state, { profile }) => profile;
+ACTION_HANDLERS['SERVER_STATE_PUSH'] = (state, { profile }) => profile;
 
 // ------------------------------------
 // Reducer

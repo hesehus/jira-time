@@ -97,7 +97,7 @@ export default class DateInput extends Component {
             <span className='date-inp'>
                 <span className='date-inp-date'>
                     <span className='date-inp-date__display'>{this.getDateDisplay()}</span>
-                    <Flatpickr tabindex='-1' onChange={this.onDateChange} options={{ defaultDate: date }} />
+                    <Flatpickr tabIndex='-1' onChange={this.onDateChange} options={{ defaultDate: date }} />
                 </span>
                 <TimeInput
                   value={time}

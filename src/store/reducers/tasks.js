@@ -212,7 +212,7 @@ const ACTION_HANDLERS = {
             search
         };
     },
-    SERVER_HYDRATE : (state, { tasks }) => tasks
+    'SERVER_STATE_PUSH' : (state, { tasks }) => tasks
 };
 
 function naturalCompare (a, b) {

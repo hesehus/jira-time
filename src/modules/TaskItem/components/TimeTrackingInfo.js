@@ -7,7 +7,7 @@ import './TimeTrackingInfo.scss';
 export default class TimeTrackingInfo extends Component {
 
     static propTypes = {
-        task: PropTypes.object,
+        task: PropTypes.object.isRequired,
         somethingIsMoving: PropTypes.bool,
         setIssueRemainingEstimate: PropTypes.func.isRequired
     }
@@ -15,29 +15,51 @@ export default class TimeTrackingInfo extends Component {
     constructor (props) {
         super(props);
 
-        this.onRemainignBlur = this.onRemainignBlur.bind(this);
+        this.onRemainingChange = this.onRemainingChange.bind(this);
+        this.onRemainingBlur = this.onRemainingBlur.bind(this);
+
+        this.state = {
+            remainingEstimate: props.task.issue.fields.timetracking.remainingEstimate
+        };
     }
 
-    onRemainignBlur (e) {
+    onRemainingChange (e) {
+        this.props.setIssueRemainingEstimate({
+            cuid: this.props.task.cuid,
+            remainingEstimate: e.target.value
+        });
+    }
 
-        let remainingEstimate = e.target.innerText;
-        const { task } = this.props;
+    onRemainingBlur (e) {
+        let remainingEstimate = e.target.value;
+        const { task, setIssueRemainingEstimate } = this.props;
 
         // Default the value to 0h
         if (!remainingEstimate) {
             remainingEstimate = '0h';
-            e.target.innerHTML = remainingEstimate;
         }
 
-        if (remainingEstimate !== task.issue.fields.timetracking.remainingEstimate) {
-            updateRemainingEstimate({
-                taskCuid: task.cuid,
-                taskIssueKey: task.issue.key,
+        if (remainingEstimate !== this.state.remainingEstimate) {
+            this.setState({
                 remainingEstimate
-            }).then(() => {
-                return refreshJiraIssue({
+            }, () => {
+
+                // Update redux state
+                setIssueRemainingEstimate({
+                    cuid: task.cuid,
+                    remainingEstimate
+                });
+
+                // Send updates to server
+                updateRemainingEstimate({
                     taskCuid: task.cuid,
-                    taskIssueKey: task.issue.key
+                    taskIssueKey: task.issue.key,
+                    remainingEstimate
+                }).then(() => {
+                    return refreshJiraIssue({
+                        taskCuid: task.cuid,
+                        taskIssueKey: task.issue.key
+                    });
                 });
             });
         }
@@ -70,20 +92,28 @@ export default class TimeTrackingInfo extends Component {
         let usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
 
         return (
-            <div className='time-tracking-info'>
-                <div className='time-tracking-info-progress-text'
+            <div className='time-tracking'>
+                <div className='time-tracking-progress-text'
                   title={`Original estimate: ${originalEstimate}. Remaining: ${remainingEstimate}`}>
-                    <span className='time-tracking-info-progress-text-original'>{originalEstimate}</span>
-                    <span className='time-tracking-info-progress-text-remaining'
-                      contentEditable={!somethingIsMoving}
-                      onFocus={this.onRemainignFocus}
-                      onBlur={this.onRemainignBlur}
-                      ref='inputRemaining'
-                      tabIndex='-1'
-                    >{remainingEstimate}</span>
+                    <span className='time-tracking-progress-text-original'>
+                        <input className='time-tracking-progress-input time-tracking-progress-input--original'
+                          value={originalEstimate}
+                          disabled
+                        />
+                    </span>
+                    <span className='time-tracking-progress-text-remaining'>
+                        <input className='time-tracking-progress-input'
+                          contentEditable={!somethingIsMoving}
+                          value={remainingEstimate}
+                          onChange={this.onRemainingChange}
+                          onBlur={this.onRemainingBlur}
+                          tabIndex='-1'
+                          ref={el => this.remainingElement = el}
+                        />
+                    </span>
                 </div>
-                <div className='time-tracking-info-progress-bar' title={`${usedEstimatePct}% of the time is spent`}>
-                    <div className='time-tracking-info-progress-bar__status' style={{ width: usedEstimatePct + '%' }} />
+                <div className='time-tracking-progress-bar' title={`${usedEstimatePct}% of the time is spent`}>
+                    <div className='time-tracking-progress-bar__status' style={{ width: usedEstimatePct + '%' }} />
                 </div>
             </div>
         );

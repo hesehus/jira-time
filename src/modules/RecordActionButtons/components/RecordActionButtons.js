@@ -15,9 +15,6 @@ export default class RecordActionButtons extends Component {
         task: PropTypes.object,
         addRecord: PropTypes.func.isRequired,
         startRecording: PropTypes.func.isRequired,
-        removeTask: PropTypes.func.isRequired,
-        refreshIssue: PropTypes.func.isRequired,
-        setIssueRefreshing: PropTypes.func.isRequired,
         onRemainingUpdated: PropTypes.func
     }
 

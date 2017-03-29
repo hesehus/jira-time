@@ -13,7 +13,7 @@ module.exports = function startWebsocketServer (app) {
 
     const ee = new EventEmitter({});
 
-    let allStates = [];
+    let allClientConnectionStates = [];
 
     wss.on('connection', function connection (ws) {
         let username;
@@ -26,6 +26,7 @@ module.exports = function startWebsocketServer (app) {
             try {
                 const messageJson = JSON.parse(message);
 
+                // Client wants init data
                 if (messageJson.init) {
                     if (!initiated) {
                         initiated = true;
@@ -34,18 +35,20 @@ module.exports = function startWebsocketServer (app) {
 
                         log(`Websocket connection establised for "${username}" (${syncUserId})`);
 
-                        setupInitialState(messageJson);
+                        setInitialClientConnectionState(messageJson);
 
                         ee.on('update', listenForStateUpdates);
                         ee.on('updatedTaskIssue', listenForTaskIssueUpdates);
                     }
                 } else if (messageJson.issueUpdate) {
+                    // Client has an updated JIRA issue to broadcast to the other clients
                     updateJiraIssue({
                         issue: messageJson.issue,
                         syncUserId
                     });
                     log(`Received Jira issue update from "${username}" (${syncUserId})`);
                 } else {
+                    // Normal state update
                     addOrReplaceState({ state: messageJson });
                     log(`State updated for "${username}" (${syncUserId})`);
                 }
@@ -55,7 +58,7 @@ module.exports = function startWebsocketServer (app) {
         });
 
         function listenForStateUpdates (state) {
-            if (username === state.profile.username && syncUserId !== state.syncUserId) {
+            if (username === state.profile.username) {
                 send(state);
             }
         }
@@ -65,15 +68,20 @@ module.exports = function startWebsocketServer (app) {
             send(state);
         }
 
-        // Send the initial state
-        function setupInitialState (state) {
+        // Send the initial state to the client
+        function setInitialClientConnectionState (state) {
             delete state.init;
-            const initialState = allStates.find(s => s.profile.username === username);
-            if (initialState) {
-                log(`Sending initial server state to "${username}" (${syncUserId})`);
+            const initialState = allClientConnectionStates.find(s => s.profile.username === username);
+
+            /**
+             * There is already an initial state, and its updateTime is ahead
+             * of the one that we are getting here.
+             */
+            if (initialState && initialState.app.updateTime > state.app.updateTime) {
+                log(`Initial state for ${username} already on the server.
+                     Sending it back to the client (${syncUserId})...`);
                 send(initialState);
             } else {
-                // No previous state was found. Lets add it
                 addOrReplaceState({ state, emitEvent: false });
             }
         }
@@ -110,11 +118,18 @@ module.exports = function startWebsocketServer (app) {
     });
 
     function addOrReplaceState ({ state, emitEvent = true }) {
-        const existingIndex = allStates.findIndex(s => s.profile.username === state.profile.username);
+        const existingIndex = allClientConnectionStates.findIndex(s => s.profile.username === state.profile.username);
         if (existingIndex >= 0) {
-            allStates[existingIndex] = state;
+
+            /**
+             * Ensure that the new state we received is actually updated at a later
+             * point in time than the one we have
+             */
+            if (allClientConnectionStates[existingIndex].app.updateTime < state.app.updateTime) {
+                allClientConnectionStates[existingIndex] = state;
+            }
         } else {
-            allStates.push(state);
+            allClientConnectionStates.push(state);
         }
         if (emitEvent) {
             ee.emit('update', state);
@@ -122,8 +137,8 @@ module.exports = function startWebsocketServer (app) {
     }
 
     function updateJiraIssue ({ issue, syncUserId }) {
-        allStates = allStates.map((state) => {
-            if (state.syncUserId !== syncUserId && !!state.tasks.tasks.length) {
+        allClientConnectionStates = allClientConnectionStates.map((state) => {
+            if (!!state.tasks.tasks.length) {
                 state.tasks.tasks = state.tasks.tasks.map((task) => {
                     if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
                         task.issue = issue;

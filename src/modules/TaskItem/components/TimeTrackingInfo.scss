@@ -1,6 +1,6 @@
 @import 'variables';
 
-.time-tracking-info {
+.time-tracking {
     margin-right: 10px;
     font-size: .75rem;
     min-width: 100px;
@@ -28,10 +28,21 @@
 
     &-progress-text-remaining {
         min-width: 10px;
-        flex-shrink: 0;
-        padding: 0 2px;
         display: inline-block;
-        cursor: text;
+        flex-shrink: 0;
+    }
+
+    &-progress-input {
+        padding: 0 2px;
+        width: 100%;
+        border: none;
+        background: transparent;
+        color: #fff;
+        width: 45px;
+
+        &--original {
+            text-align: right;
+        }
     }
 
     &-progress-bar {

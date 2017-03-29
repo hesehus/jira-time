@@ -4,10 +4,8 @@ import RecordModel from 'store/models/RecordModel';
 import TaskModel from 'store/models/TaskModel';
 
 import { REMOVE_TASK } from 'store/reducers/tasks';
-// import { SET_LOGGED_IN } from 'store/reducers/profile';
 
 const initialState = {
-    record: null,
     records: [],
     task: null
 };
@@ -167,10 +165,10 @@ const ACTION_HANDLERS = {
         // Start new recording
         const record = action.record || RecordModel({ task });
         record.elapsedTime = getElapsedTime({ startTime: new Date() });
+        records.push(record);
 
         return {
             ...state,
-            record,
             task,
             records
         }
@@ -190,11 +188,6 @@ const ACTION_HANDLERS = {
             }
         });
 
-        let record = state.record;
-        if (record && record.taskCuid === action.cuid) {
-            record = initialState.record;
-        }
-
         let task = state.task;
         if (task && task.cuid === action.cuid) {
             task = initialState.task;
@@ -202,7 +195,6 @@ const ACTION_HANDLERS = {
 
         return {
             ...state,
-            record,
             task,
             records
         };
@@ -220,16 +212,8 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                syncing: action.syncing
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
@@ -250,17 +234,8 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let { record } = state;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                startTime,
-                elapsedTime: getElapsedTime({ startTime, endTime })
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
@@ -277,16 +252,8 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                comment: action.comment
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
@@ -308,19 +275,8 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                taskCuid,
-                taskIssueKey,
-                moving: false,
-                taskDroppableCuid: null
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
@@ -336,16 +292,8 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                moving: action.moving
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
@@ -361,72 +309,46 @@ const ACTION_HANDLERS = {
             return record;
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = Object.assign({}, record, {
-                taskDroppableCuid: action.taskCuid
-            });
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
     [UPDATE_RECORD_ELAPSED] : (state, action) => {
 
         const records = state.records.map((record) => {
-
             if (record.cuid === action.cuid) {
                 const { startTime, endTime } = record;
                 return Object.assign({}, record, {
                     elapsedTime: getElapsedTime({ startTime, endTime })
                 });
             }
-
             return record;
         });
 
-        let { record } = state;
-        if (record && record.cuid === action.cuid) {
-            const { startTime, endTime } = record;
-            record = Object.assign({}, record, {
-                elapsedTime: getElapsedTime({ startTime, endTime })
-            });
-        }
-
         return {
             ...state,
-            records,
-            record
+            records
         };
     },
     [REMOVE_RECORD] : (state, action) => {
 
         const records = [];
-
         state.records.forEach((record) => {
             if (record.cuid !== action.cuid) {
                 records.push(record);
             }
         });
 
-        let record = state.record;
-        if (record && record.cuid === action.cuid) {
-            record = initialState.record;
-        }
-
         return {
             ...state,
-            record,
             records
         };
     },
-    SERVER_HYDRATE : (state, { recorder }) => recorder
+    'SERVER_STATE_PUSH' : (state, { recorder }) => recorder
 };
 
-// Listen for logout. Clear everything if we log out
+// Listen for logout. Clear everything if we do
 /* ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
     const records = [...state.records];
 
@@ -446,21 +368,13 @@ const ACTION_HANDLERS = {
 
 function stopRecordingInState ({ state }) {
     let records = [...state.records];
-
-    // Stop ongoing record
-    let { record } = state;
-    if (record) {
-
-        // Legacy: remove the active record from records
-        const index = records.findIndex(r => r.cuid === record.cuid);
-        if (index !== -1) {
-            records = records.slice(0, index);
-        }
-
-        records.push(Object.assign({}, record, {
+    let recordIndex = records.findIndex(r => !r.endTime);
+    if (recordIndex !== -1) {
+        records[recordIndex] = {
+            ...records[recordIndex],
             endTime: Date.now(),
-            elapsedTime: getElapsedTime({ startTime: record.startTime })
-        }));
+            elapsedTime: getElapsedTime({ startTime: records[recordIndex].startTime })
+        };
     }
 
     return records;
@@ -469,59 +383,20 @@ function stopRecordingInState ({ state }) {
 // ------------------------------------
 // Getters
 // ------------------------------------
-export function getRecordsForTask ({ state, taskCuid }) {
-    const records = [];
-    const activeRecord = state.recorder.record || {};
-
-    state.recorder.records.forEach((record) => {
-        if (record.taskCuid === taskCuid && record.cuid !== activeRecord.cuid) {
-            records.push(record);
-        }
-    });
-
-    // Add the active record
-    if (activeRecord.taskCuid === taskCuid) {
-        records.push(activeRecord);
-    }
-
-    return records;
-}
-
-export function getRecordsWithNoIssue ({ state }) {
-    const records = [];
-    const activeRecord = state.recorder.record;
-
-    state.recorder.records.forEach((record) => {
-        if (!record.taskIssueKey && (!activeRecord || record.cuid !== activeRecord.cuid)) {
-            records.push(record);
-        }
-    });
-
-    // Add the active record
-    if (activeRecord && !activeRecord.taskIssueKey) {
-        records.push(activeRecord);
-    }
-
-    return records;
-}
+export const getRecordsForTask = ({ state, taskCuid }) => state.recorder.records.filter(r => r.taskCuid === taskCuid);
 
 export const getRecords = ({ state }) => state.recorder.records;
 
-export const getActiveRecord = ({ state }) => state.recorder.record;
+export const getRecordsWithNoIssue = ({ state }) => state.recorder.records.filter(r => !r.taskIssueKey);
 
-export const getMovingRecord = ({ state }) => {
-    if (state.recorder.record && state.recorder.record.moving) {
-        return state.recorder.record;
-    }
-    return state.recorder.records.find(r => r.moving);
-}
+export const getActiveRecord = ({ state }) => state.recorder.records.find(r => !r.endTime);
+
+export const getNotSyncedRecords = ({ state }) => state.recorder.records.filter(r => !!r.endTime);
+
+export const getMovingRecord = ({ state }) => state.recorder.records.find(r => r.moving);
 
 export const getNumberOfRecords = ({ state, taskCuid }) => {
-    let recordsCount = state.recorder.records.filter(r => r.taskCuid === taskCuid).length;
-    if (state.recorder.record && state.recorder.record.taskCuid === taskCuid) {
-        recordsCount++;
-    }
-    return recordsCount;
+    return state.recorder.records.filter(r => r.taskCuid === taskCuid).length;
 }
 
 // ------------------------------------

@@ -16,8 +16,7 @@ export default class Recorder extends Component {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
             updateRecordElapsed: PropTypes.func.isRequired,
-            isLoggedIn: PropTypes.bool.isRequired,
-            setSyncId: PropTypes.func.isRequired
+            isLoggedIn: PropTypes.bool.isRequired
         };
     }
 
@@ -165,7 +164,7 @@ export default class Recorder extends Component {
         if (tasksAddingRemaining) {
             if (tasksAddingRemaining > 10) {
                 notifications.push((
-                    <div className='notification'>
+                    <div className='notification' key='adding-task-crazy-many'>
                         {
                             `Wow dude! ${tasksAtStart} tasks?
                             You must be crazy busy!
@@ -177,13 +176,13 @@ export default class Recorder extends Component {
             } else {
                 if (tasksAtStart > 10) {
                     notifications.push((
-                        <div className='notification'>
+                        <div className='notification' key='adding-task-crazy-many-some-remaining'>
                             {`Allright man. Only ${tasksAddingRemaining} more...`}
                         </div>
                     ));
                 } else {
                     notifications.push((
-                        <div className='notification'>
+                        <div className='notification' key='adding-task'>
                             {
                                 `Yo dude!
                                 I'm real busy trying to add ${tasksAddingRemaining}
@@ -196,17 +195,17 @@ export default class Recorder extends Component {
         }
 
         if (showWsConnected) {
-            notifications.push(<div className='notification'>Connected!</div>);
+            notifications.push(<div className='notification' key='ws-connecting'>Connected!</div>);
         }
         if (wsConnecting) {
-            notifications.push(<div className='notification'>Connecting to remote server...</div>);
+            notifications.push(<div className='notification' key='ws-connected'>Connecting to remote server...</div>);
         }
         // if (wsClosed) {
         //     notifications.push(<div className='notification'>Connection to remote server closed. Retrying...</div>);
         // }
         if (wsError || wsClosed) {
             notifications.push((
-                <div className='notification'>
+                <div className='notification' key='ws-connection-failed'>
                     Could not connect to to remote server.
                     <u onClick={initWebsocketConnection}>Try again</u>
                 </div>

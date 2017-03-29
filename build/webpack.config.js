@@ -18,11 +18,7 @@ const webpackConfig = {
     devtool : config.compiler_devtool,
     resolve : {
         root       : paths.client(),
-        extensions : ['', '.js', '.jsx', '.json'],
-        alias: {
-            'react': 'inferno-compat',
-            'react-dom': 'inferno-compat'
-        }
+        extensions : ['', '.js', '.jsx', '.json']
     },
     module : {},
     node: {

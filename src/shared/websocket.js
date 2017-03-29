@@ -3,17 +3,18 @@ import cuid from 'cuid';
 
 let ws;
 let syncId;
+let updateTime = 0;
 let unsubscribeFromStoreUpdates;
 let sendTimeout;
-let minTimeBetweenStateUpdates = 1000;
+let minTimeBetweenStateUpdates = 100;
 
-let syncUserId = window.syncUserId || cuid();
+let syncUserId = window.syncUserId || innerWidth + ':' + cuid();
 window.syncUserId = syncUserId;
 
 const ee = new EventEmitter({});
 export default ee;
 
-// Initiate websocket connection in 2 sec
+// Initiate websocket connection
 // setTimeout(initWebsocketConnection, 2000);
 
 export function sendIssueUpdate (issue) {
@@ -34,18 +35,32 @@ export function initWebsocketConnection () {
         return;
     }
 
+    {
+        let state = store.getState();
+        if (!state.profile.loggedIn) {
+            setTimeout(initWebsocketConnection, 100);
+            return;
+        }
+    }
+
     ee.emit('connecting');
 
     ws = new WebSocket('ws://' + location.hostname + ':8080');
 
-    ws.addEventListener('close', closeConnection);
+    ws.addEventListener('close', () => {
+        console.log('server connection closed');
+        closeConnection();
+    });
 
     ws.addEventListener('error', (e) => {
         console.log('server connection error', e);
         closeConnection();
-        // ws = false;
     });
 
+    /**
+     * Listen for the successful connect(open) event when the connection to
+     * the server is established
+     */
     ws.addEventListener('open', () => {
 
         ee.emit('connected');
@@ -62,7 +77,36 @@ export function initWebsocketConnection () {
             syncUserId
         });
 
-        // Receving a message from the server
+        // Listen for local store changes
+        unsubscribeFromStoreUpdates = store.subscribe(() => {
+            clearTimeout(sendTimeout);
+            sendTimeout = setTimeout(() => {
+                const state = store.getState();
+
+                /**
+                 * The store updateTime is fresher than what we have. This means that the
+                 * state change is local and we should push the changes to the server
+                **/
+                if (state.app.updateTime > updateTime) {
+                    console.log('state qualifies for server update', state.app.updateTime, updateTime)
+
+                    // Store the updateTime
+                    updateTime = state.app.updateTime;
+
+                    ee.emit('send-remote');
+                    syncId = Date.now();
+                    state.app.syncId = syncId;
+
+                    // Send update to server
+                    send({
+                        syncUserId,
+                        ...state
+                    });
+                }
+            }, minTimeBetweenStateUpdates);
+        });
+
+        // Listen for messages from the server
         ws.addEventListener('message', (message) => {
 
             let serverState;
@@ -78,51 +122,26 @@ export function initWebsocketConnection () {
 
             const state = store.getState();
 
-            // console.log('received from server', serverState.app.syncId, syncId);
-            if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
-                if (serverState.profile.username === state.profile.username) {
-                    console.log('State received from server. Hydrate!', serverState);
+            // Ensure that the new state comes from a different client
+            // if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
+            if (serverState.profile.username === state.profile.username) {
+                if (state.app.updateTime < serverState.app.updateTime) {
+                    console.log('Fresher state received from server. Hydrate!', serverState);
+                    updateTime = serverState.app.updateTime;
 
                     // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
                     delete serverState.syncUserId;
                     delete serverState.taskIssueUpdate;
 
                     store.dispatch({
-                        type: 'SERVER_HYDRATE',
+                        type: 'SERVER_STATE_PUSH',
                         ...serverState
                     });
+
                     ee.emit('hydrate');
                 }
             }
-        });
-
-        unsubscribeFromStoreUpdates = store.subscribe(() => {
-            clearTimeout(sendTimeout);
-            sendTimeout = setTimeout(() => {
-                const state = store.getState();
-
-                /**
-                 * The local syncId is equal to the state syncId. This means that the origin of
-                 * the state change is local and we should push the changes to the server
-                **/
-                if (state.app.syncId === syncId) {
-                    ee.emit('send-remote');
-                    syncId = Date.now();
-                    state.app.syncId = syncId;
-
-                    // Send update to server
-                    send({
-                        syncUserId,
-                        ...state
-                    });
-                } else {
-                    /**
-                     * Since the syncIds do not match, it means that the change origin was the server
-                     * and we should not send this back to the server
-                    **/
-                    syncId = state.app.syncId;
-                }
-            }, minTimeBetweenStateUpdates);
+            // }
         });
     });
 }
@@ -134,7 +153,7 @@ function send (message) {
                 ws.send(JSON.stringify(message));
                 console.log('Send to server!', message);
             } catch (error) {
-                console.error(error);
+                console.error('Error at websocket send', error);
                 closeConnection();
             }
         } else {
