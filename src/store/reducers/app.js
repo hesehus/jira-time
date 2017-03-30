@@ -75,6 +75,7 @@ export default function appReducer (state = initialState, action) {
         'LOCATION_CHANGE',
         'SET_USER_INFO'].includes(action.type)) {
         if (!action.type.includes('@@redux')) {
+            console.log('updateTime changed', action.type);
             state = {
                 ...state,
                 updateTime: Date.now()

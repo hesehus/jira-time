@@ -16,7 +16,7 @@ export default class Recorder extends Component {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
             updateRecordElapsed: PropTypes.func.isRequired,
-            isLoggedIn: PropTypes.bool.isRequired
+            profile: PropTypes.object.isRequired
         };
     }
 
@@ -111,7 +111,7 @@ export default class Recorder extends Component {
     }
 
     onDropAndPaste ({ url, text }) {
-        if (this.props.isLoggedIn) {
+        if (this.props.profile.loggedIn) {
 
             const taskKeys = extractIssueKeysFromText(url || text);
 
@@ -146,7 +146,9 @@ export default class Recorder extends Component {
 
     render () {
 
-        if (!this.props.isLoggedIn) {
+        const { profile } = this.props;
+
+        if (!profile.loggedIn) {
             return null;
         }
 
@@ -194,22 +196,27 @@ export default class Recorder extends Component {
             }
         }
 
-        if (showWsConnected) {
-            notifications.push(<div className='notification' key='ws-connecting'>Connected!</div>);
-        }
-        if (wsConnecting) {
-            notifications.push(<div className='notification' key='ws-connected'>Connecting to remote server...</div>);
-        }
-        // if (wsClosed) {
-        //     notifications.push(<div className='notification'>Connection to remote server closed. Retrying...</div>);
-        // }
-        if (wsError || wsClosed) {
-            notifications.push((
-                <div className='notification' key='ws-connection-failed'>
-                    Could not connect to to remote server.
-                    <u onClick={initWebsocketConnection}>Try again</u>
-                </div>
-            ));
+        if (profile.preferences.connectToSyncServer) {
+            if (showWsConnected) {
+                notifications.push(<div className='notification' key='ws-connecting'>Connected!</div>);
+            }
+
+            if (wsConnecting) {
+                notifications.push(<div className='notification' key='ws-connected'>Connecting to remote server...</div>);
+            }
+        
+            // if (wsClosed) {
+            //     notifications.push(<div className='notification'>Connection to remote server closed. Retrying...</div>);
+            // }
+
+            if (wsError || wsClosed) {
+                notifications.push((
+                    <div className='notification' key='ws-connection-failed'>
+                        Could not connect to to remote server.
+                        <u onClick={initWebsocketConnection}>Try again</u>
+                    </div>
+                ));
+            }
         }
 
         if (!!notifications.length) {
@@ -223,4 +230,3 @@ export default class Recorder extends Component {
         return <div className='recorder' />;
     }
 }
-

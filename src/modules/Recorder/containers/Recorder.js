@@ -24,7 +24,7 @@ const mapDispatchToProps = {
 const mapStateToProps = (state) => ({
     tasks : state.tasks.tasks,
     recorder: state.recorder,
-    isLoggedIn: state.profile.loggedIn
+    profile: state.profile
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recorder);

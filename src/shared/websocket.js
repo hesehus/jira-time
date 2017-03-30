@@ -15,7 +15,9 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection
-setTimeout(initWebsocketConnection, 2000);
+setTimeout(handleWSConnection, 2000);
+
+let unsubscribeToStore;
 
 export function sendIssueUpdate (issue) {
     send({
@@ -28,122 +30,138 @@ export function sendIssueUpdate (issue) {
     return issue;
 }
 
-export function initWebsocketConnection () {
+export function handleWSConnection () {
 
     // We cannot connect to a socket server when the site is hosted by JIRA.
     if (location.hostname === 'jira.hesehus.dk') {
         return;
     }
 
+    if (!unsubscribeToStore) {
+        unsubscribeToStore = store.subscribe(handleWSConnection);
+    }
+
     {
         let state = store.getState();
         if (!state.profile.loggedIn) {
-            setTimeout(initWebsocketConnection, 100);
+            setTimeout(handleWSConnection, 100);
+            return;
+        }
+
+        if (!state.profile.preferences.connectToSyncServer) {
+            closeConnection();
             return;
         }
     }
 
-    ee.emit('connecting');
+    if (!ws) {
+        connect();
+    }
 
-    ws = new WebSocket('ws://' + location.hostname + ':8080');
+    function connect () {
 
-    ws.addEventListener('close', () => {
-        console.log('server connection closed');
-        closeConnection();
-    });
+        ee.emit('connecting');
 
-    ws.addEventListener('error', (e) => {
-        console.log('server connection error', e);
-        closeConnection();
-    });
+        ws = new WebSocket('ws://' + location.hostname + ':8080');
 
-    /**
-     * Listen for the successful connect(open) event when the connection to
-     * the server is established
-     */
-    ws.addEventListener('open', () => {
+        ws.addEventListener('close', () => {
+            console.log('server connection closed');
+            closeConnection();
+        });
 
-        ee.emit('connected');
+        ws.addEventListener('error', (e) => {
+            console.log('server connection error', e);
+            closeConnection();
+        });
 
         /**
-         * Send the init command the username since it is being used
-         * as identifier for the future messages
-        **/
-        const state = store.getState();
-        send({
-            ...state,
-            init: true,
-            username: state.profile.username,
-            syncUserId
-        });
+         * Listen for the successful connect(open) event when the connection to
+         * the server is established
+         */
+        ws.addEventListener('open', () => {
 
-        // Listen for local store changes
-        unsubscribeFromStoreUpdates = store.subscribe(() => {
-            clearTimeout(sendTimeout);
-            sendTimeout = setTimeout(() => {
+            ee.emit('connected');
+
+            /**
+             * Send the init command the username since it is being used
+             * as identifier for the future messages
+            **/
+            const state = store.getState();
+            send({
+                ...state,
+                init: true,
+                username: state.profile.username,
+                syncUserId
+            });
+
+            // Listen for local store changes
+            unsubscribeFromStoreUpdates = store.subscribe(() => {
+                clearTimeout(sendTimeout);
+                sendTimeout = setTimeout(() => {
+                    const state = store.getState();
+
+                    /**
+                     * The store updateTime is fresher than what we have. This means that the
+                     * state change is local and we should push the changes to the server
+                    **/
+                    if (state.app.updateTime > updateTime) {
+                        console.log('state qualifies for server update', state.app.updateTime, updateTime)
+
+                        // Store the updateTime
+                        updateTime = state.app.updateTime;
+
+                        ee.emit('send-remote');
+                        syncId = Date.now();
+                        state.app.syncId = syncId;
+
+                        // Send update to server
+                        send({
+                            syncUserId,
+                            ...state
+                        });
+                    }
+                }, minTimeBetweenStateUpdates);
+            });
+
+            // Listen for messages from the server
+            ws.addEventListener('message', (message) => {
+
+                let serverState;
+                try {
+                    serverState = JSON.parse(message.data);
+                } catch (error) {
+                    console.error('Malformed websocket response', message);
+                }
+
+                if (!serverState) {
+                    return;
+                }
+
                 const state = store.getState();
 
-                /**
-                 * The store updateTime is fresher than what we have. This means that the
-                 * state change is local and we should push the changes to the server
-                **/
-                if (state.app.updateTime > updateTime) {
-                    console.log('state qualifies for server update', state.app.updateTime, updateTime)
+                // Ensure that the new state comes from a different client
+                // if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
+                if (serverState.profile.username === state.profile.username) {
+                    if (state.app.updateTime < serverState.app.updateTime) {
+                        console.log('Fresher state received from server. Hydrate!', serverState);
+                        updateTime = serverState.app.updateTime;
 
-                    // Store the updateTime
-                    updateTime = state.app.updateTime;
+                        // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
+                        delete serverState.syncUserId;
+                        delete serverState.taskIssueUpdate;
 
-                    ee.emit('send-remote');
-                    syncId = Date.now();
-                    state.app.syncId = syncId;
+                        store.dispatch({
+                            type: 'SERVER_STATE_PUSH',
+                            ...serverState
+                        });
 
-                    // Send update to server
-                    send({
-                        syncUserId,
-                        ...state
-                    });
+                        ee.emit('hydrate');
+                    }
                 }
-            }, minTimeBetweenStateUpdates);
+                // }
+            });
         });
-
-        // Listen for messages from the server
-        ws.addEventListener('message', (message) => {
-
-            let serverState;
-            try {
-                serverState = JSON.parse(message.data);
-            } catch (error) {
-                console.error('Malformed websocket response', message);
-            }
-
-            if (!serverState) {
-                return;
-            }
-
-            const state = store.getState();
-
-            // Ensure that the new state comes from a different client
-            // if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
-            if (serverState.profile.username === state.profile.username) {
-                if (state.app.updateTime < serverState.app.updateTime) {
-                    console.log('Fresher state received from server. Hydrate!', serverState);
-                    updateTime = serverState.app.updateTime;
-
-                    // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
-                    delete serverState.syncUserId;
-                    delete serverState.taskIssueUpdate;
-
-                    store.dispatch({
-                        type: 'SERVER_STATE_PUSH',
-                        ...serverState
-                    });
-
-                    ee.emit('hydrate');
-                }
-            }
-            // }
-        });
-    });
+    }
 }
 
 function send (message) {
@@ -170,6 +188,7 @@ function closeConnection () {
     }
     if (ws) {
         ws.close();
+        ws = null;
 
         ee.emit('closeOrError');
         console.log('Server connection closed.');
