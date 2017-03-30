@@ -12,7 +12,7 @@ import MicRedIcon from 'assets/mic-red.svg';
 
 import './RecordItem.scss';
 
-const shouldAllowSpeechRecording = 'webkitSpeechRecognition' in window && 'ontouchstart' in document.documentElement;
+const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
 export default class RecordItem extends Component {
 
@@ -24,7 +24,8 @@ export default class RecordItem extends Component {
         stopRecording: PropTypes.func.isRequired,
         activeRecord: PropTypes.object,
         movingRecord: PropTypes.object,
-        movingTask: PropTypes.object
+        movingTask: PropTypes.object,
+        profile: PropTypes.object
     }
 
     constructor (props) {
@@ -137,7 +138,6 @@ export default class RecordItem extends Component {
                         cuid: this.props.record.cuid,
                         comment: results[0][0].transcript
                     });
-                    console.log(results[0]);
                 }
             }
         }
@@ -154,7 +154,7 @@ export default class RecordItem extends Component {
 
     render () {
 
-        let { record, movingRecord, movingTask } = this.props;
+        let { record, movingRecord, movingTask, profile } = this.props;
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
@@ -172,13 +172,13 @@ export default class RecordItem extends Component {
         let btnSync;
         if (record.syncing) {
             btnSync = (
-                <div className='record__sync record__sync--syncing' title='Syncing!'>
-                    <img className='record__sync-icon' src={LoadingIcon} alt='Loading' />
+                <div className='record-sync record-sync--syncing' title='Syncing!'>
+                    <img className='record-sync-icon' src={LoadingIcon} alt='Loading' />
                 </div>
             );
         } else if (!record.endTime) {
             btnSync = (
-                <div className='record__sync record__sync--stop'
+                <div className='record-sync record-sync--stop'
                   onClick={this.onStopRecordingClick}
                   title='Stop recording'
                 />
@@ -186,19 +186,19 @@ export default class RecordItem extends Component {
         } else {
             btnSync = (
                 <button tabIndex='-1'
-                  className='record__sync'
+                  className='record-sync'
                   onClick={this.onSyncClick}
                   title='Sync this worklog to JIRA'
                 >
-                    <img className='record__sync-icon' src={ExportIcon} alt='Export' />
+                    <img className='record-sync-icon' src={ExportIcon} alt='Export' />
                 </button>
             );
         }
 
         let btnMic;
-        if (shouldAllowSpeechRecording) {
+        if (browserHasSpeechRecognition && profile.preferences.enableVoiceRecording) {
             btnMic = (
-                <span style={{ padding: '10px 20px' }} onClick={this.onSpeechRecordClick}>
+                <span className='record-mic' onClick={this.onSpeechRecordClick}>
                     <img src={this.state.srActive ? MicRedIcon : MicIcon} alt='Microfone' />
                 </span>
             );

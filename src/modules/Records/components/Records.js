@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { TransitionMotion, spring } from 'react-motion';
 
+import { xs } from 'shared/responsive';
 import events from 'shared/events';
 import RecordItem from 'modules/RecordItem';
 
@@ -15,6 +16,15 @@ export default class Records extends Component {
     render () {
 
         const { records } = this.props;
+
+        /**
+         * Fixed height for record items since we need to animate
+         * them with react-motion
+         */
+        const recordHeight = {
+            xs: 90,
+            default: 53
+        };
 
         return (
             <TransitionMotion
@@ -39,7 +49,7 @@ export default class Records extends Component {
                   style: {
                       opacity: spring(1),
                       scale: spring(1),
-                      height: spring(53), // At the moment we have a fixed height of 53px for all record items
+                      height: spring(xs.matches ? recordHeight.xs : recordHeight.default),
                       marginTop: index === 0 ? spring(10) : spring(5)
                   },
                   data: {

@@ -18,6 +18,7 @@ import RecordItem from '../components/RecordItem';
 
 const mapStateToProps = (state, props) => {
     return {
+        profile: state.profile,
         activeRecord: getActiveRecord({ state }),
         movingRecord: getMovingRecord({ state }),
         movingTask: getMovingTask({ state })

@@ -1,8 +1,8 @@
 import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import TimeInput from 'time-input';
-import Flatpickr from 'react-flatpickr'
-
+// import Flatpickr from 'react-flatpickr'
+import Flatpickr from 'flatpickr';
 import 'flatpickr/dist/themes/airbnb.css';
 
 import './DateInput.scss';
@@ -18,7 +18,7 @@ export default class DateInput extends Component {
     constructor (props) {
         super(props);
 
-        this.onDateChange = this.onDateChange.bind(this);
+        this.onDateInputChanged = this.onDateInputChanged.bind(this);
         this.onTimeChange = this.onTimeChange.bind(this);
 
         this.state = {
@@ -37,6 +37,17 @@ export default class DateInput extends Component {
             date,
             time
         });
+    }
+
+    componentDidMount () {
+        this.fp = new Flatpickr(this.dateInput, {
+            // onChange: dates => this.onDateChanged(dates[0])
+        });
+    }
+
+    componentDidUpdate () {
+        console.log(this.dateInput.value);
+        console.log(this.fp);
     }
 
     static createDateObjectFromDateAndTime ({ date, time }) {
@@ -63,8 +74,11 @@ export default class DateInput extends Component {
         });
     }
 
-    onDateChange ([date]) {
+    onDateInputChanged (e) {
+        this.onDateChanged(e.target.value);
+    }
 
+    onDateChanged (date) {
         const { time } = this.state;
 
         date = DateInput.createDateObjectFromDateAndTime({
@@ -97,7 +111,13 @@ export default class DateInput extends Component {
             <span className='date-inp'>
                 <span className='date-inp-date'>
                     <span className='date-inp-date__display'>{this.getDateDisplay()}</span>
-                    <Flatpickr tabIndex='-1' onChange={this.onDateChange} options={{ defaultDate: date }} />
+                    <input className='date-inp-date__input'
+                      type='date'
+                      tabIndex='-1'
+                      value={date && date.toISOString()}
+                      onChange={this.onDateInputChanged}
+                      ref={el => this.dateInput = el}
+                    />
                 </span>
                 <TimeInput
                   value={time}

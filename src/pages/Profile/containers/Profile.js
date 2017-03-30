@@ -2,7 +2,11 @@ import { connect } from 'react-redux';
 
 import Profile from '../components/Profile';
 
-import { setLoggedIn, setUserInfo } from 'store/reducers/profile';
+import {
+    setLoggedIn,
+    setUserInfo,
+    setUserPreferences
+} from 'store/reducers/profile';
 
 const mapStateToProps = (state) => ({
     profile : state.profile
@@ -10,7 +14,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
     setLoggedIn,
-    setUserInfo
+    setUserInfo,
+    setUserPreferences
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -5,7 +5,9 @@ const initialState = {
     username: '',
     userinfo: {},
     preferences: {
-        theme: themes[0].key
+        theme: themes[0].key,
+        connectToSyncServer: false,
+        enableVoiceRecording: false
     }
 };
 
@@ -14,6 +16,7 @@ const initialState = {
 // ------------------------------------
 export const SET_LOGGED_IN = 'SET_LOGGED_IN';
 export const SET_USER_INFO = 'SET_USER_INFO';
+export const SET_USER_PREFERENCES = 'SET_USER_PREFERENCES';
 export const SET_THEME = 'SET_THEME';
 
 // ------------------------------------
@@ -31,6 +34,13 @@ export function setUserInfo ({ userinfo }) {
     return {
         type: SET_USER_INFO,
         userinfo
+    }
+};
+
+export function setUserPreferences ({ preferences }) {
+    return {
+        type: SET_USER_PREFERENCES,
+        preferences
     }
 };
 
@@ -54,10 +64,17 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
     }
 };
 
-ACTION_HANDLERS[SET_USER_INFO] = (state, action) => {
+ACTION_HANDLERS[SET_USER_INFO] = (state, { userinfo }) => {
     return {
         ...state,
-        userinfo: action.userinfo
+        userinfo
+    };
+};
+
+ACTION_HANDLERS[SET_USER_PREFERENCES] = (state, { preferences }) => {
+    return {
+        ...state,
+        preferences
     };
 };
 

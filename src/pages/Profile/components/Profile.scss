@@ -1,5 +1,6 @@
 .profile {
   flex-grow: 1;
+  flex-shrink: 0;
 
   &-logout {
     margin-top: 20px;
@@ -32,6 +33,24 @@
   }
   &-shortcuts-cell {
     padding: 5px;
+  }
+
+  &-preferences {
+    margin-bottom: 40px;
+
+    &-field:not(:last-child) {
+      margin-bottom: 5px;
+    }
+
+    &-label {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    &-input {
+      position: relative;
+      top: 1px;
+    }
   }
 }
 

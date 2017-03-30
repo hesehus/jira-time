@@ -10,12 +10,15 @@ import changelog from 'changelog.json';
 
 import './Profile.scss';
 
+const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
+
 export class Profile extends Component {
 
     static get propTypes () {
         return {
             profile: PropTypes.object.isRequired,
-            setLoggedIn: PropTypes.func.isRequired
+            setLoggedIn: PropTypes.func.isRequired,
+            setUserPreferences: PropTypes.func.isRequired
         };
     }
 
@@ -34,13 +37,26 @@ export class Profile extends Component {
         updateUserInfo();
     }
 
+    updateUserPreferences ({ connectToSyncServer, enableVoiceRecording }) {
+        let preferences = { ...this.props.profile.preferences };
+        
+        if (typeof connectToSyncServer !== 'undefined') {
+            preferences.connectToSyncServer = connectToSyncServer;
+        }
+        if (typeof enableVoiceRecording !== 'undefined') {
+            preferences.enableVoiceRecording = enableVoiceRecording;
+        }
+
+        this.props.setUserPreferences({ preferences });
+    }
+
     render () {
 
         if (!this.props.profile.loggedIn) {
             return <Login />;
         }
 
-        const { userinfo } = this.props.profile;
+        const { userinfo, preferences } = this.props.profile;
         const { avatarUrls } = userinfo;
         const { version, changes = [], date } = changelog[0];
         const changelogTitle = moment(date).format('lll') + ':\n' + changes.join('/n');
@@ -58,6 +74,34 @@ export class Profile extends Component {
                 </div>
                 <ThemeSelector />
                 <div className='profile-bottom'>
+                    <div className='profile-preferences'>
+                        <div className='profile-preferences-field'
+                          style={{ display: browserHasSpeechRecognition ? 'block' : 'none' }}>
+                            <label>
+                                <span className='profile-preferences-label'>Enable voice recording</span>
+                                <input className='profile-preferences-input'
+                                  type='checkbox'
+                                  checked={preferences.enableVoiceRecording}
+                                  onChange={e => this.updateUserPreferences({
+                                      enableVoiceRecording: e.target.checked
+                                  })}
+                                />
+                            </label>
+                        </div>
+                        <div className='profile-preferences-field'>
+                            <label>
+                                <span className='profile-preferences-label'>Connect to sync server</span>
+                                <input className='profile-preferences-input'
+                                  type='checkbox'
+                                  checked={preferences.connectToSyncServer}
+                                  onChange={e => this.updateUserPreferences({
+                                      connectToSyncServer: e.target.checked
+                                  })}
+                                />
+                            </label>
+                        </div>
+                    </div>
+
                     <div className='profile-shortcuts-heading'>App shortcuts</div>
                     <table className='profile-shortcuts'>
                         <tbody>

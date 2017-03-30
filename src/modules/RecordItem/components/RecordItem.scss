@@ -1,3 +1,5 @@
+@import 'variables';
+
 .record-wrap {
   position: relative;
 }
@@ -19,9 +21,15 @@
     font-size: .7rem;
   }
 
-  &__sync {
-    height: 100%;
-    padding: 0 0 0 10px;
+  &-sync,
+  &-mic {
+    > img {
+      height: 20px;
+    }
+  }
+
+  &-sync {
+    padding: 10px;
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -97,6 +105,10 @@
     background: transparent;
     border: 1px solid rgba(255, 255, 255, .5);
     color: #fff;
+
+    @media (max-width: $screen-xs) {
+        order: 5;
+    }
   }
 
   &-dates {
@@ -114,5 +126,10 @@
 
   &-comment {
     padding: 5px;
+  }
+
+  &-mic {
+    padding: 10px 10px 10px 20px;
+    cursor: pointer;
   }
 }

@@ -2451,7 +2451,7 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flatpickr@^2.3.5:
+flatpickr@^2.4.7:
   version "2.4.7"
   resolved "https://proget.hesehus.dk/npm/npm/flatpickr/-/flatpickr-2.4.7.tgz#3b5b9c2b820aea302339e2cceed00d243932fa54"
 
@@ -3590,7 +3590,7 @@ loader-utils@0.2.x, loader-utils@^0.2.11, loader-utils@^0.2.15, loader-utils@^0.
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
-lodash-es@^4.16.0, lodash-es@^4.2.1:
+lodash-es@^4.16.0, lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.16.4"
   resolved "https://proget.hesehus.dk/npm/npm/lodash-es/-/lodash-es-4.16.4.tgz#4dc3e2cf33a8c343028aa7f7e06d1c9697042599"
 
@@ -4833,11 +4833,11 @@ pseudomap@^1.0.1:
   version "1.0.2"
   resolved "https://proget.hesehus.dk/npm/npm/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
 
-punycode@1.3.2:
+punycode@1.3.2, punycode@^1.2.4:
   version "1.3.2"
   resolved "https://proget.hesehus.dk/npm/npm/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
 
-punycode@^1.2.4, punycode@^1.4.1:
+punycode@^1.4.1:
   version "1.4.1"
   resolved "https://proget.hesehus.dk/npm/npm/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
@@ -4934,12 +4934,6 @@ react-element-to-jsx-string@^3.0.0:
     stringify-object "^2.3.1"
     traverse "^0.6.6"
 
-react-flatpickr@^3.0.0:
-  version "3.1.2"
-  resolved "https://proget.hesehus.dk/npm/npm/react-flatpickr/-/react-flatpickr-3.1.2.tgz#6d45a1472a72ab7905e09a0b9d849acac2efc865"
-  dependencies:
-    flatpickr "^2.3.5"
-
 react-motion@^0.4.7:
   version "0.4.7"
   resolved "https://proget.hesehus.dk/npm/npm/react-motion/-/react-motion-0.4.7.tgz#f77331ec7920bdb0d0cfc37eb6ffa10571bf42c7"
@@ -4947,13 +4941,14 @@ react-motion@^0.4.7:
     performance-now "^0.2.0"
     raf "^3.1.0"
 
-react-redux@^4.4.5:
-  version "4.4.5"
-  resolved "https://proget.hesehus.dk/npm/npm/react-redux/-/react-redux-4.4.5.tgz#f509a2981be2252d10c629ef7c559347a4aec457"
+react-redux@~5.0.3:
+  version "5.0.3"
+  resolved "https://proget.hesehus.dk/npm/npm/react-redux/-/react-redux-5.0.3.tgz#86c3b68d56e74294a42e2a740ab66117ef6c019f"
   dependencies:
     hoist-non-react-statics "^1.0.3"
     invariant "^2.0.0"
     lodash "^4.2.0"
+    lodash-es "^4.2.0"
     loose-envify "^1.1.0"
 
 react-router@^3.0.0:
