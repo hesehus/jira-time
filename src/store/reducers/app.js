@@ -73,7 +73,9 @@ export default function appReducer (state = initialState, action) {
         'SERVER_STATE_PUSH',
         'UPDATE_RECORD_ELAPSED',
         'LOCATION_CHANGE',
-        'SET_USER_INFO'].includes(action.type)) {
+        'SET_USER_INFO',
+        'SET_LOGGED_IN',
+        'ATTEMPT_LOGIN'].includes(action.type)) {
         if (!action.type.includes('@@redux')) {
             console.log('updateTime changed', action.type);
             state = {
