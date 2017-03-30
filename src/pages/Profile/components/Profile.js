@@ -74,7 +74,7 @@ export class Profile extends Component {
                 </div>
                 <ThemeSelector />
                 <div className='profile-bottom'>
-                    <div className='profile-preferences'>
+                    <div className='profile-preferences' style={{ display: 'none' }}>
                         <div className='profile-preferences-field'
                           style={{ display: browserHasSpeechRecognition ? 'block' : 'none' }}>
                             <label>
