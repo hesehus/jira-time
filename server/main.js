@@ -48,7 +48,7 @@ if (config.env === 'development') {
     // when the application is compiled.
     app.use(express.static(paths.client('static')));
 } else {
-    app.use('/jira-time', express.static(paths.dist()));
+    app.use('/', express.static(paths.dist()));
 }
 
 module.exports = app;

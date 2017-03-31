@@ -16,7 +16,7 @@ describe('(Component) Header', () => {
   describe('Navigation links...', () => {
     it('Should render a Link to Home route', () => {
       expect(_wrapper.contains(
-        <IndexLink to='/jira-time' className='header__route' activeClassName='header__route--active'>
+        <IndexLink to='/' className='header__route' activeClassName='header__route--active'>
           <img className='header__route__icon' src={ListIcon} alt='Home' />
         </IndexLink>
       )).to.be.true;
@@ -24,7 +24,7 @@ describe('(Component) Header', () => {
 
     it('Should render a Link to Profile route', () => {
       expect(_wrapper.contains(
-        <Link to='/jira-time/profile' className='header__route' activeClassName='header__route--active'>
+        <Link to='/profile' className='header__route' activeClassName='header__route--active'>
           <img className='header__route__icon' src={UserIcon} alt='Profile' />
         </Link>
       )).to.be.true;

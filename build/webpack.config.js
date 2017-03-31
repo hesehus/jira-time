@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = require('../config');
 const debug = require('debug')('app:webpack:config');
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+// const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 const paths = config.utils_paths;
 const __DEV__ = config.globals.__DEV__;
@@ -85,22 +85,22 @@ if (__DEV__) {
             dead_code : true,
             warnings  : false
         }
-    }),
-    new SWPrecacheWebpackPlugin(
-        {
-            cacheId: 'jira-time',
-            filename: 'service-worker.js',
-            maximumFileSizeToCacheInBytes: 4194304,
-            runtimeCaching: [{
-                handler: 'cacheFirst',
-                urlPattern: /[.]jpg$/
-            }],
-            stripPrefixMulti: {
-                [paths.dist()]: '/jira-time',
-                [paths.dist().replace(/[\\]/g, '/')]: '/jira-time'
-            }
-        }
-    )
+    })
+    // new SWPrecacheWebpackPlugin(
+    //     {
+    //         cacheId: 'jira-time',
+    //         filename: 'service-worker.js',
+    //         maximumFileSizeToCacheInBytes: 4194304,
+    //         runtimeCaching: [{
+    //             handler: 'cacheFirst',
+    //             urlPattern: /[.]jpg$/
+    //         }],
+    //         stripPrefixMulti: {
+    //             [paths.dist()]: '/jira-time',
+    //             [paths.dist().replace(/[\\]/g, '/')]: '/jira-time'
+    //         }
+    //     }
+    // )
   )
 }
 
