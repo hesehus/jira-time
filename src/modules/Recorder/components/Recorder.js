@@ -198,16 +198,16 @@ export default class Recorder extends Component {
 
         if (profile.preferences.connectToSyncServer) {
             if (showWsConnected) {
-                notifications.push(<div className='notification' key='ws-connecting'>Connected!</div>);
+                notifications.push((
+                    <div className='notification' key='ws-connecting'>Connected!</div>
+                ));
             }
 
             if (wsConnecting) {
-                notifications.push(<div className='notification' key='ws-connected'>Connecting to remote server...</div>);
+                notifications.push((
+                    <div className='notification' key='ws-connected'>Connecting to remote server...</div>
+                ));
             }
-        
-            // if (wsClosed) {
-            //     notifications.push(<div className='notification'>Connection to remote server closed. Retrying...</div>);
-            // }
 
             if (wsError || wsClosed) {
                 notifications.push((

@@ -6,7 +6,7 @@ const initialState = {
     userinfo: {},
     preferences: {
         theme: themes[0].key,
-        connectToSyncServer: false,
+        connectToSyncServer: true,
         enableVoiceRecording: false
     }
 };

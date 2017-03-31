@@ -4,7 +4,8 @@ const initialState = {
     api: '/rest',
     authenticationHash: null,
     syncId: 0, // Used to identify client when syncing to server,
-    updateTime: 0 // The last time the state was updated
+    updateTime: 0, // The last time the state was updated;
+    hydrated: false // If persist/REHYDRATE has ran
 };
 
 // ------------------------------------
@@ -64,7 +65,6 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 export default function appReducer (state = initialState, action) {
-    const handler = ACTION_HANDLERS[action.type];
 
     // Update the last updated time if a useful action is executed
     if (![
@@ -75,15 +75,25 @@ export default function appReducer (state = initialState, action) {
         'LOCATION_CHANGE',
         'SET_USER_INFO',
         'SET_LOGGED_IN',
-        'ATTEMPT_LOGIN'].includes(action.type)) {
-        if (!action.type.includes('@@redux')) {
-            console.log('updateTime changed', action.type);
-            state = {
-                ...state,
-                updateTime: Date.now()
-            };
-        }
+        'ATTEMPT_LOGIN'
+    ].includes(action.type) && !action.type.includes('@@redux')) {
+
+        state = {
+            ...state,
+            updateTime: Date.now()
+        };
     }
 
+    // Reset the update time since it is not relevant when rehydrating
+    if (action.type === 'persist/REHYDRATE') {
+
+        if (!action.payload.app) {
+            action.payload.app = {};
+        }
+        action.payload.app.hydrated = true;
+        action.payload.app.updateTime = 0;
+    }
+
+    const handler = ACTION_HANDLERS[action.type];
     return handler ? handler(state, action) : state;
 }

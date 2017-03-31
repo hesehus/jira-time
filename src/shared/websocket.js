@@ -6,7 +6,7 @@ let syncId;
 let updateTime = 0;
 let unsubscribeFromStoreUpdates;
 let sendTimeout;
-let minTimeBetweenStateUpdates = 100;
+let minimumTimeBetweenStateUpdates = 500;
 
 let syncUserId = window.syncUserId || innerWidth + ':' + cuid();
 window.syncUserId = syncUserId;
@@ -15,14 +15,13 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection
-setTimeout(handleWSConnection, 2000);
+setTimeout(handleWSConnection, 500);
 
 let unsubscribeToStore;
 
 export function sendIssueUpdate (issue) {
     send({
         issueUpdate: true,
-        syncUserId,
         issue
     });
 
@@ -43,12 +42,9 @@ export function handleWSConnection () {
 
     {
         let state = store.getState();
-        if (!state.profile.loggedIn) {
-            setTimeout(handleWSConnection, 100);
-            return;
-        }
-
-        if (!state.profile.preferences.connectToSyncServer) {
+        if (!state.profile.loggedIn ||
+            !state.profile.preferences.connectToSyncServer ||
+            !state.app.hydrated) {
             closeConnection();
             return;
         }
@@ -89,15 +85,18 @@ export function handleWSConnection () {
             const state = store.getState();
             send({
                 ...state,
-                init: true,
-                username: state.profile.username,
-                syncUserId
+                init: true
             });
 
             // Listen for local store changes
             unsubscribeFromStoreUpdates = store.subscribe(() => {
                 clearTimeout(sendTimeout);
                 sendTimeout = setTimeout(() => {
+
+                    if (!ws) {
+                        return;
+                    }
+
                     const state = store.getState();
 
                     /**
@@ -115,12 +114,9 @@ export function handleWSConnection () {
                         state.app.syncId = syncId;
 
                         // Send update to server
-                        send({
-                            syncUserId,
-                            ...state
-                        });
+                        send(state);
                     }
-                }, minTimeBetweenStateUpdates);
+                }, minimumTimeBetweenStateUpdates);
             });
 
             // Listen for messages from the server
@@ -139,26 +135,21 @@ export function handleWSConnection () {
 
                 const state = store.getState();
 
-                // Ensure that the new state comes from a different client
-                // if (serverState.syncUserId && (serverState.syncUserId !== syncUserId || serverState.taskIssueUpdate)) {
                 if (serverState.profile.username === state.profile.username) {
-                    if (state.app.updateTime < serverState.app.updateTime) {
-                        console.log('Fresher state received from server. Hydrate!', serverState);
-                        updateTime = serverState.app.updateTime;
+                    console.log('Fresher state received from server. Hydrate!', serverState);
+                    updateTime = serverState.app.updateTime;
 
-                        // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
-                        delete serverState.syncUserId;
-                        delete serverState.taskIssueUpdate;
+                    // Delete util keys, since redux will give a warning if we don't (we don't need to persist them)
+                    delete serverState.syncUserId;
+                    delete serverState.taskIssueUpdate;
 
-                        store.dispatch({
-                            type: 'SERVER_STATE_PUSH',
-                            ...serverState
-                        });
+                    store.dispatch({
+                        type: 'SERVER_STATE_PUSH',
+                        ...serverState
+                    });
 
-                        ee.emit('hydrate');
-                    }
+                    ee.emit('hydrate');
                 }
-                // }
             });
         });
     }
@@ -168,7 +159,10 @@ function send (message) {
     if (ws && ws.send) {
         if (ws.readyState === WebSocket.OPEN) {
             try {
-                ws.send(JSON.stringify(message));
+                ws.send(JSON.stringify({
+                    ...message,
+                    syncUserId
+                }));
                 console.log('Send to server!', message);
             } catch (error) {
                 console.error('Error at websocket send', error);
@@ -191,6 +185,5 @@ function closeConnection () {
         ws = null;
 
         ee.emit('closeOrError');
-        console.log('Server connection closed.');
     }
 }

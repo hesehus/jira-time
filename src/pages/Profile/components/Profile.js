@@ -39,7 +39,7 @@ export class Profile extends Component {
 
     updateUserPreferences ({ connectToSyncServer, enableVoiceRecording }) {
         let preferences = { ...this.props.profile.preferences };
-        
+
         if (typeof connectToSyncServer !== 'undefined') {
             preferences.connectToSyncServer = connectToSyncServer;
         }
