@@ -1,7 +1,6 @@
 import { SET_LOGGED_IN } from 'store/reducers/profile';
 
 const initialState = {
-    api: '/rest',
     authenticationHash: null,
     syncId: 0, // Used to identify client when syncing to server,
     updateTime: 0, // The last time the state was updated;

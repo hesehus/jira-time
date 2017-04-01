@@ -13,38 +13,6 @@ function startupCheck () {
 }
 
 /**
-* Verifies the current user session
-* @returns void
-**/
-function verifyLoginStatus () {
-    return callApi({
-        path: `auth/1/session`
-    })
-  .then((response) => {
-
-    // Not authenticated. Log out
-      if (response.status !== 200) {
-          logout();
-
-          store.dispatch(setLoggedIn({
-              isLoggedIn: false
-          }));
-      }
-
-      return response;
-  });
-}
-
-export function updateUserInfo () {
-    const state = store.getState();
-
-    userInfo({ username: state.profile.username })
-    .then((userinfo) => {
-        store.dispatch(setUserInfo({ userinfo }));
-    });
-}
-
-/**
 * Wrapper for all API calls
 **/
 function callApi ({ path, method = 'get', body }) {
@@ -60,7 +28,7 @@ function callApi ({ path, method = 'get', body }) {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${state.app.api}/${path}`, {
+        fetch(`${location.protocol}//localhost:3000/rest/${path}`, {
             method,
             headers,
             body: body ? JSON.stringify(body) : null
@@ -94,6 +62,38 @@ function callApi ({ path, method = 'get', body }) {
     .catch((error) => {
         reject(error);
     });
+    });
+}
+
+/**
+* Verifies the current user session
+* @returns void
+**/
+function verifyLoginStatus () {
+    return callApi({
+        path: `auth/1/session`
+    })
+  .then((response) => {
+
+    // Not authenticated. Log out
+      if (response.status !== 200) {
+          logout();
+
+          store.dispatch(setLoggedIn({
+              isLoggedIn: false
+          }));
+      }
+
+      return response;
+  });
+}
+
+export function updateUserInfo () {
+    const state = store.getState();
+
+    userInfo({ username: state.profile.username })
+    .then((userinfo) => {
+        store.dispatch(setUserInfo({ userinfo }));
     });
 }
 
