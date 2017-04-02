@@ -18,6 +18,7 @@ export default class RecordItem extends Component {
 
     static propTypes = {
         record: PropTypes.object.isRequired,
+        task: PropTypes.object,
         removeRecord: PropTypes.func.isRequired,
         setRecordDate: PropTypes.func.isRequired,
         setRecordComment: PropTypes.func.isRequired,
@@ -154,9 +155,14 @@ export default class RecordItem extends Component {
 
     render () {
 
-        let { record, movingRecord, movingTask, profile } = this.props;
+        let { record, task, movingRecord, movingTask, profile } = this.props;
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
+
+        let issueIsClosed = false;
+        if (task) {
+            issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
+        }
 
         let className = 'record';
         if (record.syncing) {
@@ -170,7 +176,13 @@ export default class RecordItem extends Component {
         }
 
         let btnSync;
-        if (record.syncing) {
+        if (issueIsClosed) {
+            btnSync = (
+                <div className='record-sync record-sync--syncing' title='The issue is closed, dude!'>
+                    Issue closed
+                </div>
+            );
+        } else if (record.syncing) {
             btnSync = (
                 <div className='record-sync record-sync--syncing' title='Syncing!'>
                     <img className='record-sync-icon' src={LoadingIcon} alt='Loading' />

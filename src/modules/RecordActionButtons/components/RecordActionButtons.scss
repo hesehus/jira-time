@@ -14,6 +14,11 @@
         &:last-child {
             margin-right: 0;
         }
+
+        &--disabled {
+            cursor: default;
+            opacity: .5;
+        }
     }
 
     &-start-new {

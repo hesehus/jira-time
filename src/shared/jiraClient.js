@@ -28,7 +28,7 @@ function callApi ({ path, method = 'get', body }) {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(`${location.protocol}//localhost:3000/rest/${path}`, {
+        fetch(`${location.protocol}//${location.hostname}:3000/rest/${path}`, {
             method,
             headers,
             body: body ? JSON.stringify(body) : null

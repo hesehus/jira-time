@@ -89,7 +89,8 @@ export default class TimeTrackingInfo extends Component {
             return null;
         }
 
-        let usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
+        const usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
+        const issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
 
         return (
             <div className='time-tracking'>
@@ -105,8 +106,10 @@ export default class TimeTrackingInfo extends Component {
                         <input className='time-tracking-progress-input'
                           contentEditable={!somethingIsMoving}
                           value={remainingEstimate}
+                          title={remainingEstimate}
                           onChange={this.onRemainingChange}
                           onBlur={this.onRemainingBlur}
+                          disabled={issueIsClosed}
                           tabIndex='-1'
                           ref={el => this.remainingElement = el}
                         />

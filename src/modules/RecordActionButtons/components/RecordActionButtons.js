@@ -73,6 +73,10 @@ export default class RecordActionButtons extends Component {
     render () {
 
         const { task } = this.props;
+        let issueIsClosed = false;
+        if (task) {
+            issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
+        }
 
         let refreshElement;
         if (task) {
@@ -99,21 +103,27 @@ export default class RecordActionButtons extends Component {
             }
         }
 
+        const btnClass = 'record-action-buttons-btn';
+
         return (
             <div className='record-action-buttons'>
                 {refreshElement}
-                <button className='record-action-buttons-btn'
+                <button
+                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title='Add a worklog'
+                  title={issueIsClosed ? 'Issue is closed, dude' : 'Add a worklog'}
+                  disabled={issueIsClosed}
                   onClick={this.onStartPassiveLogClick}>
                     <img src={AddButton}
                       className='record-action-buttons-small-icon record-action-buttons-small-icon--add-passive'
                       alt='Plus'
                     />
                 </button>
-                <button className='record-action-buttons-btn'
+                <button
+                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title='Start new worklog'
+                  title={issueIsClosed ? 'Issue is closed, dude' : 'Start new worklog'}
+                  disabled={issueIsClosed}
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}
                       className='record-action-buttons--start-new'

@@ -79,23 +79,19 @@ export class TaskItem extends Component {
             </button>
         );
 
-        // This task does have a JIRA issue
-        if (task.issue) {
-
-            // There are errors with the task. Display that instead of issue info
-            if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
-                return (
-                    <div className='task-item task-item--errors'>
-                        {deleteButton}
-                        <div className='task-item-info'>
-                            <span className='task-item__summary'>
-                                {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
-                            </span>
-                        </div>
-                        <Records records={records} />
+        // There are errors with the task. Display that instead of issue info
+        if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
+            return (
+                <div className='task-item task-item--errors'>
+                    {deleteButton}
+                    <div className='task-item-info'>
+                        <span className='task-item__summary'>
+                            {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
+                        </span>
                     </div>
-                );
-            }
+                    <Records records={records} />
+                </div>
+            );
         }
 
         const status = (

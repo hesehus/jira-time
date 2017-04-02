@@ -12,13 +12,17 @@ import {
   getMovingRecord
 } from 'store/reducers/recorder';
 
-import { getMovingTask } from 'store/reducers/tasks';
+import {
+    getTask,
+    getMovingTask
+} from 'store/reducers/tasks';
 
 import RecordItem from '../components/RecordItem';
 
 const mapStateToProps = (state, props) => {
     return {
         profile: state.profile,
+        task: getTask({ state, taskCuid: props.record.taskCuid }),
         activeRecord: getActiveRecord({ state }),
         movingRecord: getMovingRecord({ state }),
         movingTask: getMovingTask({ state })
