@@ -6,9 +6,9 @@ import RecordActionButtons from 'modules/RecordActionButtons';
 import DeleteIcon from 'assets/delete.svg';
 import TimeTrackingInfo from './TimeTrackingInfo';
 
-import './TaskItem.scss';
+import './Task.scss';
 
-export class TaskItem extends Component {
+export class Task extends Component {
 
     static get propTypes () {
         return {
@@ -56,36 +56,37 @@ export class TaskItem extends Component {
 
     render () {
 
-        const { task,
+        const {
+            task,
             movingRecord,
             movingTask,
             records,
             setIssueRemainingEstimate
         } = this.props;
 
-        let className = 'task-item';
+        let className = 'task';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
-            className += ' task-item--drop-active';
+            className += ' task--drop-active';
         }
 
         const deleteButton = (
             <button tabIndex='-1'
               type='button'
-              className='task-item-delete'
-              title='Delete work log'
+              className='task-delete'
+              title='Remove task'
               onClick={this.onRemoveClick}
             >
-                <img src={DeleteIcon} alt='Delete' className='task-item-delete-icon' />
+                <img src={DeleteIcon} alt='Delete' className='task-delete-icon' />
             </button>
         );
 
         // There are errors with the task. Display that instead of issue info
         if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
             return (
-                <div className='task-item task-item--errors'>
+                <div className='task task--errors'>
                     {deleteButton}
-                    <div className='task-item-info'>
-                        <span className='task-item__summary'>
+                    <div className='task-info'>
+                        <span className='task__summary'>
                             {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
                         </span>
                     </div>
@@ -96,7 +97,7 @@ export class TaskItem extends Component {
 
         const status = (
             task.issue.fields.status
-            ? <span className='task-item__status'>{task.issue.fields.status.name}</span>
+            ? <span className='task__status'>{task.issue.fields.status.name}</span>
             : null
         );
 
@@ -106,10 +107,10 @@ export class TaskItem extends Component {
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 {deleteButton}
-                <div className='task-item__info'>
-                    <div className='task-item__left'>
-                        <div className='task-item__key-and-status'>
-                            <a className='task-item__link'
+                <div className='task__info'>
+                    <div className='task__left'>
+                        <div className='task__key-and-status'>
+                            <a className='task__link'
                               href={'/browse/' + task.issue.key}
                               target='_blank'
                               tabIndex='-1'
@@ -118,11 +119,11 @@ export class TaskItem extends Component {
                             </a>
                             {status}
                         </div>
-                        <div className='task-item__summary' title={task.issue.fields.summary}>
+                        <div className='task__summary' title={task.issue.fields.summary}>
                             {task.issue.fields.summary}
                         </div>
                     </div>
-                    <div className='task-item__right'>
+                    <div className='task__right'>
                         <TimeTrackingInfo
                           task={task}
                           somethingIsMoving={somethingIsMoving}
@@ -137,4 +138,4 @@ export class TaskItem extends Component {
     }
 }
 
-export default TaskItem;
+export default Task;

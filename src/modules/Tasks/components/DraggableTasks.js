@@ -3,11 +3,9 @@ import { Motion, spring } from 'react-motion';
 import { connect } from 'react-redux';
 
 import events from 'shared/events';
-import TaskItem from 'modules/TaskItem';
+import Task from 'modules/Task';
 
 import { getClosestTaskFromPosition } from 'modules/DragAndDropHandler';
-
-import './DraggableTasks.scss';
 
 const springConfig = { stiffness: 300, damping: 50 };
 
@@ -168,7 +166,7 @@ class DraggablaTasks extends Component {
         }
 
         return (
-            <div className='tasks-draggable' ref={el => this.refOuter = el}>
+            <div className='tasks tasks--draggable' ref={el => this.refOuter = el}>
                 {tasks.map((task, i) => {
 
                     const rect = tasksPositions.find(c => c.cuid === task.cuid);
@@ -195,7 +193,7 @@ class DraggablaTasks extends Component {
                         <Motion style={style} key={task.cuid}>
                             {({ scale, shadow, y }) =>
                                 <div
-                                  className='tasks-draggable-item'
+                                  className='tasks--draggable_item'
                                   style={{
                                       height: `${rect.clientRect.height}px`,
                                       boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
@@ -204,7 +202,7 @@ class DraggablaTasks extends Component {
                                       zIndex: task.cuid === isPressed ? 99 : i
                                   }}
                                 >
-                                    <TaskItem task={task} index={i} />
+                                    <Task task={task} />
                                 </div>
                             }
                         </Motion>

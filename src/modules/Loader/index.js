@@ -5,13 +5,17 @@ import './index.scss';
 export default class Loader extends Component {
 
     static propTypes = {
-        size: PropTypes.string
+        size: PropTypes.string,
+        height: PropTypes.string,
+        width: PropTypes.string
     }
 
     render () {
 
         const {
-            size = 'medium'
+            size = 'medium',
+            height,
+            width
         } = this.props;
 
         const baseStyles = {
@@ -33,6 +37,13 @@ export default class Loader extends Component {
         };
 
         const style = baseStyles[size];
+
+        if (height) {
+            style.height = height;
+        }
+        if (width) {
+            style.width = width;
+        }
 
         return <span className='loader' style={style} />
     }

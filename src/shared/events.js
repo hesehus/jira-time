@@ -4,10 +4,10 @@ const events = new EventEmitter({});
 
 // Shared event emitter for all record items
 let recordAnimationTimeout;
-events.emitRecordItemAnimate = () => {
+events.emitRecordAnimate = () => {
     clearTimeout(recordAnimationTimeout);
     recordAnimationTimeout = setTimeout(() => {
-        events.emit('record-item-animate');
+        events.emit('record-animate');
     });
 }
 

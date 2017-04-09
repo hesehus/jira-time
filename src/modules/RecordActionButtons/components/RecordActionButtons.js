@@ -12,6 +12,7 @@ import './RecordActionButtons.scss';
 export default class RecordActionButtons extends Component {
 
     static propTypes = {
+        profile: PropTypes.object.isRequired,
         task: PropTypes.object,
         addRecord: PropTypes.func.isRequired,
         startRecording: PropTypes.func.isRequired,
@@ -72,19 +73,28 @@ export default class RecordActionButtons extends Component {
 
     render () {
 
-        const { task } = this.props;
+        const { task, profile } = this.props;
+        const { compactView } = profile.preferences;
+
         let issueIsClosed = false;
         if (task) {
-            issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
+            const { statusCategory } = task.issue.fields.status;
+            if (statusCategory) {
+                issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
+            }
         }
 
         let refreshElement;
         if (task) {
             if (task.issueRefreshing) {
                 refreshElement = (
-                    <span className='record-action-buttons-btn'>
+                    <span className='record-action-buttons-btn record-action-buttons-btn--loader'>
                         <span className='record-action-buttons-small-icon'>
-                            <Loader size='small' />
+                            <Loader
+                              size={compactView ? 'tiny' : 'small'}
+                              width={compactView ? '13px' : '20px'}
+                              height={compactView ? '13px' : '20px'}
+                            />
                         </span>
                     </span>
                 );
@@ -126,7 +136,7 @@ export default class RecordActionButtons extends Component {
                   disabled={issueIsClosed}
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}
-                      className='record-action-buttons--start-new'
+                      className='record-action-buttons-start-new'
                       alt='Record' />
                 </button>
             </div>

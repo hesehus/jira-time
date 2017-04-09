@@ -3,19 +3,28 @@ import { TransitionMotion, spring } from 'react-motion';
 
 import { xs } from 'shared/responsive';
 import events from 'shared/events';
-import RecordItem from 'modules/RecordItem';
+import Record from 'modules/Record';
 
 import './Records.scss';
 
 export default class Records extends Component {
 
     static propTypes = {
-        records: PropTypes.array.isRequired
+        records: PropTypes.array.isRequired,
+        profile: PropTypes.object.isRequired
     }
 
     render () {
 
-        const { records } = this.props;
+        const { records, profile } = this.props;
+
+        if (!profile.preferences.enableAnimations) {
+            return (
+                <div className='records'>
+                    {records.map(record => <Record record={record} key={record.cuid} />)}
+                </div>
+            );
+        }
 
         /**
          * Fixed height for record items since we need to animate
@@ -59,7 +68,7 @@ export default class Records extends Component {
               }))}
             >
                 {interpolatedStyles => {
-                    events.emitRecordItemAnimate();
+                    events.emitRecordAnimate();
                     return (
                         <div className='records'>
                             {interpolatedStyles.map((interpolated) => {
@@ -75,7 +84,7 @@ export default class Records extends Component {
                                       }}
                                       className='record-wrap'
                                     >
-                                        <RecordItem
+                                        <Record
                                           record={interpolated.data.record}
                                           key={interpolated.data.record.cuid}
                                         />

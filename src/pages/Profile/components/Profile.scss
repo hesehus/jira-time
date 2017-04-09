@@ -1,31 +1,51 @@
 .profile {
   flex-grow: 1;
   flex-shrink: 0;
-  max-width: 100vw;
+  max-width: calc(100vw - 16px);
+  padding-top: 20px;
+
+  &-section {
+    background: rgba(0,0,0,.2);
+    padding: 15px;
+    border-radius: 5px;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+
+  &-section-heading {
+    text-transform: uppercase;
+    font-size: 1rem;
+    margin: 0 0 6px;
+    text-align: center;
+  }
 
   &-logout {
     margin-top: 20px;
     flex: 0 0 auto;
   }
 
-  &-avatar {
-    text-align: center;
-  }
+  &-avatar {}
   &-avatar-img {
+    display: block;
     border-radius: 50%;
     border: 5px solid rgba(0, 0, 0, .2);
     width: 50px;
     height: 50px;
     background-size: cover;
+    margin: 0 auto;
   }
 
   &-bottom {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 20px;
   }
 
   &-shortcuts {
-    margin: 0 auto;
-    max-width: calc(100% - 40px);
+    width: 100%;
     text-align: left;
     line-height: 1.2rem;
   }
@@ -37,7 +57,6 @@
   }
 
   &-preferences {
-    margin-bottom: 40px;
 
     &-field:not(:last-child) {
       margin-bottom: 5px;
@@ -53,8 +72,4 @@
       top: 1px;
     }
   }
-}
-
-.app-version {
-  margin-top: 30px;
 }

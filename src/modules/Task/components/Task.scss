@@ -1,8 +1,20 @@
 @import '_variables.scss';
-.task-item {
+.task {
     position: relative;
     z-index: 0;
     padding: 10px 15px;
+
+    &:not(:last-child) {
+        margin-bottom: 15px;
+
+        .compact-view & {
+            margin-bottom: 5px;
+        }
+    }
+
+    .compact-view & {
+        padding: 5px;
+    }
     
     .tasks-draggable & {
         // Hint to the browser that we will be animate using transforms
@@ -29,9 +41,6 @@
     &--drop-active:before {
         opacity: .4;
     }
-    &:not(:last-child) {
-        margin-bottom: 15px;
-    }
 
     &-delete {
         position: absolute;
@@ -46,29 +55,46 @@
         border: none;
         appearance: none;
 
-        .task-item:hover & {
+        .task:hover & {
             opacity: 1;
             transform: none;
         }
+
+        .compact-view & {
+            padding: 3px;
+        }
     }
+
     &-delete-icon {
         display: block;
+
+        .compact-view & {
+            width: 6px;
+        }
     }
 
     &__info {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         @media (max-width: $screen-sm) {
             flex-wrap: wrap;
+
+            .compact-view & {
+                flex-wrap: nowrap;
+            }
         }
     }
     &__left {
-        // display: flex;
-        // align-items: center;
         flex: 0 1 auto;
         min-width: 0;
         padding-right: 10px;
+
+        .compact-view & {
+            display: flex;
+        }
+
         @media (max-width: $screen-sm) {
             flex: 0 1 auto;
         }
@@ -89,22 +115,31 @@
         flex: 0 1 auto;
         justify-content: center;
         flex-wrap: nowrap;
+
         @media (max-width: $screen-sm) {
             flex: 1 1 auto;
             justify-content: flex-end;
             min-width: 50%;
+
+            .compact-view & {
+                min-width: 0;
+            }
         }
     }
     
     &__key-and-status {
         flex-shrink: 0;
         min-width: 130px;
-        //margin-left: 15px;
         white-space: nowrap;
         display: flex;
         align-items: center;
         text-transform: uppercase;
         font-size: 1rem;
+
+        .compact-view & {
+            font-size: .8rem;
+            min-width: 0px;
+        }
 
         @media (max-width: $screen-sm) {
             display: flex;
@@ -118,6 +153,11 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        .compact-view & {
+            margin-left: 5px;
+        }
+
         @media (max-width: $screen-sm) {
             margin: 0;
         }
@@ -138,6 +178,20 @@
         white-space: nowrap;
         margin-left: 20px;
         text-transform: none;
+
+        .compact-view & {
+            border: none;
+            font-size: .6rem;
+            margin-left: 5px;
+            padding: 0;
+
+            &::before {
+                content: '(';
+            }
+            &::after {
+                content: ')';
+            }
+        }
 
         @media (max-width: $screen-sm) {
             margin-left: 10px;

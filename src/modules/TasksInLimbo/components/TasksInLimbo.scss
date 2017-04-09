@@ -1,5 +1,9 @@
-.task-item--limbo {
+.task--limbo {
     margin: 0 15px 0 20px;
+
+    .compact-view & {
+        margin: 0 5px 10px;
+    }
 
     &-header {
         display: flex;

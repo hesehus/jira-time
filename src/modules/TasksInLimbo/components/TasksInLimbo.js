@@ -38,16 +38,16 @@ export default class TasksInLimbo extends Component {
         }
         }
 
-        let className = 'task-item task-item--limbo';
+        let className = 'task task--limbo';
         if (movingRecord && !movingRecord.taskDroppableCuid) {
-            className += ' task-item--drop-active';
+            className += ' task--drop-active';
         }
 
         // Output the list of tasks
         return (
             <div>
                 <div className={className}>
-                    <div className='task-item--limbo-header'>
+                    <div className='task--limbo-header'>
                         {textInLimbo}
                         <RecordActionButtons />
                     </div>

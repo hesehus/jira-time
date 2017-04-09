@@ -66,7 +66,10 @@ api.createDummyIssue = function (key) {
             },
             status: {
                 name: 'Forespørgsel',
-                description: 'Forespørgsel'
+                description: 'Forespørgsel',
+                statusCategory: {
+                    key: 'done'
+                }
             }
         }
     };

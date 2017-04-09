@@ -7,7 +7,9 @@ const initialState = {
     preferences: {
         theme: themes[0].key,
         connectToSyncServer: true,
-        enableVoiceRecording: false
+        enableVoiceRecording: false,
+        enableAnimations: false,
+        compactView: false
     }
 };
 

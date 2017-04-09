@@ -17,7 +17,7 @@ import {
     getMovingTask
 } from 'store/reducers/tasks';
 
-import RecordItem from '../components/RecordItem';
+import Record from '../components/Record';
 
 const mapStateToProps = (state, props) => {
     return {
@@ -39,4 +39,4 @@ const mapDispatchToProps = {
     setRecordMoveTarget
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecordItem);
+export default connect(mapStateToProps, mapDispatchToProps)(Record);

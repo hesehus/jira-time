@@ -13,6 +13,12 @@ import {
 
 import RecordActionButtons from '../components/RecordActionButtons';
 
+const mapStateToProps = ({ profile }) => {
+    return {
+        profile
+    };
+}
+
 const mapDispatchToProps = {
     startRecording,
     addRecord,
@@ -21,4 +27,4 @@ const mapDispatchToProps = {
     setIssueRefreshing
 };
 
-export default connect(null, mapDispatchToProps)(RecordActionButtons);
+export default connect(mapStateToProps, mapDispatchToProps)(RecordActionButtons);

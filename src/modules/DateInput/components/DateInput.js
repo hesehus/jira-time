@@ -28,7 +28,33 @@ export default class DateInput extends Component {
     }
 
     componentWillMount () {
-        const dateObject = moment(this.props.date);
+        this.setDateState(this.props.date);
+    }
+
+    componentDidMount () {
+        this.fp = new Flatpickr(this.dateInput, {
+            defaultDate: this.state.date
+            // onChange: dates => this.onDateChanged(dates[0])
+        });
+    }
+
+    componentDidUpdate () {
+        if (!moment(this.props.date).isSame(this.state.date)) {
+            if (this.fp) {
+                this.fp.setDate(this.props.date, false);
+                this.setDateState(this.props.date);
+            }
+        }
+    }
+
+    componentWillUnmount () {
+        if (this.fp) {
+            this.fp.destroy();
+        }
+    }
+
+    setDateState (_date) {
+        const dateObject = moment(_date);
 
         const date = dateObject.toDate();
         const time = dateObject.format('HH:mm');
@@ -37,17 +63,6 @@ export default class DateInput extends Component {
             date,
             time
         });
-    }
-
-    componentDidMount () {
-        this.fp = new Flatpickr(this.dateInput, {
-            // onChange: dates => this.onDateChanged(dates[0])
-        });
-    }
-
-    componentDidUpdate () {
-        console.log(this.dateInput.value);
-        console.log(this.fp);
     }
 
     static createDateObjectFromDateAndTime ({ date, time }) {
@@ -105,7 +120,7 @@ export default class DateInput extends Component {
 
     render () {
 
-        const { time, date } = this.state;
+        const { time } = this.state;
 
         return (
             <span className='date-inp'>
@@ -114,7 +129,6 @@ export default class DateInput extends Component {
                     <input className='date-inp-date__input'
                       type='date'
                       tabIndex='-1'
-                      value={date && date.toISOString()}
                       onChange={this.onDateInputChanged}
                       ref={el => this.dateInput = el}
                     />
