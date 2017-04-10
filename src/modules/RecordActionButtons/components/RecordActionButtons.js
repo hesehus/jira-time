@@ -12,6 +12,7 @@ import './RecordActionButtons.scss';
 export default class RecordActionButtons extends Component {
 
     static propTypes = {
+        profile: PropTypes.object.isRequired,
         task: PropTypes.object,
         addRecord: PropTypes.func.isRequired,
         startRecording: PropTypes.func.isRequired,
@@ -72,15 +73,28 @@ export default class RecordActionButtons extends Component {
 
     render () {
 
-        const { task } = this.props;
+        const { task, profile } = this.props;
+        const { compactView } = profile.preferences;
+
+        let issueIsClosed = false;
+        if (task) {
+            const { statusCategory } = task.issue.fields.status;
+            if (statusCategory) {
+                issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
+            }
+        }
 
         let refreshElement;
         if (task) {
             if (task.issueRefreshing) {
                 refreshElement = (
-                    <span className='record-action-buttons-btn'>
+                    <span className='record-action-buttons-btn record-action-buttons-btn--loader'>
                         <span className='record-action-buttons-small-icon'>
-                            <Loader size='small' />
+                            <Loader
+                              size={compactView ? 'tiny' : 'small'}
+                              width={compactView ? '13px' : '20px'}
+                              height={compactView ? '13px' : '20px'}
+                            />
                         </span>
                     </span>
                 );
@@ -99,24 +113,30 @@ export default class RecordActionButtons extends Component {
             }
         }
 
+        const btnClass = 'record-action-buttons-btn';
+
         return (
             <div className='record-action-buttons'>
                 {refreshElement}
-                <button className='record-action-buttons-btn'
+                <button
+                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title='Add a worklog'
+                  title={issueIsClosed ? 'Issue is closed, dude' : 'Add a worklog'}
+                  disabled={issueIsClosed}
                   onClick={this.onStartPassiveLogClick}>
                     <img src={AddButton}
                       className='record-action-buttons-small-icon record-action-buttons-small-icon--add-passive'
                       alt='Plus'
                     />
                 </button>
-                <button className='record-action-buttons-btn'
+                <button
+                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title='Start new worklog'
+                  title={issueIsClosed ? 'Issue is closed, dude' : 'Start new worklog'}
+                  disabled={issueIsClosed}
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}
-                      className='record-action-buttons--start-new'
+                      className='record-action-buttons-start-new'
                       alt='Record' />
                 </button>
             </div>

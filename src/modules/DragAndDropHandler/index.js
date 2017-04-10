@@ -77,6 +77,7 @@ function onPanStart (event) {
         tasksFilteredBySearch = getTasksFilteredBySearch({ state: store.getState() });
 
         recordElement = domClosest(event.target, '.record');
+
         if (recordElement) {
             if (!!tasksPositions.length) {
                 doSharedMovingPreparations();
@@ -97,7 +98,7 @@ function onPanStart (event) {
 
         const tasksAreFiltered = !!store.getState().tasks.search;
         if (!tasksAreFiltered) {
-            taskElement = domClosest(event.target, '.task-item');
+            taskElement = domClosest(event.target, '.task');
             if (taskElement) {
                 doSharedMovingPreparations();
 
@@ -136,10 +137,12 @@ function onPanMove (event) {
                 targetTaskIssueKey = null
             }
 
-            store.dispatch(setRecordMoveTarget({
-                cuid: record.cuid,
-                taskCuid: targetTaskCuid
-            }));
+            if (record.taskDroppableCuid !== targetTaskCuid) {
+                store.dispatch(setRecordMoveTarget({
+                    cuid: record.cuid,
+                    taskCuid: targetTaskCuid
+                }));
+            }
         }
         return;
     }

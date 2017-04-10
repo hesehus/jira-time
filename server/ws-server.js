@@ -13,12 +13,11 @@ module.exports = function startWebsocketServer (app) {
 
     const ee = new EventEmitter({});
 
-    let allClientConnectionStates = [];
+    const allClientConnectionStates = {};
 
     wss.on('connection', function connection (ws) {
         let username;
         let syncUserId;
-        let initiated = false;
 
         ws.on('close', closeConnection);
 
@@ -28,28 +27,24 @@ module.exports = function startWebsocketServer (app) {
 
                 // Client wants init data
                 if (messageJson.init) {
-                    if (!initiated) {
-                        initiated = true;
-                        username = messageJson.username;
-                        syncUserId = messageJson.syncUserId;
+                    username = messageJson.profile.username;
+                    syncUserId = messageJson.syncUserId;
 
-                        log(`Websocket connection establised for "${username}" (${syncUserId})`);
+                    log(`Websocket connection establised for "${username}" (${syncUserId})`);
 
-                        setInitialClientConnectionState(messageJson);
+                    setInitialClientConnectionState(messageJson);
 
-                        ee.on('update', listenForStateUpdates);
-                        ee.on('updatedTaskIssue', listenForTaskIssueUpdates);
-                    }
+                    ee.on('update', listenForStateUpdates);
+                    ee.on('updatedTaskIssue', listenForTaskIssueUpdates);
                 } else if (messageJson.issueUpdate) {
                     // Client has an updated JIRA issue to broadcast to the other clients
                     updateJiraIssue({
-                        issue: messageJson.issue,
-                        syncUserId
+                        issue: messageJson.issue
                     });
                     log(`Received Jira issue update from "${username}" (${syncUserId})`);
                 } else {
                     // Normal state update
-                    addOrReplaceState({ state: messageJson });
+                    updateState({ state: messageJson });
                     log(`State updated for "${username}" (${syncUserId})`);
                 }
             } catch (e) {
@@ -71,18 +66,20 @@ module.exports = function startWebsocketServer (app) {
         // Send the initial state to the client
         function setInitialClientConnectionState (state) {
             delete state.init;
-            const initialState = allClientConnectionStates.find(s => s.profile.username === username);
+            let connection = allClientConnectionStates[username];
 
-            /**
-             * There is already an initial state, and its updateTime is ahead
-             * of the one that we are getting here.
-             */
-            if (initialState && initialState.app.updateTime > state.app.updateTime) {
+            if (!connection) {
+                connection = {
+                    connectedUsers: 1,
+                    state
+                };
+                allClientConnectionStates[state.profile.username] = connection;
+            } else {
+                connection.connectedUsers += 1;
+
                 log(`Initial state for ${username} already on the server.
                      Sending it back to the client (${syncUserId})...`);
-                send(initialState);
-            } else {
-                addOrReplaceState({ state, emitEvent: false });
+                send(connection.state);
             }
         }
 
@@ -90,7 +87,7 @@ module.exports = function startWebsocketServer (app) {
             try {
                 log(`Send to "${username}" (${syncUserId})`);
                 if (ws.readyState === ws.OPEN) {
-                    ws.send(JSON.stringify(message), (error) => {
+                    ws.send(JSON.stringify(message), null, (error) => {
                         if (error) {
                             ws.close();
                             log(error);
@@ -107,48 +104,63 @@ module.exports = function startWebsocketServer (app) {
 
         function closeConnection () {
             log(`Connection closed for "${username}" (${syncUserId})`);
+
+            removeClientStateIfLastConnection(username);
+
             ee.off('update', listenForStateUpdates);
+
             if (ws.close) {
                 ws.close();
             }
             username = null;
             syncUserId = null;
-            initiated = false;
         }
     });
 
-    function addOrReplaceState ({ state, emitEvent = true }) {
-        const existingIndex = allClientConnectionStates.findIndex(s => s.profile.username === state.profile.username);
-        if (existingIndex >= 0) {
+    /**
+     * Removes the connection state if no more users are connected
+     */
+    function removeClientStateIfLastConnection (username) {
+        const connection = allClientConnectionStates[username];
+        if (connection) {
+            if (connection.connectedUsers === 1) {
+                delete allClientConnectionStates[username];
+                log(`No more connections for ${username}. Clearing state.`);
+            } else {
+                connection.connectedUsers -= 1;
+            }
+        }
+    }
+
+    function updateState ({ state, emitEvent = true }) {
+        const existingConnection = allClientConnectionStates[state.profile.username];
+
+        if (existingConnection) {
 
             /**
              * Ensure that the new state we received is actually updated at a later
              * point in time than the one we have
              */
-            if (allClientConnectionStates[existingIndex].app.updateTime < state.app.updateTime) {
-                allClientConnectionStates[existingIndex] = state;
+            existingConnection.state = state;
+
+            if (emitEvent) {
+                ee.emit('update', state);
             }
-        } else {
-            allClientConnectionStates.push(state);
-        }
-        if (emitEvent) {
-            ee.emit('update', state);
         }
     }
 
-    function updateJiraIssue ({ issue, syncUserId }) {
-        allClientConnectionStates = allClientConnectionStates.map((state) => {
-            if (!!state.tasks.tasks.length) {
-                state.tasks.tasks = state.tasks.tasks.map((task) => {
+    function updateJiraIssue ({ issue }) {
+        for (let connection in allClientConnectionStates) {
+            if (!!connection.state.tasks.tasks.length) {
+                connection.state.tasks.tasks = connection.state.tasks.tasks.map((task) => {
                     if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
                         task.issue = issue;
                     }
                     return task;
                 });
-                ee.emit('updatedTaskIssue', state);
+                ee.emit('updatedTaskIssue', connection.state);
             }
-            return state;
-        });
+        }
     }
 
     function log (message) {

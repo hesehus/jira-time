@@ -152,17 +152,28 @@ export default class Recorder extends Component {
             return null;
         }
 
-        let notifications = [(
+        let notifications = [];
+
+        /* notifications.push((
             <div className='notification' key='adding-task-crazy-many' style={{ textAlign: 'left' }}>
-                <div>Yo! Jira time has moved to a brand new server! This means more cool stuff, but requires a one-time manual update by you =( <br /> Terribly sorry about that. You can update by either</div>
+                <div>
+                    Yo! Jira time has moved to a brand new server!
+                    This means more cool stuff, but requires a one-time manual update by you =( <br />
+                    Terribly sorry about that. You can update by either</div>
                 <ul>
                     <li>download the new version from S:\Fælles\Software\Applikationer\Jira Time</li>
                     <li style={{ listStyle: 'none', margin: '10px 0' }}>or</li>
-                    <li>use the web version at <a href='http://prod-jira-time.hesehus.dk'>http://prod-jira-time.hesehus.dk</a></li>
+                    <li>
+                        use the web version at
+                        <a href='http://prod-jira-time.hesehus.dk'>http://prod-jira-time.hesehus.dk</a>
+                    </li>
                 </ul>
-                <div>IMPORTANT: all tasks and un-synced worklogs will be lost! Remember: you can simply copy/paste all your existing tasks into the new Jira Time</div>
+                <div>
+                    IMPORTANT: all tasks and un-synced worklogs will be lost!
+                    Remember: you can simply copy/paste all your existing tasks into the new Jira Time
+                </div>
             </div>
-        )];
+        )); */
 
         const {
             tasksAddingRemaining,
@@ -208,16 +219,16 @@ export default class Recorder extends Component {
 
         if (profile.preferences.connectToSyncServer) {
             if (showWsConnected) {
-                notifications.push(<div className='notification' key='ws-connecting'>Connected!</div>);
+                notifications.push((
+                    <div className='notification' key='ws-connecting'>Connected!</div>
+                ));
             }
 
             if (wsConnecting) {
-                notifications.push(<div className='notification' key='ws-connected'>Connecting to remote server...</div>);
+                notifications.push((
+                    <div className='notification' key='ws-connected'>Connecting to remote server...</div>
+                ));
             }
-        
-            // if (wsClosed) {
-            //     notifications.push(<div className='notification'>Connection to remote server closed. Retrying...</div>);
-            // }
 
             if (wsError || wsClosed) {
                 notifications.push((

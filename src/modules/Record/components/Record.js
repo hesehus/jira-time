@@ -10,7 +10,7 @@ import DeleteIcon from 'assets/delete.svg';
 import MicIcon from 'assets/mic.svg';
 import MicRedIcon from 'assets/mic-red.svg';
 
-import './RecordItem.scss';
+import './Record.scss';
 
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
@@ -18,6 +18,7 @@ export default class RecordItem extends Component {
 
     static propTypes = {
         record: PropTypes.object.isRequired,
+        task: PropTypes.object,
         removeRecord: PropTypes.func.isRequired,
         setRecordDate: PropTypes.func.isRequired,
         setRecordComment: PropTypes.func.isRequired,
@@ -90,11 +91,18 @@ export default class RecordItem extends Component {
         if ((command === 'down' || command === 'up')) {
             e.preventDefault();
 
-            const draggableTasks = document.querySelector('.tasks-draggable');
-            const limboTask = document.querySelector('.task-item--limbo');
-            if (draggableTasks && limboTask) {
+            const { enableAnimations } = this.props.profile.preferences;
+            let tasks;
+            if (enableAnimations) {
+                tasks = document.querySelector('.tasks--draggable');
+            } else {
+                tasks = document.querySelector('.tasks--real');
+            }
+
+            const limboTask = document.querySelector('.task--limbo');
+            if (tasks && limboTask) {
                 const allRecordsInLimbo = Array.from(limboTask.querySelectorAll('.record[data-cuid]'));
-                const allRecordsOnPage = Array.from(draggableTasks.querySelectorAll('.record[data-cuid]'));
+                const allRecordsOnPage = Array.from(tasks.querySelectorAll('.record[data-cuid]'));
                 const allRecords = [...allRecordsInLimbo, ...allRecordsOnPage];
                 const currentRecordPosition = allRecords.findIndex((record) => {
                     return record.dataset.cuid === this.recordElement.dataset.cuid;
@@ -154,9 +162,16 @@ export default class RecordItem extends Component {
 
     render () {
 
-        let { record, movingRecord, movingTask, profile } = this.props;
+        let { record, task, movingRecord, movingTask, profile } = this.props;
+        const { enableVoiceRecording, compactView } = profile.preferences;
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
+
+        let issueIsClosed = false;
+        if (task) {
+            const { statusCategory = {} } = task.issue.fields.status;
+            issueIsClosed = statusCategory.key === 'done';
+        }
 
         let className = 'record';
         if (record.syncing) {
@@ -170,7 +185,15 @@ export default class RecordItem extends Component {
         }
 
         let btnSync;
-        if (record.syncing) {
+        if (issueIsClosed) {
+            btnSync = (
+                <div
+                  className='record-sync'
+                  title='The issue is closed, dude!'>
+                    Issue closed
+                </div>
+            );
+        } else if (record.syncing) {
             btnSync = (
                 <div className='record-sync record-sync--syncing' title='Syncing!'>
                     <img className='record-sync-icon' src={LoadingIcon} alt='Loading' />
@@ -196,7 +219,7 @@ export default class RecordItem extends Component {
         }
 
         let btnMic;
-        if (browserHasSpeechRecognition && profile.preferences.enableVoiceRecording) {
+        if (browserHasSpeechRecognition && enableVoiceRecording) {
             btnMic = (
                 <span className='record-mic' onClick={this.onSpeechRecordClick}>
                     <img src={this.state.srActive ? MicRedIcon : MicIcon} alt='Microfone' />
@@ -226,7 +249,7 @@ export default class RecordItem extends Component {
                         null
                         )}
                     </div>
-                    <span className='record__elapsed-time'>{record.elapsedTime}</span>
+                    {!compactView && <span className='record__elapsed-time'>{record.elapsedTime}</span>}
                 </div>
                 <input
                   className='record-comment'

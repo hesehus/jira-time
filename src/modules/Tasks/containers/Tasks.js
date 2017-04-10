@@ -5,6 +5,7 @@ import { setManualSortOrder, setTaskMoving, getTasksFilteredBySearch } from 'sto
 import Tasks from '../components/Tasks';
 
 const mapStateToProps = (state) => ({
+    profile: state.profile,
     tasks: getTasksFilteredBySearch({ state }),
     tasksSearch: state.tasks.search,
     unfilteredTasks: state.tasks.tasks

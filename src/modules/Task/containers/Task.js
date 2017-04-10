@@ -10,7 +10,7 @@ import {
 
 import { getMovingRecord, getRecordsForTask, getRecordsWithNoIssue } from 'store/reducers/recorder';
 
-import TaskItem from '../components/TaskItem';
+import Task from '../components/Task';
 
 const mapStateToProps = (state, props) => {
     return {
@@ -28,4 +28,4 @@ const mapDispatchToProps = {
     setIssueRemainingEstimate
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskItem);
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

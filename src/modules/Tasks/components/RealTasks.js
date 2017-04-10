@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 
-import TaskItem from 'modules/TaskItem';
+import Task from 'modules/Task';
 import events from 'shared/events';
-
-import './Tasks.scss';
 
 export default class Tasks extends Component {
 
     static propTypes = {
-        tasks: PropTypes.array.isRequired
+        tasks: PropTypes.array.isRequired,
+        enableAnimations: PropTypes.bool.isRequired
     }
 
     constructor (props) {
@@ -18,19 +17,27 @@ export default class Tasks extends Component {
 
     componentDidMount () {
         this.calculatePositions();
-        window.addEventListener('resize', this.calculatePositions);
-        events.on('record-item-animate', this.calculatePositions);
+        window.addEventListener('resize', () => {
+            clearTimeout(this.calculateTimeout);
+            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 1000);
+        });
+        if (this.props.enableAnimations) {
+            events.on('record-animate', this.calculatePositions);
+        }
 
         // Ensure that we update on all changes on the store
         this.storeUnsubscribe = store.subscribe(() => {
             clearTimeout(this.calculateTimeout);
-            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 25);
+            this.calculateTimeout = setTimeout(() => this.calculatePositions(), 1000);
         });
     }
 
     componentWillUnmount () {
         window.removeEventListener('resize', this.calculatePositions);
-        events.off('record-item-animate', this.calculatePositions);
+        if (this.props.enableAnimations) {
+            events.off('record-animate', this.calculatePositions);
+        }
+        clearTimeout(this.calculateTimeout);
         this.storeUnsubscribe();
     }
 
@@ -46,16 +53,16 @@ export default class Tasks extends Component {
         const { tasks } = this.props;
         const tasksPositions = [];
         let heightIncrement = 0;
-        const taskItems = Array.from(this.el.querySelectorAll('.task-item'));
+        const taskElements = Array.from(this.el.querySelectorAll('.task'));
 
-        if (!taskItems.length) {
+        if (!taskElements.length) {
             return;
         }
 
         tasks.forEach((task) => {
-            const realTaskItem = taskItems.find(t => t.dataset.cuid === task.cuid);
-            if (realTaskItem) {
-                const clientRect = realTaskItem.getBoundingClientRect();
+            const realTask = taskElements.find(t => t.dataset.cuid === task.cuid);
+            if (realTask) {
+                const clientRect = realTask.getBoundingClientRect();
 
                 tasksPositions.push({
                     cuid: task.cuid,
@@ -77,8 +84,8 @@ export default class Tasks extends Component {
 
         // Output the list of tasks
         return (
-            <div className='tasks-real' ref={el => this.el = el}>
-                {tasks.map((task, index) => <TaskItem key={index} task={task} />)}
+            <div className='tasks tasks--real' ref={el => this.el = el}>
+                {tasks.map(task => <Task key={task.cuid} task={task} />)}
             </div>
         );
     }

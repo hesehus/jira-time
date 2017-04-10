@@ -123,20 +123,31 @@ export default class Sync extends EventClass {
                     cuid: record.cuid,
                     syncing: false
                 }));
+                console.log(response);
 
                 /* eslint-disable */
                 if (response.status === 403) {
                     swal(
-                        'Damn!',
+                        `Damn! Could not sync ${record.taskIssueKey}`,
                         `Looks like you don't have permissions to log to ${record.taskIssueKey}.<br />Did you change your login password or something?`,
                         'error'
                     );
                 } else if (response.status === 400) {
-                    swal(
-                        'Hey...!',
-                        `Looks like not all info required to log to ${record.taskIssueKey} was provided.<br />Shape up!`,
-                        'error'
-                    );
+                    if (response.json) {
+                        response.json().then((r) => {
+                            swal(
+                                `Damn! Could not sync ${record.taskIssueKey}`,
+                                r.errorMessages ? r.errorMessages.join('<br />') : 'Unkown error',
+                                'error'
+                            );
+                        });
+                    } else {
+                        swal(
+                            `Damn! Could not sync ${record.taskIssueKey}`,
+                            `Looks like not all info required to log to ${record.taskIssueKey} was provided.<br />Shape up!`,
+                            'error'
+                        );
+                    }
                 } else {
                     swal(
                         'Whuut?',

@@ -6,8 +6,10 @@ const initialState = {
     userinfo: {},
     preferences: {
         theme: themes[0].key,
-        connectToSyncServer: false,
-        enableVoiceRecording: false
+        connectToSyncServer: true,
+        enableVoiceRecording: false,
+        enableAnimations: false,
+        compactView: false
     }
 };
 

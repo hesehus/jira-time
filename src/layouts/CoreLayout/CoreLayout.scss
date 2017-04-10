@@ -6,6 +6,7 @@
   &__viewport {
     flex-grow: 1;
     display: flex;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }

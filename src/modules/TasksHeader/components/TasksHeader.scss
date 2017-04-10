@@ -5,13 +5,23 @@
     justify-content: space-between;
     align-items: center;
     font-size: .8rem;
+
+    .compact-view & {
+        margin: 0 5px 5px;
+    }
+
     &-sorting {
         cursor: pointer;
         display: flex;
         align-items: center;
         padding: 5px 15px;
         user-select: none;
+
+        .compact-view & {
+            padding: 5px 3px;
+        }
     }
+
     &-sorting-icon {
         width: 17px;
         margin-left: 3px;
