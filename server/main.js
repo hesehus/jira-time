@@ -16,7 +16,17 @@ startWebsocketServer(app);
 if (config.useDummyApi) {
     app.use('/rest', dummyApi);
 } else {
-    app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+    const proxyServer = proxy({
+        // ssl: true,
+        target: 'http://jira.hesehus.dk',
+        changeOrigin: false,
+        onProxyRes: (proxyRes, req, res) => {
+        // console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+            proxyRes.headers['x-added'] = 'foobar';
+        }
+    });
+
+    app.use('/rest', proxyServer);
 }
 
 // ------------------------------------
