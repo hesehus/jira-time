@@ -105,7 +105,7 @@ module.exports = function startWebsocketServer (app) {
         function closeConnection () {
             log(`Connection closed for "${username}" (${syncUserId})`);
 
-            removeClientStateIfLastConnection(username);
+            // removeClientStateIfLastConnection(username);
 
             ee.off('update', listenForStateUpdates);
 

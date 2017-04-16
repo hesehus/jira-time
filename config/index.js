@@ -2,7 +2,7 @@
 const path = require('path')
 const debug = require('debug')('app:config')
 const argv = require('yargs').argv
-const ip = require('ip')
+// const ip = require('ip')
 
 debug('Creating default configuration.')
 // ========================================================
