@@ -19,11 +19,7 @@ if (config.useDummyApi) {
     const proxyServer = proxy({
         // ssl: true,
         target: 'http://jira.hesehus.dk',
-        changeOrigin: false,
-        onProxyRes: (proxyRes, req, res) => {
-        // console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
-            proxyRes.headers['x-added'] = 'foobar';
-        }
+        changeOrigin: false
     });
 
     app.use('/rest', proxyServer);
