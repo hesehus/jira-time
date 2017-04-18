@@ -15,7 +15,7 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection
-setTimeout(handleWSConnection, 500);
+// setTimeout(handleWSConnection, 500);
 
 let unsubscribeToStore;
 
