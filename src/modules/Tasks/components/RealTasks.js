@@ -41,10 +41,6 @@ export default class Tasks extends Component {
         this.storeUnsubscribe();
     }
 
-    componentDidUpdate () {
-        // this.calculatePositions();
-    }
-
     calculatePositions () {
         if (!this.el) {
             return;
@@ -59,7 +55,7 @@ export default class Tasks extends Component {
             return;
         }
 
-        tasks.forEach((task) => {
+        tasks.forEach((task, index) => {
             const realTask = taskElements.find(t => t.dataset.cuid === task.cuid);
             if (realTask) {
                 const clientRect = realTask.getBoundingClientRect();
@@ -67,11 +63,17 @@ export default class Tasks extends Component {
                 tasksPositions.push({
                     cuid: task.cuid,
                     top: heightIncrement,
+                    bottom: clientRect.bottom,
                     center: heightIncrement + (clientRect.height / 2),
                     clientRect
                 });
 
-                heightIncrement += clientRect.height + 15;
+                heightIncrement += clientRect.height;
+
+                // Adjust for any spacing between tasks
+                if (index > 0) {
+                    heightIncrement += clientRect.top - tasksPositions[index - 1].bottom;
+                }
             }
         });
 
