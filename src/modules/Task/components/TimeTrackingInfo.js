@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import { updateRemainingEstimate, refreshJiraIssue } from 'shared/taskHelper';
+import { updateRemainingEstimate, refreshJiraIssue, issueIsClosed } from 'shared/taskHelper';
 
 import './TimeTrackingInfo.scss';
 
@@ -77,7 +77,6 @@ export default class TimeTrackingInfo extends Component {
 
     render () {
         const { task, somethingIsMoving } = this.props;
-        const { statusCategory = {} } = task.issue.fields.status;
 
         let {
             remainingEstimate,
@@ -91,7 +90,6 @@ export default class TimeTrackingInfo extends Component {
         }
 
         const usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
-        const issueIsClosed = statusCategory.key === 'done';
 
         return (
             <div className='time-tracking'>
@@ -110,7 +108,7 @@ export default class TimeTrackingInfo extends Component {
                           title={remainingEstimate + ' remaining'}
                           onChange={this.onRemainingChange}
                           onBlur={this.onRemainingBlur}
-                          disabled={issueIsClosed}
+                          disabled={issueIsClosed(task)}
                           tabIndex='-1'
                           ref={el => this.remainingElement = el}
                         />

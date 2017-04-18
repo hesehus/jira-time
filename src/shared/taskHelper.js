@@ -1,6 +1,17 @@
 import { setIssueRefreshing, refreshIssue } from 'store/reducers/tasks';
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
 
+export function issueIsClosed (task) {
+    let issueIsClosed = false;
+    if (task) {
+        const { id, name } = task.issue.fields.status;
+        if (id) {
+            issueIsClosed = name === 'Lukket' || id === '10013';
+        }
+    }
+    return issueIsClosed;
+}
+
 export function updateRemainingEstimate ({ taskCuid, taskIssueKey, remainingEstimate }) {
 
     store.dispatch(setIssueRefreshing({

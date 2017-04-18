@@ -6,7 +6,7 @@ import AddButton from 'assets/add-button.svg';
 import RecordIcon from 'assets/record.svg';
 import RefreshIcon from 'assets/refresh.svg';
 import RecordModel from 'store/models/RecordModel';
-import { refreshJiraIssue } from 'shared/taskHelper';
+import { refreshJiraIssue, issueIsClosed } from 'shared/taskHelper';
 import './RecordActionButtons.scss';
 
 export default class RecordActionButtons extends Component {
@@ -76,13 +76,7 @@ export default class RecordActionButtons extends Component {
         const { task, profile } = this.props;
         const { compactView } = profile.preferences;
 
-        let issueIsClosed = false;
-        if (task) {
-            const { statusCategory } = task.issue.fields.status;
-            if (statusCategory) {
-                issueIsClosed = task.issue.fields.status.statusCategory.key === 'done';
-            }
-        }
+        const closed = issueIsClosed(task);
 
         let refreshElement;
         if (task) {
@@ -119,10 +113,10 @@ export default class RecordActionButtons extends Component {
             <div className='record-action-buttons'>
                 {refreshElement}
                 <button
-                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
+                  className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title={issueIsClosed ? 'Issue is closed, dude' : 'Add a worklog'}
-                  disabled={issueIsClosed}
+                  title={closed ? 'Issue is closed, dude' : 'Add a worklog'}
+                  disabled={closed}
                   onClick={this.onStartPassiveLogClick}>
                     <img src={AddButton}
                       className='record-action-buttons-small-icon record-action-buttons-small-icon--add-passive'
@@ -130,10 +124,10 @@ export default class RecordActionButtons extends Component {
                     />
                 </button>
                 <button
-                  className={btnClass + (issueIsClosed ? ` ${btnClass}--disabled` : '')}
+                  className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
                   tabIndex='-1'
-                  title={issueIsClosed ? 'Issue is closed, dude' : 'Start new worklog'}
-                  disabled={issueIsClosed}
+                  title={closed ? 'Issue is closed, dude' : 'Start new worklog'}
+                  disabled={closed}
                   onClick={this.onStartActiveLogClick}>
                     <img src={RecordIcon}
                       className='record-action-buttons-start-new'
