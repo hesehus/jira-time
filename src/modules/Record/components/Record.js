@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import keycode from 'keycode';
 
 import Sync from 'shared/sync';
+import { issueIsClosed } from 'shared/taskHelper';
 import DateInput from 'modules/DateInput';
 
 import ExportIcon from 'assets/export-compact.svg';
@@ -167,12 +168,6 @@ export default class RecordItem extends Component {
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
-        let issueIsClosed = false;
-        if (task) {
-            const { statusCategory = {} } = task.issue.fields.status;
-            issueIsClosed = statusCategory.key === 'done';
-        }
-
         let className = 'record';
         if (record.syncing) {
             className += ' record--syncing';
@@ -185,7 +180,7 @@ export default class RecordItem extends Component {
         }
 
         let btnSync;
-        if (issueIsClosed) {
+        if (issueIsClosed(task)) {
             btnSync = (
                 <div
                   className='record-sync'
