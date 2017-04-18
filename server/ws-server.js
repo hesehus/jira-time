@@ -105,7 +105,7 @@ module.exports = function startWebsocketServer (app) {
         function closeConnection () {
             log(`Connection closed for "${username}" (${syncUserId})`);
 
-            removeClientStateIfLastConnection(username);
+            // removeClientStateIfLastConnection(username);
 
             ee.off('update', listenForStateUpdates);
 
@@ -120,17 +120,17 @@ module.exports = function startWebsocketServer (app) {
     /**
      * Removes the connection state if no more users are connected
      */
-    function removeClientStateIfLastConnection (username) {
-        const connection = allClientConnectionStates[username];
-        if (connection) {
-            if (connection.connectedUsers === 1) {
-                delete allClientConnectionStates[username];
-                log(`No more connections for ${username}. Clearing state.`);
-            } else {
-                connection.connectedUsers -= 1;
-            }
-        }
-    }
+    // function removeClientStateIfLastConnection (username) {
+    //     const connection = allClientConnectionStates[username];
+    //     if (connection) {
+    //         if (connection.connectedUsers === 1) {
+    //             delete allClientConnectionStates[username];
+    //             log(`No more connections for ${username}. Clearing state.`);
+    //         } else {
+    //             connection.connectedUsers -= 1;
+    //         }
+    //     }
+    // }
 
     function updateState ({ state, emitEvent = true }) {
         const existingConnection = allClientConnectionStates[state.profile.username];

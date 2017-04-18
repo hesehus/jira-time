@@ -16,7 +16,13 @@ startWebsocketServer(app);
 if (config.useDummyApi) {
     app.use('/rest', dummyApi);
 } else {
-    app.use('/rest', proxy({ target: 'http://jira.hesehus.dk', changeOrigin: false }));
+    const proxyServer = proxy({
+        // ssl: true,
+        target: 'http://jira.hesehus.dk',
+        changeOrigin: false
+    });
+
+    app.use('/rest', proxyServer);
 }
 
 // ------------------------------------

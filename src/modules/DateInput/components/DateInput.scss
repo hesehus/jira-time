@@ -50,14 +50,9 @@
 
   &-date {
     $width: 45px;
-    $widthCompact: 35px;
     // margin-right: 5px;
     position: relative;
     width: $width;
-
-    .compact-view & {
-      width: $widthCompact;
-    }
 
     &__display {
       position: absolute;
@@ -84,10 +79,6 @@
       opacity: 0;
       z-index: 2;
       cursor: pointer;
-
-      .compact-view & {
-        width: $widthCompact;
-      }
     }
   }
 }
