@@ -94,11 +94,11 @@ if (__DEV__) {
             runtimeCaching: [{
                 handler: 'cacheFirst',
                 urlPattern: /[.]jpg$/
-            }]
-            // stripPrefixMulti: {
-            //     [paths.dist()]: '/jira-time',
-            //     [paths.dist().replace(/[\\]/g, '/')]: '/jira-time'
-            // }
+            }],
+            stripPrefixMulti: {
+                [paths.dist()]: '',
+                [paths.dist().replace(/[\\]/g, '/')]: ''
+            }
         }
     )
   )
