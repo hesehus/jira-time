@@ -15,7 +15,7 @@ const ee = new EventEmitter({});
 export default ee;
 
 // Initiate websocket connection
-setTimeout(handleWSConnection, 500);
+// setTimeout(handleWSConnection, 500);
 
 let unsubscribeToStore;
 
@@ -58,7 +58,7 @@ export function handleWSConnection () {
 
         ee.emit('connecting');
 
-        ws = new WebSocket('ws://' + location.hostname + ':8080');
+        ws = new WebSocket('wss://' + location.hostname + ':8080');
 
         ws.addEventListener('close', () => {
             console.log('server connection closed');
