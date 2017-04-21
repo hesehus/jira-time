@@ -54,11 +54,13 @@ export function getClosestTaskFromPosition ({ y }) {
     for (let i = 0; i < tasksPositions.length; i++) {
         const rect = tasksPositions[i];
         const diffForThisTask = Math.abs(y - rect.center);
+
         if (i === 0 || diffForThisTask < diff) {
             index = i;
             diff = diffForThisTask;
         }
     }
+
     return {
         index,
         task: tasksFilteredBySearch[index]
@@ -89,7 +91,7 @@ function onPanStart (event) {
 
                 // Get the distance from the mouse center, to the record center
                 const rect = recordElement.getBoundingClientRect();
-                recordElementInitialCenterPosition = rect.top + (rect.height / 2);
+                recordElementInitialCenterPosition = rect.top + (rect.height / 2) - tasksPositions[0].clientRect.top;
 
                 onPanMove(event);
             }
@@ -125,9 +127,9 @@ function onPanMove (event) {
 
             recordElement.style.transform = `translate3d(0px, ${event.deltaY}px, 0) scale(1.08)`;
 
-            const y = (recordElementInitialCenterPosition + event.deltaY) - tasksPositions[0].clientRect.top;
+            const y = recordElementInitialCenterPosition + event.deltaY;
 
-            if (y > 20) {
+            if (y > 0) {
                 const closestTask = getClosestTaskFromPosition({ y });
 
                 targetTaskCuid = closestTask.task.cuid;

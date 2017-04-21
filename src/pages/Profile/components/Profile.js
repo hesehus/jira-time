@@ -37,10 +37,7 @@ export class Profile extends Component {
 
     updateUserPreferences (updatedPreferences) {
         const { preferences } = this.props.profile;
-        console.log({
-            ...preferences,
-            ...updatedPreferences
-        });
+
         this.props.setUserPreferences({
             preferences: {
                 ...preferences,
