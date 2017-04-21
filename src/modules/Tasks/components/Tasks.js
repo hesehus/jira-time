@@ -91,7 +91,7 @@ export default class Tasks extends Component {
                 tasksListOutput = (
                     <div className='tasks-list-wrap tasks-list-wrap--center'>
                         <img className='tasks__lazy-dog' src={lazyDog} alt='Lazy dog' />
-                        <div>You have not added any tasks, you lazy dog!</div>
+                        <div>You have not added any tasks, you stupid lazy dog!</div>
                         <div className='tasks-add-instructions'>Add new tasks by pressing "a"</div>
                     </div>
                 );
