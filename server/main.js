@@ -25,6 +25,15 @@ if (config.useDummyApi) {
     app.use('/rest', proxyServer);
 }
 
+// Example on how to automatic update with github webhooks
+// var sys = require('sys')
+// var exec = require('child_process').exec;
+// function puts(error, stdout, stderr) { sys.puts(stdout) }
+// app.use('/work/update-from-github/', function (req, res) {
+//     exec("git pull && npm install && npm run deploy:prod", puts);
+//     res.send('Updated!');
+// });
+
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
