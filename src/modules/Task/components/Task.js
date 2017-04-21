@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { default as swal } from 'sweetalert2';
 
+import config from '../../../../config/shared-server-client.json';
+
 import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
 import DeleteIcon from 'assets/delete.svg';
@@ -111,7 +113,7 @@ export class Task extends Component {
                     <div className='task__left'>
                         <div className='task__key-and-status'>
                             <a className='task__link'
-                              href={'/browse/' + task.issue.key}
+                              href={config.jiraServerPath + '/browse/' + task.issue.key}
                               target='_blank'
                               tabIndex='-1'
                             >

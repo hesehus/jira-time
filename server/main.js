@@ -3,6 +3,7 @@ const proxy = require('http-proxy-middleware');
 const debug = require('debug')('app:server');
 const webpack = require('webpack');
 
+const sharedConfig = require('../config/shared-server-client.json');
 const webpackConfig = require('../build/webpack.config');
 const config = require('../config');
 const dummyApi = require('./jira-dummy-api');
@@ -18,7 +19,7 @@ if (config.useDummyApi) {
 } else {
     const proxyServer = proxy({
         // ssl: true,
-        target: 'http://jira.hesehus.dk',
+        target: sharedConfig.jiraServerPath.replace('https', 'http'),
         changeOrigin: false
     });
 

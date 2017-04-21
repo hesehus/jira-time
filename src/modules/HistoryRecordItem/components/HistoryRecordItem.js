@@ -2,6 +2,8 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import TimeInput from 'time-input';
 
+import config from '../../../../config/shared-server-client.json';
+
 import { getElapsedTime } from 'store/reducers/recorder';
 import Sync from 'shared/sync';
 
@@ -160,7 +162,8 @@ export default class HistoryRecordItem extends Component {
         let editWorklogLink = record.taskIssueKey;
         if (record.id) {
             editWorklogLink = (
-                <a href={`/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`}
+                <a href={config.jiraServerPath +
+                    `/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`}
                   target='_blank'>
                     {record.taskIssueKey}
                 </a>
