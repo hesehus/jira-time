@@ -24,7 +24,7 @@ export class CoreLayout extends React.Component {
             showUpdateMessage: true
         };
     }
-    
+
     render () {
         const { children, profile } = this.props;
         const { showUpdateMessage } = this.state;
@@ -32,7 +32,10 @@ export class CoreLayout extends React.Component {
         if (showUpdateMessage) {
             return (
                 <Theme>
-                    <UpdateMessage />
+                    <div>
+                        <UpdateMessage />
+                        <Recorder />
+                    </div>
                 </Theme>
             );
         }
