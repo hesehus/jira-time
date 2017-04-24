@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Clipboard from 'clipboard';
+import platform from 'platform';
 
 import SorryDog from 'assets/sorry.jpg';
 
@@ -23,7 +24,7 @@ const SorryImage = styled.img`
     border: 5px solid rgba(0, 0, 0, .4);
 `;
 
-const UserStateInput = styled.input`
+const AppStateInput = styled.input`
     margin: 0;
     opacity: 0;
 `;
@@ -36,8 +37,15 @@ export default class UpdateMessage extends React.Component {
         this.backupDataAndMoveToStep1 = this.backupDataAndMoveToStep1.bind(this);
 
         this.state = {
-            step: 0
+            step: 0,
+            appState: null
         };
+
+        store.subscribe(() => {
+            this.setState({
+                appState: store.getState()
+            });
+        });
     }
 
     backupDataAndMoveToStep1 () {
@@ -51,14 +59,13 @@ export default class UpdateMessage extends React.Component {
     }
 
     render () {
-        const { step } = this.state;
+        const { step, appState } = this.state;
 
-        const downloadLink = 'todo';
-        const userState = store.getState();
+        const downloadLink = platform.os.family === 'OS X' ? 'osx.zip' : 'windows.zip';
 
-        const numTasks = userState.tasks.tasks.length;
+        const numTasks = appState ? appState.tasks.tasks.length : 0;
         const tasksDisplay = numTasks + (numTasks === 1 ? ' task' : ' tasks');
-        const numWorklogs = userState.recorder.records.length;
+        const numWorklogs = appState ? appState.recorder.records.length : 0;
         const worklogsDisplay = numWorklogs + (numWorklogs === 1 ? ' work log' : ' work logs');
 
         return (
@@ -82,7 +89,7 @@ export default class UpdateMessage extends React.Component {
                                 Backup your data
                             </button>
                         </p>
-                        <div><UserStateInput id='user-state' defaultValue={JSON.stringify(userState)} /></div>
+                        <div><AppStateInput id='user-state' defaultValue={JSON.stringify(appState)} /></div>
                     </div>
                 )}
                 {step === 1 && (
