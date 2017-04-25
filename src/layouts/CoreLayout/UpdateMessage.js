@@ -85,25 +85,26 @@ export default class UpdateMessage extends React.Component {
                               onClick={this.backupDataAndMoveToStep1}
                               ref={el => this.copyBtn = el}
                               data-clipboard-target='#user-state'
+                              disabled={!appState}
                             >
                                 Backup your data
                             </button>
                         </p>
-                        <div><AppStateInput id='user-state' defaultValue={JSON.stringify(appState)} /></div>
+                        <div><AppStateInput id='user-state' readOnly value={JSON.stringify(appState)} /></div>
                     </div>
                 )}
                 {step === 1 && (
                     <div>
+                        <h1>Good stuff!</h1>
                         <p>
-                            Good stuff! Your {tasksDisplay} and {worklogsDisplay} has been backed up to your clipboard.
-                            You can just paste it in (ctrl+v) after updating
+                            Your {tasksDisplay} and {worklogsDisplay} has been backed up to your clipboard.
                         </p>
                         <p>
-                            Now then:<br />
                             <a className='btn btn--sm'
                               href={downloadLink}
                               download
                               style={{ marginTop: '10px' }}
+                              onClick={() => this.setState({ step: 2 })}
                             >
                               Download the new version
                             </a>
@@ -111,6 +112,22 @@ export default class UpdateMessage extends React.Component {
                         <p style={{ marginTop: '40px' }}>
                             ... or use the web version, if you are that kind of person<br />
                             <a href='http://prod-jira-time.hesehus.dk'>http://prod-jira-time.hesehus.dk</a>
+                        </p>
+                    </div>
+                )}
+                {step === 2 && (
+                    <div>
+                        <h1>
+                            Downloading...
+                        </h1>
+                        <p>
+                            When opening the updated app, just press CTR+V to restore your state
+                            and continue to do awesome logging!
+                        </p>
+                        <p style={{ marginTop: '40px', fontSize: '.8rem' }}>
+                            <a href='#' onClick={e => { e.preventDefault(); this.setState({ step: 0 }) }}>
+                                Start all over again
+                            </a>
                         </p>
                     </div>
                 )}
