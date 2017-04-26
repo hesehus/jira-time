@@ -22,10 +22,7 @@ const NoticeLink = styled.a`
 `;
 
 const updateInstructionsShownKey = 'updateInstructionsShown';
-const locationIncludesUpdateInstructions = location.href.includes('show-update-instructions=1');
-const updateInstructionsShown = localStorage.getItem(updateInstructionsShownKey);
-const showUpdateMessage = locationIncludesUpdateInstructions && updateInstructionsShown;
-
+const showUpdateMessage = !localStorage.getItem(updateInstructionsShownKey);
 if (showUpdateMessage) {
     localStorage.setItem(updateInstructionsShownKey, Date.now());
 }
