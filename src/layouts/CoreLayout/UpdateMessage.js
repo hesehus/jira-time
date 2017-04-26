@@ -40,6 +40,14 @@ export default class UpdateMessage extends React.Component {
             step: 0,
             appState: null
         };
+    }
+
+    componentDidMount () {
+        this.cp = new Clipboard(this.copyBtn);
+
+        this.setState({
+            appState: store.getState()
+        });
 
         store.subscribe(() => {
             this.setState({
@@ -52,10 +60,6 @@ export default class UpdateMessage extends React.Component {
         this.setState({
             step: 1
         });
-    }
-
-    componentDidMount () {
-        this.cp = new Clipboard(this.copyBtn);
     }
 
     render () {
