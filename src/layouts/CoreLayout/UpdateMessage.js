@@ -115,7 +115,7 @@ export default class UpdateMessage extends React.Component {
                         </p>
                         <p style={{ marginTop: '40px' }}>
                             ... or use the web version, if you are that kind of person<br />
-                            <a href='http://prod-jira-time.hesehus.dk'>http://prod-jira-time.hesehus.dk</a>
+                            <a href='http://prod-jira-time.hesehus.dk?show-update-instructions=1'>http://prod-jira-time.hesehus.dk</a>
                         </p>
                     </div>
                 )}
