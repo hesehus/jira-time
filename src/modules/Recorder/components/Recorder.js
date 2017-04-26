@@ -119,7 +119,7 @@ export default class Recorder extends Component {
             window.__events.emit('userAppStateApplied');
             return;
         }
-        
+
         if (this.props.profile.loggedIn) {
             const taskKeys = extractIssueKeysFromText(url || text);
 
