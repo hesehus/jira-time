@@ -111,8 +111,16 @@ export default class Recorder extends Component {
     }
 
     onDropAndPaste ({ url, text }) {
+        if (text && text.startsWith('{"app')) {
+            store.dispatch({
+                type: 'SERVER_STATE_PUSH',
+                ...JSON.parse(text)
+            });
+            window.__events.emit('userAppStateApplied');
+            return;
+        }
+        
         if (this.props.profile.loggedIn) {
-
             const taskKeys = extractIssueKeysFromText(url || text);
 
             if (!!taskKeys.length) {
