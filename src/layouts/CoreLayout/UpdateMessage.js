@@ -9,12 +9,18 @@ const Wrapper = styled.div`
     height: 100vh;
     overflow-x: hidden;
     overflow-y: auto;
-    padding: 50px;
+    padding: 0 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+`;
+
+const Heading = styled.h1`
+    font-weight: normal;
+    text-transform: uppercase;
+    font-size: 2rem;
 `;
 
 const SorryImage = styled.img`
@@ -76,14 +82,15 @@ export default class UpdateMessage extends React.Component {
             <Wrapper>
                 {step === 0 && (
                     <div>
-                        <h1>Update!</h1>
+                        <Heading>Server update!</Heading>
                         <p>
-                            Jira time has moved to a brand new server!<br />
-                            This means more cool stuff, but requires a one-time manual update by you...
+                            Horray! Jira time has moved to a brand new server!<br />
+                            This means more SPEED, and cool stuff coming in the near future,
+                            but it does requires a one-time manual update by you...
                         </p>
                         <SorryImage src={SorryDog} />
                         <p>
-                            First and foremost:<br />
+                            Start by:<br />
                             <button className='btn btn--sm'
                               style={{ marginTop: '10px' }}
                               onClick={this.backupDataAndMoveToStep1}
@@ -115,7 +122,9 @@ export default class UpdateMessage extends React.Component {
                         </p>
                         <p style={{ marginTop: '40px' }}>
                             ... or use the web version, if you are that kind of person<br />
-                            <a href='http://prod-jira-time.hesehus.dk?show-update-instructions=1'>http://prod-jira-time.hesehus.dk</a>
+                            <a href='http://prod-jira-time.hesehus.dk?show-update-instructions=1'>
+                                http://prod-jira-time.hesehus.dk
+                            </a>
                         </p>
                     </div>
                 )}
