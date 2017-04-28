@@ -33,7 +33,7 @@ export class CoreLayout extends React.Component {
             return (
                 <Theme>
                     <div>
-                        <UpdateMessage />
+                        <UpdateMessage onDismiss={() => this.setState({ showUpdateMessage: false })} />
                         <Recorder />
                     </div>
                 </Theme>

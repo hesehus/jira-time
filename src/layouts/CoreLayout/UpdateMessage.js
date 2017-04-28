@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 import Clipboard from 'clipboard';
 import platform from 'platform';
@@ -37,6 +37,10 @@ const AppStateInput = styled.input`
 
 export default class UpdateMessage extends React.Component {
 
+    static propTypes = {
+        onDismiss: PropTypes.func.isRequired
+    }
+
     constructor (props) {
         super(props);
 
@@ -49,7 +53,9 @@ export default class UpdateMessage extends React.Component {
     }
 
     componentDidMount () {
-        this.cp = new Clipboard(this.copyBtn);
+        if (this.copyBtn) {
+            this.cp = new Clipboard(this.copyBtn);
+        }
 
         this.setState({
             appState: store.getState()
@@ -71,12 +77,52 @@ export default class UpdateMessage extends React.Component {
     render () {
         const { step, appState } = this.state;
 
-        const downloadLink = platform.os.family === 'OS X' ? 'osx.zip' : 'windows.zip';
+        const downloadLink = platform.os.family === 'OS X' ? 'jira-time-osx.zip' : 'jira-time-windows.zip';
 
         const numTasks = appState ? appState.tasks.tasks.length : 0;
         const tasksDisplay = numTasks + (numTasks === 1 ? ' task' : ' tasks');
         const numWorklogs = appState ? appState.recorder.records.length : 0;
         const worklogsDisplay = numWorklogs + (numWorklogs === 1 ? ' work log' : ' work logs');
+
+        const downloadButton = [
+            (<p>
+                <a className='btn btn--sm'
+                  href={downloadLink}
+                  download
+                  style={{ marginTop: '10px' }}
+                  onClick={() => this.setState({ step: 2 })}
+                >
+                    Download the new version
+                </a>
+            </p>),
+            (<p style={{ marginTop: '40px' }}>
+                ... or use the web version, if you are that kind of person<br />
+                <a href='http://prod-jira-time.hesehus.dk?show-update-instructions=1'>
+                    http://prod-jira-time.hesehus.dk
+                </a>
+            </p>)
+        ];
+
+        let step1ActionButton;
+        if (numTasks < 25) {
+            step1ActionButton = [
+                (<p>
+                    Start by:<br />
+                    <button className='btn btn--sm'
+                      style={{ marginTop: '10px' }}
+                      onClick={this.backupDataAndMoveToStep1}
+                      ref={el => this.copyBtn = el}
+                      data-clipboard-target='#user-state'
+                      disabled={!appState}
+                    >
+                        Backup your data
+                    </button>
+                </p>),
+                <div><AppStateInput id='user-state' readOnly value={JSON.stringify(appState)} /></div>
+            ];
+        } else {
+            step1ActionButton = downloadButton;
+        }
 
         return (
             <Wrapper>
@@ -89,19 +135,7 @@ export default class UpdateMessage extends React.Component {
                             but it does requires a one-time manual update by you...
                         </p>
                         <SorryImage src={SorryDog} />
-                        <p>
-                            Start by:<br />
-                            <button className='btn btn--sm'
-                              style={{ marginTop: '10px' }}
-                              onClick={this.backupDataAndMoveToStep1}
-                              ref={el => this.copyBtn = el}
-                              data-clipboard-target='#user-state'
-                              disabled={!appState}
-                            >
-                                Backup your data
-                            </button>
-                        </p>
-                        <div><AppStateInput id='user-state' readOnly value={JSON.stringify(appState)} /></div>
+                        {step1ActionButton}
                     </div>
                 )}
                 {step === 1 && (
@@ -110,28 +144,13 @@ export default class UpdateMessage extends React.Component {
                         <p>
                             Your {tasksDisplay} and {worklogsDisplay} has been backed up to your clipboard.
                         </p>
-                        <p>
-                            <a className='btn btn--sm'
-                              href={downloadLink}
-                              download
-                              style={{ marginTop: '10px' }}
-                              onClick={() => this.setState({ step: 2 })}
-                            >
-                              Download the new version
-                            </a>
-                        </p>
-                        <p style={{ marginTop: '40px' }}>
-                            ... or use the web version, if you are that kind of person<br />
-                            <a href='http://prod-jira-time.hesehus.dk?show-update-instructions=1'>
-                                http://prod-jira-time.hesehus.dk
-                            </a>
-                        </p>
+                        {downloadButton}
                     </div>
                 )}
                 {step === 2 && (
                     <div>
                         <h1>
-                            Downloading...
+                            Downloading to your 'downloads' folder...
                         </h1>
                         <p>
                             When opening the updated app, just press CTR+V to restore your state
@@ -144,6 +163,11 @@ export default class UpdateMessage extends React.Component {
                         </p>
                     </div>
                 )}
+                <p style={{ marginTop: '40px', fontSize: '.8rem' }}>
+                    <a href='#' onClick={e => { e.preventDefault(); this.props.onDismiss() }}>
+                        Dismiss
+                    </a>
+                </p>
             </Wrapper>
         );
     }
