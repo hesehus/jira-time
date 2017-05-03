@@ -1,8 +1,66 @@
 import React, { Component, PropTypes } from 'react';
+import styled from 'styled-components';
 
+import Bar from './Bar';
 import { updateRemainingEstimate, refreshJiraIssue, issueIsClosed } from 'shared/taskHelper';
 
-import './TimeTrackingInfo.scss';
+const Wrapper = styled.div`
+    margin-right: 10px;
+    font-size: .75rem;
+    min-width: 150px;
+    max-width: 200px;
+    flex-grow: 1;
+    flex-shrink: 0;
+    cursor: default;
+    display: flex;
+    align-items: center;
+
+    .compact-view & {
+        min-width: 0;
+    }
+
+    @media (min-width: 544px) {
+        margin-left: 10px;
+    }
+
+    @media (max-width: 543px) {
+        min-width: 0px;
+    }
+`;
+
+const Percentage = styled.div`
+    flex: 0 0 auto;
+    text-align: right;
+
+    .compact-view & {
+        display: none;
+    }
+`;
+
+const Remaining = styled.div`
+    flex: 0 0 auto;
+`;
+
+const RemainingInput = styled.input`
+    padding: 0 2px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    width: 40px;
+
+    .compact-view & {
+        text-align: right;
+    }
+`;
+
+const Bars = styled.div`
+    flex: 1 1 auto;
+    margin: 0 5px;
+
+    .compact-view & {
+        display: none;
+    }
+`;
 
 export default class TimeTrackingInfo extends Component {
 
@@ -82,42 +140,51 @@ export default class TimeTrackingInfo extends Component {
             remainingEstimate,
             remainingEstimateSeconds,
             originalEstimate,
-            originalEstimateSeconds
+            originalEstimateSeconds,
+            timeSpent,
+            timeSpentSeconds
         } = task.issue.fields.timetracking;
 
         if (!remainingEstimate || remainingEstimate === 'undefined' || !originalEstimate) {
             return null;
         }
 
-        const usedEstimatePct = this.getUsedEstimatePercentage(originalEstimateSeconds, remainingEstimateSeconds);
+        const timeSpentAndRemaining = timeSpentSeconds + remainingEstimateSeconds;
+        const largest = Math.max(timeSpentAndRemaining, originalEstimateSeconds);
+
+        const widthOriginalEstimate = (originalEstimateSeconds / largest) * 100;
+        const widthTimeSpentAndRemaining = (timeSpentAndRemaining / largest) * 100;
+        let progress = (timeSpentSeconds / remainingEstimateSeconds) * 100;
+        if (!isFinite(progress)) {
+            progress = 0;
+        }
 
         return (
-            <div className='time-tracking'>
-                <div className='time-tracking-progress-text'
-                  title={`Original estimate: ${originalEstimate}. Remaining: ${remainingEstimate}`}>
-                    <span className='time-tracking-progress-text-original'>
-                        <input className='time-tracking-progress-input time-tracking-progress-input--original'
-                          value={originalEstimate}
-                          disabled
-                        />
-                    </span>
-                    <span className='time-tracking-progress-text-remaining'>
-                        <input className='time-tracking-progress-input'
-                          contentEditable={!somethingIsMoving}
-                          value={remainingEstimate}
-                          title={remainingEstimate + ' remaining'}
-                          onChange={this.onRemainingChange}
-                          onBlur={this.onRemainingBlur}
-                          disabled={issueIsClosed(task)}
-                          tabIndex='-1'
-                          ref={el => this.remainingElement = el}
-                        />
-                    </span>
-                </div>
-                <div className='time-tracking-progress-bar' title={`${usedEstimatePct}% of the time is spent`}>
-                    <div className='time-tracking-progress-bar__status' style={{ width: usedEstimatePct + '%' }} />
-                </div>
-            </div>
+            <Wrapper>
+                <Percentage>{`${Math.round(progress)}%`}</Percentage>
+                <Bars>
+                    <Bar
+                      width={widthOriginalEstimate}
+                      title={`Original estimate: ${originalEstimate}`}
+                    />
+                    <Bar
+                      width={widthTimeSpentAndRemaining}
+                      lineWidth={progress}
+                      title={`Time spent: ${timeSpent}`}
+                    />
+                </Bars>
+                <Remaining>
+                    <RemainingInput
+                      value={remainingEstimate}
+                      title={remainingEstimate + ' remaining'}
+                      onChange={this.onRemainingChange}
+                      onBlur={this.onRemainingBlur}
+                      disabled={issueIsClosed(task) || somethingIsMoving}
+                      tabIndex='-1'
+                      ref={el => this.remainingElement = el}
+                    />
+                </Remaining>
+            </Wrapper>
         );
     }
 }

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { IndexLink, Link, hashHistory } from 'react-router'
 
 import Sync, { sharedEvents } from 'shared/sync';
+import { showAddIssuesDialog } from 'shared/helpers';
 
 import './Header.scss'
 
@@ -155,7 +156,12 @@ export default class Header extends Component {
             <div className='header'>
                 <div className='header__left'>
                     <div className='header-title'>
-                        <img className='header-logo' src={AppLogoIcon} alt='Abstract hour glass' />
+                        <img
+                          className='header-logo'
+                          src={AppLogoIcon}
+                          alt='Abstract hour glass'
+                          onClick={showAddIssuesDialog}
+                        />
                         <span className='header-title-text'>JIRA-time</span>
                     </div>
                     {updateAvailable}

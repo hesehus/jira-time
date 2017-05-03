@@ -96,7 +96,8 @@
         }
 
         @media (max-width: $screen-sm) {
-            flex: 0 1 auto;
+            flex: 1 1 auto;
+            padding-right: 0;
         }
     }
     &__mid {
@@ -118,7 +119,7 @@
 
         @media (max-width: $screen-sm) {
             flex: 1 1 auto;
-            justify-content: flex-end;
+            justify-content: space-between;
             min-width: 50%;
 
             .compact-view & {
