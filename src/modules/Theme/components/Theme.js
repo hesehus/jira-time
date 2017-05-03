@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 
+import themes from '../themes';
+
 import './Theme.scss';
 
 export class Theme extends Component {
@@ -7,6 +9,11 @@ export class Theme extends Component {
     static propTypes = {
         profile: PropTypes.object,
         children: PropTypes.object
+    }
+
+    componentDidUpdate () {
+        const theme = themes.find(t => t.key === this.props.profile.preferences.theme) || themes[0];
+        document.body.style.setProperty('--theme-background', theme.background);
     }
 
     render () {

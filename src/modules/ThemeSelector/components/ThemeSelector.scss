@@ -33,15 +33,6 @@
         transition: all 150ms;
         box-shadow: 0 0 5px rgba(255, 255, 255, 0);
 
-        &--lightpurple { background: $theme-lightpurple-background; }
-        &--darkpurple { background: $theme-darkpurple-background; }
-        &--blue { background: $theme-blue-background; }
-        &--turquoise { background: $theme-turquoise-background; }
-        &--orange { background: $theme-orange-background; }
-        &--yellow { background: $theme-yellow-background; }
-        &--green { background: $theme-green-background; }
-        &--dark { background: $theme-dark-background; }
-
         &:active {
             transform: scale(.92);
         }

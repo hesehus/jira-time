@@ -1,16 +1,5 @@
 @import '_variables';
 
 .theme {
-
-    // Fallback color if something is wrong with setting the theme
-    background: $theme-lightpurple-background;
-
-    &-lightpurple { background: $theme-lightpurple-background; }
-    &-darkpurple { background: $theme-darkpurple-background; }
-    &-blue { background: $theme-blue-background; }
-    &-turquoise { background: $theme-turquoise-background; }
-    &-orange { background: $theme-orange-background; }
-    &-yellow { background: $theme-yellow-background; }
-    &-green { background: $theme-green-background; }
-    &-dark { background: $theme-dark-background; }
+    background: var(--theme-background, #555);
 }
