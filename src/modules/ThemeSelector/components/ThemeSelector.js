@@ -22,7 +22,8 @@ export class ThemeSelector extends Component {
         const listItems = themes.map(theme => {
             const selected = theme.key === preferences.theme ? 'theme-selector-list-item--selected' : '';
             return (
-                <li className={`theme-selector-list-item theme-selector-list-item--${theme.key} ${selected}`}
+                <li className={`theme-selector-list-item ${selected}`}
+                  style={{ background: theme.background }}
                   key={theme.key}
                   onClick={() => this.changeTheme(theme.key)}
                   title={theme.name} />

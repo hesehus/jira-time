@@ -1,15 +1,5 @@
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/_variables.scss";
 
-// Themes
-$theme-lightpurple-background: radial-gradient(circle, #EEADE3 0%, #6A1A5E 100%);
-$theme-darkpurple-background: radial-gradient(circle, #D56588 0%, #383166 100%);
-$theme-blue-background: radial-gradient(circle, #2683A5 0%, #1C315C 100%);
-$theme-turquoise-background: radial-gradient(circle, #00D2B0 0%, #114E70 100%);;
-$theme-orange-background: radial-gradient(circle, #D5803F 0%, #D33030 100%);
-$theme-yellow-background: radial-gradient(circle, #FAD961 0%, #F76B1C 100%);
-$theme-green-background: radial-gradient(circle, #81AD4E 0%, #1A6206 100%);
-$theme-dark-background: linear-gradient(180deg, #58747F 0%, #24323A 100%);
-
 // Extra small screen / phone
 //** Deprecated `$screen-xs` as of v3.0.1
 $screen-xs:                  480px;

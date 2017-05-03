@@ -15,10 +15,9 @@ import { getTasksFilteredBySearch } from 'store/reducers/tasks';
 let eventsBinded;
 let taskElement;
 let recordElement;
-let recordElementInitialCenterPosition;
+let recordElementHeight;
 let targetTaskCuid;
 let targetTaskIssueKey;
-let tasksPositions = [];
 let tasksFilteredBySearch = [];
 
 export function init () {
@@ -42,22 +41,18 @@ export function init () {
         mc.on('panend', onPanEnd);
 
         document.addEventListener('keydown', onKeyPress, false);
-
-        events.on('tasksPositionsCalculated', p => tasksPositions = p.tasksPositions);
     }
 }
 
 // Determine the closest task when a mouseY value is given
-export function getClosestTaskFromPosition ({ y }) {
-    let index = 0;
-    let diff;
-    for (let i = 0; i < tasksPositions.length; i++) {
-        const rect = tasksPositions[i];
-        const diffForThisTask = Math.abs(y - rect.center);
+export function getClosestTaskFromPosition ({ x, y }) {
+    let index = -1;
 
-        if (i === 0 || diffForThisTask < diff) {
-            index = i;
-            diff = diffForThisTask;
+    const taskElement = domClosest(document.elementFromPoint(x, y), '.task');
+    if (taskElement) {
+        let taskIndex = tasksFilteredBySearch.findIndex(t => t.cuid === taskElement.dataset.cuid);
+        if (taskIndex > -1) {
+            index = taskIndex;
         }
     }
 
@@ -81,20 +76,17 @@ function onPanStart (event) {
         recordElement = domClosest(event.target, '.record');
 
         if (recordElement) {
-            if (!!tasksPositions.length) {
-                doSharedMovingPreparations();
+            doSharedMovingPreparations();
 
-                store.dispatch(setRecordMoving({
-                    cuid: recordElement.dataset.cuid,
-                    moving: true
-                }));
+            store.dispatch(setRecordMoving({
+                cuid: recordElement.dataset.cuid,
+                moving: true
+            }));
 
-                // Get the distance from the mouse center, to the record center
-                const rect = recordElement.getBoundingClientRect();
-                recordElementInitialCenterPosition = rect.top + (rect.height / 2) - tasksPositions[0].clientRect.top;
+            const rect = recordElement.getBoundingClientRect();
+            recordElementHeight = rect.height;
 
-                onPanMove(event);
-            }
+            onPanMove(event);
             return;
         }
 
@@ -125,18 +117,17 @@ function onPanMove (event) {
         if (record) {
             event.preventDefault();
 
-            recordElement.style.transform = `translate3d(0px, ${event.deltaY}px, 0) scale(1.08)`;
+            recordElement.style.transform = `translate3d(0px, ${event.deltaY + recordElementHeight}px, 0) scale(1.05)`;
 
-            const y = recordElementInitialCenterPosition + event.deltaY;
+            const { x, y } = event.center;
+            const closestTask = getClosestTaskFromPosition({ x, y });
 
-            if (y > 0) {
-                const closestTask = getClosestTaskFromPosition({ y });
-
-                targetTaskCuid = closestTask.task.cuid;
-                targetTaskIssueKey = closestTask.task.issue.key;
-            } else {
+            if (!closestTask.task) {
                 targetTaskCuid = null;
                 targetTaskIssueKey = null
+            } else {
+                targetTaskCuid = closestTask.task.cuid;
+                targetTaskIssueKey = closestTask.task.issue.key;
             }
 
             if (record.taskDroppableCuid !== targetTaskCuid) {

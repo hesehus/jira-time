@@ -7,7 +7,7 @@ export default class Tasks extends Component {
 
     static propTypes = {
         tasks: PropTypes.array.isRequired,
-        enableAnimations: PropTypes.bool.isRequired
+        enableAnimations: PropTypes.bool
     }
 
     constructor (props) {
@@ -42,7 +42,8 @@ export default class Tasks extends Component {
     }
 
     calculatePositions () {
-        if (!this.el) {
+
+        if (!this.el || !this.props.enableAnimations) {
             return;
         }
 
