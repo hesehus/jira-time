@@ -25,10 +25,10 @@ export const SET_RECORD_TASK = 'SET_RECORD_TASK';
 export const UPDATE_RECORD_ELAPSED = 'UPDATE_RECORD_ELAPSED';
 export const REMOVE_RECORD = 'REMOVE_RECORD';
 
-export function getElapsedTime ({ startTime, endTime = Date.now() }) {
+export function getElapsedTime ({ startTime, endTime }) {
 
     startTime = moment(startTime);
-    endTime = moment(endTime);
+    endTime = moment(endTime || Date.now());
 
     const diff = endTime.unix() - startTime.unix();
 
@@ -45,7 +45,7 @@ export function getElapsedTime ({ startTime, endTime = Date.now() }) {
     let outputString = '';
 
     if (d.minutes() !== 0) {
-        outputString = `${d.minutes()}m`;
+        outputString = `${d.minutes()}m` + outputString;
     }
     if (d.hours() !== 0) {
         outputString = `${d.hours()}h ` + outputString;

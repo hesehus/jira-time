@@ -15,7 +15,8 @@ export default function RecordModel ({
   timeSpentSeconds = 0,
   created,
   updated,
-  id
+  id,
+  isSynced = false
 } = {}) {
 
     const model = {
@@ -34,6 +35,8 @@ export default function RecordModel ({
         created, // Jiras created worklog time (When it was synced the first time)
         updated // Jiras updated worklog time
     };
+
+    model.isSynced = !!model.created;
 
     if (!model.endTime && timeSpentSeconds) {
         model.endTime = moment(model.startTime).add(timeSpentSeconds, 'seconds').toDate();

@@ -70,6 +70,7 @@ export default class Recorder extends Component {
 
             const oneMinute = 1000 * 60;
             this.elapsedTimeInterval = setInterval(this.updateElapsedTime, oneMinute);
+            this.updateElapsedTime();
         }
     }
 
