@@ -145,7 +145,7 @@ export default class TimeTrackingInfo extends Component {
             timeSpentSeconds
         } = task.issue.fields.timetracking;
 
-        if (!remainingEstimate || remainingEstimate === 'undefined' || !originalEstimate) {
+        if (!remainingEstimateSeconds || remainingEstimate === 'undefined' || !originalEstimateSeconds) {
             return null;
         }
 
@@ -154,6 +154,7 @@ export default class TimeTrackingInfo extends Component {
 
         const widthOriginalEstimate = (originalEstimateSeconds / largest) * 100;
         const widthTimeSpentAndRemaining = (timeSpentAndRemaining / largest) * 100;
+
         let progress = (timeSpentSeconds / remainingEstimateSeconds) * 100;
         if (!isFinite(progress)) {
             progress = 0;
