@@ -1,7 +1,7 @@
-import { default as swal } from 'sweetalert2'
 import keycode from 'keycode';
 
 import Sync from 'shared/sync';
+import { showAddIssuesDialog } from 'shared/helpers';
 
 let eventsBinded;
 
@@ -42,17 +42,7 @@ export function init () {
 
             if (code === 'a' && !e.ctrlKey) {
                 if (targetIsNotEditable(e.target)) {
-                    swal({
-                        title: 'Give me some tasks!',
-                        text: 'Tasks... yum yum!',
-                        input: 'text'
-                    })
-                    .then(text => {
-                        if (text) {
-                            window.__events.emit('paste', { text });
-                        }
-                    })
-                    .catch(() => { console.log('close..') });
+                    showAddIssuesDialog();
                 }
             }
 

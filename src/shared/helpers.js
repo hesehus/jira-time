@@ -1,3 +1,4 @@
+import { default as swal } from 'sweetalert2'
 import { getIssue } from './jiraClient';
 
 export function getJIRAIssueFromUrl (url = '') {
@@ -26,4 +27,18 @@ export function ensureDate (date) {
         return date;
     }
     return new Date(date);
+}
+
+export function showAddIssuesDialog () {
+    swal({
+        title: 'Give me some tasks!',
+        text: 'Tasks... yum yum!',
+        input: 'text'
+    })
+    .then(text => {
+        if (text) {
+            window.__events.emit('paste', { text });
+        }
+    })
+    .catch(() => { console.log('close..') });
 }
