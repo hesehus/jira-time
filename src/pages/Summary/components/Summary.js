@@ -129,7 +129,7 @@ export default class Summary extends Component {
         // Momentify
         outputRecords.forEach((r) => {
             r.startTime = moment(r.startTime);
-            r.endTime = moment(r.endTime);
+            r.endTime = moment(r.endTime || Date.now());
         });
 
         // Sort by time started

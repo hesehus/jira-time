@@ -37,7 +37,7 @@ export default class HistoryRecordItem extends Component {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
-        const endTime = moment(record.endTime);
+        const endTime = record.isSynced ? moment(record.endTime) : null;
 
         const vals = time.split(':');
 
@@ -65,7 +65,7 @@ export default class HistoryRecordItem extends Component {
         const recordInfo = {
             cuid: this.props.record.cuid,
             startTime: startTime.toDate(),
-            endTime: endTime.toDate()
+            endTime: endTime ? endTime.toDate() : null
         };
 
         // Un-synced item. Just update the redux state
@@ -125,6 +125,7 @@ export default class HistoryRecordItem extends Component {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
+
         const endTime = moment(record.endTime);
         const elapsedTime = record.elapsedTime || getElapsedTime({ startTime, endTime });
 
