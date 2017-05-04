@@ -63,7 +63,7 @@ export default class Recorder extends Component {
 
     componentWillMount () {
         if (!this.state.binded) {
-            this.setState({ binded: true, test: 1 });
+            this.setState({ binded: true });
 
             window.__events.on('drop', this.onDropAndPaste);
             window.__events.on('paste', this.onDropAndPaste);
@@ -144,7 +144,7 @@ export default class Recorder extends Component {
     }
 
     updateElapsedTime () {
-        const { record } = this.props.recorder;
+        const record = this.props.recorder.records.find(r => !r.endTime);
 
         if (record) {
             this.props.updateRecordElapsed({
