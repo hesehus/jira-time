@@ -1,3 +1,9 @@
 {
-    "serverPath": "https://jira.hesehus.dk"
+    "serverPath": "https://jira.hesehus.dk",
+    "breakpoints": {
+        "xs": 480,
+        "sm": 544,
+        "md": 768,
+        "lg": 992
+    }
 }

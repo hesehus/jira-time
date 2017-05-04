@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import Bar from './Bar';
 import { updateRemainingEstimate, refreshJiraIssue, issueIsClosed } from 'shared/taskHelper';
+import config from 'shared/config.json';
 
 const Wrapper = styled.div`
     margin-right: 10px;
@@ -13,11 +14,13 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
 
-    .compact-view & {
-        width: auto;
+    @media (max-width: ${() => config.breakpoints.sm}px) {
+        .compact-view & {
+            width: 100px;
+        }
     }
 
-    @media (min-width: 769px) {
+    @media (min-width: ${() => config.breakpoints.md + 1}px) {
         margin-left: 10px;
     }
 `;
@@ -25,10 +28,6 @@ const Wrapper = styled.div`
 const Percentage = styled.div`
     flex: 0 0 auto;
     text-align: right;
-
-    .compact-view & {
-        display: none;
-    }
 `;
 
 const Remaining = styled.div`
@@ -50,10 +49,6 @@ const RemainingInput = styled.input`
 const Bars = styled.div`
     flex: 1 1 auto;
     margin: 0 5px;
-
-    .compact-view & {
-        display: none;
-    }
 `;
 
 export default class TimeTrackingInfo extends Component {
