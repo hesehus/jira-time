@@ -7,6 +7,7 @@ const webpackConfig = require('../build/webpack.config');
 const config = require('../config');
 const dummyApi = require('./jira-dummy-api');
 const startWebsocketServer = require('./ws-server');
+const sharedConfig = require('../src/shared/config');
 
 const app = express();
 const paths = config.utils_paths;
@@ -18,7 +19,7 @@ if (config.useDummyApi) {
 } else {
     const proxyServer = proxy({
         // ssl: true,
-        target: 'http://jira.hesehus.dk',
+        target: 'http://' + sharedConfig.serverPath,
         changeOrigin: false
     });
 

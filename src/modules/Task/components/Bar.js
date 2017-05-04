@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     background: rgba(0, 0, 0, .3);
     border-radius: 5px;
-    height: 8px;
+    height: 6px;
     display: flex;
 
     &:first-child {
