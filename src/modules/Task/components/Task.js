@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { default as swal } from 'sweetalert2';
 
-import config from '../../../../config/shared-server-client.json';
+import config from 'shared/config.json';
 
 import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
@@ -10,7 +10,7 @@ import TimeTrackingInfo from './TimeTrackingInfo';
 
 import './Task.scss';
 
-export class Task extends Component {
+export default class Task extends Component {
 
     static get propTypes () {
         return {
@@ -113,7 +113,7 @@ export class Task extends Component {
                     <div className='task__left'>
                         <div className='task__key-and-status'>
                             <a className='task__link'
-                              href={config.jiraServerPath + '/browse/' + task.issue.key}
+                              href={config.serverPath + '/browse/' + task.issue.key}
                               target='_blank'
                               tabIndex='-1'
                             >
@@ -139,5 +139,3 @@ export class Task extends Component {
         );
     }
 }
-
-export default Task;

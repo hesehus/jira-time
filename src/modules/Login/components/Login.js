@@ -3,11 +3,12 @@ import React, { Component, PropTypes } from 'react'
 import './Login.scss';
 
 import { login, updateUserInfo } from 'shared/jiraClient';
+import config from 'shared/config.json';
 
 import LogoIcon from 'assets/logo.png';
 import LoadingIcon from 'assets/loading-black.svg';
 
-export class Login extends Component {
+export default class Login extends Component {
 
     static get propTypes () {
         return {
@@ -118,6 +119,12 @@ export class Login extends Component {
                 }
 
             } else if (this.state.error === 'tooManyFailedLoginAttempts') {
+                const headToJira = (
+                    <div>
+                        Head over to <a href={'https://' + config.serverPath}>JIRA</a>,
+                        log out, and the log back in in order to fix this.
+                    </div>
+                );
 
                 if (this.state.tooManyFailedLoginAttempts === 1) {
                     error = (
@@ -125,9 +132,7 @@ export class Login extends Component {
                             <div className='login-error__header'>
                                 Yo. Looks like you have too many failed login attempts!
                             </div>
-                            <div>
-                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                            </div>
+                            {headToJira}
                             <div className='login-error__footer'>
                                 And for the future, <b>remember your credentials dude!</b>
                             </div>
@@ -140,9 +145,7 @@ export class Login extends Component {
                                 You are truly impossible!
                                 You <u><b>STILL</b></u> have too many failed login attempts!!!!
                             </div>
-                            <div>
-                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                            </div>
+                            {headToJira}
                             <div className='login-error__footer'>
                                 And for the future, <b>remember your credentials dude!</b>
                             </div>
@@ -155,9 +158,7 @@ export class Login extends Component {
                                 Things have not changed...
                                 You <u>still</u> have too many failed login attempts!
                             </div>
-                            <div>
-                                Head over to <a href='/'>JIRA</a>, log out, and the log back in in order to fix this.
-                            </div>
+                            {headToJira}
                             <div className='login-error__footer'>
                                 And for the future, <b>remember your credentials dude!</b>
                             </div>
@@ -205,5 +206,3 @@ export class Login extends Component {
         );
     }
 }
-
-export default Login;

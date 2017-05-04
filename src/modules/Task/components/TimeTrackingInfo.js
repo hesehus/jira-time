@@ -155,9 +155,15 @@ export default class TimeTrackingInfo extends Component {
         const widthOriginalEstimate = (originalEstimateSeconds / largest) * 100;
         const widthTimeSpentAndRemaining = (timeSpentAndRemaining / largest) * 100;
 
-        let progress = (timeSpentSeconds / remainingEstimateSeconds) * 100;
+        let progress = (timeSpentSeconds / remainingEstimateSeconds);
+
         if (!isFinite(progress)) {
             progress = 0;
+        }
+        if (progress < 0) {
+            progress = 0;
+        } else if (progress > 100) {
+            progress = 100;
         }
 
         return (

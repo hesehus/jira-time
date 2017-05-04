@@ -43,6 +43,11 @@
         .compact-view & {
             width: 13px;
             height: 13px;
+
+            .loader {
+                position: relative;
+                top: -5px;
+            }
         }
 
         &--add-passive {
