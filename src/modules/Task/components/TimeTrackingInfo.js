@@ -123,16 +123,6 @@ export default class TimeTrackingInfo extends Component {
         }
     }
 
-    getUsedEstimatePercentage (originalEstimateSeconds, remainingEstimateSeconds) {
-        let usedEstimatePct = ((originalEstimateSeconds - remainingEstimateSeconds) / originalEstimateSeconds) * 100;
-        if (usedEstimatePct > 100) {
-            usedEstimatePct = 100;
-        } else if (usedEstimatePct < 0) {
-            usedEstimatePct = 0;
-        }
-        return Math.floor(usedEstimatePct);
-    }
-
     render () {
         const { task, somethingIsMoving } = this.props;
 
@@ -145,7 +135,7 @@ export default class TimeTrackingInfo extends Component {
             timeSpentSeconds
         } = task.issue.fields.timetracking;
 
-        if (!remainingEstimateSeconds || remainingEstimate === 'undefined' || !originalEstimateSeconds) {
+        if (typeof remainingEstimateSeconds === 'undefined' || remainingEstimate === 'undefined' || !originalEstimateSeconds) {
             return null;
         }
 

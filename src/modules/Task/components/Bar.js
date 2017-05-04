@@ -4,11 +4,11 @@ import styled from 'styled-components';
 const Wrapper = styled.div`
     background: rgba(0, 0, 0, .3);
     border-radius: 5px;
-    height: 6px;
+    height: 4px;
     display: flex;
 
     &:first-child {
-        margin-bottom: 5px;
+        margin-bottom: 4px;
     }
 `;
 

@@ -62,7 +62,9 @@ api.createDummyIssue = function (key) {
                 remainingEstimate: '2d 14h 51m',
                 remainingEstimateSeconds: 500,
                 originalEstimate: '3d',
-                originalEstimateSeconds: 600
+                originalEstimateSeconds: 600,
+                timeSpent: 'A while',
+                timeSpentSeconds: 500
             },
             status: {
                 name: 'Forespørgsel',
