@@ -155,7 +155,7 @@ export default class TimeTrackingInfo extends Component {
         const widthOriginalEstimate = (originalEstimateSeconds / largest) * 100;
         const widthTimeSpentAndRemaining = (timeSpentAndRemaining / largest) * 100;
 
-        let progress = (timeSpentSeconds / remainingEstimateSeconds);
+        let progress = (timeSpentSeconds / timeSpentAndRemaining) * 100;
 
         if (!isFinite(progress)) {
             progress = 0;
@@ -168,7 +168,7 @@ export default class TimeTrackingInfo extends Component {
 
         return (
             <Wrapper>
-                <Percentage>{`${Math.round(progress)}%`}</Percentage>
+                <Percentage>{`${parseInt(progress)}%`}</Percentage>
                 <Bars>
                     <Bar
                       width={widthOriginalEstimate}
