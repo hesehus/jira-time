@@ -78,7 +78,7 @@
         justify-content: space-between;
         align-items: center;
 
-        @media (max-width: $screen-sm) {
+        @media (max-width: $screen-md) {
             flex-wrap: wrap;
 
             .compact-view & {
@@ -95,7 +95,7 @@
             display: flex;
         }
 
-        @media (max-width: $screen-sm) {
+        @media (max-width: $screen-md) {
             flex: 1 1 auto;
             padding-right: 0;
         }
@@ -104,6 +104,7 @@
         display: flex;
         align-items: center;
         flex: 1 1 auto;
+
         @media (max-width: $screen-sm) {
             order: 4;
             flex: 0 0 100%;
@@ -117,14 +118,17 @@
         justify-content: center;
         flex-wrap: nowrap;
 
-        @media (max-width: $screen-sm) {
+        .compact-view & {
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: $screen-md) {
             flex: 1 1 auto;
             justify-content: space-between;
-            min-width: 50%;
+            width: 100%;
 
             .compact-view & {
-                min-width: 0;
-                flex-shrink: 0;
+                width: auto;
             }
         }
     }
@@ -143,7 +147,7 @@
             min-width: 0px;
         }
 
-        @media (max-width: $screen-sm) {
+        @media (max-width: $screen-md) {
             display: flex;
             justify-content: space-between;
         }
@@ -182,17 +186,7 @@
         text-transform: none;
 
         .compact-view & {
-            border: none;
-            font-size: .6rem;
-            margin-left: 5px;
-            padding: 0;
-
-            &::before {
-                content: '(';
-            }
-            &::after {
-                content: ')';
-            }
+            display: none;
         }
 
         @media (max-width: $screen-sm) {

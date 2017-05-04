@@ -7,24 +7,18 @@ import { updateRemainingEstimate, refreshJiraIssue, issueIsClosed } from 'shared
 const Wrapper = styled.div`
     margin-right: 10px;
     font-size: .75rem;
-    min-width: 150px;
-    max-width: 200px;
-    flex-grow: 1;
-    flex-shrink: 0;
+    width: 150px;
+    flex: 0 0 auto;
     cursor: default;
     display: flex;
     align-items: center;
 
     .compact-view & {
-        min-width: 0;
+        width: auto;
     }
 
-    @media (min-width: 544px) {
+    @media (min-width: 769px) {
         margin-left: 10px;
-    }
-
-    @media (max-width: 543px) {
-        min-width: 0px;
     }
 `;
 
