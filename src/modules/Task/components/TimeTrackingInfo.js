@@ -135,7 +135,9 @@ export default class TimeTrackingInfo extends Component {
             timeSpentSeconds
         } = task.issue.fields.timetracking;
 
-        if (typeof remainingEstimateSeconds === 'undefined' || remainingEstimate === 'undefined' || !originalEstimateSeconds) {
+        if (typeof remainingEstimateSeconds === 'undefined' ||
+            remainingEstimate === 'undefined' ||
+            !originalEstimateSeconds) {
             return null;
         }
 
