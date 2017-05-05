@@ -20,10 +20,10 @@ const Line = styled.div`
     max-width: 100%;
 `;
 
-export default function Bar ({ width, lineWidth = 100, title }) {
+export default function Bar ({ width, lineWidth = 100, title, titleLine }) {
     return (
-        <Wrapper style={{ width: `${width}%` }} title={title}>
-            <Line style={{ width: `${lineWidth}%` }} />
+        <Wrapper style={{ width: `${width}%` }} title={title} >
+            <Line style={{ width: `${lineWidth}%` }} title={titleLine} />
         </Wrapper>
     );
 }
@@ -32,5 +32,6 @@ Bar.propTypes = {
     width: PropTypes.number.isRequired,
     lineWidth: PropTypes.number,
     setBackground: PropTypes.bool,
-    title: PropTypes.string
+    title: PropTypes.string,
+    titleLine: PropTypes.string
 };
