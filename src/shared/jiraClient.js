@@ -75,7 +75,7 @@ function verifyLoginStatus () {
     })
   .then((response) => {
 
-    // Not authenticated. Log out
+      // Not authenticated. Log out
       if (response.status !== 200) {
           logout();
 
@@ -202,6 +202,8 @@ export function getIssue ({ key, url }) {
 
             if (response.status === 200) {
                 return resolve(response.json());
+            } else if (response.status === 500) {
+                verifyLoginStatus();
             }
 
             reject(response.status);
@@ -256,7 +258,8 @@ export function addWorklog ({ record }) {
         }
 
         // No permission to log here
-        case 403 : {
+        case 403 :
+        case 500 : {
             reject(response);
             verifyLoginStatus();
             break;
