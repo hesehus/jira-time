@@ -224,11 +224,12 @@ const ACTION_HANDLERS = {
         const records = state.records.map((record) => {
 
             if (record.cuid === action.cuid) {
-                return Object.assign({}, record, {
+                return {
+                    ...record,
                     startTime,
                     endTime,
                     elapsedTime: getElapsedTime({ startTime, endTime })
-                });
+                };
             }
 
             return record;

@@ -39,7 +39,7 @@ export default class HistoryRecordItem extends Component {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
-        const endTime = record.isSynced ? moment(record.endTime) : null;
+        const endTime = !record.active ? moment(record.endTime) : null;
 
         const vals = time.split(':');
 
