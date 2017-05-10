@@ -121,7 +121,7 @@ export default class Login extends Component {
             } else if (this.state.error === 'tooManyFailedLoginAttempts') {
                 const headToJira = (
                     <div>
-                        Head over to <a href={'https://' + config.serverPath}>JIRA</a>,
+                        Head over to <a href={config.serverPath}>JIRA</a>,
                         log out, and the log back in in order to fix this.
                     </div>
                 );
