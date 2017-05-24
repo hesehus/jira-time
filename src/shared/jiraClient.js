@@ -70,22 +70,27 @@ function callApi ({ path, method = 'get', body }) {
 * @returns void
 **/
 function verifyLoginStatus () {
+    const doLogout = () => {
+        logout();
+
+        store.dispatch(setLoggedIn({
+            isLoggedIn: false
+        }));
+    };
+
     return callApi({
         path: `auth/1/session`
     })
-  .then((response) => {
+    .then((response) => {
 
-      // Not authenticated. Log out
-      if (response.status !== 200) {
-          logout();
+        // Not authenticated. Log out
+        if (response.status !== 200) {
+            doLogout();
+        }
 
-          store.dispatch(setLoggedIn({
-              isLoggedIn: false
-          }));
-      }
-
-      return response;
-  });
+        return response;
+    })
+    .catch(doLogout);
 }
 
 export function updateUserInfo () {
