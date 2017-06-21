@@ -7,13 +7,12 @@ import Records from 'modules/Records';
 import RecordActionButtons from 'modules/RecordActionButtons';
 import DeleteIcon from 'assets/delete.svg';
 import TimeTrackingInfo from './TimeTrackingInfo';
-import { getJIRAIssueFromUrl } from 'shared/helpers';
 
 import './Task.scss';
 
 export default class Task extends Component {
 
-    static get propTypes() {
+    static get propTypes () {
         return {
             task: PropTypes.object.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
@@ -24,7 +23,7 @@ export default class Task extends Component {
         };
     }
 
-    constructor(props) {
+    constructor (props) {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
@@ -32,7 +31,7 @@ export default class Task extends Component {
         this.state = {};
     }
 
-    onRemoveClick() {
+    onRemoveClick () {
 
         const { records, removeTask, task } = this.props;
 
@@ -57,7 +56,7 @@ export default class Task extends Component {
         }
     }
 
-    render() {
+    render () {
 
         const {
             task,
@@ -74,10 +73,10 @@ export default class Task extends Component {
 
         const deleteButton = (
             <button tabIndex='-1'
-                type='button'
-                className='task-delete'
-                title='Remove task'
-                onClick={this.onRemoveClick}
+              type='button'
+              className='task-delete'
+              title='Remove task'
+              onClick={this.onRemoveClick}
             >
                 <img src={DeleteIcon} alt='Delete' className='task-delete-icon' />
             </button>
@@ -114,26 +113,22 @@ export default class Task extends Component {
                     <div className='task__left'>
                         <div className='task__key-and-status'>
                             <a className='task__link'
-                                href={config.serverPath + '/browse/' + task.issue.key}
-                                target='_blank'
-                                tabIndex='-1'
+                              href={config.serverPath + '/browse/' + task.issue.key}
+                              target='_blank'
+                              tabIndex='-1'
                             >
                                 {task.issue.key}
 
                             </a>
 
-                            {task.issue.fields.customfield_10006 ?
-                                <a className='task__link task__link--epic'
-                                    href={config.serverPath + '/browse/' + task.issue.fields.customfield_10006}
-                                    target='_blank'
-                                    tabIndex='-1'
+                            {task.issue.fields.customfield_10006
+                            ? <a className='task__link task__link--epic'
+                              href={config.serverPath + '/browse/' + task.issue.fields.customfield_10006}
+                              target='_blank'
+                              tabIndex='-1'
                                 >
-
                                     EPIC: {task.issue.fields.customfield_10006}
-
-                                </a>
-                                :
-                                ''
+                            </a> : ''
                             }
 
                             {status}
@@ -144,9 +139,9 @@ export default class Task extends Component {
                     </div>
                     <div className='task__right'>
                         <TimeTrackingInfo
-                            task={task}
-                            somethingIsMoving={somethingIsMoving}
-                            setIssueRemainingEstimate={setIssueRemainingEstimate}
+                          task={task}
+                          somethingIsMoving={somethingIsMoving}
+                          setIssueRemainingEstimate={setIssueRemainingEstimate}
                         />
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>

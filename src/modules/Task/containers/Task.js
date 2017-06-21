@@ -5,8 +5,7 @@ import {
   refreshIssue,
   setIssueRefreshing,
   setIssueRemainingEstimate,
-  getMovingTask,
-  getTask
+  getMovingTask
 } from 'store/reducers/tasks';
 
 import { getMovingRecord, getRecordsForTask, getRecordsWithNoIssue } from 'store/reducers/recorder';

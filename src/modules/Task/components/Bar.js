@@ -31,7 +31,6 @@ export default function Bar ({ width, lineWidth = 100, title, titleLine }) {
 Bar.propTypes = {
     width: PropTypes.number.isRequired,
     lineWidth: PropTypes.number,
-    setBackground: PropTypes.bool,
     title: PropTypes.string,
     titleLine: PropTypes.string
 };
