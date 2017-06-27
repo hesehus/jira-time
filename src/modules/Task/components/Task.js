@@ -105,6 +105,8 @@ export default class Task extends Component {
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
+        console.log(task);
+
         // Output the task
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
@@ -121,13 +123,13 @@ export default class Task extends Component {
 
                             </a>
 
-                            {task.issue.fields.customfield_10006
+                            {task.issue.epic
                             ? <a className='task__link task__link--epic'
-                              href={config.serverPath + '/browse/' + task.issue.fields.customfield_10006}
+                              href={config.serverPath + '/browse/' + task.issue.epic.key}
                               target='_blank'
                               tabIndex='-1'
                                 >
-                                    EPIC: {task.issue.fields.customfield_10006}
+                                    EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
                             </a> : ''
                             }
 

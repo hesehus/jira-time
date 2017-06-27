@@ -200,18 +200,88 @@ export function getIssue ({ key, url }) {
     }
 
     return new Promise((resolve, reject) => {
-        callApi({
+
+        const getIssue = callApi({
             path: `api/2/issue/${key}`
-        })
-        .then((response) => {
+        });
 
-            if (response.status === 200) {
-                return resolve(response.json());
-            } else if (response.status === 500) {
-                verifyLoginStatus();
-            }
+        const getMeta = callApi({
+            path: `api/2/issue/${key}/editmeta`
+        });
 
-            reject(response.status);
+        Promise.all([
+            getIssue,
+            getMeta
+        ])
+        .then(([
+            getIssueResponse,
+            getMetaResponse
+        ]) => {
+
+            getMetaResponse.json().then(json => {
+
+                let epicId = null;
+
+                for (let field in json.fields) {
+                    if (json.fields[field].name === 'Epic Link') {
+                        epicId = field;
+                        break;
+                    }
+                }
+
+                callApi({
+                    path: `api/2/issue/${key}?fields=${epicId}`
+                })
+                .then(response => {
+
+                    response.json().then(json => {
+
+                        const epicKey = json.fields[epicId];
+
+                        if (epicKey) {
+
+                            callApi({
+                                path: `api/2/issue/${epicKey}`
+                            })
+                            .then(epicResponse => {
+
+                                Promise.all([
+                                    getIssueResponse.json(),
+                                    epicResponse.json()
+                                ])
+                                .then(([issueJson, epicJson]) => {
+                                    issueJson['epic'] = epicJson
+
+                                    if (getIssueResponse.status === 200) {
+                                        return resolve(issueJson);
+                                    } else if (getIssueResponse.status === 500) {
+                                        verifyLoginStatus();
+                                    }
+
+                                    reject(getIssueResponse.status);
+                                })
+
+                            });
+
+                        } else {
+
+                            if (getIssueResponse.status === 200) {
+                                return resolve(getIssueResponse.json());
+                            } else if (getIssueResponse.status === 500) {
+                                verifyLoginStatus();
+                            }
+
+                            reject(getIssueResponse.status);
+
+                        }
+
+                    });
+
+                });
+
+
+            });
+
         })
         .catch(reject);
     })

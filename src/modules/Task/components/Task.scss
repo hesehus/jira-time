@@ -15,7 +15,7 @@
     .compact-view & {
         padding: 5px;
     }
-    
+
     .tasks-draggable & {
         // Hint to the browser that we will be animate using transforms
         will-change: height, transform;
@@ -132,7 +132,7 @@
             }
         }
     }
-    
+
     &__key-and-status {
         flex-shrink: 0;
         min-width: 130px;
@@ -176,9 +176,12 @@
         }
 
         &--epic{
-            font-size: .8rem;
+            font-size: .7rem;
             margin-left: .6rem;
-            align-self: flex-end;
+            flex: 0 1 auto;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
     &__status {
