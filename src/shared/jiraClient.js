@@ -279,7 +279,6 @@ export function getIssue ({ key, url }) {
 
                 });
 
-
             });
 
         })
