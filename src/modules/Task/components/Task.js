@@ -129,7 +129,7 @@ export default class Task extends Component {
                               target='_blank'
                               tabIndex='-1'
                                 >
-                                    EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
+                                EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
                             </a> : ''
                             }
 
