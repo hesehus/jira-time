@@ -439,10 +439,9 @@ export function getWorkLogs ({ startDate, endDate, username }) {
     endDate = moment(endDate);
 
     return new Promise((resolve, reject) => {
-        let jql = `
-        worklogDate >= "${startDate.format('YYYY-MM-DD')}" and
-        worklogDate <= "${endDate.format('YYYY-MM-DD')}" and
-        worklogAuthor="${username}"`;
+        let jql = `worklogDate >= "${startDate.format('YYYY-MM-DD')}"` +
+            ` and worklogDate <= "${endDate.format('YYYY-MM-DD')}"` +
+            ` and worklogAuthor="${username}"`;
 
         callApi({
             path: `api/2/search?jql=${jql}`
