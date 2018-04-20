@@ -1,14 +1,13 @@
 import generateCuid from 'cuid';
 import moment from 'moment';
-
-import { getElapsedTime } from 'store/reducers/recorder';
+import { getElapsedTime, getRoundedTime } from 'store/reducers/recorder';
 
 export default function RecordModel ({
   cuid = generateCuid(),
   task,
   taskIssueKey,
-  createdTime = Date.now(),
-  startTime = Date.now(),
+  createdTime = getRoundedTime(Date.now()),
+  startTime = getRoundedTime(Date.now()),
   endTime,
   elapsedTime,
   comment = '',
