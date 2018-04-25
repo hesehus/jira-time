@@ -236,7 +236,7 @@ export function getIssue ({ key, url }) {
 
                     response.json().then(json => {
 
-                        const epicKey = json.fields[epicId];
+                        const epicKey = json.fields && json.fields[epicId];
 
                         if (epicKey) {
 
