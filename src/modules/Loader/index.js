@@ -3,20 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import './index.scss';
 
 export default class Loader extends Component {
-
     static propTypes = {
         size: PropTypes.string,
         height: PropTypes.string,
         width: PropTypes.string
-    }
+    };
 
-    render () {
-
-        const {
-            size = 'medium',
-            height,
-            width
-        } = this.props;
+    render() {
+        const { size = 'medium', height, width } = this.props;
 
         const baseStyles = {
             tiny: {
@@ -45,6 +39,6 @@ export default class Loader extends Component {
             style.width = width;
         }
 
-        return <span className='loader' style={style} />
+        return <span className="loader" style={style} />;
     }
 }

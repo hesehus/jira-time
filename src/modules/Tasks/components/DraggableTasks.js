@@ -10,16 +10,15 @@ import { getClosestTaskFromPosition } from 'modules/DragAndDropHandler';
 const springConfig = { stiffness: 300, damping: 50 };
 
 class DraggablaTasks extends Component {
-
     static propTypes = {
         tasks: PropTypes.array.isRequired,
         unfilteredTasks: PropTypes.array.isRequired,
         setManualSortOrder: PropTypes.func.isRequired,
         setTaskMoving: PropTypes.func.isRequired,
         parentScrollTop: PropTypes.number.isRequired
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onPanStart = this.onPanStart.bind(this);
@@ -40,14 +39,14 @@ class DraggablaTasks extends Component {
         events.on('tasksPositionsCalculated', this.onTasksPositionsCalculated);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         events.on('panstart:task', this.onPanStart);
         events.on('panmove:task', this.onPanMove);
         events.on('panend:task', this.onPanEnd);
         events.on('pancancel:task', this.onPanCancel);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         events.off('tasksPositionsCalculated', this.onTasksPositionsCalculated);
         events.off('panstart:task', this.onPanStart);
         events.off('panmove:task', this.onPanMove);
@@ -55,13 +54,13 @@ class DraggablaTasks extends Component {
         events.off('pancancel:task', this.onPanCancel);
     }
 
-    onTasksPositionsCalculated ({ tasksPositions }) {
+    onTasksPositionsCalculated({ tasksPositions }) {
         this.setState({
             tasksPositions
         });
     }
 
-    onPanStart ({ element }) {
+    onPanStart({ element }) {
         if (element) {
             const { tasksPositions } = this.state;
             const { tasks, parentScrollTop, setTaskMoving } = this.props;
@@ -84,7 +83,7 @@ class DraggablaTasks extends Component {
         }
     }
 
-    onPanMove ({ event, element }) {
+    onPanMove({ event, element }) {
         if (element) {
             const { tasks, unfilteredTasks, setManualSortOrder, parentScrollTop } = this.props;
             const { tasksPositions, initialYPosition, parentScrollTopAtPanStart } = this.state;
@@ -96,7 +95,7 @@ class DraggablaTasks extends Component {
                 const y = initialYPosition + event.deltaY + (parentScrollTop - parentScrollTopAtPanStart);
 
                 const closestTask = getClosestTaskFromPosition({
-                    y: (y + (clientRectEl.clientRect.height / 2))
+                    y: y + clientRectEl.clientRect.height / 2
                 });
                 const currentRow = closestTask.index;
 
@@ -109,7 +108,7 @@ class DraggablaTasks extends Component {
                         newTasks[currentArrayPosition] = switchWith;
 
                         // Get the unfiltered tasks (excluding the current filtered tasks)
-                        const unfilteredTasksToAdd = unfilteredTasks.filter((task) => {
+                        const unfilteredTasksToAdd = unfilteredTasks.filter(task => {
                             return !newTasks.find(t => task.cuid === t.cuid);
                         });
 
@@ -126,7 +125,7 @@ class DraggablaTasks extends Component {
         }
     }
 
-    onPanEnd () {
+    onPanEnd() {
         this.props.setTaskMoving({
             cuid: this.state.isPressed,
             moving: false
@@ -139,7 +138,7 @@ class DraggablaTasks extends Component {
         });
     }
 
-    onPanCancel () {
+    onPanCancel() {
         this.props.setTaskMoving({
             cuid: this.state.isPressed,
             moving: false
@@ -157,7 +156,7 @@ class DraggablaTasks extends Component {
         });
     }
 
-    render () {
+    render() {
         const { y, isPressed, tasksPositions } = this.state;
         const { tasks } = this.props;
 
@@ -166,9 +165,8 @@ class DraggablaTasks extends Component {
         }
 
         return (
-            <div className='tasks tasks--draggable' ref={el => this.refOuter = el}>
+            <div className="tasks tasks--draggable" ref={el => (this.refOuter = el)}>
                 {tasks.map((task, i) => {
-
                     const rect = tasksPositions.find(c => c.cuid === task.cuid);
                     if (!rect) {
                         return null;
@@ -191,20 +189,20 @@ class DraggablaTasks extends Component {
 
                     return (
                         <Motion style={style} key={task.cuid}>
-                            {({ scale, shadow, y }) =>
+                            {({ scale, shadow, y }) => (
                                 <div
-                                  className='tasks--draggable_item'
-                                  style={{
-                                      height: `${rect.clientRect.height}px`,
-                                      boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
-                                      transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                                      WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
-                                      zIndex: task.cuid === isPressed ? 99 : i
-                                  }}
+                                    className="tasks--draggable_item"
+                                    style={{
+                                        height: `${rect.clientRect.height}px`,
+                                        boxShadow: `rgba(0, 0, 0, 0.2) 0px ${shadow}px ${2 * shadow}px 0px`,
+                                        transform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+                                        WebkitTransform: `translate3d(0, ${y}px, 0) scale(${scale})`,
+                                        zIndex: task.cuid === isPressed ? 99 : i
+                                    }}
                                 >
                                     <Task task={task} />
                                 </div>
-                            }
+                            )}
                         </Motion>
                     );
                 })}
@@ -213,10 +211,10 @@ class DraggablaTasks extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         tasksPositions: state.tasks.tasksPositions
-    }
+    };
 };
 
 export default connect(mapStateToProps)(DraggablaTasks);

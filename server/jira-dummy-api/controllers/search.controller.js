@@ -4,8 +4,8 @@ const IssueController = require('./issue.controller');
 
 const api = {};
 
-api.search = function (req, res) {
-    helpers.delay(function () {
+api.search = function(req, res) {
+    helpers.delay(function() {
         res.json({
             expand: 'schema,names',
             issues: [
@@ -19,6 +19,6 @@ api.search = function (req, res) {
             total: 5
         });
     });
-}
+};
 
 module.exports = api;

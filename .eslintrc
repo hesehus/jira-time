@@ -1,37 +1,21 @@
 {
-  "parser": "babel-eslint",
-  "extends": [
-    "standard",
-    "standard-react"
-  ],
-  "plugins": [
-    "babel",
-    "react",
-    "promise"
-  ],
-  "env": {
-    "browser" : true
-  },
-  "globals": {
-    "__DEV__"      : false,
-    "__TEST__"     : false,
-    "__PROD__"     : false,
-    "__COVERAGE__" : false,
-    "store"        : true
-  },
-  "rules": {
-    "key-spacing"          : 0,
-    "jsx-quotes"           : [2, "prefer-single"],
-    "max-len"              : [2, 120, 2],
-    "object-curly-spacing" : [2, "always"],
-    "semi"                 : 0,
-    "padded-blocks"        : 0,
-    "trailing-spaces"      : [0, { "skipBlankLines": true }],
-    "indent"               : ["error", 4],
-    "react/jsx-indent"     : ["error", 4],
-    "no-extra-boolean-cast": "off",
-    "no-tabs"              : [1],
-    "no-mixed-spaces-and-tabs": [1],
-    "no-return-assign"     : "off"
-  }
+    "env": {
+        "browser": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "project": "./tsconfig.json",
+        "tsconfigRootDir": "."
+    },
+    "extends": ["airbnb", "prettier", "prettier/react"],
+    "plugins": ["react-hooks", "prettier"],
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
+        "react-hooks/rules-of-hooks": "warn",
+        "react-hooks/exhaustive-deps": "warn",
+        "prettier/prettier": "warn",
+        "radix": "off",
+        "no-console": "off",
+        "no-underscore-dangle": "off"
+    }
 }

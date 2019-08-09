@@ -16,13 +16,13 @@ export const SET_SYNC_ID = 'SET_SYNC_ID';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setAuthenticationHash ({ username, password }) {
+export function setAuthenticationHash({ username, password }) {
     return {
         type: SET_AUTHENTICATION_HASH,
         hash: window.btoa(unescape(encodeURIComponent(username + ':' + password)))
     };
 }
-export function setSyncId ({ syncId }) {
+export function setSyncId({ syncId }) {
     return {
         type: SET_SYNC_ID,
         syncId
@@ -33,22 +33,22 @@ export function setSyncId ({ syncId }) {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [SET_AUTHENTICATION_HASH] : (state, action) => {
+    [SET_AUTHENTICATION_HASH]: (state, action) => {
         return {
             api: state.api,
             authenticationHash: action.hash
-        }
+        };
     },
 
-    [SET_SYNC_ID] : (state, { syncId }) => {
+    [SET_SYNC_ID]: (state, { syncId }) => {
         return {
             ...state,
             syncId
-        }
+        };
     },
 
     // Listen for logout
-    [SET_LOGGED_IN] : (state, action) => {
+    [SET_LOGGED_IN]: (state, action) => {
         if (action.isLoggedIn) {
             return state;
         }
@@ -63,20 +63,21 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function appReducer (state = initialState, action) {
-
+export default function appReducer(state = initialState, action) {
     // Update the last updated time if a useful action is executed
-    if (![
-        '@@INIT',
-        'persist/REHYDRATE',
-        'SERVER_STATE_PUSH',
-        'UPDATE_RECORD_ELAPSED',
-        'LOCATION_CHANGE',
-        'SET_USER_INFO',
-        'SET_LOGGED_IN',
-        'ATTEMPT_LOGIN'
-    ].includes(action.type) && !action.type.includes('@@redux')) {
-
+    if (
+        ![
+            '@@INIT',
+            'persist/REHYDRATE',
+            'SERVER_STATE_PUSH',
+            'UPDATE_RECORD_ELAPSED',
+            'LOCATION_CHANGE',
+            'SET_USER_INFO',
+            'SET_LOGGED_IN',
+            'ATTEMPT_LOGIN'
+        ].includes(action.type) &&
+        !action.type.includes('@@redux')
+    ) {
         state = {
             ...state,
             updateTime: Date.now()
@@ -85,7 +86,6 @@ export default function appReducer (state = initialState, action) {
 
     // Reset the update time since it is not relevant when rehydrating
     if (action.type === 'persist/REHYDRATE') {
-
         if (!action.payload.app) {
             action.payload.app = {};
         }

@@ -4,7 +4,7 @@ import TasksHeader from '../components/TasksHeader';
 
 import { getTasksSortOrder, setTasksSortOrder, setTasksSearch } from 'store/reducers/tasks';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         tasksSortOrder: getTasksSortOrder(state),
         tasksSearch: state.tasks.search
@@ -16,4 +16,7 @@ const mapDispatchToProps = {
     setTasksSearch
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TasksHeader);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TasksHeader);

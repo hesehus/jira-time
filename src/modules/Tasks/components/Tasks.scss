@@ -1,81 +1,80 @@
 .tasks {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-
-  &-list-wrap {
-    position: relative;
-    overflow-y: scroll;
-    overflow-x: hidden;
     flex-grow: 1;
-    padding: 0 15px 20px 20px;
-    margin-top: 15px;
-
-    .compact-view & {
-      margin-top: 0;
-      padding: 0 5px 10px;
-    }
-
-    &--center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-  }
-
-  &-outer {
-    flex-grow: 1;
-    min-width: 0;
     display: flex;
     flex-direction: column;
-    margin-top: 15px;
-  }
 
-  &-outer--loading {
-    align-items: center;
-    justify-content: center;
-  }
+    &-list-wrap {
+        position: relative;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        flex-grow: 1;
+        padding: 0 15px 20px 20px;
+        margin-top: 15px;
 
-  &__item {
-    padding: 5px;
-    border-bottom: 1px solid #ccc;
-  }
+        .compact-view & {
+            margin-top: 0;
+            padding: 0 5px 10px;
+        }
 
-  &__lazy-dog {
-    max-width: 100%;
-    height: 150px;
-    margin-bottom: 30px;
-    border: 10px solid rgba(0, 0, 0, .2);
-    border-radius: 50%;
-  }
-
-  &--real {
-    visibility: hidden;
-
-    .disable-animations & {
-      visibility: visible;
+        &--center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
     }
-  }
 
-  &--draggable {
-    position: absolute;
-    top: 0;
-    left: 20px;
-    right: 15px;
-    height: calc(100% - 20px);
-  }
-  &--draggable_item {
-    position: absolute;
-    min-height: 10px;
-    width: 100%;
-    overflow: visible;
-    pointer-events: auto;
-    transform-origin: 50% 50% 0px;
-  }
+    &-outer {
+        flex-grow: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        margin-top: 15px;
+    }
 
+    &-outer--loading {
+        align-items: center;
+        justify-content: center;
+    }
 
-  &-add-instructions {
-    margin-top: 15px;
-  }
+    &__item {
+        padding: 5px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    &__lazy-dog {
+        max-width: 100%;
+        height: 150px;
+        margin-bottom: 30px;
+        border: 10px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+    }
+
+    &--real {
+        visibility: hidden;
+
+        .disable-animations & {
+            visibility: visible;
+        }
+    }
+
+    &--draggable {
+        position: absolute;
+        top: 0;
+        left: 20px;
+        right: 15px;
+        height: calc(100% - 20px);
+    }
+    &--draggable_item {
+        position: absolute;
+        min-height: 10px;
+        width: 100%;
+        overflow: visible;
+        pointer-events: auto;
+        transform-origin: 50% 50% 0px;
+    }
+
+    &-add-instructions {
+        margin-top: 15px;
+    }
 }

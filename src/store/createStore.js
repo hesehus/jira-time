@@ -1,5 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux';
-import { persistStore, autoRehydrate } from 'redux-persist'
+import { persistStore, autoRehydrate } from 'redux-persist';
 import thunk from 'redux-thunk';
 import { hashHistory } from 'react-router';
 import makeRootReducer from './reducers.js';
@@ -26,20 +26,24 @@ export default () => {
     // Store Instantiation and HMR Setup
     // ======================================================
     const store = createStore(
-      makeRootReducer(),
-      undefined,
-      compose(
-        autoRehydrate(),
-        applyMiddleware(...middleware),
-        ...enhancers
-      )
+        makeRootReducer(),
+        undefined,
+        compose(
+            autoRehydrate(),
+            applyMiddleware(...middleware),
+            ...enhancers
+        )
     );
 
-    persistStore(store, {
-        blacklist: []
-    }, appReady);
+    persistStore(
+        store,
+        {
+            blacklist: []
+        },
+        appReady
+    );
 
-    function appReady () {
+    function appReady() {
         document.body.style.opacity = 1;
         document.body.style.transform = 'initial';
         document.body.style.webkitTransform = 'initial';
@@ -58,4 +62,4 @@ export default () => {
     }
 
     return store;
-}
+};

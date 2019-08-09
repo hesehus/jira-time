@@ -6,36 +6,34 @@ import RecordActionButtons from 'modules/RecordActionButtons';
 import './TasksInLimbo.scss';
 
 export default class TasksInLimbo extends Component {
-
     static propTypes = {
         movingRecord: PropTypes.object,
         recordsWithNoIssue: PropTypes.array.isRequired
-    }
+    };
 
-    render () {
-
+    render() {
         const { movingRecord, recordsWithNoIssue } = this.props;
 
         let textInLimbo;
         switch (recordsWithNoIssue.length) {
-        case 0 : {
-            textInLimbo = 'No work logs in limbo!';
-            break;
-        }
-        case 1 : {
-            textInLimbo = 'Just one work log in limbo';
-            break;
-        }
-        case 2 :
-        case 3 :
-        case 4 : {
-            textInLimbo = `${recordsWithNoIssue.length} work logs in limbo`;
-            break;
-        }
-        default : {
-            textInLimbo = `Oh dear. You have ${recordsWithNoIssue.length} work logs in limbo`;
-            break;
-        }
+            case 0: {
+                textInLimbo = 'No work logs in limbo!';
+                break;
+            }
+            case 1: {
+                textInLimbo = 'Just one work log in limbo';
+                break;
+            }
+            case 2:
+            case 3:
+            case 4: {
+                textInLimbo = `${recordsWithNoIssue.length} work logs in limbo`;
+                break;
+            }
+            default: {
+                textInLimbo = `Oh dear. You have ${recordsWithNoIssue.length} work logs in limbo`;
+                break;
+            }
         }
 
         let className = 'task task--limbo';
@@ -47,7 +45,7 @@ export default class TasksInLimbo extends Component {
         return (
             <div>
                 <div className={className}>
-                    <div className='task--limbo-header'>
+                    <div className="task--limbo-header">
                         {textInLimbo}
                         <RecordActionButtons />
                     </div>

@@ -11,16 +11,15 @@ import Loader from 'modules/Loader';
 import './Summary.scss';
 
 export default class Summary extends Component {
-
-    static get propTypes () {
+    static get propTypes() {
         return {
             profile: PropTypes.object.isRequired,
             notSyncedRecords: PropTypes.array.isRequired,
             activeRecord: PropTypes.object
-        }
+        };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -32,22 +31,27 @@ export default class Summary extends Component {
         this.onNotSyncedSynced = this.onNotSyncedSynced.bind(this);
     }
 
-    componentDidMount () {
-
-        const startDate = moment().second(0).minute(0).hour(0);
-        const endDate = moment().second(0).minute(0).hour(0).add(1, 'days');
+    componentDidMount() {
+        const startDate = moment()
+            .second(0)
+            .minute(0)
+            .hour(0);
+        const endDate = moment()
+            .second(0)
+            .minute(0)
+            .hour(0)
+            .add(1, 'days');
 
         getWorkLogs({
             startDate,
             endDate,
             username: this.props.profile.username
         })
-        .then(records => this.setState({ loading: false, records }))
-        .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
+            .then(records => this.setState({ loading: false, records }))
+            .catch(() => this.setState({ loading: false, error: 'Could not get worklogs' }));
     }
 
-    onSyncedChange (recordInfo, recordIsDirty) {
-
+    onSyncedChange(recordInfo, recordIsDirty) {
         const { records } = this.state;
 
         // Get the updated item
@@ -62,7 +66,7 @@ export default class Summary extends Component {
         });
     }
 
-    onSyncedSynced (recordInfo) {
+    onSyncedSynced(recordInfo) {
         const { records } = this.state;
 
         // Get the updated item
@@ -76,11 +80,10 @@ export default class Summary extends Component {
     }
 
     /**
-    * Since not synced records will dissapear from the redux state,
-    * we need to adde them manually here at some point
-    **/
-    onNotSyncedSynced ({ record, worklog }) {
-
+     * Since not synced records will dissapear from the redux state,
+     * we need to adde them manually here at some point
+     **/
+    onNotSyncedSynced({ record, worklog }) {
         // Since the not synced record will disappear from the redux state, we need to add it manually here
         const newRecord = {
             ...record,
@@ -94,25 +97,20 @@ export default class Summary extends Component {
         });
     }
 
-    render () {
-
+    render() {
         const { loading, records } = this.state;
         let { notSyncedRecords, activeRecord } = this.props;
 
         if (!records || loading) {
             return (
-                <div className='summary summary--loading'>
+                <div className="summary summary--loading">
                     <Loader />
                 </div>
             );
         }
 
         if (records && records.length === 0 && notSyncedRecords.length === 0) {
-            return (
-                <div className='summary summary--no-found'>
-                    No worklogs found today
-                </div>
-            );
+            return <div className="summary summary--no-found">No worklogs found today</div>;
         }
 
         // Filter out active record
@@ -127,7 +125,7 @@ export default class Summary extends Component {
         }
 
         // Momentify
-        outputRecords.forEach((r) => {
+        outputRecords.forEach(r => {
             r.startTime = moment(r.startTime);
             r.endTime = moment(r.endTime || Date.now());
         });
@@ -137,7 +135,7 @@ export default class Summary extends Component {
 
         // Calculate duration
         let duration = moment.duration();
-        outputRecords.forEach((r) => {
+        outputRecords.forEach(r => {
             duration.add(r.endTime.unix() - r.startTime.unix(), 'seconds');
         });
 
@@ -146,7 +144,6 @@ export default class Summary extends Component {
         outputRecords.forEach((record, index) => {
             const prev = outputRecords[index - 1];
             if (prev) {
-
                 // Consider everything over 1m as a space
                 const duration = record.startTime.unix() - prev.endTime.unix();
                 if (duration > 59) {
@@ -158,25 +155,25 @@ export default class Summary extends Component {
                 }
             }
 
-            outputItems.push((
+            outputItems.push(
                 <HistoryRecordItem
-                  key={record.cuid}
-                  record={record}
-                  onSyncedChange={this.onSyncedChange}
-                  onSyncedSynced={this.onSyncedSynced}
-                  onNotSyncedSynced={this.onNotSyncedSynced}
+                    key={record.cuid}
+                    record={record}
+                    onSyncedChange={this.onSyncedChange}
+                    onSyncedSynced={this.onSyncedSynced}
+                    onNotSyncedSynced={this.onNotSyncedSynced}
                 />
-            ));
+            );
         });
 
         return (
-            <div className='summary'>
-                <table className='summary-table'>
-                    <tbody>
-                        {outputItems}
-                    </tbody>
+            <div className="summary">
+                <table className="summary-table">
+                    <tbody>{outputItems}</tbody>
                 </table>
-                <div className='summary-total'>Total: {duration.hours()}h {duration.minutes()}m</div>
+                <div className="summary-total">
+                    Total: {duration.hours()}h {duration.minutes()}m
+                </div>
             </div>
         );
     }

@@ -28,71 +28,70 @@ export const SET_SEARCH = 'SET_SEARCH';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function addTask ({ issue }) {
+export function addTask({ issue }) {
     return {
         type: ADD_TASK,
         issue
-    }
-};
-export function removeTask ({ cuid }) {
+    };
+}
+export function removeTask({ cuid }) {
     return {
         type: REMOVE_TASK,
         cuid
-    }
-};
-export function refreshIssue ({ cuid, issue }) {
+    };
+}
+export function refreshIssue({ cuid, issue }) {
     return {
         type: REFRESH_ISSUE,
         cuid,
         issue
-    }
-};
-export function setIssueRefreshing ({ cuid, refreshing }) {
+    };
+}
+export function setIssueRefreshing({ cuid, refreshing }) {
     return {
         type: SET_ISSUE_REFRESHING,
         cuid,
         refreshing
-    }
-};
-export function setIssueRemainingEstimate ({ cuid, remainingEstimate }) {
+    };
+}
+export function setIssueRemainingEstimate({ cuid, remainingEstimate }) {
     return {
         type: SET_ISSUE_REMAINING_ESTIMATE,
         cuid,
         remainingEstimate
-    }
-};
-export function setManualSortOrder ({ tasks }) {
+    };
+}
+export function setManualSortOrder({ tasks }) {
     return {
         type: SET_MANUAL_SORT_ORDER,
         tasks
-    }
-};
-export function setTaskMoving ({ cuid, moving }) {
+    };
+}
+export function setTaskMoving({ cuid, moving }) {
     return {
         type: SET_TASK_MOVING,
         cuid,
         moving
-    }
-};
-export function setTasksSortOrder ({ sortOrder }) {
+    };
+}
+export function setTasksSortOrder({ sortOrder }) {
     return {
         type: SET_TASKS_SORT_ORDER,
         sortOrder
-    }
-};
-export function setTasksSearch ({ search }) {
+    };
+}
+export function setTasksSearch({ search }) {
     return {
         type: SET_SEARCH,
         search
-    }
-};
+    };
+}
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [ADD_TASK] : (state, action) => {
-
+    [ADD_TASK]: (state, action) => {
         const { issue } = action;
 
         // Prevent adding tasks with issue keys that we have already
@@ -103,10 +102,9 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             tasks: [...state.tasks, TaskModel({ issue })]
-        }
+        };
     },
-    [REMOVE_TASK] : (state, action) => {
-
+    [REMOVE_TASK]: (state, action) => {
         let taskIndex = state.tasks.findIndex(task => task.cuid === action.cuid);
 
         return {
@@ -114,14 +112,14 @@ const ACTION_HANDLERS = {
             tasks: [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)]
         };
     },
-    [SET_MANUAL_SORT_ORDER] : (state, { tasks }) => {
+    [SET_MANUAL_SORT_ORDER]: (state, { tasks }) => {
         return {
             ...state,
             tasks,
             sortOrder: initialState.sortOrder
         };
     },
-    [REFRESH_ISSUE] : (state, action) => {
+    [REFRESH_ISSUE]: (state, action) => {
         let tasks = state.tasks.map(task => {
             if (task.cuid === action.cuid) {
                 task = DeepAssign({}, task);
@@ -136,11 +134,9 @@ const ACTION_HANDLERS = {
             tasks
         };
     },
-    [SET_ISSUE_REFRESHING] : (state, action) => {
-
+    [SET_ISSUE_REFRESHING]: (state, action) => {
         let tasks = state.tasks.map(task => {
             if (task.cuid === action.cuid) {
-
                 const newTask = DeepAssign({}, task, {
                     issueRefreshing: action.refreshing
                 });
@@ -155,8 +151,7 @@ const ACTION_HANDLERS = {
             tasks
         };
     },
-    [SET_ISSUE_REMAINING_ESTIMATE] : (state, action) => {
-
+    [SET_ISSUE_REMAINING_ESTIMATE]: (state, action) => {
         let tasks = state.tasks.map(task => {
             if (task.cuid === action.cuid) {
                 const newTask = DeepAssign({}, task);
@@ -175,8 +170,7 @@ const ACTION_HANDLERS = {
             tasks
         };
     },
-    [SET_TASK_MOVING] : (state, { cuid, moving }) => {
-
+    [SET_TASK_MOVING]: (state, { cuid, moving }) => {
         let tasks = state.tasks.map(task => {
             if (task.cuid === cuid) {
                 const newTask = DeepAssign({}, task);
@@ -212,20 +206,24 @@ const ACTION_HANDLERS = {
             search
         };
     },
-    'SERVER_STATE_PUSH' : (state, { tasks }) => tasks
+    SERVER_STATE_PUSH: (state, { tasks }) => tasks
 };
 
-function naturalCompare (a, b) {
+function naturalCompare(a, b) {
     let ax = [];
     let bx = [];
 
-    a.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { ax.push([$1 || Infinity, $2 || '']) });
-    b.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => { bx.push([$1 || Infinity, $2 || '']) });
+    a.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+        ax.push([$1 || Infinity, $2 || '']);
+    });
+    b.issue.key.replace(/(\d+)|(\D+)/g, (_, $1, $2) => {
+        bx.push([$1 || Infinity, $2 || '']);
+    });
 
     while (ax.length && bx.length) {
         let an = ax.shift();
         let bn = bx.shift();
-        let nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
+        let nn = an[0] - bn[0] || an[1].localeCompare(bn[1]);
         if (nn) return nn;
     }
     return ax.length - bx.length;
@@ -239,16 +237,17 @@ export const getMovingTask = ({ state }) => state.tasks.tasks.find(task => task.
 export const getTasksSortOrder = state => state.tasks.sortOrder;
 export const getTasksFilteredBySearch = ({ state }) => {
     const search = state.tasks.search.toLowerCase();
-    return state.tasks.tasks.filter((task) => {
-        return task.issue.key.toLowerCase().includes(search) ||
-               task.issue.fields.summary.toLowerCase().includes(search);
+    return state.tasks.tasks.filter(task => {
+        return (
+            task.issue.key.toLowerCase().includes(search) || task.issue.fields.summary.toLowerCase().includes(search)
+        );
     });
 };
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function tasksReducer (state = initialState, action) {
+export default function tasksReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;

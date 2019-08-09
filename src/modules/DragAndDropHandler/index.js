@@ -3,12 +3,7 @@ import keycode from 'keycode';
 import domClosest from 'dom-closest';
 
 import events from 'shared/events';
-import {
-    setRecordTask,
-    setRecordMoving,
-    getMovingRecord,
-    setRecordMoveTarget
-} from 'store/reducers/recorder';
+import { setRecordTask, setRecordMoving, getMovingRecord, setRecordMoveTarget } from 'store/reducers/recorder';
 
 import { getTasksFilteredBySearch } from 'store/reducers/tasks';
 
@@ -20,9 +15,8 @@ let targetTaskCuid;
 let targetTaskIssueKey;
 let tasksFilteredBySearch = [];
 
-export function init () {
+export function init() {
     if (!eventsBinded) {
-
         eventsBinded = true;
 
         const mc = new Hammer.Manager(document, {
@@ -31,10 +25,12 @@ export function init () {
             }
         });
 
-        mc.add(new Hammer.Pan({
-            direction: Hammer.DIRECTION_VERTICAL,
-            threshold: 5
-        }));
+        mc.add(
+            new Hammer.Pan({
+                direction: Hammer.DIRECTION_VERTICAL,
+                threshold: 5
+            })
+        );
 
         mc.on('panstart', onPanStart);
         mc.on('panmove', onPanMove);
@@ -45,7 +41,7 @@ export function init () {
 }
 
 // Determine the closest task when a mouseY value is given
-export function getClosestTaskFromPosition ({ x, y }) {
+export function getClosestTaskFromPosition({ x, y }) {
     let index = -1;
 
     const taskElement = domClosest(document.elementFromPoint(x, y), '.task');
@@ -62,15 +58,14 @@ export function getClosestTaskFromPosition ({ x, y }) {
     };
 }
 
-function onKeyPress (e) {
+function onKeyPress(e) {
     if (keycode(e) === 'esc') {
         cancelPan();
     }
 }
 
-function onPanStart (event) {
+function onPanStart(event) {
     if (event.target.type !== 'textarea' && event.target.type !== 'input' && event.target.contentEditable !== 'true') {
-
         tasksFilteredBySearch = getTasksFilteredBySearch({ state: store.getState() });
 
         recordElement = domClosest(event.target, '.record');
@@ -78,10 +73,12 @@ function onPanStart (event) {
         if (recordElement) {
             doSharedMovingPreparations();
 
-            store.dispatch(setRecordMoving({
-                cuid: recordElement.dataset.cuid,
-                moving: true
-            }));
+            store.dispatch(
+                setRecordMoving({
+                    cuid: recordElement.dataset.cuid,
+                    moving: true
+                })
+            );
 
             const rect = recordElement.getBoundingClientRect();
             recordElementHeight = rect.height;
@@ -104,14 +101,14 @@ function onPanStart (event) {
         }
     }
 
-    function doSharedMovingPreparations () {
+    function doSharedMovingPreparations() {
         event.preventDefault();
         clearSelection();
         document.body.classList.add('moving');
     }
 }
 
-function onPanMove (event) {
+function onPanMove(event) {
     if (recordElement) {
         const record = getMovingRecord({ state: store.getState() });
         if (record) {
@@ -124,17 +121,19 @@ function onPanMove (event) {
 
             if (!closestTask.task) {
                 targetTaskCuid = null;
-                targetTaskIssueKey = null
+                targetTaskIssueKey = null;
             } else {
                 targetTaskCuid = closestTask.task.cuid;
                 targetTaskIssueKey = closestTask.task.issue.key;
             }
 
             if (record.taskDroppableCuid !== targetTaskCuid) {
-                store.dispatch(setRecordMoveTarget({
-                    cuid: record.cuid,
-                    taskCuid: targetTaskCuid
-                }));
+                store.dispatch(
+                    setRecordMoveTarget({
+                        cuid: record.cuid,
+                        taskCuid: targetTaskCuid
+                    })
+                );
             }
         }
         return;
@@ -149,15 +148,17 @@ function onPanMove (event) {
     }
 }
 
-function onPanEnd (e) {
+function onPanEnd(e) {
     if (recordElement) {
         const record = getMovingRecord({ state: store.getState() });
         if (record) {
-            store.dispatch(setRecordTask({
-                cuid: record.cuid,
-                taskCuid: targetTaskCuid,
-                taskIssueKey: targetTaskIssueKey
-            }));
+            store.dispatch(
+                setRecordTask({
+                    cuid: record.cuid,
+                    taskCuid: targetTaskCuid,
+                    taskIssueKey: targetTaskIssueKey
+                })
+            );
 
             e.preventDefault();
             panCleanup();
@@ -172,7 +173,7 @@ function onPanEnd (e) {
     }
 }
 
-function panCleanup () {
+function panCleanup() {
     clearSelection();
     document.body.classList.remove('moving');
 
@@ -181,7 +182,7 @@ function panCleanup () {
     }
 }
 
-function cancelPan () {
+function cancelPan() {
     if (recordElement) {
         events.emit('pancancel:record');
 
@@ -191,10 +192,12 @@ function cancelPan () {
 
         const record = getMovingRecord({ state: store.getState() });
         if (record) {
-            store.dispatch(setRecordMoving({
-                cuid: record.cuid,
-                moving: false
-            }));
+            store.dispatch(
+                setRecordMoving({
+                    cuid: record.cuid,
+                    moving: false
+                })
+            );
         }
     } else if (taskElement) {
         events.emit('pancancel:task');
@@ -207,7 +210,7 @@ function cancelPan () {
 }
 
 // Clears any HTML text selection on the page
-function clearSelection () {
+function clearSelection() {
     if (document.selection) {
         document.selection.empty();
     } else if (window.getSelection) {

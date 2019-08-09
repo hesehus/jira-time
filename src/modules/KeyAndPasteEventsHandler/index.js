@@ -5,28 +5,26 @@ import { showAddIssuesDialog } from 'shared/helpers';
 
 let eventsBinded;
 
-export function init () {
+export function init() {
     if (!eventsBinded) {
-
         eventsBinded = true;
 
-        ['drag',
-            'dragend',
-            'dragenter',
-            'dragexit',
-            'dragleave',
-            'dragover',
-            'dragstart',
-            'drop'].forEach(name => document.addEventListener(name, e => e.preventDefault(), false));
+        ['drag', 'dragend', 'dragenter', 'dragexit', 'dragleave', 'dragover', 'dragstart', 'drop'].forEach(name =>
+            document.addEventListener(name, e => e.preventDefault(), false)
+        );
 
-        document.addEventListener('drop', function onDrop (event) {
-            const url = event.dataTransfer.getData('URL');
-            const text = event.dataTransfer.getData('Text');
+        document.addEventListener(
+            'drop',
+            function onDrop(event) {
+                const url = event.dataTransfer.getData('URL');
+                const text = event.dataTransfer.getData('Text');
 
-            window.__events.emit('drop', { url, text });
-        }, false);
+                window.__events.emit('drop', { url, text });
+            },
+            false
+        );
 
-        document.addEventListener('paste', function onPaste (e) {
+        document.addEventListener('paste', function onPaste(e) {
             if (targetIsNotEditable(e.target)) {
                 if (e.clipboardData && e.clipboardData.getData) {
                     const text = e.clipboardData.getData('text/plain');
@@ -37,26 +35,30 @@ export function init () {
             }
         });
 
-        document.addEventListener('keydown', function onKeyUp (e) {
-            const code = keycode(e);
+        document.addEventListener(
+            'keydown',
+            function onKeyUp(e) {
+                const code = keycode(e);
 
-            if (code === 'a' && !e.ctrlKey) {
-                if (targetIsNotEditable(e.target)) {
-                    showAddIssuesDialog();
+                if (code === 'a' && !e.ctrlKey) {
+                    if (targetIsNotEditable(e.target)) {
+                        showAddIssuesDialog();
+                    }
                 }
-            }
 
-            if (e.ctrlKey) {
-                if (code === 's') {
-                    e.preventDefault();
-                    Sync.processAllInState();
+                if (e.ctrlKey) {
+                    if (code === 's') {
+                        e.preventDefault();
+                        Sync.processAllInState();
+                    }
                 }
-            }
-        }, false);
+            },
+            false
+        );
     }
 }
 
-function targetIsNotEditable (element) {
+function targetIsNotEditable(element) {
     const { nodeName } = element;
     return nodeName !== 'INPUT' && nodeName !== 'TEXTAREA';
 }

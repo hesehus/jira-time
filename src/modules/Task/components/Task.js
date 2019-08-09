@@ -11,8 +11,7 @@ import TimeTrackingInfo from './TimeTrackingInfo';
 import './Task.scss';
 
 export default class Task extends Component {
-
-    static get propTypes () {
+    static get propTypes() {
         return {
             task: PropTypes.object.isRequired,
             setIssueRemainingEstimate: PropTypes.func.isRequired,
@@ -23,7 +22,7 @@ export default class Task extends Component {
         };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
@@ -31,8 +30,7 @@ export default class Task extends Component {
         this.state = {};
     }
 
-    onRemoveClick () {
-
+    onRemoveClick() {
         const { records, removeTask, task } = this.props;
 
         if (records.length > 0) {
@@ -46,25 +44,20 @@ export default class Task extends Component {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, get rid of it all!',
                 cancelButtonText: 'Shit, NO!'
-            }).then(function () {
-                removeTask({ cuid: task.cuid });
-            }).catch(() => {
-                // No? Good thing we asked this question then =)
-            });
+            })
+                .then(function() {
+                    removeTask({ cuid: task.cuid });
+                })
+                .catch(() => {
+                    // No? Good thing we asked this question then =)
+                });
         } else {
             removeTask({ cuid: task.cuid });
         }
     }
 
-    render () {
-
-        const {
-            task,
-            movingRecord,
-            movingTask,
-            records,
-            setIssueRemainingEstimate
-        } = this.props;
+    render() {
+        const { task, movingRecord, movingTask, records, setIssueRemainingEstimate } = this.props;
 
         let className = 'task';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
@@ -72,24 +65,27 @@ export default class Task extends Component {
         }
 
         const deleteButton = (
-            <button tabIndex='-1'
-              type='button'
-              className='task-delete'
-              title='Remove task'
-              onClick={this.onRemoveClick}
+            <button
+                tabIndex="-1"
+                type="button"
+                className="task-delete"
+                title="Remove task"
+                onClick={this.onRemoveClick}
             >
-                <img src={DeleteIcon} alt='Delete' className='task-delete-icon' />
+                <img src={DeleteIcon} alt="Delete" className="task-delete-icon" />
             </button>
         );
 
         // There are errors with the task. Display that instead of issue info
         if (task.issue.errorMessages && task.issue.errorMessages.length > 0) {
             return (
-                <div className='task task--errors'>
+                <div className="task task--errors">
                     {deleteButton}
-                    <div className='task-info'>
-                        <span className='task__summary'>
-                            {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
+                    <div className="task-info">
+                        <span className="task__summary">
+                            {task.issue.errorMessages.map((e, i) => (
+                                <div key={i}>{e}</div>
+                            ))}
                         </span>
                     </div>
                     <Records records={records} />
@@ -97,11 +93,9 @@ export default class Task extends Component {
             );
         }
 
-        const status = (
-            task.issue.fields.status
-                ? <span className='task__status'>{task.issue.fields.status.name}</span>
-                : null
-        );
+        const status = task.issue.fields.status ? (
+            <span className="task__status">{task.issue.fields.status.name}</span>
+        ) : null;
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
@@ -111,39 +105,42 @@ export default class Task extends Component {
         return (
             <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
                 {deleteButton}
-                <div className='task__info'>
-                    <div className='task__left'>
-                        <div className='task__key-and-status'>
-                            <a className='task__link'
-                              href={config.serverPath + '/browse/' + task.issue.key}
-                              target='_blank'
-                              tabIndex='-1'
+                <div className="task__info">
+                    <div className="task__left">
+                        <div className="task__key-and-status">
+                            <a
+                                className="task__link"
+                                href={config.serverPath + '/browse/' + task.issue.key}
+                                target="_blank"
+                                tabIndex="-1"
                             >
                                 {task.issue.key}
-
                             </a>
 
-                            {task.issue.epic
-                            ? <a className='task__link task__link--epic'
-                              href={config.serverPath + '/browse/' + task.issue.epic.key}
-                              target='_blank'
-                              tabIndex='-1'
+                            {task.issue.epic ? (
+                                <a
+                                    className="task__link task__link--epic"
+                                    href={config.serverPath + '/browse/' + task.issue.epic.key}
+                                    target="_blank"
+                                    tabIndex="-1"
                                 >
                                     EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
-                            </a> : ''
-                            }
+                                </a>
+                            ) : (
+                                ''
+                            )}
 
                             {status}
                         </div>
-                        <div className='task__summary' title={task.issue.fields.summary}>
+                        <div className="task__summary" title={task.issue.fields.summary}>
                             {task.issue.fields.summary}
                         </div>
                     </div>
-                    <div className='task__right'>
+                    <div className="task__right">
                         <TimeTrackingInfo
-                          task={task}
-                          somethingIsMoving={somethingIsMoving}
-                          setIssueRemainingEstimate={setIssueRemainingEstimate}
+                            task={task}
+                            somethingIsMoving={somethingIsMoving}
+                            setIssueRemainingEstimate={setIssueRemainingEstimate}
                         />
                         <RecordActionButtons task={task} onRemainingUpdated={this.setRemainingInputValue} />
                     </div>

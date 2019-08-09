@@ -24,34 +24,34 @@ export const SET_THEME = 'SET_THEME';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setLoggedIn ({ isLoggedIn, username }) {
+export function setLoggedIn({ isLoggedIn, username }) {
     return {
         type: SET_LOGGED_IN,
         isLoggedIn,
         username
-    }
-};
+    };
+}
 
-export function setUserInfo ({ userinfo }) {
+export function setUserInfo({ userinfo }) {
     return {
         type: SET_USER_INFO,
         userinfo
-    }
-};
+    };
+}
 
-export function setUserPreferences ({ preferences }) {
+export function setUserPreferences({ preferences }) {
     return {
         type: SET_USER_PREFERENCES,
         preferences
-    }
-};
+    };
+}
 
-export function setTheme ({ theme }) {
+export function setTheme({ theme }) {
     return {
         type: SET_THEME,
         theme
-    }
-};
+    };
+}
 
 // ------------------------------------
 // Action Handlers
@@ -63,7 +63,7 @@ ACTION_HANDLERS[SET_LOGGED_IN] = (state, action) => {
         ...state,
         loggedIn: action.isLoggedIn,
         username: typeof action.username === 'undefined' ? state.username : action.username
-    }
+    };
 };
 
 ACTION_HANDLERS[SET_USER_INFO] = (state, { userinfo }) => {
@@ -95,8 +95,7 @@ ACTION_HANDLERS['SERVER_STATE_PUSH'] = (state, { profile }) => profile;
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function profileReducer (state = initialState, action) {
-
+export default function profileReducer(state = initialState, action) {
     const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;

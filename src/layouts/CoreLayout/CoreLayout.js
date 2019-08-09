@@ -10,15 +10,15 @@ import 'styles/core.scss';
 
 export const CoreLayout = ({ children, profile }) => (
     <Theme>
-        <div className={
-            'layout-container' +
-            (profile.preferences.compactView ? ' compact-view' : '') +
-            (!profile.preferences.enableAnimations ? ' disable-animations' : '')}
+        <div
+            className={
+                'layout-container' +
+                (profile.preferences.compactView ? ' compact-view' : '') +
+                (!profile.preferences.enableAnimations ? ' disable-animations' : '')
+            }
         >
             <Header />
-            <div className='layout-container__viewport'>
-                {children}
-            </div>
+            <div className="layout-container__viewport">{children}</div>
             <Recorder />
         </div>
     </Theme>
@@ -33,6 +33,6 @@ const mapStateToProps = ({ profile }) => {
     return {
         profile
     };
-}
+};
 
 export default connect(mapStateToProps)(CoreLayout);

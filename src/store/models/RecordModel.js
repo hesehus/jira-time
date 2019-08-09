@@ -2,22 +2,21 @@ import generateCuid from 'cuid';
 import moment from 'moment';
 import { getElapsedTime, getRoundedTime } from 'store/reducers/recorder';
 
-export default function RecordModel ({
-  cuid = generateCuid(),
-  task,
-  taskIssueKey,
-  createdTime = getRoundedTime(Date.now()),
-  startTime = getRoundedTime(Date.now()),
-  endTime,
-  elapsedTime,
-  comment = '',
-  timeSpentSeconds = 0,
-  created,
-  updated,
-  id,
-  isSynced = false
+export default function RecordModel({
+    cuid = generateCuid(),
+    task,
+    taskIssueKey,
+    createdTime = getRoundedTime(Date.now()),
+    startTime = getRoundedTime(Date.now()),
+    endTime,
+    elapsedTime,
+    comment = '',
+    timeSpentSeconds = 0,
+    created,
+    updated,
+    id,
+    isSynced = false
 } = {}) {
-
     const model = {
         cuid,
         taskCuid: task ? task.cuid : null,
@@ -38,7 +37,9 @@ export default function RecordModel ({
     model.isSynced = !!model.created;
 
     if (!model.endTime && timeSpentSeconds) {
-        model.endTime = moment(model.startTime).add(timeSpentSeconds, 'seconds').toDate();
+        model.endTime = moment(model.startTime)
+            .add(timeSpentSeconds, 'seconds')
+            .toDate();
     }
 
     if (startTime && endTime && !elapsedTime) {

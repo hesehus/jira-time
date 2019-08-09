@@ -1,7 +1,7 @@
-import React from 'react'
-import { bindActionCreators } from 'redux'
-import { Profile } from 'routes/Profile/components/Profile'
-import { shallow } from 'enzyme'
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { Profile } from 'routes/Profile/components/Profile';
+import { shallow } from 'enzyme';
 
 /*
 describe('(Component) Profile', () => {

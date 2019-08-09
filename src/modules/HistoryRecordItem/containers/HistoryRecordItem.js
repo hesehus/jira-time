@@ -10,4 +10,7 @@ const mapDispatchToProps = {
     setRecordDate
 };
 
-export default connect(undefined, mapDispatchToProps)(HistoryRecordItem);
+export default connect(
+    undefined,
+    mapDispatchToProps
+)(HistoryRecordItem);

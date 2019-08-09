@@ -7,7 +7,7 @@ import config from 'shared/config.json';
 
 const Wrapper = styled.div`
     margin-right: 10px;
-    font-size: .75rem;
+    font-size: 0.75rem;
     width: 150px;
     flex: 0 0 auto;
     cursor: default;
@@ -49,14 +49,13 @@ const Bars = styled.div`
 `;
 
 export default class TimeTrackingInfo extends Component {
-
     static propTypes = {
         task: PropTypes.object.isRequired,
         somethingIsMoving: PropTypes.bool,
         setIssueRemainingEstimate: PropTypes.func.isRequired
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onRemainingChange = this.onRemainingChange.bind(this);
@@ -67,14 +66,14 @@ export default class TimeTrackingInfo extends Component {
         };
     }
 
-    onRemainingChange (e) {
+    onRemainingChange(e) {
         this.props.setIssueRemainingEstimate({
             cuid: this.props.task.cuid,
             remainingEstimate: e.target.value
         });
     }
 
-    onRemainingBlur (e) {
+    onRemainingBlur(e) {
         let remainingEstimate = e.target.value;
         const { task, setIssueRemainingEstimate } = this.props;
 
@@ -84,32 +83,34 @@ export default class TimeTrackingInfo extends Component {
         }
 
         if (remainingEstimate !== this.state.remainingEstimate) {
-            this.setState({
-                remainingEstimate
-            }, () => {
-
-                // Update redux state
-                setIssueRemainingEstimate({
-                    cuid: task.cuid,
+            this.setState(
+                {
                     remainingEstimate
-                });
-
-                // Send updates to server
-                updateRemainingEstimate({
-                    taskCuid: task.cuid,
-                    taskIssueKey: task.issue.key,
-                    remainingEstimate
-                }).then(() => {
-                    return refreshJiraIssue({
-                        taskCuid: task.cuid,
-                        taskIssueKey: task.issue.key
+                },
+                () => {
+                    // Update redux state
+                    setIssueRemainingEstimate({
+                        cuid: task.cuid,
+                        remainingEstimate
                     });
-                });
-            });
+
+                    // Send updates to server
+                    updateRemainingEstimate({
+                        taskCuid: task.cuid,
+                        taskIssueKey: task.issue.key,
+                        remainingEstimate
+                    }).then(() => {
+                        return refreshJiraIssue({
+                            taskCuid: task.cuid,
+                            taskIssueKey: task.issue.key
+                        });
+                    });
+                }
+            );
         }
     }
 
-    render () {
+    render() {
         const { task, somethingIsMoving } = this.props;
 
         let {
@@ -121,9 +122,11 @@ export default class TimeTrackingInfo extends Component {
             timeSpentSeconds
         } = task.issue.fields.timetracking;
 
-        if (typeof remainingEstimateSeconds === 'undefined' ||
+        if (
+            typeof remainingEstimateSeconds === 'undefined' ||
             remainingEstimate === 'undefined' ||
-            !originalEstimateSeconds) {
+            !originalEstimateSeconds
+        ) {
             return null;
         }
 
@@ -148,26 +151,23 @@ export default class TimeTrackingInfo extends Component {
             <Wrapper>
                 <Percentage>{`${parseInt(progress)}%`}</Percentage>
                 <Bars>
+                    <Bar width={widthOriginalEstimate} title={`Original estimate: ${originalEstimate}`} />
                     <Bar
-                      width={widthOriginalEstimate}
-                      title={`Original estimate: ${originalEstimate}`}
-                    />
-                    <Bar
-                      width={widthTimeSpentAndRemaining}
-                      lineWidth={progress}
-                      title={`Remaining: ${remainingEstimate}`}
-                      titleLine={`Time spent: ${timeSpent}`}
+                        width={widthTimeSpentAndRemaining}
+                        lineWidth={progress}
+                        title={`Remaining: ${remainingEstimate}`}
+                        titleLine={`Time spent: ${timeSpent}`}
                     />
                 </Bars>
                 <Remaining>
                     <RemainingInput
-                      value={remainingEstimate}
-                      title={remainingEstimate + ' remaining'}
-                      onChange={this.onRemainingChange}
-                      onBlur={this.onRemainingBlur}
-                      disabled={issueIsClosed(task) || somethingIsMoving}
-                      tabIndex='-1'
-                      ref={el => this.remainingElement = el}
+                        value={remainingEstimate}
+                        title={remainingEstimate + ' remaining'}
+                        onChange={this.onRemainingChange}
+                        onBlur={this.onRemainingBlur}
+                        disabled={issueIsClosed(task) || somethingIsMoving}
+                        tabIndex="-1"
+                        ref={el => (this.remainingElement = el)}
                     />
                 </Remaining>
             </Wrapper>

@@ -1,181 +1,181 @@
-@import 'variables';
+@import "variables";
 
 .record-wrap {
-  position: relative;
+    position: relative;
 }
 
 .record {
-  padding: 5px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  background: rgba(255, 255, 255, .2);
-  border-radius: 6px;
-  transition: background 150ms;
-  position: relative;
-  height: 100%;
-  margin-top: 5px;
-
-  .compact-view & {
-    padding: 3px 5px;
-  }
-
-  &,
-  input[type='text'] {
-    font-size: .7rem;
-  }
-
-  &-sync,
-  &-mic {
-    > img {
-      height: 20px;
-
-      .compact-view & {
-        height: 15px;
-      }
-    }
-  }
-
-  &-sync {
-    padding: 10px;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    appearance: none;
-    background: transparent;
-    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    transition: background 150ms;
+    position: relative;
+    height: 100%;
+    margin-top: 5px;
 
     .compact-view & {
-      padding: 5px;
-      margin-right: -5px;
-    }
-    
-    &-icon {
-      width: 20px;
-      cursor: pointer;
-      transition: opacity 250ms linear;
-
-      &:hover {
-        opacity: 1;
-      }
+        padding: 3px 5px;
     }
 
-    &--stop {
-      background: rgba(255, 255, 255, .9);
-      width: 19px;
-      height: 20px;
-      margin-left: 11px;
-      margin-right: 1px;
-      border-radius: 4px;
-      cursor: pointer;
-
-      .compact-view & {
-        margin-right: 3px;
-        margin-left: 8px;
-        width: 14px;
-        height: 14px;
-      }
-    }
-  }
-
-  &--syncing {
-    background: rgba(255, 255, 255, .4);
-  }
-
-  &--moving {
-    z-index: 99;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-    background: rgba(255, 255, 255, .4);
-  }
-
-  &-remove {
-    padding: 6px;
-    flex-shrink: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 3; // One unit higher than the date input
-    opacity: 0;
-    transform: scale(.5);
-    transition: all 150ms;
-
-    &:focus,
-    .record:hover & {
-      opacity: 1;
-      transform: none;
+    &,
+    input[type="text"] {
+        font-size: 0.7rem;
     }
 
-    .compact-view & {
-      top: -2px;
-      left: -2px;
-    }
-  }
-  &-remove-icon {
-    display: block;
-    width: 10px;
+    &-sync,
+    &-mic {
+        > img {
+            height: 20px;
 
-    .compact-view & {
-      width: 6px;
-    }
-  }
-
-  &-time {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-
-    .compact-view & {
-      margin-right: 5px;
-    }
-  }
-
-  &-comment {
-    flex-grow: 1;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, .5);
-    color: #fff;
-    padding: 5px;
-
-    .compact-view & {
-      padding: 2px 5px;
-    }
-
-    @media (max-width: $screen-xs) {
-        order: 5;
-
-        .compact-view & {
-          order: inherit;
+            .compact-view & {
+                height: 15px;
+            }
         }
     }
-  }
 
-  &-dates {
-    margin-right: 15px;
+    &-sync {
+        padding: 10px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        appearance: none;
+        background: transparent;
+        border: none;
 
-    .compact-view & {
-      margin-right: 5px;
-      display: flex;
-      align-items: center;
+        .compact-view & {
+            padding: 5px;
+            margin-right: -5px;
+        }
+
+        &-icon {
+            width: 20px;
+            cursor: pointer;
+            transition: opacity 250ms linear;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        &--stop {
+            background: rgba(255, 255, 255, 0.9);
+            width: 19px;
+            height: 20px;
+            margin-left: 11px;
+            margin-right: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+
+            .compact-view & {
+                margin-right: 3px;
+                margin-left: 8px;
+                width: 14px;
+                height: 14px;
+            }
+        }
     }
-  }
 
-  &__elapsed-time {
-    min-width: 70px;
-    text-align: right;
-
-    .record--active & {
-      animation: blink 2s infinite;
+    &--syncing {
+        background: rgba(255, 255, 255, 0.4);
     }
-  }
 
-  &-mic {
-    padding: 10px 10px 10px 20px;
-    cursor: pointer;
-  }
+    &--moving {
+        z-index: 99;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        background: rgba(255, 255, 255, 0.4);
+    }
+
+    &-remove {
+        padding: 6px;
+        flex-shrink: 0;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3; // One unit higher than the date input
+        opacity: 0;
+        transform: scale(0.5);
+        transition: all 150ms;
+
+        &:focus,
+        .record:hover & {
+            opacity: 1;
+            transform: none;
+        }
+
+        .compact-view & {
+            top: -2px;
+            left: -2px;
+        }
+    }
+    &-remove-icon {
+        display: block;
+        width: 10px;
+
+        .compact-view & {
+            width: 6px;
+        }
+    }
+
+    &-time {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        margin-right: 15px;
+
+        .compact-view & {
+            margin-right: 5px;
+        }
+    }
+
+    &-comment {
+        flex-grow: 1;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        color: #fff;
+        padding: 5px;
+
+        .compact-view & {
+            padding: 2px 5px;
+        }
+
+        @media (max-width: $screen-xs) {
+            order: 5;
+
+            .compact-view & {
+                order: inherit;
+            }
+        }
+    }
+
+    &-dates {
+        margin-right: 15px;
+
+        .compact-view & {
+            margin-right: 5px;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    &__elapsed-time {
+        min-width: 70px;
+        text-align: right;
+
+        .record--active & {
+            animation: blink 2s infinite;
+        }
+    }
+
+    &-mic {
+        padding: 10px 10px 10px 20px;
+        cursor: pointer;
+    }
 }

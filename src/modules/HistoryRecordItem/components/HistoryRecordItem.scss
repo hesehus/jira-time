@@ -1,26 +1,25 @@
 .history-record {
+    &-cell {
+        white-space: nowrap;
+        padding: 5px 9px;
+        border: 1px solid #ccc;
 
-  &-cell {
-    white-space: nowrap;
-    padding: 5px 9px;
-    border: 1px solid #ccc;
+        &--comment {
+            white-space: normal;
+        }
 
-    &--comment {
-      white-space: normal;
+        &--issue-key {
+            text-transform: uppercase;
+        }
     }
 
-    &--issue-key {
-      text-transform: uppercase;
-    }
-  }
+    &-icon {
+        opacity: 0;
+        height: 24px;
 
-  &-icon {
-    opacity: 0;
-    height: 24px;
-
-    .history-record--can-be-exported & {
-      opacity: 1;
-      cursor: pointer;
+        .history-record--can-be-exported & {
+            opacity: 1;
+            cursor: pointer;
+        }
     }
-  }
 }

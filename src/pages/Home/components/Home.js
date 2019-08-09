@@ -6,25 +6,20 @@ import Login from 'modules/Login';
 import './Home.scss';
 
 export class Home extends Component {
-
-    static get contextTypes () {
+    static get contextTypes() {
         return {
             router: PropTypes.object.isRequired
         };
     }
 
-    static get propTypes () {
+    static get propTypes() {
         return {
             loggedIn: PropTypes.bool.isRequired
-        }
+        };
     }
 
-    render () {
-        return (
-            <div className='home'>
-                {this.props.loggedIn ? <Tasks /> : <Login />}
-            </div>
-        );
+    render() {
+        return <div className="home">{this.props.loggedIn ? <Tasks /> : <Login />}</div>;
     }
 }
 

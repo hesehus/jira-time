@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react'
-import { IndexLink, Link, hashHistory } from 'react-router'
+import React, { Component, PropTypes } from 'react';
+import { IndexLink, Link, hashHistory } from 'react-router';
 
 import Sync, { sharedEvents } from 'shared/sync';
 import { showAddIssuesDialog } from 'shared/helpers';
 
-import './Header.scss'
+import './Header.scss';
 
 import Loader from 'modules/Loader';
 
@@ -16,15 +16,14 @@ import CalendarIcon from 'assets/calendar.svg';
 import ListViewIcon from 'assets/list-view.svg';
 
 export default class Header extends Component {
-
-    static get propTypes () {
+    static get propTypes() {
         return {
             records: PropTypes.array.isRequired,
             loggedIn: PropTypes.bool.isRequired
         };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.state = {};
@@ -35,10 +34,9 @@ export default class Header extends Component {
         this.onHashChange = this.onHashChange.bind(this);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         if (window.__getServiceWorkerStatus) {
-            window.__getServiceWorkerStatus
-            .then((status) => {
+            window.__getServiceWorkerStatus.then(status => {
                 this.setState({
                     serviceWorkerUpdated: status.updateAvailable
                 });
@@ -53,45 +51,44 @@ export default class Header extends Component {
         this.hashHistoryUnlisten = hashHistory.listen(this.onHashChange);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         sharedEvents.off('processAllStart', this.onProcessAllStart);
         sharedEvents.off('processAllDone', this.onProcessAllDone);
 
         this.hashHistoryUnlisten();
     }
 
-    onHashChange () {
+    onHashChange() {
         this.setState({
             currentPathname: hashHistory.getCurrentLocation().pathname
         });
     }
 
-    onProcessAllStart () {
+    onProcessAllStart() {
         this.setState({
             syncing: true
         });
     }
 
-    onProcessAllDone () {
+    onProcessAllDone() {
         this.setState({
             syncing: false
         });
     }
 
-    onUpdateAvailableClick () {
+    onUpdateAvailableClick() {
         location.reload();
     }
 
-    onSyncClick () {
+    onSyncClick() {
         Sync.processAllInState();
     }
 
-    someRecordsCanBeSynced () {
+    someRecordsCanBeSynced() {
         return !!this.props.records.find(r => !!r.endTime && !!r.comment);
     }
 
-    render () {
-
+    render() {
         if (!this.props.loggedIn) {
             return <div />;
         }
@@ -102,8 +99,8 @@ export default class Header extends Component {
         let updateAvailable;
         if (serviceWorkerUpdated) {
             updateAvailable = (
-                <div className='update-available' onClick={this.onUpdateAvailableClick}>
-                    <img src={RefreshIcon} alt='refresh' className='update-available-icon' />
+                <div className="update-available" onClick={this.onUpdateAvailableClick}>
+                    <img src={RefreshIcon} alt="refresh" className="update-available-icon" />
                     Update available!
                 </div>
             );
@@ -125,12 +122,8 @@ export default class Header extends Component {
         }
 
         let sync = (
-            <div
-              className={className}
-              onClick={onClick}
-              title={title}
-              style={{ backgroundImage: `url(${SyncIcon})` }}>
-                {syncing ? <Loader size='tiny' /> : 'Sync'}
+            <div className={className} onClick={onClick} title={title} style={{ backgroundImage: `url(${SyncIcon})` }}>
+                {syncing ? <Loader size="tiny" /> : 'Sync'}
             </div>
         );
 
@@ -139,42 +132,42 @@ export default class Header extends Component {
         let classNameSummary = 'header__button header__button--summary';
 
         switch (currentPathname) {
-        case '/profile' : {
-            classNameProfile += ' header__button--active';
-            break;
-        }
-        case '/summary' : {
-            classNameSummary += ' header__button--active';
-            break;
-        }
-        default : {
-            classNameHome += ' header__button--active';
-        }
+            case '/profile': {
+                classNameProfile += ' header__button--active';
+                break;
+            }
+            case '/summary': {
+                classNameSummary += ' header__button--active';
+                break;
+            }
+            default: {
+                classNameHome += ' header__button--active';
+            }
         }
 
         return (
-            <div className='header'>
-                <div className='header__left'>
-                    <div className='header-title'>
+            <div className="header">
+                <div className="header__left">
+                    <div className="header-title">
                         <img
-                          className='header-logo'
-                          src={AppLogoIcon}
-                          alt='Abstract hour glass'
-                          onClick={showAddIssuesDialog}
+                            className="header-logo"
+                            src={AppLogoIcon}
+                            alt="Abstract hour glass"
+                            onClick={showAddIssuesDialog}
                         />
-                        <span className='header-title-text'>JIRA-time</span>
+                        <span className="header-title-text">JIRA-time</span>
                     </div>
                     {updateAvailable}
                 </div>
-                <div className='header__right'>
-                    <IndexLink to='/' className={classNameHome} title='Tasks'>
-                        <img className='header__icon' src={ListViewIcon} alt='Home' />
+                <div className="header__right">
+                    <IndexLink to="/" className={classNameHome} title="Tasks">
+                        <img className="header__icon" src={ListViewIcon} alt="Home" />
                     </IndexLink>
-                    <Link to='/summary' className={classNameSummary} title='Summary'>
-                        <img className='header__icon' src={CalendarIcon} alt='Calendar' />
+                    <Link to="/summary" className={classNameSummary} title="Summary">
+                        <img className="header__icon" src={CalendarIcon} alt="Calendar" />
                     </Link>
-                    <Link to='/profile' className={classNameProfile} title='Profile'>
-                        <img className='header__icon' src={UserIcon} alt='Profile' />
+                    <Link to="/profile" className={classNameProfile} title="Profile">
+                        <img className="header__icon" src={UserIcon} alt="Profile" />
                     </Link>
                     {sync}
                 </div>

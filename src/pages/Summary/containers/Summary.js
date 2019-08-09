@@ -4,8 +4,8 @@ import { getActiveRecord, getNotSyncedRecords } from 'store/reducers/recorder';
 
 import Summary from '../components/Summary';
 
-const mapStateToProps = (state) => ({
-    profile : state.profile,
+const mapStateToProps = state => ({
+    profile: state.profile,
     notSyncedRecords: getNotSyncedRecords({ state }),
     activeRecord: getActiveRecord({ state })
 });

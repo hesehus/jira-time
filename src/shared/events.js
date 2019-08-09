@@ -9,6 +9,6 @@ events.emitRecordAnimate = () => {
     recordAnimationTimeout = setTimeout(() => {
         events.emit('record-animate');
     });
-}
+};
 
 export default events;

@@ -10,8 +10,7 @@ import './Recorder.scss';
 const processTask = new ProcessTask();
 
 export default class Recorder extends Component {
-
-    static get propTypes () {
+    static get propTypes() {
         return {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
@@ -20,7 +19,7 @@ export default class Recorder extends Component {
         };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         const remaining = processTask.getRemaining();
@@ -35,7 +34,7 @@ export default class Recorder extends Component {
         this.onWsConnected = this.onWsConnected.bind(this);
         this.onWsCloseOrError = this.onWsCloseOrError.bind(this);
 
-        processTask.on('add', (result) => {
+        processTask.on('add', result => {
             const remaining = processTask.getRemaining();
 
             this.setState({
@@ -46,11 +45,7 @@ export default class Recorder extends Component {
                 this.props.addTask({ issue: result.issue });
                 addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
             } else {
-                swal(
-                    'Heeey..',
-                    result.message,
-                    'error'
-                );
+                swal('Heeey..', result.message, 'error');
             }
         });
 
@@ -61,7 +56,7 @@ export default class Recorder extends Component {
         });
     }
 
-    componentWillMount () {
+    componentWillMount() {
         if (!this.state.binded) {
             this.setState({ binded: true });
 
@@ -74,13 +69,13 @@ export default class Recorder extends Component {
         }
     }
 
-    componentDidMount () {
+    componentDidMount() {
         ws.on('connecting', this.onWsConnecting);
         ws.on('connected', this.onWsConnected);
         ws.on('closeOrError', this.onWsCloseOrError);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         window.__events.off('drop', this.onDropAndPaste);
         window.__events.off('paste', this.onDropAndPaste);
         ws.off('connecting', this.onWsConnecting);
@@ -89,21 +84,21 @@ export default class Recorder extends Component {
         clearInterval(this.elapsedTimeInterval);
     }
 
-    onWsConnecting () {
+    onWsConnecting() {
         this.setState({
             wsConnecting: true,
             showWsConnected: false,
             wsClosed: false
         });
     }
-    onWsConnected () {
+    onWsConnected() {
         this.setState({
             wsConnecting: false,
             showWsConnected: true,
             wsClosed: false
         });
     }
-    onWsCloseOrError () {
+    onWsCloseOrError() {
         this.setState({
             wsConnecting: false,
             showWsConnected: false,
@@ -111,7 +106,7 @@ export default class Recorder extends Component {
         });
     }
 
-    onDropAndPaste ({ url, text }) {
+    onDropAndPaste({ url, text }) {
         if (text && text.startsWith('{"app')) {
             store.dispatch({
                 type: 'SERVER_STATE_PUSH',
@@ -125,7 +120,6 @@ export default class Recorder extends Component {
             const taskKeys = extractIssueKeysFromText(url || text);
 
             if (!!taskKeys.length) {
-
                 processTask.add(taskKeys);
 
                 const remaining = processTask.getRemaining();
@@ -135,15 +129,11 @@ export default class Recorder extends Component {
                 });
             }
         } else {
-            swal(
-                'Heeey..',
-                'Hey dude, you are not logged in. How do you expect me to validate your shit?',
-                'error'
-            );
+            swal('Heeey..', 'Hey dude, you are not logged in. How do you expect me to validate your shit?', 'error');
         }
     }
 
-    updateElapsedTime () {
+    updateElapsedTime() {
         const record = this.props.recorder.records.find(r => !r.endTime);
 
         if (record) {
@@ -153,8 +143,7 @@ export default class Recorder extends Component {
         }
     }
 
-    render () {
-
+    render() {
         const { profile } = this.props;
 
         if (!profile.loggedIn) {
@@ -163,79 +152,68 @@ export default class Recorder extends Component {
 
         let notifications = [];
 
-        const {
-            tasksAddingRemaining,
-            tasksAtStart,
-            showWsConnected,
-            wsConnecting,
-            wsClosed,
-            wsError
-        } = this.state;
+        const { tasksAddingRemaining, tasksAtStart, showWsConnected, wsConnecting, wsClosed, wsError } = this.state;
 
         if (tasksAddingRemaining) {
             if (tasksAddingRemaining > 10) {
-                notifications.push((
-                    <div className='notification' key='adding-task-crazy-many'>
-                        {
-                            `Wow dude! ${tasksAtStart} tasks?
+                notifications.push(
+                    <div className="notification" key="adding-task-crazy-many">
+                        {`Wow dude! ${tasksAtStart} tasks?
                             You must be crazy busy!
                             Take a well deserved break while I'm setting this up (${tasksAddingRemaining}
-                            more to go)...`
-                        }
+                            more to go)...`}
                     </div>
-                ));
+                );
             } else {
                 if (tasksAtStart > 10) {
-                    notifications.push((
-                        <div className='notification' key='adding-task-crazy-many-some-remaining'>
+                    notifications.push(
+                        <div className="notification" key="adding-task-crazy-many-some-remaining">
                             {`Allright man. Only ${tasksAddingRemaining} more...`}
                         </div>
-                    ));
+                    );
                 } else {
-                    notifications.push((
-                        <div className='notification' key='adding-task'>
-                            {
-                                `Yo dude!
+                    notifications.push(
+                        <div className="notification" key="adding-task">
+                            {`Yo dude!
                                 I'm real busy trying to add ${tasksAddingRemaining}
-                                ${tasksAddingRemaining > 1 ? 'tasks' : 'task'}...`
-                            }
+                                ${tasksAddingRemaining > 1 ? 'tasks' : 'task'}...`}
                         </div>
-                    ));
+                    );
                 }
             }
         }
 
         if (profile.preferences.connectToSyncServer) {
             if (showWsConnected) {
-                notifications.push((
-                    <div className='notification' key='ws-connecting'>Connected!</div>
-                ));
+                notifications.push(
+                    <div className="notification" key="ws-connecting">
+                        Connected!
+                    </div>
+                );
             }
 
             if (wsConnecting) {
-                notifications.push((
-                    <div className='notification' key='ws-connected'>Connecting to remote server...</div>
-                ));
+                notifications.push(
+                    <div className="notification" key="ws-connected">
+                        Connecting to remote server...
+                    </div>
+                );
             }
 
             if (wsError || wsClosed) {
-                notifications.push((
-                    <div className='notification' key='ws-connection-failed'>
+                notifications.push(
+                    <div className="notification" key="ws-connection-failed">
                         Could not connect to to remote server.
                         <u onClick={initWebsocketConnection}>Try again</u>
                     </div>
-                ));
+                );
             }
         }
 
         if (!!notifications.length) {
-            return (
-                <div className='recorder recorder--show'>
-                    {notifications}
-                </div>
-            );
+            return <div className="recorder recorder--show">{notifications}</div>;
         }
 
-        return <div className='recorder' />;
+        return <div className="recorder" />;
     }
 }

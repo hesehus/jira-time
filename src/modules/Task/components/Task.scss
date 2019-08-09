@@ -1,4 +1,4 @@
-@import '_variables.scss';
+@import "_variables.scss";
 .task {
     position: relative;
     z-index: 0;
@@ -22,14 +22,14 @@
     }
 
     &:before {
-        content: '';
+        content: "";
         position: absolute;
         z-index: -1;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #FFF;
+        background-color: #fff;
         border-radius: 6px;
         opacity: 0.2;
         transform: translateZ(0);
@@ -39,7 +39,7 @@
         opacity: 0.3;
     }
     &--drop-active:before {
-        opacity: .4;
+        opacity: 0.4;
     }
 
     &-delete {
@@ -49,7 +49,7 @@
         padding: 6px;
         cursor: pointer;
         opacity: 0;
-        transform: scale(.5);
+        transform: scale(0.5);
         transition: all 150ms;
         background: transparent;
         border: none;
@@ -143,7 +143,7 @@
         font-size: 1rem;
 
         .compact-view & {
-            font-size: .8rem;
+            font-size: 0.8rem;
             min-width: 0px;
         }
 
@@ -153,7 +153,7 @@
         }
     }
     &__summary {
-        font-size: .8rem;
+        font-size: 0.8rem;
         flex: 1 1 auto;
         color: rgba(255, 255, 255, 0.6);
         overflow: hidden;
@@ -175,9 +175,9 @@
             flex: 0 0 auto;
         }
 
-        &--epic{
-            font-size: .7rem;
-            margin-left: .6rem;
+        &--epic {
+            font-size: 0.7rem;
+            margin-left: 0.6rem;
             flex: 0 1 auto;
             min-width: 0;
             overflow: hidden;
@@ -185,8 +185,8 @@
         }
     }
     &__status {
-        opacity: .6;
-        font-size: .8rem;
+        opacity: 0.6;
+        font-size: 0.8rem;
         padding: 1px 5px;
         border: 1px solid #fff;
         border-radius: 4px;
@@ -210,6 +210,6 @@
 
     &__loading {
         width: 20px;
-        opacity: .7;
+        opacity: 0.7;
     }
 }

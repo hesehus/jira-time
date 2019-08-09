@@ -1,13 +1,10 @@
 import { connect } from 'react-redux';
 
-import {
-  getMovingRecord,
-  getRecordsWithNoIssue
-} from 'store/reducers/recorder';
+import { getMovingRecord, getRecordsWithNoIssue } from 'store/reducers/recorder';
 
 import TasksinLimbo from '../components/TasksinLimbo';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     movingRecord: getMovingRecord({ state }),
     recordsWithNoIssue: getRecordsWithNoIssue({ state })
 });

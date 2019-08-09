@@ -8,14 +8,13 @@ import 'flatpickr/dist/themes/airbnb.css';
 import './DateInput.scss';
 
 export default class DateInput extends Component {
-
     static propTypes = {
         date: PropTypes.any,
         onChange: PropTypes.func.isRequired,
         disabled: PropTypes.bool
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onDateInputChanged = this.onDateInputChanged.bind(this);
@@ -27,18 +26,18 @@ export default class DateInput extends Component {
         };
     }
 
-    componentWillMount () {
+    componentWillMount() {
         this.setDateState(this.props.date);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.fp = new Flatpickr(this.dateInput, {
             defaultDate: this.state.date
             // onChange: dates => this.onDateChanged(dates[0])
         });
     }
 
-    componentDidUpdate () {
+    componentDidUpdate() {
         if (!moment(this.props.date).isSame(this.state.date)) {
             if (this.fp) {
                 this.fp.setDate(this.props.date, false);
@@ -47,13 +46,13 @@ export default class DateInput extends Component {
         }
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         if (this.fp) {
             this.fp.destroy();
         }
     }
 
-    setDateState (_date) {
+    setDateState(_date) {
         const dateObject = moment(_date);
 
         const date = dateObject.toDate();
@@ -65,7 +64,7 @@ export default class DateInput extends Component {
         });
     }
 
-    static createDateObjectFromDateAndTime ({ date, time }) {
+    static createDateObjectFromDateAndTime({ date, time }) {
         date = moment(date).toDate();
         const timeParts = time.split(':');
         date.setHours(timeParts[0]);
@@ -73,8 +72,7 @@ export default class DateInput extends Component {
         return date;
     }
 
-    onTimeChange (time) {
-
+    onTimeChange(time) {
         const date = DateInput.createDateObjectFromDateAndTime({
             date: new Date(this.state.date),
             time
@@ -89,11 +87,11 @@ export default class DateInput extends Component {
         });
     }
 
-    onDateInputChanged (e) {
+    onDateInputChanged(e) {
         this.onDateChanged(e.target.value);
     }
 
-    onDateChanged (date) {
+    onDateChanged(date) {
         const { time } = this.state;
 
         date = DateInput.createDateObjectFromDateAndTime({
@@ -110,7 +108,7 @@ export default class DateInput extends Component {
         });
     }
 
-    getDateDisplay () {
+    getDateDisplay() {
         const { date } = this.state;
         if (!date) {
             return '';
@@ -118,27 +116,27 @@ export default class DateInput extends Component {
         return moment(date).format('MMM D');
     }
 
-    render () {
-
+    render() {
         const { time } = this.state;
 
         return (
-            <span className='date-inp'>
-                <span className='date-inp-date'>
-                    <span className='date-inp-date__display'>{this.getDateDisplay()}</span>
-                    <input className='date-inp-date__input'
-                      type='date'
-                      tabIndex='-1'
-                      onChange={this.onDateInputChanged}
-                      ref={el => this.dateInput = el}
+            <span className="date-inp">
+                <span className="date-inp-date">
+                    <span className="date-inp-date__display">{this.getDateDisplay()}</span>
+                    <input
+                        className="date-inp-date__input"
+                        type="date"
+                        tabIndex="-1"
+                        onChange={this.onDateInputChanged}
+                        ref={el => (this.dateInput = el)}
                     />
                 </span>
                 <TimeInput
-                  value={time}
-                  className='date-inp__input date-inp__input--time'
-                  onChange={this.onTimeChange}
-                  disabled={this.props.disabled}
-            />
+                    value={time}
+                    className="date-inp__input date-inp__input--time"
+                    onChange={this.onTimeChange}
+                    disabled={this.props.disabled}
+                />
             </span>
         );
     }

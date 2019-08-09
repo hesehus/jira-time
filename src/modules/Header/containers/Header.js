@@ -11,11 +11,14 @@ const mapDispatchToProps = {
     setIssueRefreshing
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     profile: state.profile,
     records: getRecords({ state }),
     currentPath: getCurrentPath(state),
     loggedIn: state.profile.loggedIn
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Header);
