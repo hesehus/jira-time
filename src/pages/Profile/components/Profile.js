@@ -11,7 +11,6 @@ import './Profile.scss';
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
 export class Profile extends Component {
-
     static get propTypes () {
         return {
             profile: PropTypes.object.isRequired,
@@ -53,12 +52,15 @@ export class Profile extends Component {
             <div className='profile-preferences-field'>
                 <label>
                     <span className='profile-preferences-label'>{label}</span>
-                    <input className='profile-preferences-input'
+                    <input
+                      className='profile-preferences-input'
                       type='checkbox'
                       checked={preferences[property]}
-                      onChange={e => this.updateUserPreferences({
-                          [property]: e.target.checked
-                      })}
+                      onChange={e =>
+                            this.updateUserPreferences({
+                                [property]: e.target.checked
+                            })
+                        }
                     />
                 </label>
             </div>
@@ -66,7 +68,6 @@ export class Profile extends Component {
     }
 
     render () {
-
         if (!this.props.profile.loggedIn) {
             return <Login />;
         }
@@ -90,22 +91,29 @@ export class Profile extends Component {
                     <div className='profile-section'>
                         <h2 className='profile-section-heading'>Settings</h2>
                         <div className='profile-preferences'>
-                            {browserHasSpeechRecognition && this.createPreferenceCheckboxField({
-                                label: 'Enable voice recording',
-                                property: 'enableVoiceRecording'
-                            })}
-                            {false && this.createPreferenceCheckboxField({
-                                label: 'Connect to sync server',
-                                property: 'connectToSyncServer'
-                            })}
+                            {browserHasSpeechRecognition &&
+                                this.createPreferenceCheckboxField({
+                                    label: 'Enable voice recording',
+                                    property: 'enableVoiceRecording'
+                                })}
+                            {false &&
+                                this.createPreferenceCheckboxField({
+                                    label: 'Connect to sync server',
+                                    property: 'connectToSyncServer'
+                                })}
                             {this.createPreferenceCheckboxField({
                                 label: 'Compact tasks view',
                                 property: 'compactView'
                             })}
-                            {false && this.createPreferenceCheckboxField({
-                                label: 'Enable animations',
-                                property: 'enableAnimations'
+                            {this.createPreferenceCheckboxField({
+                                label: 'Split limbo and tasks vertically',
+                                property: 'verticalLimboSplit'
                             })}
+                            {false &&
+                                this.createPreferenceCheckboxField({
+                                    label: 'Enable animations',
+                                    property: 'enableAnimations'
+                                })}
                         </div>
                     </div>
 
@@ -133,7 +141,9 @@ export class Profile extends Component {
                         </table>
                     </div>
 
-                    <button className='profile-logout btn' onClick={this.onLogoutClick}>Log out</button>
+                    <button className='profile-logout btn' onClick={this.onLogoutClick}>
+                        Log out
+                    </button>
                 </div>
             </div>
         );

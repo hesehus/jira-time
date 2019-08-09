@@ -6,33 +6,31 @@ import RecordActionButtons from 'modules/RecordActionButtons';
 import './TasksInLimbo.scss';
 
 export default class TasksInLimbo extends Component {
-
     static propTypes = {
         movingRecord: PropTypes.object,
         recordsWithNoIssue: PropTypes.array.isRequired
-    }
+    };
 
     render () {
-
         const { movingRecord, recordsWithNoIssue } = this.props;
 
         let textInLimbo;
         switch (recordsWithNoIssue.length) {
-        case 0 : {
+        case 0: {
             textInLimbo = 'No work logs in limbo!';
             break;
         }
-        case 1 : {
+        case 1: {
             textInLimbo = 'Just one work log in limbo';
             break;
         }
-        case 2 :
-        case 3 :
-        case 4 : {
+        case 2:
+        case 3:
+        case 4: {
             textInLimbo = `${recordsWithNoIssue.length} work logs in limbo`;
             break;
         }
-        default : {
+        default: {
             textInLimbo = `Oh dear. You have ${recordsWithNoIssue.length} work logs in limbo`;
             break;
         }
@@ -45,7 +43,7 @@ export default class TasksInLimbo extends Component {
 
         // Output the list of tasks
         return (
-            <div>
+            <div className='task-limbo-container'>
                 <div className={className}>
                     <div className='task--limbo-header'>
                         {textInLimbo}

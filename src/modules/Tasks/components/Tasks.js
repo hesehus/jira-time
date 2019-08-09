@@ -13,7 +13,6 @@ import './Tasks.scss';
 let scrollbarWidth;
 
 export default class Tasks extends Component {
-
     static propTypes = {
         profile: PropTypes.object.isRequired,
         tasks: PropTypes.array.isRequired,
@@ -21,7 +20,7 @@ export default class Tasks extends Component {
         setManualSortOrder: PropTypes.func.isRequired,
         setTaskMoving: PropTypes.func.isRequired,
         unfilteredTasks: PropTypes.array.isRequired
-    }
+    };
 
     constructor (props) {
         super(props);
@@ -56,16 +55,8 @@ export default class Tasks extends Component {
     }
 
     render () {
-
-        const {
-            profile,
-            tasks,
-            tasksSearch,
-            setManualSortOrder,
-            setTaskMoving,
-            unfilteredTasks
-        } = this.props;
-        const { enableAnimations } = profile.preferences;
+        const { profile, tasks, tasksSearch, setManualSortOrder, setTaskMoving, unfilteredTasks } = this.props;
+        const { enableAnimations, verticalLimboSplit } = profile.preferences;
         const { delayedMount, scrollTop } = this.state;
 
         // Show loading spinner when mounted the first time and there are a lot of items
@@ -100,13 +91,15 @@ export default class Tasks extends Component {
             tasksListOutput = (
                 <div className='tasks-list-wrap' onScroll={this.onScroll}>
                     <RealTasks tasks={tasks} enableAnimations={enableAnimations} />
-                    {enableAnimations && <DraggableTasks
-                      tasks={tasks}
-                      unfilteredTasks={unfilteredTasks}
-                      setTaskMoving={setTaskMoving}
-                      setManualSortOrder={setManualSortOrder}
-                      parentScrollTop={scrollTop}
-                    />}
+                    {enableAnimations && (
+                        <DraggableTasks
+                          tasks={tasks}
+                          unfilteredTasks={unfilteredTasks}
+                          setTaskMoving={setTaskMoving}
+                          setManualSortOrder={setManualSortOrder}
+                          parentScrollTop={scrollTop}
+                        />
+                    )}
                 </div>
             );
         }
@@ -115,11 +108,13 @@ export default class Tasks extends Component {
         return (
             <div className='tasks-outer'>
                 <div className='tasks'>
-                    <div style={{ marginRight: `${scrollbarWidth}px` }}>
+                    <div className='tasks-header-container' style={{ marginRight: `${scrollbarWidth}px` }}>
                         <TasksHeader />
-                        <TasksInLimbo />
                     </div>
-                    {tasksListOutput}
+                    <div className='tasks-container' style={verticalLimboSplit ? { flexDirection: 'row' } : null}>
+                        <TasksInLimbo />
+                        {tasksListOutput}
+                    </div>
                 </div>
             </div>
         );

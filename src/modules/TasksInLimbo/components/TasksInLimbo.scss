@@ -11,7 +11,13 @@
         align-items: center;
 
         .compact-view & {
-            font-size: .8rem;
+            font-size: 0.8rem;
         }
     }
+}
+
+.task-limbo-container {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    flex: 1 1 40%;
 }
