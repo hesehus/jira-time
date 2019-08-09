@@ -84,7 +84,7 @@ export default class Tasks extends Component {
 
         // Output the list of tasks
         return (
-            <div className="tasks tasks--real" ref={el => (this.el = el)}>
+            <div className="tasks--real" ref={el => (this.el = el)}>
                 {tasks.map(task => (
                     <Task key={task.cuid} task={task} />
                 ))}

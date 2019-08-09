@@ -43,7 +43,7 @@ export default class TasksInLimbo extends Component {
 
         // Output the list of tasks
         return (
-            <div>
+            <div className='task-limbo-container'>
                 <div className={className}>
                     <div className="task--limbo-header">
                         {textInLimbo}

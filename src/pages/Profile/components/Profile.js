@@ -105,6 +105,10 @@ export class Profile extends Component {
                                 label: 'Compact tasks view',
                                 property: 'compactView'
                             })}
+                            {this.createPreferenceCheckboxField({
+                                label: 'Split limbo and tasks vertically',
+                                property: 'verticalLimboSplit'
+                            })}
                             {false &&
                                 this.createPreferenceCheckboxField({
                                     label: 'Enable animations',

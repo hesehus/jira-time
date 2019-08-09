@@ -2,6 +2,8 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
+    position: relative;
 
     &-list-wrap {
         position: relative;
@@ -10,6 +12,7 @@
         flex-grow: 1;
         padding: 0 15px 20px 20px;
         margin-top: 15px;
+        flex: 1 1 60%;
 
         .compact-view & {
             margin-top: 0;
@@ -30,6 +33,17 @@
         display: flex;
         flex-direction: column;
         margin-top: 15px;
+    }
+
+    &-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 100%;
+        min-height: 1px;
+    }
+
+    &-header-container {
+        flex: 0 0 auto;
     }
 
     &-outer--loading {
