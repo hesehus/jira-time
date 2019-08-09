@@ -11,7 +11,6 @@ import TimeTrackingInfo from './TimeTrackingInfo';
 import './Task.scss';
 
 export default class Task extends Component {
-
     static get propTypes () {
         return {
             task: PropTypes.object.isRequired,
@@ -32,7 +31,6 @@ export default class Task extends Component {
     }
 
     onRemoveClick () {
-
         const { records, removeTask, task } = this.props;
 
         if (records.length > 0) {
@@ -46,25 +44,20 @@ export default class Task extends Component {
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes, get rid of it all!',
                 cancelButtonText: 'Shit, NO!'
-            }).then(function () {
-                removeTask({ cuid: task.cuid });
-            }).catch(() => {
-                // No? Good thing we asked this question then =)
-            });
+            })
+                .then(function () {
+                    removeTask({ cuid: task.cuid });
+                })
+                .catch(() => {
+                    // No? Good thing we asked this question then =)
+                });
         } else {
             removeTask({ cuid: task.cuid });
         }
     }
 
     render () {
-
-        const {
-            task,
-            movingRecord,
-            movingTask,
-            records,
-            setIssueRemainingEstimate
-        } = this.props;
+        const { task, movingRecord, movingTask, records, setIssueRemainingEstimate } = this.props;
 
         let className = 'task';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
@@ -72,7 +65,8 @@ export default class Task extends Component {
         }
 
         const deleteButton = (
-            <button tabIndex='-1'
+            <button
+              tabIndex='-1'
               type='button'
               className='task-delete'
               title='Remove task'
@@ -89,7 +83,9 @@ export default class Task extends Component {
                     {deleteButton}
                     <div className='task-info'>
                         <span className='task__summary'>
-                            {task.issue.errorMessages.map((e, i) => (<div key={i}>{e}</div>))}
+                            {task.issue.errorMessages.map((e, i) => (
+                                <div key={i}>{e}</div>
+                            ))}
                         </span>
                     </div>
                     <Records records={records} />
@@ -97,11 +93,9 @@ export default class Task extends Component {
             );
         }
 
-        const status = (
-            task.issue.fields.status
-                ? <span className='task__status'>{task.issue.fields.status.name}</span>
-                : null
-        );
+        const status = task.issue.fields.status ? (
+            <span className='task__status'>{task.issue.fields.status.name}</span>
+        ) : null;
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
@@ -114,24 +108,27 @@ export default class Task extends Component {
                 <div className='task__info'>
                     <div className='task__left'>
                         <div className='task__key-and-status'>
-                            <a className='task__link'
+                            <a
+                              className='task__link'
                               href={config.serverPath + '/browse/' + task.issue.key}
                               target='_blank'
                               tabIndex='-1'
                             >
                                 {task.issue.key}
-
                             </a>
 
-                            {task.issue.epic
-                            ? <a className='task__link task__link--epic'
-                              href={config.serverPath + '/browse/' + task.issue.epic.key}
-                              target='_blank'
-                              tabIndex='-1'
+                            {task.issue.epic ? (
+                                <a
+                                  className='task__link task__link--epic'
+                                  href={config.serverPath + '/browse/' + task.issue.epic.key}
+                                  target='_blank'
+                                  tabIndex='-1'
                                 >
-                                EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
-                            </a> : ''
-                            }
+                                    EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
+                                </a>
+                            ) : (
+                                ''
+                            )}
 
                             {status}
                         </div>
