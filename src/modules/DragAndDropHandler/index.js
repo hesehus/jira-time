@@ -10,6 +10,7 @@ import { getTasksFilteredBySearch } from 'store/reducers/tasks';
 let eventsBinded;
 let taskElement;
 let recordElement;
+let recordElementClone;
 let recordElementHeight;
 let targetTaskCuid;
 let targetTaskIssueKey;
@@ -27,7 +28,7 @@ export function init() {
 
         mc.add(
             new Hammer.Pan({
-                direction: Hammer.DIRECTION_VERTICAL,
+                direction: Hammer.DIRECTION_ALL,
                 threshold: 5
             })
         );
@@ -83,6 +84,19 @@ function onPanStart(event) {
             const rect = recordElement.getBoundingClientRect();
             recordElementHeight = rect.height;
 
+            const container = domClosest(recordElement, '.tasks');
+            const rectContainer = container.getBoundingClientRect();
+            recordElementClone = recordElement.cloneNode(true);
+            recordElementClone.style.position = 'absolute';
+            recordElementClone.style.top = rect.top - rectContainer.top + 'px';
+            recordElementClone.style.left = rect.left + 'px';
+            recordElementClone.style.height = rect.height + 'px';
+            recordElementClone.style.width = rect.width + 'px';
+            recordElementClone.style.pointerEvents = 'none';
+            container.appendChild(recordElementClone);
+
+            recordElement.style.opacity = 0;
+
             onPanMove(event);
             return;
         }
@@ -114,7 +128,7 @@ function onPanMove(event) {
         if (record) {
             event.preventDefault();
 
-            recordElement.style.transform = `translate3d(0px, ${event.deltaY + recordElementHeight}px, 0) scale(1.05)`;
+            recordElementClone.style.transform = `translate3d(${event.deltaX}px, ${event.deltaY}px, 0) scale(1.05)`;
 
             const { x, y } = event.center;
             const closestTask = getClosestTaskFromPosition({ x, y });
@@ -179,6 +193,10 @@ function panCleanup() {
 
     if (recordElement) {
         recordElement.style.transform = ``;
+        recordElement.style.opacity = 1;
+    }
+    if (recordElementClone) {
+        recordElementClone.remove();
     }
 }
 
