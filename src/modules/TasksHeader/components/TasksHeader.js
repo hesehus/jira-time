@@ -8,15 +8,14 @@ import PlusIcon from 'assets/plus-black.svg';
 import './TasksHeader.scss';
 
 export default class TasksHeader extends Component {
-
     static propTypes = {
         tasksSortOrder: PropTypes.string,
         tasksSearch: PropTypes.string,
         setTasksSortOrder: PropTypes.func.isRequired,
         setTasksSearch: PropTypes.func.isRequired
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onSortClick = this.onSortClick.bind(this);
@@ -25,15 +24,15 @@ export default class TasksHeader extends Component {
         this.onDocumentKeyDown = this.onDocumentKeyDown.bind(this);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         document.addEventListener('keydown', this.onDocumentKeyDown, false);
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         document.removeEventListener('keydown', this.onDocumentKeyDown);
     }
 
-    onDocumentKeyDown (e) {
+    onDocumentKeyDown(e) {
         const code = keycode(e);
         if (code === 'f') {
             if (e.metaKey || e.ctrlKey) {
@@ -49,7 +48,7 @@ export default class TasksHeader extends Component {
         }
     }
 
-    onSortClick () {
+    onSortClick() {
         let { tasksSortOrder } = this.props;
 
         if (tasksSortOrder === TASKS_SORT_ORDERS[0]) {
@@ -62,15 +61,14 @@ export default class TasksHeader extends Component {
             sortOrder: tasksSortOrder
         });
     }
-    onDeleteSearchText () {
+    onDeleteSearchText() {
         this.props.setTasksSearch({ search: '' });
     }
-    onInputChange (e) {
+    onInputChange(e) {
         this.props.setTasksSearch({ search: e.target.value });
     }
 
-    render () {
-
+    render() {
         const { tasksSortOrder, tasksSearch } = this.props;
 
         let sortOrderDisplay = '-';
@@ -80,34 +78,37 @@ export default class TasksHeader extends Component {
 
         // Output the list of tasks
         return (
-            <div className='tasks-header'>
+            <div className="tasks-header">
                 <div
-                  className={'tasks-header-sorting tasks-header-sorting--' + sortOrderDisplay}
-                  onClick={this.onSortClick}
-                  title={sortOrderDisplay}
+                    className={'tasks-header-sorting tasks-header-sorting--' + sortOrderDisplay}
+                    onClick={this.onSortClick}
+                    title={sortOrderDisplay}
                 >
                     Sort:
-                    <img
-                      className='tasks-header-sorting-icon'
-                      src={IconDown}
-                      alt={sortOrderDisplay}
-                    />
+                    <img className="tasks-header-sorting-icon" src={IconDown} alt={sortOrderDisplay} />
                 </div>
-                <div className='tasks-header-right'>
-                    <div className='tasks-header-search'>
+                <div className="tasks-header-right">
+                    <div className="tasks-header-search">
                         <input
-                          className='input-field tasks-header-search-input'
-                          value={tasksSearch}
-                          onChange={this.onInputChange}
-                          onFocus={() => this.inputFocusing = true}
-                          onBlur={() => this.inputFocusing = false}
-                          type='search'
-                          ref={e => this.search = e}
+                            className="input-field tasks-header-search-input"
+                            value={tasksSearch}
+                            onChange={this.onInputChange}
+                            onFocus={() => (this.inputFocusing = true)}
+                            onBlur={() => (this.inputFocusing = false)}
+                            type="search"
+                            ref={e => (this.search = e)}
                         />
-                        <span className={'tasks-header-search-delete' + (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')} // eslint-disable-line
-                          onClick={this.onDeleteSearchText}>
-                            <img src={PlusIcon} alt='Delete search input'
-                              className='tasks-header-search-delete__icon'
+                        <span
+                            className={
+                                'tasks-header-search-delete' +
+                                (!!tasksSearch.length ? ' tasks-header-search-delete--show' : '')
+                            } // eslint-disable-line
+                            onClick={this.onDeleteSearchText}
+                        >
+                            <img
+                                src={PlusIcon}
+                                alt="Delete search input"
+                                className="tasks-header-search-delete__icon"
                             />
                         </span>
                     </div>

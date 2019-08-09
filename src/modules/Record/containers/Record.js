@@ -1,21 +1,18 @@
 import { connect } from 'react-redux';
 
 import {
-  stopRecording,
-  removeRecord,
-  setRecordDate,
-  setRecordMoving,
-  setRecordComment,
-  setRecordMoveTarget,
-  setRecordTask,
-  getActiveRecord,
-  getMovingRecord
+    stopRecording,
+    removeRecord,
+    setRecordDate,
+    setRecordMoving,
+    setRecordComment,
+    setRecordMoveTarget,
+    setRecordTask,
+    getActiveRecord,
+    getMovingRecord
 } from 'store/reducers/recorder';
 
-import {
-    getTask,
-    getMovingTask
-} from 'store/reducers/tasks';
+import { getTask, getMovingTask } from 'store/reducers/tasks';
 
 import Record from '../components/Record';
 
@@ -27,7 +24,7 @@ const mapStateToProps = (state, props) => {
         movingRecord: getMovingRecord({ state }),
         movingTask: getMovingTask({ state })
     };
-}
+};
 
 const mapDispatchToProps = {
     stopRecording,
@@ -39,4 +36,7 @@ const mapDispatchToProps = {
     setRecordMoveTarget
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Record);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Record);

@@ -10,16 +10,15 @@ import { refreshJiraIssue, issueIsClosed } from 'shared/taskHelper';
 import './RecordActionButtons.scss';
 
 export default class RecordActionButtons extends Component {
-
     static propTypes = {
         profile: PropTypes.object.isRequired,
         task: PropTypes.object,
         addRecord: PropTypes.func.isRequired,
         startRecording: PropTypes.func.isRequired,
         onRemainingUpdated: PropTypes.func
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onIssueRefreshClick = this.onIssueRefreshClick.bind(this);
@@ -27,7 +26,7 @@ export default class RecordActionButtons extends Component {
         this.onStartActiveLogClick = this.onStartActiveLogClick.bind(this);
     }
 
-    onStartPassiveLogClick () {
+    onStartPassiveLogClick() {
         const { task } = this.props;
 
         const startTime = new Date();
@@ -46,7 +45,7 @@ export default class RecordActionButtons extends Component {
         });
     }
 
-    onStartActiveLogClick () {
+    onStartActiveLogClick() {
         const { task } = this.props;
 
         const record = RecordModel({ task });
@@ -57,22 +56,20 @@ export default class RecordActionButtons extends Component {
         });
     }
 
-    onIssueRefreshClick () {
+    onIssueRefreshClick() {
         const { task, onRemainingUpdated } = this.props;
 
         refreshJiraIssue({
             taskCuid: task.cuid,
             taskIssueKey: task.issue.key
-        })
-        .then((issue) => {
+        }).then(issue => {
             if (onRemainingUpdated) {
                 onRemainingUpdated(issue.fields.timetracking.remainingEstimate);
             }
         });
     }
 
-    render () {
-
+    render() {
         const { task, profile } = this.props;
         const { compactView } = profile.preferences;
 
@@ -82,26 +79,25 @@ export default class RecordActionButtons extends Component {
         if (task) {
             if (task.issueRefreshing) {
                 refreshElement = (
-                    <span className='record-action-buttons-btn record-action-buttons-btn--loader'>
-                        <span className='record-action-buttons-small-icon'>
+                    <span className="record-action-buttons-btn record-action-buttons-btn--loader">
+                        <span className="record-action-buttons-small-icon">
                             <Loader
-                              size={compactView ? 'tiny' : 'small'}
-                              width={compactView ? '13px' : '20px'}
-                              height={compactView ? '13px' : '20px'}
+                                size={compactView ? 'tiny' : 'small'}
+                                width={compactView ? '13px' : '20px'}
+                                height={compactView ? '13px' : '20px'}
                             />
                         </span>
                     </span>
                 );
             } else {
                 refreshElement = (
-                    <button className='record-action-buttons-btn'
-                      title='Click to refresh the JIRA issue'
-                      onClick={this.onIssueRefreshClick}
-                      tabIndex='-1'
+                    <button
+                        className="record-action-buttons-btn"
+                        title="Click to refresh the JIRA issue"
+                        onClick={this.onIssueRefreshClick}
+                        tabIndex="-1"
                     >
-                        <img src={RefreshIcon}
-                          className='record-action-buttons-small-icon'
-                          alt='Refresh' />
+                        <img src={RefreshIcon} className="record-action-buttons-small-icon" alt="Refresh" />
                     </button>
                 );
             }
@@ -110,28 +106,29 @@ export default class RecordActionButtons extends Component {
         const btnClass = 'record-action-buttons-btn';
 
         return (
-            <div className='record-action-buttons'>
+            <div className="record-action-buttons">
                 {refreshElement}
                 <button
-                  className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
-                  tabIndex='-1'
-                  title={closed ? 'Issue is closed, dude' : 'Add a worklog'}
-                  disabled={closed}
-                  onClick={this.onStartPassiveLogClick}>
-                    <img src={AddButton}
-                      className='record-action-buttons-small-icon record-action-buttons-small-icon--add-passive'
-                      alt='Plus'
+                    className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
+                    tabIndex="-1"
+                    title={closed ? 'Issue is closed, dude' : 'Add a worklog'}
+                    disabled={closed}
+                    onClick={this.onStartPassiveLogClick}
+                >
+                    <img
+                        src={AddButton}
+                        className="record-action-buttons-small-icon record-action-buttons-small-icon--add-passive"
+                        alt="Plus"
                     />
                 </button>
                 <button
-                  className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
-                  tabIndex='-1'
-                  title={closed ? 'Issue is closed, dude' : 'Start new worklog'}
-                  disabled={closed}
-                  onClick={this.onStartActiveLogClick}>
-                    <img src={RecordIcon}
-                      className='record-action-buttons-start-new'
-                      alt='Record' />
+                    className={btnClass + (closed ? ` ${btnClass}--disabled` : '')}
+                    tabIndex="-1"
+                    title={closed ? 'Issue is closed, dude' : 'Start new worklog'}
+                    disabled={closed}
+                    onClick={this.onStartActiveLogClick}
+                >
+                    <img src={RecordIcon} className="record-action-buttons-start-new" alt="Record" />
                 </button>
             </div>
         );

@@ -1,75 +1,75 @@
 .profile {
-  flex-grow: 1;
-  flex-shrink: 0;
-  max-width: calc(100vw - 16px);
-  padding-top: 20px;
+    flex-grow: 1;
+    flex-shrink: 0;
+    max-width: calc(100vw - 16px);
+    padding-top: 20px;
 
-  &-section {
-    background: rgba(0,0,0,.2);
-    padding: 15px;
-    border-radius: 5px;
+    &-section {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 5px;
 
-    &:not(:last-child) {
-      margin-bottom: 15px;
-    }
-  }
-
-  &-section-heading {
-    text-transform: uppercase;
-    font-size: 1rem;
-    margin: 0 0 6px;
-    text-align: center;
-  }
-
-  &-logout {
-    margin-top: 20px;
-    flex: 0 0 auto;
-  }
-
-  &-avatar {}
-  &-avatar-img {
-    display: block;
-    border-radius: 50%;
-    border: 5px solid rgba(0, 0, 0, .2);
-    width: 50px;
-    height: 50px;
-    background-size: cover;
-    margin: 0 auto;
-  }
-
-  &-bottom {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 20px 20px;
-  }
-
-  &-shortcuts {
-    width: 100%;
-    text-align: left;
-    line-height: 1.2rem;
-  }
-  &-shortcuts-heading {
-    text-transform: uppercase;
-  }
-  &-shortcuts-cell {
-    padding: 5px;
-  }
-
-  &-preferences {
-
-    &-field:not(:last-child) {
-      margin-bottom: 5px;
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
     }
 
-    &-label {
-      display: inline-block;
-      margin-right: 10px;
+    &-section-heading {
+        text-transform: uppercase;
+        font-size: 1rem;
+        margin: 0 0 6px;
+        text-align: center;
     }
-    
-    &-input {
-      position: relative;
-      top: 1px;
+
+    &-logout {
+        margin-top: 20px;
+        flex: 0 0 auto;
     }
-  }
+
+    &-avatar {
+    }
+    &-avatar-img {
+        display: block;
+        border-radius: 50%;
+        border: 5px solid rgba(0, 0, 0, 0.2);
+        width: 50px;
+        height: 50px;
+        background-size: cover;
+        margin: 0 auto;
+    }
+
+    &-bottom {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px 20px;
+    }
+
+    &-shortcuts {
+        width: 100%;
+        text-align: left;
+        line-height: 1.2rem;
+    }
+    &-shortcuts-heading {
+        text-transform: uppercase;
+    }
+    &-shortcuts-cell {
+        padding: 5px;
+    }
+
+    &-preferences {
+        &-field:not(:last-child) {
+            margin-bottom: 5px;
+        }
+
+        &-label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        &-input {
+            position: relative;
+            top: 1px;
+        }
+    }
 }

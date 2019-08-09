@@ -1,11 +1,6 @@
 import { connect } from 'react-redux';
 
-import {
-  startRecording,
-  stopRecording,
-  setRecordComment,
-  updateRecordElapsed
-} from 'store/reducers/recorder';
+import { startRecording, stopRecording, setRecordComment, updateRecordElapsed } from 'store/reducers/recorder';
 
 import { addTask } from 'store/reducers/tasks';
 import { setSyncId } from 'store/reducers/app';
@@ -21,10 +16,13 @@ const mapDispatchToProps = {
     setSyncId
 };
 
-const mapStateToProps = (state) => ({
-    tasks : state.tasks.tasks,
+const mapStateToProps = state => ({
+    tasks: state.tasks.tasks,
     recorder: state.recorder,
     profile: state.profile
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Recorder);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Recorder);

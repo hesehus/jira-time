@@ -7,27 +7,31 @@ import ListIcon from 'components/Header/assets/list.svg';
 import UserIcon from 'components/Header/assets/user.svg';
 
 describe('(Component) Header', () => {
-  let _wrapper;
+    let _wrapper;
 
-  beforeEach(() => {
-    _wrapper = shallow(<Header />)
-  });
-
-  describe('Navigation links...', () => {
-    it('Should render a Link to Home route', () => {
-      expect(_wrapper.contains(
-        <IndexLink to='/' className='header__route' activeClassName='header__route--active'>
-          <img className='header__route__icon' src={ListIcon} alt='Home' />
-        </IndexLink>
-      )).to.be.true;
+    beforeEach(() => {
+        _wrapper = shallow(<Header />);
     });
 
-    it('Should render a Link to Profile route', () => {
-      expect(_wrapper.contains(
-        <Link to='/profile' className='header__route' activeClassName='header__route--active'>
-          <img className='header__route__icon' src={UserIcon} alt='Profile' />
-        </Link>
-      )).to.be.true;
+    describe('Navigation links...', () => {
+        it('Should render a Link to Home route', () => {
+            expect(
+                _wrapper.contains(
+                    <IndexLink to="/" className="header__route" activeClassName="header__route--active">
+                        <img className="header__route__icon" src={ListIcon} alt="Home" />
+                    </IndexLink>
+                )
+            ).to.be.true;
+        });
+
+        it('Should render a Link to Profile route', () => {
+            expect(
+                _wrapper.contains(
+                    <Link to="/profile" className="header__route" activeClassName="header__route--active">
+                        <img className="header__route__icon" src={UserIcon} alt="Profile" />
+                    </Link>
+                )
+            ).to.be.true;
+        });
     });
-  });
 });

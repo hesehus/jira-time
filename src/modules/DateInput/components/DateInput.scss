@@ -1,84 +1,84 @@
 .date-inp {
-  display: flex;
+    display: flex;
 
-  &:not(:first-child) {
-    margin-top: 5px;
+    &:not(:first-child) {
+        margin-top: 5px;
 
-    .compact-view & {
-      margin-top: 0;
-    }
-  }
-
-  &__input {
-    display: inline-block;
-    padding: 0;
-    border: none; 
-    background: transparent;
-
-    &::-ms-clear,
-    &::-webkit-clear-button,
-    &::-webkit-outer-spin-button,
-    &::-webkit-inner-spin-button {
-        display:none;
-    }
-  }
-
-  &__input--date {
-    &,
-    & > input {
-      width: 130px;
-      border: none !important;
-    }
-  }
-
-  &__input--time > input {
-    width: 40px;
-    border: none !important;
-    padding: 2px 0;
-    text-align: center;
-    background: transparent;
-    color: #fff;
-    font-size: .8rem;
-  }
-
-  &__input--time-seconds > input {
-    width: 65px;
-    border: none !important;
-    padding: 2px 0;
-    text-align: left;
-  }
-
-  &-date {
-    $width: 45px;
-    // margin-right: 5px;
-    position: relative;
-    width: $width;
-
-    &__display {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      text-align: right;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
+        .compact-view & {
+            margin-top: 0;
+        }
     }
 
-    &__input,
-    .flatpickr-input[type=text],
-    .flatpickr-input.flatpickr-mobile {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: $width;
-      height: 100%;
-      margin: 0;
-      opacity: 0;
-      z-index: 2;
-      cursor: pointer;
+    &__input {
+        display: inline-block;
+        padding: 0;
+        border: none;
+        background: transparent;
+
+        &::-ms-clear,
+        &::-webkit-clear-button,
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            display: none;
+        }
     }
-  }
+
+    &__input--date {
+        &,
+        & > input {
+            width: 130px;
+            border: none !important;
+        }
+    }
+
+    &__input--time > input {
+        width: 40px;
+        border: none !important;
+        padding: 2px 0;
+        text-align: center;
+        background: transparent;
+        color: #fff;
+        font-size: 0.8rem;
+    }
+
+    &__input--time-seconds > input {
+        width: 65px;
+        border: none !important;
+        padding: 2px 0;
+        text-align: left;
+    }
+
+    &-date {
+        $width: 45px;
+        // margin-right: 5px;
+        position: relative;
+        width: $width;
+
+        &__display {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: right;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        &__input,
+        .flatpickr-input[type="text"],
+        .flatpickr-input.flatpickr-mobile {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: $width;
+            height: 100%;
+            margin: 0;
+            opacity: 0;
+            z-index: 2;
+            cursor: pointer;
+        }
+    }
 }

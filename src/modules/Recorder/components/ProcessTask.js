@@ -2,15 +2,14 @@ import { getIssue } from 'shared/jiraClient';
 import EventClass from 'shared/eventClass';
 
 export default class ProcessTask extends EventClass {
-
-    constructor () {
+    constructor() {
         super();
 
         this.processingTasks = false;
         this.tasks = [];
     }
 
-    add (tasks) {
+    add(tasks) {
         const length = this.tasks.length;
 
         this.tasks = [...this.tasks, ...tasks];
@@ -20,12 +19,11 @@ export default class ProcessTask extends EventClass {
         }
     }
 
-    getRemaining () {
+    getRemaining() {
         return this.tasks.length;
     }
 
-    process () {
-
+    process() {
         if (!this.tasks.length) {
             this.emit('end');
             return;
@@ -36,10 +34,10 @@ export default class ProcessTask extends EventClass {
         var next = () => {
             this.tasks = this.tasks.splice(1);
             this.process();
-        }
+        };
 
         getIssue({ key })
-            .then((issue) => {
+            .then(issue => {
                 next();
 
                 if (issue) {

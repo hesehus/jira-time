@@ -1,4 +1,4 @@
-@import '_variables';
+@import "_variables";
 
 .theme-selector {
     display: flex;
@@ -27,18 +27,18 @@
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: .5rem;
+        font-size: 0.5rem;
         margin: 10px 15px;
         cursor: pointer;
         transition: all 150ms;
         box-shadow: 0 0 5px rgba(255, 255, 255, 0);
 
         &:active {
-            transform: scale(.92);
+            transform: scale(0.92);
         }
 
         &--selected {
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, .5);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
             transform: scale(1.2);
         }
     }

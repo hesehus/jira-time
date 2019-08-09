@@ -9,12 +9,12 @@ export default class Tasks extends Component {
         enableAnimations: PropTypes.bool
     };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.calculatePositions = this.calculatePositions.bind(this);
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.calculatePositions();
         window.addEventListener('resize', () => {
             clearTimeout(this.calculateTimeout);
@@ -31,7 +31,7 @@ export default class Tasks extends Component {
         });
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         window.removeEventListener('resize', this.calculatePositions);
         if (this.props.enableAnimations) {
             events.off('record-animate', this.calculatePositions);
@@ -40,7 +40,7 @@ export default class Tasks extends Component {
         this.storeUnsubscribe();
     }
 
-    calculatePositions () {
+    calculatePositions() {
         if (!this.el || !this.props.enableAnimations) {
             return;
         }
@@ -79,12 +79,12 @@ export default class Tasks extends Component {
         events.emit('tasksPositionsCalculated', { tasksPositions });
     }
 
-    render () {
+    render() {
         const { tasks } = this.props;
 
         // Output the list of tasks
         return (
-            <div className='tasks--real' ref={el => (this.el = el)}>
+            <div className="tasks--real" ref={el => (this.el = el)}>
                 {tasks.map(task => (
                     <Task key={task.cuid} task={task} />
                 ))}

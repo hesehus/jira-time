@@ -4,7 +4,7 @@ import { setLoggedIn } from 'store/reducers/profile';
 
 import Login from '../components/Login';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     username: state.profile.username
 });
 
@@ -13,4 +13,7 @@ const mapDispatchToProps = {
     setAuthenticationHash
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Login);

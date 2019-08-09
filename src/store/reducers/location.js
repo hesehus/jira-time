@@ -8,10 +8,10 @@ export const LOCATION_CHANGE = 'LOCATION_CHANGE';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function locationChange (location = '/') {
+export function locationChange(location = '/') {
     return {
-        type    : LOCATION_CHANGE,
-        payload : location
+        type: LOCATION_CHANGE,
+        payload: location
     };
 }
 
@@ -19,19 +19,17 @@ export function locationChange (location = '/') {
 // Specialized Action Creator
 // ------------------------------------
 export const updateLocation = ({ dispatch }) => {
-    return (nextLocation) => dispatch(locationChange(nextLocation));
+    return nextLocation => dispatch(locationChange(nextLocation));
 };
 
 // ------------------------------------
 // Getters
 // ------------------------------------
-export const getCurrentPath = state => state.location ? state.location.pathname : '/';
+export const getCurrentPath = state => (state.location ? state.location.pathname : '/');
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function locationReducer (state = initialState, action) {
-    return action.type === LOCATION_CHANGE && action.payload.action !== 'POP'
-    ? action.payload
-    : state;
+export default function locationReducer(state = initialState, action) {
+    return action.type === LOCATION_CHANGE && action.payload.action !== 'POP' ? action.payload : state;
 }

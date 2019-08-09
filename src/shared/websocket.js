@@ -19,7 +19,7 @@ export default ee;
 
 let unsubscribeToStore;
 
-export function sendIssueUpdate (issue) {
+export function sendIssueUpdate(issue) {
     send({
         issueUpdate: true,
         issue
@@ -29,8 +29,7 @@ export function sendIssueUpdate (issue) {
     return issue;
 }
 
-export function handleWSConnection () {
-
+export function handleWSConnection() {
     // We cannot connect to a socket server when the site is hosted by JIRA.
     if (location.hostname === 'jira.hesehus.dk') {
         return;
@@ -42,9 +41,7 @@ export function handleWSConnection () {
 
     {
         let state = store.getState();
-        if (!state.profile.loggedIn ||
-            !state.profile.preferences.connectToSyncServer ||
-            !state.app.hydrated) {
+        if (!state.profile.loggedIn || !state.profile.preferences.connectToSyncServer || !state.app.hydrated) {
             closeConnection();
             return;
         }
@@ -54,8 +51,7 @@ export function handleWSConnection () {
         connect();
     }
 
-    function connect () {
-
+    function connect() {
         ee.emit('connecting');
 
         ws = new WebSocket('wss://' + location.hostname + ':8080');
@@ -65,7 +61,7 @@ export function handleWSConnection () {
             closeConnection();
         });
 
-        ws.addEventListener('error', (e) => {
+        ws.addEventListener('error', e => {
             console.log('server connection error', e);
             closeConnection();
         });
@@ -75,13 +71,12 @@ export function handleWSConnection () {
          * the server is established
          */
         ws.addEventListener('open', () => {
-
             ee.emit('connected');
 
             /**
              * Send the init command the username since it is being used
              * as identifier for the future messages
-            **/
+             **/
             const state = store.getState();
             send({
                 ...state,
@@ -92,7 +87,6 @@ export function handleWSConnection () {
             unsubscribeFromStoreUpdates = store.subscribe(() => {
                 clearTimeout(sendTimeout);
                 sendTimeout = setTimeout(() => {
-
                     if (!ws) {
                         return;
                     }
@@ -102,9 +96,9 @@ export function handleWSConnection () {
                     /**
                      * The store updateTime is fresher than what we have. This means that the
                      * state change is local and we should push the changes to the server
-                    **/
+                     **/
                     if (state.app.updateTime > updateTime) {
-                        console.log('state qualifies for server update', state.app.updateTime, updateTime)
+                        console.log('state qualifies for server update', state.app.updateTime, updateTime);
 
                         // Store the updateTime
                         updateTime = state.app.updateTime;
@@ -120,8 +114,7 @@ export function handleWSConnection () {
             });
 
             // Listen for messages from the server
-            ws.addEventListener('message', (message) => {
-
+            ws.addEventListener('message', message => {
                 let serverState;
                 try {
                     serverState = JSON.parse(message.data);
@@ -155,14 +148,16 @@ export function handleWSConnection () {
     }
 }
 
-function send (message) {
+function send(message) {
     if (ws && ws.send) {
         if (ws.readyState === WebSocket.OPEN) {
             try {
-                ws.send(JSON.stringify({
-                    ...message,
-                    syncUserId
-                }));
+                ws.send(
+                    JSON.stringify({
+                        ...message,
+                        syncUserId
+                    })
+                );
                 console.log('Send to server!', message);
             } catch (error) {
                 console.error('Error at websocket send', error);
@@ -176,7 +171,7 @@ function send (message) {
     }
 }
 
-function closeConnection () {
+function closeConnection() {
     if (unsubscribeFromStoreUpdates) {
         unsubscribeFromStoreUpdates();
     }

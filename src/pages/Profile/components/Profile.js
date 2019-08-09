@@ -11,7 +11,7 @@ import './Profile.scss';
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
 export class Profile extends Component {
-    static get propTypes () {
+    static get propTypes() {
         return {
             profile: PropTypes.object.isRequired,
             setLoggedIn: PropTypes.func.isRequired,
@@ -19,22 +19,22 @@ export class Profile extends Component {
         };
     }
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onLogoutClick = this.onLogoutClick.bind(this);
     }
 
-    onLogoutClick () {
+    onLogoutClick() {
         logout();
         this.props.setLoggedIn({ isLoggedIn: false });
     }
 
-    componentWillMount () {
+    componentWillMount() {
         updateUserInfo();
     }
 
-    updateUserPreferences (updatedPreferences) {
+    updateUserPreferences(updatedPreferences) {
         const { preferences } = this.props.profile;
 
         this.props.setUserPreferences({
@@ -45,18 +45,18 @@ export class Profile extends Component {
         });
     }
 
-    createPreferenceCheckboxField ({ label, property }) {
+    createPreferenceCheckboxField({ label, property }) {
         const { preferences } = this.props.profile;
 
         return (
-            <div className='profile-preferences-field'>
+            <div className="profile-preferences-field">
                 <label>
-                    <span className='profile-preferences-label'>{label}</span>
+                    <span className="profile-preferences-label">{label}</span>
                     <input
-                      className='profile-preferences-input'
-                      type='checkbox'
-                      checked={preferences[property]}
-                      onChange={e =>
+                        className="profile-preferences-input"
+                        type="checkbox"
+                        checked={preferences[property]}
+                        onChange={e =>
                             this.updateUserPreferences({
                                 [property]: e.target.checked
                             })
@@ -67,7 +67,7 @@ export class Profile extends Component {
         );
     }
 
-    render () {
+    render() {
         if (!this.props.profile.loggedIn) {
             return <Login />;
         }
@@ -82,15 +82,15 @@ export class Profile extends Component {
         }
 
         return (
-            <div className='profile'>
-                <div className='profile-avatar'>
-                    <img className='profile-avatar-img' src={avatarUrl} alt={userinfo.name} title={userinfo.name} />
+            <div className="profile">
+                <div className="profile-avatar">
+                    <img className="profile-avatar-img" src={avatarUrl} alt={userinfo.name} title={userinfo.name} />
                 </div>
                 <ThemeSelector />
-                <div className='profile-bottom'>
-                    <div className='profile-section'>
-                        <h2 className='profile-section-heading'>Settings</h2>
-                        <div className='profile-preferences'>
+                <div className="profile-bottom">
+                    <div className="profile-section">
+                        <h2 className="profile-section-heading">Settings</h2>
+                        <div className="profile-preferences">
                             {browserHasSpeechRecognition &&
                                 this.createPreferenceCheckboxField({
                                     label: 'Enable voice recording',
@@ -117,31 +117,31 @@ export class Profile extends Component {
                         </div>
                     </div>
 
-                    <div className='profile-section'>
-                        <h2 className='profile-section-heading'>Shortcuts</h2>
-                        <table className='profile-shortcuts'>
+                    <div className="profile-section">
+                        <h2 className="profile-section-heading">Shortcuts</h2>
+                        <table className="profile-shortcuts">
                             <tbody>
                                 <tr>
-                                    <td className='profile-shortcuts-cell'>A:</td>
-                                    <td className='profile-shortcuts-cell'>add issue(s)</td>
+                                    <td className="profile-shortcuts-cell">A:</td>
+                                    <td className="profile-shortcuts-cell">add issue(s)</td>
                                 </tr>
                                 <tr>
-                                    <td className='profile-shortcuts-cell'>UP/DOWN in comment:</td>
-                                    <td className='profile-shortcuts-cell'>navigate between worklog comments</td>
+                                    <td className="profile-shortcuts-cell">UP/DOWN in comment:</td>
+                                    <td className="profile-shortcuts-cell">navigate between worklog comments</td>
                                 </tr>
                                 <tr>
-                                    <td className='profile-shortcuts-cell'>CTR+F:</td>
-                                    <td className='profile-shortcuts-cell'>search in tasks list</td>
+                                    <td className="profile-shortcuts-cell">CTR+F:</td>
+                                    <td className="profile-shortcuts-cell">search in tasks list</td>
                                 </tr>
                                 <tr>
-                                    <td className='profile-shortcuts-cell'>CTR+S:</td>
-                                    <td className='profile-shortcuts-cell'>sync all worklogs</td>
+                                    <td className="profile-shortcuts-cell">CTR+S:</td>
+                                    <td className="profile-shortcuts-cell">sync all worklogs</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <button className='profile-logout btn' onClick={this.onLogoutClick}>
+                    <button className="profile-logout btn" onClick={this.onLogoutClick}>
                         Log out
                     </button>
                 </div>

@@ -1,8 +1,7 @@
 /* eslint-disable */
-let _listeners = Symbol("listeners");
+let _listeners = Symbol('listeners');
 
 export default class EventClass {
-
     constructor() {
         this[_listeners] = {};
     }
@@ -14,7 +13,7 @@ export default class EventClass {
      * @returns {function} - event.off(event, listener);
      */
     on(event, listener) {
-        if (typeof this[_listeners][event] === "undefined") {
+        if (typeof this[_listeners][event] === 'undefined') {
             this[_listeners][event] = [];
         }
         this[_listeners][event].push(listener);
@@ -40,8 +39,8 @@ export default class EventClass {
      * @param {function} [listener]
      */
     off(event, listener) {
-        if (typeof this[_listeners][event] !== "undefined") {
-            if (typeof listener === "undefined") {
+        if (typeof this[_listeners][event] !== 'undefined') {
+            if (typeof listener === 'undefined') {
                 this[_listeners][event] = [];
             } else {
                 let listenerIndex = this[_listeners][event].lastIndexOf(listener);
@@ -59,11 +58,10 @@ export default class EventClass {
      */
     emit(event) {
         let listeners = this[_listeners][event];
-        if (typeof listeners !== "undefined") {
+        if (typeof listeners !== 'undefined') {
             for (let i = 0; i < listeners.length; i++) {
                 listeners[i].apply(this, Array.prototype.slice.call(arguments, 1));
             }
         }
     }
-
 }

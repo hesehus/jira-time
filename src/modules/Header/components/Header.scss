@@ -1,157 +1,157 @@
-@import 'variables';
+@import "variables";
 
 .header {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: space-between;
-  height: 70px;
-  background-color: rgba(0, 0, 0, .2);
-
-  // Enable window drag for header for when wrapped in nativefier
-  -webkit-app-region: drag;
-
-  &__right,
-  &__left {
+    flex-shrink: 0;
     display: flex;
-    min-width: 52px;
-  }
+    justify-content: space-between;
+    height: 70px;
+    background-color: rgba(0, 0, 0, 0.2);
 
-  &__left {
-    align-items: center;
-    padding-left: 20px;
-  }
+    // Enable window drag for header for when wrapped in nativefier
+    -webkit-app-region: drag;
 
-  &-logo {
-    height: 35px;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-
-  &-title {
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-
-  &-title-text {
-    font-size: 1.65rem;
-    font-family: robotothinitalic, sans-serif;
-
-    @media (max-width: $screen-sm) {
-        display: none;
-    }
-  }
-
-  &__button {
-    display: flex;
-    align-items: center;
-    margin: 0;
-    padding: 0px 15px;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 100ms;
-    line-height: 0;
-    box-sizing: border-box;
-    -webkit-app-region: no-drag;
-    position: relative;
-
-    &--avatar {
-      padding: 10px 15px;
+    &__right,
+    &__left {
+        display: flex;
+        min-width: 52px;
     }
 
-    $size: 45px;
-    &::before {
-      content: '';
-      position: absolute;
-      z-index: 1;
-      width: $size;
-      height: $size;
-      left: 50%;
-      top: 50%;
-      margin-top: -($size / 2);
-      margin-left: -($size / 2);
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .2);
-      opacity: 0;
-      transform: scale(.5);
-      transition: all 150ms;
+    &__left {
+        align-items: center;
+        padding-left: 20px;
     }
 
-    &--active::before {
-      opacity: 1;
-      transform: none;
+    &-logo {
+        height: 35px;
+        margin-right: 10px;
+        cursor: pointer;
     }
 
-    &--profile::before {
-      margin-left: -(($size / 2) - 1px);
-
-      @media (max-width: $screen-md) {
-          margin-left: -($size / 2);
-      }
+    &-title {
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
 
-    &--avatar::before {
-      display: none;
-    }
-  }
+    &-title-text {
+        font-size: 1.65rem;
+        font-family: robotothinitalic, sans-serif;
 
-  &-sync {
-    background-repeat: no-repeat;
-    background-size: 61px auto;
-    background-position: 8px center;
-    font-size: .8rem;
-    padding-left: 20px;
-    padding-right: 25px;
-    margin-right: 5px;
-    width: 82px; // Shit dude, fixed width on button with text? Crazy stupid stuff!
-
-    &--inactive {
-      opacity: .5;
-      cursor: default;
+        @media (max-width: $screen-sm) {
+            display: none;
+        }
     }
 
-    &--syncing {
-      cursor: default;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    &::before {
-      display: none;
-    }
-  }
+    &__button {
+        display: flex;
+        align-items: center;
+        margin: 0;
+        padding: 0px 15px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 100ms;
+        line-height: 0;
+        box-sizing: border-box;
+        -webkit-app-region: no-drag;
+        position: relative;
 
-  &__icon {
-    height: 24px;
-    position: relative;
-    z-index: 2;
-    transition: transform 100ms;
+        &--avatar {
+            padding: 10px 15px;
+        }
 
-    .header__button:active & {
-      transform: scale(.95);
+        $size: 45px;
+        &::before {
+            content: "";
+            position: absolute;
+            z-index: 1;
+            width: $size;
+            height: $size;
+            left: 50%;
+            top: 50%;
+            margin-top: -($size / 2);
+            margin-left: -($size / 2);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 150ms;
+        }
+
+        &--active::before {
+            opacity: 1;
+            transform: none;
+        }
+
+        &--profile::before {
+            margin-left: -(($size / 2) - 1px);
+
+            @media (max-width: $screen-md) {
+                margin-left: -($size / 2);
+            }
+        }
+
+        &--avatar::before {
+            display: none;
+        }
     }
 
-    .header__button--avatar & {
-      width: 32px;
-      height: 32px;
+    &-sync {
+        background-repeat: no-repeat;
+        background-size: 61px auto;
+        background-position: 8px center;
+        font-size: 0.8rem;
+        padding-left: 20px;
+        padding-right: 25px;
+        margin-right: 5px;
+        width: 82px; // Shit dude, fixed width on button with text? Crazy stupid stuff!
+
+        &--inactive {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        &--syncing {
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &::before {
+            display: none;
+        }
     }
-  }
+
+    &__icon {
+        height: 24px;
+        position: relative;
+        z-index: 2;
+        transition: transform 100ms;
+
+        .header__button:active & {
+            transform: scale(0.95);
+        }
+
+        .header__button--avatar & {
+            width: 32px;
+            height: 32px;
+        }
+    }
 }
 
 .update-available {
-  margin-left: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: .8rem;
-  -webkit-app-region: no-drag;
+    margin-left: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    -webkit-app-region: no-drag;
 
-  &-icon {
-    display: inline-block;
-    width: 15px;
-    position: relative;
-    top: -1px;
-    margin-right: 5px;
-  }
+    &-icon {
+        display: inline-block;
+        width: 15px;
+        position: relative;
+        top: -1px;
+        margin-right: 5px;
+    }
 }

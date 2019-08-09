@@ -1,7 +1,7 @@
 import { setIssueRefreshing, refreshIssue } from 'store/reducers/tasks';
 import { getIssue, setIssueRemaining } from 'shared/jiraClient';
 
-export function issueIsClosed (task) {
+export function issueIsClosed(task) {
     let issueIsClosed = false;
     if (task) {
         const { id, name } = task.issue.fields.status;
@@ -12,65 +12,72 @@ export function issueIsClosed (task) {
     return issueIsClosed;
 }
 
-export function updateRemainingEstimate ({ taskCuid, taskIssueKey, remainingEstimate }) {
-
-    store.dispatch(setIssueRefreshing({
-        cuid: taskCuid,
-        refreshing: true
-    }));
-
-    /**
-    * We need to send the original estimate along due to a bug in the JIRA REST API,
-    * so lets get the latest issue info so that we have the correct original estimate
-    * https://jira.atlassian.com/browse/JRA-30459
-    **/
-    return getIssue({
-        key: taskIssueKey
-    })
-    .then((issue) => {
-        return setIssueRemaining({
-            id: taskIssueKey,
-            remainingEstimate,
-            originalEstimate: issue.fields.timetracking.originalEstimate
-        });
-    })
-    .then(() => {
-        return refreshJiraIssue({
-            taskCuid,
-            taskIssueKey
-        });
-    })
-    .catch(() => {
-        store.dispatch(setIssueRefreshing({
+export function updateRemainingEstimate({ taskCuid, taskIssueKey, remainingEstimate }) {
+    store.dispatch(
+        setIssueRefreshing({
             cuid: taskCuid,
             refreshing: true
-        }));
-    });
+        })
+    );
+
+    /**
+     * We need to send the original estimate along due to a bug in the JIRA REST API,
+     * so lets get the latest issue info so that we have the correct original estimate
+     * https://jira.atlassian.com/browse/JRA-30459
+     **/
+    return getIssue({
+        key: taskIssueKey
+    })
+        .then(issue => {
+            return setIssueRemaining({
+                id: taskIssueKey,
+                remainingEstimate,
+                originalEstimate: issue.fields.timetracking.originalEstimate
+            });
+        })
+        .then(() => {
+            return refreshJiraIssue({
+                taskCuid,
+                taskIssueKey
+            });
+        })
+        .catch(() => {
+            store.dispatch(
+                setIssueRefreshing({
+                    cuid: taskCuid,
+                    refreshing: true
+                })
+            );
+        });
 }
 
-export function refreshJiraIssue ({ taskCuid, taskIssueKey }) {
-
-    store.dispatch(setIssueRefreshing({
-        cuid: taskCuid,
-        refreshing: true
-    }));
+export function refreshJiraIssue({ taskCuid, taskIssueKey }) {
+    store.dispatch(
+        setIssueRefreshing({
+            cuid: taskCuid,
+            refreshing: true
+        })
+    );
 
     return getIssue({
         key: taskIssueKey
     })
-    .then((issue) => {
+        .then(issue => {
+            store.dispatch(
+                refreshIssue({
+                    cuid: taskCuid,
+                    issue
+                })
+            );
 
-        store.dispatch(refreshIssue({
-            cuid: taskCuid,
-            issue
-        }));
-
-        return issue;
-    })
-    .catch(() => {
-        store.dispatch(setIssueRefreshing({
-            cuid: taskCuid,
-            refreshing: false
-        }));
-    });
+            return issue;
+        })
+        .catch(() => {
+            store.dispatch(
+                setIssueRefreshing({
+                    cuid: taskCuid,
+                    refreshing: false
+                })
+            );
+        });
 }

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-    background: rgba(0, 0, 0, .3);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     height: 4px;
     display: flex;
@@ -13,16 +13,16 @@ const Wrapper = styled.div`
 `;
 
 const Line = styled.div`
-    background: rgba(255, 255, 255, .85);
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 5px;
     transition: all 100ms linear;
     min-width: 0%;
     max-width: 100%;
 `;
 
-export default function Bar ({ width, lineWidth = 100, title, titleLine }) {
+export default function Bar({ width, lineWidth = 100, title, titleLine }) {
     return (
-        <Wrapper style={{ width: `${width}%` }} title={title} >
+        <Wrapper style={{ width: `${width}%` }} title={title}>
             <Line style={{ width: `${lineWidth}%` }} title={titleLine} />
         </Wrapper>
     );

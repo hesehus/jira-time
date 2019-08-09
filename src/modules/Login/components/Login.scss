@@ -1,90 +1,90 @@
-@import 'variables';
+@import "variables";
 
 .login {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 5%;
-  width: 300px;
-  margin: 0 auto;
-
-  &-icon {
-    width: 150px;
-    margin-bottom: 25px;
-
-    @media (min-width: $screen-md) {
-      margin-bottom: 50px;
-      width: 272px;
-    }
-  }
-
-  input {
-    width: 100%;
-  }
-
-  &-label {
-    display: block;
-    margin-bottom: 30px;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-  }
+    align-items: center;
+    justify-content: center;
+    padding: 0 5%;
+    width: 300px;
+    margin: 0 auto;
 
-  &-label__text {
-    display: block;
-    margin-bottom: 5px;
-    padding-left: 30px;
-    font-size: .8rem;
+    &-icon {
+        width: 150px;
+        margin-bottom: 25px;
 
-    &::before,
-    &::after {
-      content: '-';
-      display: inline-block;
+        @media (min-width: $screen-md) {
+            margin-bottom: 50px;
+            width: 272px;
+        }
     }
 
-    &::before {
-      margin-right: 5px;
-    }
-    &::after {
-      margin-left: 5px;
-    }
-  }
-
-  &-error {
-    margin-bottom: 20px;
-    padding: 10px;
-
-    &__header {
-      margin-bottom: 10px;
+    input {
+        width: 100%;
     }
 
-    &__footer {
-      margin-top: 10px;
-    }
-  }
-
-  &-btn {
-    position: relative;
-    
-    img {
-      $size: 25px;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      margin-top: -($size/2);
-      margin-left: -($size/2);
-      width: $size;
-      opacity: 0;
+    &-label {
+        display: block;
+        margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
     }
 
-    &--logging-in {
-      span {
-        opacity: 0;
-      }
-      img {
-        opacity: 1;
-      }
+    &-label__text {
+        display: block;
+        margin-bottom: 5px;
+        padding-left: 30px;
+        font-size: 0.8rem;
+
+        &::before,
+        &::after {
+            content: "-";
+            display: inline-block;
+        }
+
+        &::before {
+            margin-right: 5px;
+        }
+        &::after {
+            margin-left: 5px;
+        }
     }
-  }
+
+    &-error {
+        margin-bottom: 20px;
+        padding: 10px;
+
+        &__header {
+            margin-bottom: 10px;
+        }
+
+        &__footer {
+            margin-top: 10px;
+        }
+    }
+
+    &-btn {
+        position: relative;
+
+        img {
+            $size: 25px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-top: -($size/2);
+            margin-left: -($size/2);
+            width: $size;
+            opacity: 0;
+        }
+
+        &--logging-in {
+            span {
+                opacity: 0;
+            }
+            img {
+                opacity: 1;
+            }
+        }
+    }
 }

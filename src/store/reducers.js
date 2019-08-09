@@ -7,7 +7,7 @@ import tasks from './reducers/tasks';
 import recorder from './reducers/recorder';
 import profile from './reducers/profile';
 
-export const makeRootReducer = (asyncReducers) => {
+export const makeRootReducer = asyncReducers => {
     return combineReducers({
         app,
         location,

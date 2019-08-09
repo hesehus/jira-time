@@ -13,16 +13,15 @@ import LoadingIcon from 'assets/loading.svg';
 import './HistoryRecordItem.scss';
 
 export default class HistoryRecordItem extends Component {
-
     static propTypes = {
         record: PropTypes.object.isRequired,
         setRecordDate: PropTypes.func.isRequired,
         onSyncedChange: PropTypes.func.isRequired,
         onSyncedSynced: PropTypes.func.isRequired,
         onNotSyncedSynced: PropTypes.func.isRequired
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onStartTimeChange = this.onStartTimeChange.bind(this);
@@ -34,8 +33,7 @@ export default class HistoryRecordItem extends Component {
         this.originalRecord = Object.assign({}, props.record);
     }
 
-    onStartTimeChange (time) {
-
+    onStartTimeChange(time) {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
@@ -49,7 +47,7 @@ export default class HistoryRecordItem extends Component {
         this.onChange({ startTime, endTime });
     }
 
-    onEndTimeChange (time) {
+    onEndTimeChange(time) {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
@@ -63,7 +61,7 @@ export default class HistoryRecordItem extends Component {
         this.onChange({ startTime, endTime });
     }
 
-    onChange ({ startTime, endTime }) {
+    onChange({ startTime, endTime }) {
         const recordInfo = {
             cuid: this.props.record.cuid,
             startTime: startTime.toDate(),
@@ -74,14 +72,15 @@ export default class HistoryRecordItem extends Component {
         if (!this.isSynced()) {
             this.props.setRecordDate(recordInfo);
         } else {
-            const isDirty = !moment(recordInfo.startTime).isSame(this.originalRecord.startTime) ||
-                      !moment(recordInfo.endTime).isSame(this.originalRecord.endTime);
+            const isDirty =
+                !moment(recordInfo.startTime).isSame(this.originalRecord.startTime) ||
+                !moment(recordInfo.endTime).isSame(this.originalRecord.endTime);
 
             this.props.onSyncedChange(recordInfo, isDirty);
         }
     }
 
-    onSyncClick () {
+    onSyncClick() {
         const { record } = this.props;
 
         const syncer = new Sync({
@@ -89,9 +88,9 @@ export default class HistoryRecordItem extends Component {
         });
 
         /**
-        * This is already synced, and is not in our redux state.
-        * We need to keep track of the state ourself here
-        **/
+         * This is already synced, and is not in our redux state.
+         * We need to keep track of the state ourself here
+         **/
         if (record.id) {
             this.setState({
                 syncing: true
@@ -113,17 +112,17 @@ export default class HistoryRecordItem extends Component {
         syncer.start();
     }
 
-    isSynced () {
+    isSynced() {
         return !!this.props.record.created;
     }
 
-    canBeExported () {
+    canBeExported() {
         const { record } = this.props;
 
         return record.isDirty || (!this.isSynced() && !record.active);
     }
 
-    render () {
+    render() {
         const { record } = this.props;
 
         const startTime = moment(record.startTime);
@@ -133,19 +132,19 @@ export default class HistoryRecordItem extends Component {
 
         const startTimeDisplay = (
             <TimeInput
-              value={startTime.format('HH:mm')}
-              className='date-inp__input date-inp__input--time'
-              onChange={this.onStartTimeChange}
-             />
+                value={startTime.format('HH:mm')}
+                className="date-inp__input date-inp__input--time"
+                onChange={this.onStartTimeChange}
+            />
         );
 
         let endTimeDisplay = endTime.format('HH:mm');
         if (this.isSynced() || !record.active) {
             endTimeDisplay = (
                 <TimeInput
-                  value={endTimeDisplay}
-                  className='date-inp__input date-inp__input--time'
-                  onChange={this.onEndTimeChange}
+                    value={endTimeDisplay}
+                    className="date-inp__input date-inp__input--time"
+                    onChange={this.onEndTimeChange}
                 />
             );
         }
@@ -163,9 +162,13 @@ export default class HistoryRecordItem extends Component {
         let editWorklogLink = record.taskIssueKey;
         if (record.id) {
             editWorklogLink = (
-                <a href={config.serverPath +
-                    `/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`}
-                  target='_blank'>
+                <a
+                    href={
+                        config.serverPath +
+                        `/secure/UpdateWorklog!default.jspa?key=${record.taskIssueKey}&worklogId=${record.id}`
+                    }
+                    target="_blank"
+                >
                     {record.taskIssueKey}
                 </a>
             );
@@ -173,20 +176,13 @@ export default class HistoryRecordItem extends Component {
 
         return (
             <tr className={className}>
-                <td className='history-record-cell history-record-cell--issue-key'>
-                    {editWorklogLink}
-                </td>
-                <td className='history-record-cell'>{startTimeDisplay}</td>
-                <td className='history-record-cell'>{endTimeDisplay}</td>
-                <td className='history-record-cell'>{elapsedTime}</td>
-                <td className='history-record-cell history-record-cell--comment'>{record.comment}</td>
-                <td className='history-record-cell'>
-                    <img
-                      src={Icon}
-                      alt='Export'
-                      onClick={this.onSyncClick}
-                      className='history-record-icon'
-          />
+                <td className="history-record-cell history-record-cell--issue-key">{editWorklogLink}</td>
+                <td className="history-record-cell">{startTimeDisplay}</td>
+                <td className="history-record-cell">{endTimeDisplay}</td>
+                <td className="history-record-cell">{elapsedTime}</td>
+                <td className="history-record-cell history-record-cell--comment">{record.comment}</td>
+                <td className="history-record-cell">
+                    <img src={Icon} alt="Export" onClick={this.onSyncClick} className="history-record-icon" />
                 </td>
             </tr>
         );

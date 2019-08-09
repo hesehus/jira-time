@@ -4,7 +4,7 @@ import { setManualSortOrder, setTaskMoving, getTasksFilteredBySearch } from 'sto
 
 import Tasks from '../components/Tasks';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     profile: state.profile,
     tasks: getTasksFilteredBySearch({ state }),
     tasksSearch: state.tasks.search,
@@ -16,4 +16,7 @@ const mapDispatchToProps = {
     setManualSortOrder
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Tasks);

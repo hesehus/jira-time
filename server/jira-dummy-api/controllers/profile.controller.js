@@ -2,26 +2,26 @@ const helpers = require('../helpers');
 
 const api = {};
 
-api.login = function (req, res) {
-    helpers.delay(function () {
+api.login = function(req, res) {
+    helpers.delay(function() {
         res.status(200).send();
     });
-}
+};
 
-api.logout = function (req, res) {
-    helpers.delay(function () {
+api.logout = function(req, res) {
+    helpers.delay(function() {
         res.status(204).send();
     });
-}
+};
 
-api.checkSession = function (req, res) {
-    helpers.delay(function () {
+api.checkSession = function(req, res) {
+    helpers.delay(function() {
         res.status(200).send();
     });
-}
+};
 
-api.getUserInfo = function (req, res) {
-    helpers.delay(function () {
+api.getUserInfo = function(req, res) {
+    helpers.delay(function() {
         res.json({
             self: 'http://www.example.com/jira/rest/api/2/user?username=fred',
             key: 'fred',
@@ -29,10 +29,10 @@ api.getUserInfo = function (req, res) {
             name: 'fred',
             emailAddress: 'fred@example.com',
             avatarUrls: {
-        '48x48': 'http://lorempixel.com/48/48/cats/', // eslint-disable-line
-        '24x24': 'http://lorempixel.com/24/24/cats/', // eslint-disable-line
-        '16x16': 'http://lorempixel.com/16/16/cats/', // eslint-disable-line
-        '32x32': 'http://lorempixel.com/32/32/cats/' // eslint-disable-line
+                '48x48': 'http://lorempixel.com/48/48/cats/', // eslint-disable-line
+                '24x24': 'http://lorempixel.com/24/24/cats/', // eslint-disable-line
+                '16x16': 'http://lorempixel.com/16/16/cats/', // eslint-disable-line
+                '32x32': 'http://lorempixel.com/32/32/cats/' // eslint-disable-line
             },
             displayName: 'Fred F. User',
             active: true,
@@ -61,6 +61,6 @@ api.getUserInfo = function (req, res) {
             expand: 'groups,applicationRoles'
         });
     });
-}
+};
 
 module.exports = api;

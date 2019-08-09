@@ -4,15 +4,12 @@ import Home from './Home';
 import Profile from './Profile';
 import Summary from './Summary';
 
-export const createRoutes = (store) => {
+export const createRoutes = store => {
     return {
-        path        : '/',
-        component   : CoreLayout,
-        indexRoute  : Home,
-        childRoutes : [
-            Profile,
-            Summary
-        ]
+        path: '/',
+        component: CoreLayout,
+        indexRoute: Home,
+        childRoutes: [Profile, Summary]
     };
 };
 

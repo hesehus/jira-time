@@ -8,12 +8,12 @@ export const ATTEMPT_LOGIN = 'ATTEMPT_LOGIN';
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function attemptLogin (action) {
+export function attemptLogin(action) {
     return {
         type: ATTEMPT_LOGIN,
         action
-    }
-};
+    };
+}
 
 export const actions = {
     attemptLogin
@@ -23,15 +23,14 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-    [ATTEMPT_LOGIN] : (state, action) => state
+    [ATTEMPT_LOGIN]: (state, action) => state
 };
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-export default function profileReducer (state = initialState, action) {
-
-    const handler = ACTION_HANDLERS[action.type]
+export default function profileReducer(state = initialState, action) {
+    const handler = ACTION_HANDLERS[action.type];
 
     return handler ? handler(state, action) : state;
 }

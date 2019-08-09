@@ -4,7 +4,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: .8rem;
+    font-size: 0.8rem;
 
     .compact-view & {
         margin: 0 5px 5px;
@@ -49,7 +49,7 @@
 
     &-search-delete {
         position: absolute;
-        color:#777;
+        color: #777;
         right: 0;
         top: 0;
         cursor: pointer;
@@ -59,7 +59,7 @@
         align-items: center;
         justify-content: center;
         transition: transform 150ms, opacity 150ms;
-        transform: scale(.9);
+        transform: scale(0.9);
         opacity: 0;
 
         &--show {
@@ -73,9 +73,9 @@
         }
     }
     &-search-input {
-        font-size: .7rem;
+        font-size: 0.7rem;
         padding: 3px 25px;
-        background-image: url('../../../assets/search.svg');
+        background-image: url("../../../assets/search.svg");
         background-repeat: no-repeat;
         background-position: 5px center;
         background-size: 19px auto;

@@ -1,8 +1,4 @@
-import {
-  ATTEMPT_LOGIN,
-  attemptLogin,
-  default as profileReducer
-} from 'routes/Profile/modules/profile'
+import { ATTEMPT_LOGIN, attemptLogin, default as profileReducer } from 'routes/Profile/modules/profile';
 
 /* describe('(Redux Module) Profile', () => {
   it('Should export a constant ATTEMPT_LOGIN.', () => {

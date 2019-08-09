@@ -2,12 +2,11 @@ const http = require('http');
 const EventEmitter = require('event-emitter');
 const WebSocket = require('ws');
 
-module.exports = function startWebsocketServer (app) {
-
+module.exports = function startWebsocketServer(app) {
     const server = http.createServer(app);
     const wss = new WebSocket.Server({ server });
 
-    server.listen(8080, function listening () {
+    server.listen(8080, function listening() {
         log(`Websocket server listening on port ${server.address().port}`);
     });
 
@@ -15,13 +14,13 @@ module.exports = function startWebsocketServer (app) {
 
     const allClientConnectionStates = {};
 
-    wss.on('connection', function connection (ws) {
+    wss.on('connection', function connection(ws) {
         let username;
         let syncUserId;
 
         ws.on('close', closeConnection);
 
-        ws.on('message', function incoming (message) {
+        ws.on('message', function incoming(message) {
             try {
                 const messageJson = JSON.parse(message);
 
@@ -52,19 +51,19 @@ module.exports = function startWebsocketServer (app) {
             }
         });
 
-        function listenForStateUpdates (state) {
+        function listenForStateUpdates(state) {
             if (username === state.profile.username) {
                 send(state);
             }
         }
 
-        function listenForTaskIssueUpdates (state) {
+        function listenForTaskIssueUpdates(state) {
             state.taskIssueUpdate = true;
             send(state);
         }
 
         // Send the initial state to the client
-        function setInitialClientConnectionState (state) {
+        function setInitialClientConnectionState(state) {
             delete state.init;
             let connection = allClientConnectionStates[username];
 
@@ -83,11 +82,11 @@ module.exports = function startWebsocketServer (app) {
             }
         }
 
-        function send (message) {
+        function send(message) {
             try {
                 log(`Send to "${username}" (${syncUserId})`);
                 if (ws.readyState === ws.OPEN) {
-                    ws.send(JSON.stringify(message), null, (error) => {
+                    ws.send(JSON.stringify(message), null, error => {
                         if (error) {
                             ws.close();
                             log(error);
@@ -102,7 +101,7 @@ module.exports = function startWebsocketServer (app) {
             }
         }
 
-        function closeConnection () {
+        function closeConnection() {
             log(`Connection closed for "${username}" (${syncUserId})`);
 
             // removeClientStateIfLastConnection(username);
@@ -132,11 +131,10 @@ module.exports = function startWebsocketServer (app) {
     //     }
     // }
 
-    function updateState ({ state, emitEvent = true }) {
+    function updateState({ state, emitEvent = true }) {
         const existingConnection = allClientConnectionStates[state.profile.username];
 
         if (existingConnection) {
-
             /**
              * Ensure that the new state we received is actually updated at a later
              * point in time than the one we have
@@ -149,10 +147,10 @@ module.exports = function startWebsocketServer (app) {
         }
     }
 
-    function updateJiraIssue ({ issue }) {
+    function updateJiraIssue({ issue }) {
         for (let connection in allClientConnectionStates) {
             if (!!connection.state.tasks.tasks.length) {
-                connection.state.tasks.tasks = connection.state.tasks.tasks.map((task) => {
+                connection.state.tasks.tasks = connection.state.tasks.tasks.map(task => {
                     if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
                         task.issue = issue;
                     }
@@ -163,7 +161,7 @@ module.exports = function startWebsocketServer (app) {
         }
     }
 
-    function log (message) {
+    function log(message) {
         console.log('### ' + message + ' ###');
     }
-}
+};

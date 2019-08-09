@@ -1,12 +1,12 @@
 .layout-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  &__viewport {
-    flex-grow: 1;
+    height: 100vh;
     display: flex;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+    flex-direction: column;
+
+    &__viewport {
+        flex-grow: 1;
+        display: flex;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
 }

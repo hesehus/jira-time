@@ -16,7 +16,6 @@ import './Record.scss';
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
 export default class RecordItem extends Component {
-
     static propTypes = {
         record: PropTypes.object.isRequired,
         task: PropTypes.object,
@@ -28,9 +27,9 @@ export default class RecordItem extends Component {
         movingRecord: PropTypes.object,
         movingTask: PropTypes.object,
         profile: PropTypes.object
-    }
+    };
 
-    constructor (props) {
+    constructor(props) {
         super(props);
 
         this.onStartTimeChange = this.onStartTimeChange.bind(this);
@@ -45,13 +44,13 @@ export default class RecordItem extends Component {
         this.state = {};
     }
 
-    componentDidMount () {
+    componentDidMount() {
         const { record } = this.props;
 
         // Determine if the issue was just updated (less than 100ms ago)
         let justCreated = false;
         if (record.createdTime) {
-            justCreated = (new Date() - new Date(record.createdTime)) < 100;
+            justCreated = new Date() - new Date(record.createdTime) < 100;
         }
 
         if (this.inputComment && justCreated) {
@@ -64,7 +63,7 @@ export default class RecordItem extends Component {
         }
     }
 
-    onStartTimeChange ({ date }) {
+    onStartTimeChange({ date }) {
         this.props.setRecordDate({
             cuid: this.props.record.cuid,
             startTime: date,
@@ -72,7 +71,7 @@ export default class RecordItem extends Component {
         });
     }
 
-    onEndTimeChange ({ date }) {
+    onEndTimeChange({ date }) {
         this.props.setRecordDate({
             cuid: this.props.record.cuid,
             startTime: this.props.record.startTime,
@@ -80,16 +79,16 @@ export default class RecordItem extends Component {
         });
     }
 
-    onCommentChange (e) {
+    onCommentChange(e) {
         this.props.setRecordComment({
             cuid: this.props.record.cuid,
             comment: e.target.value
         });
     }
 
-    onCommentKeyDown (e) {
+    onCommentKeyDown(e) {
         const command = keycode(e);
-        if ((command === 'down' || command === 'up')) {
+        if (command === 'down' || command === 'up') {
             e.preventDefault();
 
             const { enableAnimations } = this.props.profile.preferences;
@@ -105,7 +104,7 @@ export default class RecordItem extends Component {
                 const allRecordsInLimbo = Array.from(limboTask.querySelectorAll('.record[data-cuid]'));
                 const allRecordsOnPage = Array.from(tasks.querySelectorAll('.record[data-cuid]'));
                 const allRecords = [...allRecordsInLimbo, ...allRecordsOnPage];
-                const currentRecordPosition = allRecords.findIndex((record) => {
+                const currentRecordPosition = allRecords.findIndex(record => {
                     return record.dataset.cuid === this.recordElement.dataset.cuid;
                 });
                 const nextRecordItem = allRecords[currentRecordPosition + (command === 'up' ? -1 : 1)];
@@ -121,15 +120,15 @@ export default class RecordItem extends Component {
         }
     }
 
-    onRemoveClick () {
+    onRemoveClick() {
         this.props.removeRecord({ cuid: this.props.record.cuid });
     }
 
-    onStopRecordingClick () {
+    onStopRecordingClick() {
         this.props.stopRecording();
     }
 
-    onSyncClick () {
+    onSyncClick() {
         const syncer = new Sync({
             records: [this.props.record]
         });
@@ -137,7 +136,7 @@ export default class RecordItem extends Component {
         syncer.start();
     }
 
-    onSpeechRecordClick () {
+    onSpeechRecordClick() {
         if (!this.sr) {
             this.sr = new webkitSpeechRecognition(); // eslint-disable-line
             this.sr.lang = 'da-DK';
@@ -148,7 +147,7 @@ export default class RecordItem extends Component {
                         comment: results[0][0].transcript
                     });
                 }
-            }
+            };
         }
 
         if (this.state.srActive) {
@@ -161,8 +160,7 @@ export default class RecordItem extends Component {
         });
     }
 
-    render () {
-
+    render() {
         let { record, task, movingRecord, movingTask, profile } = this.props;
         const { enableVoiceRecording, compactView } = profile.preferences;
 
@@ -182,33 +180,33 @@ export default class RecordItem extends Component {
         let btnSync;
         if (issueIsClosed(task)) {
             btnSync = (
-                <div
-                  className='record-sync'
-                  title='The issue is closed, dude!'>
+                <div className="record-sync" title="The issue is closed, dude!">
                     Issue closed
                 </div>
             );
         } else if (record.syncing) {
             btnSync = (
-                <div className='record-sync record-sync--syncing' title='Syncing!'>
-                    <img className='record-sync-icon' src={LoadingIcon} alt='Loading' />
+                <div className="record-sync record-sync--syncing" title="Syncing!">
+                    <img className="record-sync-icon" src={LoadingIcon} alt="Loading" />
                 </div>
             );
         } else if (!record.endTime) {
             btnSync = (
-                <div className='record-sync record-sync--stop'
-                  onClick={this.onStopRecordingClick}
-                  title='Stop recording'
+                <div
+                    className="record-sync record-sync--stop"
+                    onClick={this.onStopRecordingClick}
+                    title="Stop recording"
                 />
             );
         } else {
             btnSync = (
-                <button tabIndex='-1'
-                  className='record-sync'
-                  onClick={this.onSyncClick}
-                  title='Sync this worklog to JIRA'
+                <button
+                    tabIndex="-1"
+                    className="record-sync"
+                    onClick={this.onSyncClick}
+                    title="Sync this worklog to JIRA"
                 >
-                    <img className='record-sync-icon' src={ExportIcon} alt='Export' />
+                    <img className="record-sync-icon" src={ExportIcon} alt="Export" />
                 </button>
             );
         }
@@ -216,44 +214,42 @@ export default class RecordItem extends Component {
         let btnMic;
         if (browserHasSpeechRecognition && enableVoiceRecording) {
             btnMic = (
-                <span className='record-mic' onClick={this.onSpeechRecordClick}>
-                    <img src={this.state.srActive ? MicRedIcon : MicIcon} alt='Microfone' />
+                <span className="record-mic" onClick={this.onSpeechRecordClick}>
+                    <img src={this.state.srActive ? MicRedIcon : MicIcon} alt="Microfone" />
                 </span>
             );
         }
 
         return (
-            <div className={className} data-cuid={record.cuid} ref={e => this.recordElement = e}>
-                <button tabIndex='-1' className='record-remove' onClick={this.onRemoveClick} disabled={record.syncing}>
-                    <img src={DeleteIcon} alt='Delete' className='record-remove-icon' />
+            <div className={className} data-cuid={record.cuid} ref={e => (this.recordElement = e)}>
+                <button tabIndex="-1" className="record-remove" onClick={this.onRemoveClick} disabled={record.syncing}>
+                    <img src={DeleteIcon} alt="Delete" className="record-remove-icon" />
                 </button>
-                <div className='record-time'>
-                    <div className='record-dates' ref={e => this.recordDates = e}>
+                <div className="record-time">
+                    <div className="record-dates" ref={e => (this.recordDates = e)}>
                         <DateInput
-                          date={record.startTime}
-                          onChange={this.onStartTimeChange}
-                          disabled={somethingIsMoving}
+                            date={record.startTime}
+                            onChange={this.onStartTimeChange}
+                            disabled={somethingIsMoving}
                         />
                         {record.endTime ? (
                             <DateInput
-                              date={record.endTime}
-                              onChange={this.onEndTimeChange}
-                              disabled={somethingIsMoving}
+                                date={record.endTime}
+                                onChange={this.onEndTimeChange}
+                                disabled={somethingIsMoving}
                             />
-                        ) : (
-                        null
-                        )}
+                        ) : null}
                     </div>
-                    {!compactView && <span className='record__elapsed-time'>{record.elapsedTime}</span>}
+                    {!compactView && <span className="record__elapsed-time">{record.elapsedTime}</span>}
                 </div>
                 <input
-                  className='record-comment'
-                  onChange={this.onCommentChange}
-                  onKeyDown={this.onCommentKeyDown}
-                  value={record.comment}
-                  disabled={somethingIsMoving}
-                  tabIndex='0'
-                  ref={e => this.inputComment = e}
+                    className="record-comment"
+                    onChange={this.onCommentChange}
+                    onKeyDown={this.onCommentKeyDown}
+                    value={record.comment}
+                    disabled={somethingIsMoving}
+                    tabIndex="0"
+                    ref={e => (this.inputComment = e)}
                 />
                 {btnMic}
                 {btnSync}
