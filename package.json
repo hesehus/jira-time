@@ -22,7 +22,7 @@
         "deploy:dev": "better-npm-run deploy:dev",
         "deploy:prod": "better-npm-run deploy:prod",
         "codecov": "cat coverage/*/lcov.info | codecov",
-        "nativefier": "nativefier -i src/assets/logo.png --electron-version 1.6.5 --internal-urls /no-urls-opens-in-jira-time/g --single-instance https://prod-jira-time.hesehus.dk"
+        "nativefier": "nativefier -i src/assets/logo.png --electron-version 6.0.1 --internal-urls /no-urls-opens-in-jira-time/g --single-instance https://prod-jira-time.hesehus.dk"
     },
     "betterScripts": {
         "compile": {
@@ -181,6 +181,7 @@
         "karma-phantomjs-launcher": "^1.0.2",
         "karma-webpack-with-fast-source-maps": "^1.9.2",
         "mocha": "^3.0.1",
+        "nativefier": "~7.6.12",
         "nodemon": "^1.10.2",
         "phantomjs-prebuilt": "^2.1.12",
         "pre-commit": "^1.1.3",
