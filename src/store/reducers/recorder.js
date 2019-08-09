@@ -28,7 +28,7 @@ export const REMOVE_RECORD = 'REMOVE_RECORD';
 export function getElapsedTime ({ startTime, endTime }) {
 
     startTime = moment(startTime);
-    endTime = moment(endTime || Date.now());
+    endTime = moment(endTime);
 
     const diff = endTime.unix() - startTime.unix();
 
@@ -36,17 +36,9 @@ export function getElapsedTime ({ startTime, endTime }) {
         return 'Dude, negative time?';
     }
 
-    if (diff < 60) {
-        return '< 1m';
-    }
-
     const d = moment.duration(diff, 'seconds');
 
-    let outputString = '';
-
-    if (d.minutes() !== 0) {
-        outputString = `${d.minutes()}m` + outputString;
-    }
+    let outputString = `${d.minutes()}m`;
     if (d.hours() !== 0) {
         outputString = `${d.hours()}h ` + outputString;
     }
@@ -55,6 +47,11 @@ export function getElapsedTime ({ startTime, endTime }) {
     }
 
     return outputString;
+}
+
+export function getRoundedTime (time) {
+    var minuteInMs = 60000;
+    return Math.round(time / minuteInMs) * minuteInMs;
 }
 
 // ------------------------------------
@@ -164,7 +161,7 @@ const ACTION_HANDLERS = {
 
         // Start new recording
         const record = action.record || RecordModel({ task });
-        record.elapsedTime = getElapsedTime({ startTime: new Date() });
+        record.elapsedTime = getElapsedTime({ startTime: record.startTime, endTime: record.startTime });
         records.push(record);
 
         return {
@@ -371,10 +368,13 @@ function stopRecordingInState ({ state }) {
     let records = [...state.records];
     let recordIndex = records.findIndex(r => !r.endTime);
     if (recordIndex !== -1) {
+        records[recordIndex].endTime = getRoundedTime(Date.now());
         records[recordIndex] = {
             ...records[recordIndex],
-            endTime: Date.now(),
-            elapsedTime: getElapsedTime({ startTime: records[recordIndex].startTime })
+            elapsedTime: getElapsedTime({
+                startTime: records[recordIndex].startTime,
+                endTime: records[recordIndex].endTime
+            })
         };
     }
 
