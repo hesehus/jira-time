@@ -12,7 +12,8 @@ export default class TasksInLimbo extends Component {
     };
 
     render() {
-        const { movingRecord, recordsWithNoIssue } = this.props;
+        const { profile, movingRecord, recordsWithNoIssue } = this.props;
+        const { verticalLimboSplit } = profile.preferences;
 
         let textInLimbo;
         switch (recordsWithNoIssue.length) {
@@ -41,9 +42,11 @@ export default class TasksInLimbo extends Component {
             className += ' task--drop-active';
         }
 
+        const containerClassName = `task-limbo-container ${verticalLimboSplit ? 'task-limbo-container--vertical' : ''}`;
+
         // Output the list of tasks
         return (
-            <div className='task-limbo-container'>
+            <div className={containerClassName}>
                 <div className={className}>
                     <div className="task--limbo-header">
                         {textInLimbo}

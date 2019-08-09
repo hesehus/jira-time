@@ -54,7 +54,7 @@ export default class Tasks extends Component {
         });
     }
 
-    render () {
+    render() {
         const { profile, tasks, tasksSearch, setManualSortOrder, setTaskMoving, unfilteredTasks } = this.props;
         const { enableAnimations, verticalLimboSplit } = profile.preferences;
         const { delayedMount, scrollTop } = this.state;
@@ -89,7 +89,10 @@ export default class Tasks extends Component {
             }
         } else {
             tasksListOutput = (
-                <div className="tasks-list-wrap" onScroll={this.onScroll}>
+                <div
+                    className={`tasks-list-wrap ${verticalLimboSplit ? 'tasks-list-wrap--vertical' : ''}`}
+                    onScroll={this.onScroll}
+                >
                     <RealTasks tasks={tasks} enableAnimations={enableAnimations} />
                     {enableAnimations && (
                         <DraggableTasks
@@ -108,10 +111,10 @@ export default class Tasks extends Component {
         return (
             <div className="tasks-outer">
                 <div className="tasks">
-                    <div className='tasks-header-container' style={{ marginRight: `${scrollbarWidth}px` }}>
+                    <div className="tasks-header-container" style={{ marginRight: `${scrollbarWidth}px` }}>
                         <TasksHeader />
                     </div>
-                    <div className='tasks-container' style={verticalLimboSplit ? { flexDirection: 'row' } : null}>
+                    <div className="tasks-container" style={verticalLimboSplit ? { flexDirection: 'row' } : null}>
                         <TasksInLimbo />
                         {tasksListOutput}
                     </div>

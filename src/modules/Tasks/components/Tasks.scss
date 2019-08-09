@@ -25,6 +25,10 @@
             align-items: center;
             flex-direction: column;
         }
+
+        &--vertical {
+            margin-top: 0;
+        }
     }
 
     &-outer {
