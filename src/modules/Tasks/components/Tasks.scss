@@ -4,6 +4,7 @@
     flex-direction: column;
     max-height: 100%;
     position: relative;
+    height: 100%;
 
     &-list-wrap {
         position: relative;
@@ -44,6 +45,7 @@
         flex-direction: column;
         flex: 1 1 100%;
         min-height: 1px;
+        height: 100%;
     }
 
     &-header-container {
