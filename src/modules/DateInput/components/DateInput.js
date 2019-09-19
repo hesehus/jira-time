@@ -32,8 +32,8 @@ export default class DateInput extends Component {
 
     componentDidMount() {
         this.fp = new Flatpickr(this.dateInput, {
-            defaultDate: this.state.date
-            // onChange: dates => this.onDateChanged(dates[0])
+            defaultDate: this.state.date,
+            onChange: dates => this.onDateChanged(dates[0])
         });
     }
 
