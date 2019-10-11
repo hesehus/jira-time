@@ -95,7 +95,9 @@ const ACTION_HANDLERS = {
         const { issue } = action;
 
         // Prevent adding tasks with issue keys that we have already
-        if (state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase())) {
+        const existingTask = state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase());
+        if (existingTask) {
+            existingTask.highlighted = true;
             return state;
         }
 

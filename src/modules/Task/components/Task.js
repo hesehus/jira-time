@@ -63,6 +63,9 @@ export default class Task extends Component {
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task--drop-active';
         }
+        if (task.highlighted) {
+            className += ' task--highlighted';
+        }
 
         const deleteButton = (
             <button
@@ -124,7 +127,7 @@ export default class Task extends Component {
                                     target="_blank"
                                     tabIndex="-1"
                                 >
-                                EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
+                                    EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
                                 </a>
                             ) : (
                                 ''
