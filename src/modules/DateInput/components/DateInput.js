@@ -21,14 +21,15 @@ export default class DateInput extends Component {
         this.onDateInputChanged = this.onDateInputChanged.bind(this);
         this.onTimeChange = this.onTimeChange.bind(this);
 
-        this.state = {
-            date: null,
-            time: null
-        };
-    }
+        const dateObject = moment(props.date);
 
-    componentWillMount() {
-        this.setDateState(this.props.date);
+        const date = dateObject.toDate();
+        const time = dateObject.format('HH:mm');
+        this.state = {
+            date,
+            time
+        };
+        
     }
 
     componentDidMount() {

@@ -58,12 +58,13 @@ export default class Task extends Component {
         }
     }
 
-    scrollToTaskRef = () =>
+    scrollToTaskRef = () =>{
+    console.log('scroll');
         window.scrollTo({
             top: this.taskRef.offsetTop,
             left: 0,
             behavior: 'smooth'
-        });
+        });}
 
     componentDidMount() {
         if (this.props.task.highlighted) {

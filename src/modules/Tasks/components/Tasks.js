@@ -31,9 +31,6 @@ export default class Tasks extends Component {
         this.state = {
             scrollTop: 0
         };
-    }
-
-    componentWillMount() {
         scrollbarWidth = calculateScrollbarWidth();
     }
 

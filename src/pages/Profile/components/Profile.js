@@ -26,13 +26,13 @@ export class Profile extends Component {
         this.onLogoutClick = this.onLogoutClick.bind(this);
     }
 
+    componentDidMount() {
+        updateUserInfo();
+    }
+
     onLogoutClick() {
         logout();
         this.props.setLoggedIn({ isLoggedIn: false });
-    }
-
-    componentWillMount() {
-        updateUserInfo();
     }
 
     updateUserPreferences(updatedPreferences) {

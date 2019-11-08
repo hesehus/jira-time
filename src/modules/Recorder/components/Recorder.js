@@ -59,9 +59,14 @@ export default class Recorder extends Component {
                 tasksAddingRemaining: 0
             });
         });
+        
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        ws.on('connecting', this.onWsConnecting);
+        ws.on('connected', this.onWsConnected);
+        ws.on('closeOrError', this.onWsCloseOrError);
+
         if (!this.state.binded) {
             this.setState({ binded: true });
 
@@ -72,12 +77,6 @@ export default class Recorder extends Component {
             this.elapsedTimeInterval = setInterval(this.updateElapsedTime, oneMinute);
             this.updateElapsedTime();
         }
-    }
-
-    componentDidMount() {
-        ws.on('connecting', this.onWsConnecting);
-        ws.on('connected', this.onWsConnected);
-        ws.on('closeOrError', this.onWsCloseOrError);
     }
 
     componentWillUnmount() {
