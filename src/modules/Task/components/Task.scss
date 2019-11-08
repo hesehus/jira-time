@@ -1,5 +1,6 @@
 @import "_variables.scss";
 .task {
+    $block: &;
     position: relative;
     z-index: 0;
     padding: 10px 15px;
@@ -35,6 +36,11 @@
         transform: translateZ(0);
         transition: opacity 250ms ease;
     }
+
+    &--highlighted:before {
+        opacity: 0.6;
+    }
+
     body:not(.moving) &:hover:before {
         opacity: 0.3;
     }

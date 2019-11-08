@@ -26,6 +26,7 @@ export default class Task extends Component {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
+        this.taskRef = React.createRef();
 
         this.state = {};
     }
@@ -53,6 +54,19 @@ export default class Task extends Component {
                 });
         } else {
             removeTask({ cuid: task.cuid });
+        }
+    }
+
+    scrollToTaskRef = () =>
+        window.scrollTo({
+            top: this.taskRef.offsetTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+
+    componentDidMount() {
+        if (this.props.task.highlighted) {
+            this.scrollToTaskRef();
         }
     }
 
@@ -102,11 +116,14 @@ export default class Task extends Component {
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
-        console.log(task);
-
         // Output the task
         return (
-            <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
+            <div
+                className={className}
+                data-cuid={task.cuid}
+                data-taskissuekey={task.issue ? task.issue.key : null}
+                ref={this.taskRef}
+            >
                 {deleteButton}
                 <div className="task__info">
                     <div className="task__left">

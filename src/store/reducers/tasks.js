@@ -24,6 +24,7 @@ export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 export const SET_SEARCH = 'SET_SEARCH';
+export const UPDATE_HIGHTLIGHTED = 'UPDATE_HIGHTLIGHTED';
 
 // ------------------------------------
 // Actions
@@ -86,6 +87,13 @@ export function setTasksSearch({ search }) {
         search
     };
 }
+export function updateHighlighted({ issue, highlighted }) {
+    return {
+        type: UPDATE_HIGHTLIGHTED,
+        issue,
+        highlighted
+    };
+}
 
 // ------------------------------------
 // Action Handlers
@@ -103,7 +111,7 @@ const ACTION_HANDLERS = {
 
         return {
             ...state,
-            tasks: [...state.tasks, TaskModel({ issue })]
+            tasks: [...state.tasks, TaskModel({ issue, highlighted: true })]
         };
     },
     [REMOVE_TASK]: (state, action) => {
@@ -207,6 +215,15 @@ const ACTION_HANDLERS = {
             ...state,
             search
         };
+    },
+    [UPDATE_HIGHTLIGHTED]: (state, action) => {
+        const { issue, highlighted } = action;
+
+        const existingTask = state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase());
+        if (existingTask) {
+            existingTask.highlighted = highlighted;
+        }
+        return state;
     },
     SERVER_STATE_PUSH: (state, { tasks }) => tasks
 };

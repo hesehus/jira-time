@@ -15,7 +15,8 @@ export default class Recorder extends Component {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
             updateRecordElapsed: PropTypes.func.isRequired,
-            profile: PropTypes.object.isRequired
+            profile: PropTypes.object.isRequired,
+            updateHighlighted: PropTypes.func.isRequired
         };
     }
 
@@ -44,6 +45,9 @@ export default class Recorder extends Component {
             if (result.success) {
                 this.props.addTask({ issue: result.issue });
                 addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+                setTimeout(() => {
+                    this.props.updateHighlighted({ issue: result.issue, hightlighted: false });
+                }, 2000);
             } else {
                 swal('Heeey..', result.message, 'error');
             }
