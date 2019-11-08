@@ -34,7 +34,6 @@ class Header extends Component {
         this.onProcessAllStart = this.onProcessAllStart.bind(this);
         this.onProcessAllDone = this.onProcessAllDone.bind(this);
         this.onHashChange = this.onHashChange.bind(this);
-        console.log('location',props.location);
     }
 
     componentDidMount() {
@@ -63,7 +62,6 @@ class Header extends Component {
         if(this.props.location){
             path = this.props.location.pathname;
         }
-        console.log(path);
         this.setState({
             currentPathname: path
         });
