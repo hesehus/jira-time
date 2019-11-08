@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { IndexLink, Link, hashHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 import Sync, { sharedEvents } from 'shared/sync';
 import { showAddIssuesDialog } from 'shared/helpers';
@@ -16,7 +17,7 @@ import RefreshIcon from 'assets/refresh.svg';
 import CalendarIcon from 'assets/calendar.svg';
 import ListViewIcon from 'assets/list-view.svg';
 
-export default class Header extends Component {
+class Header extends Component {
     static get propTypes() {
         return {
             records: PropTypes.array.isRequired,
@@ -33,6 +34,7 @@ export default class Header extends Component {
         this.onProcessAllStart = this.onProcessAllStart.bind(this);
         this.onProcessAllDone = this.onProcessAllDone.bind(this);
         this.onHashChange = this.onHashChange.bind(this);
+        console.log('location',props.location);
     }
 
     componentDidMount() {
@@ -49,19 +51,21 @@ export default class Header extends Component {
         sharedEvents.on('processAllDone', this.onProcessAllDone);
 
         this.onHashChange();
-        this.hashHistoryUnlisten = hashHistory.listen(this.onHashChange);
     }
 
     componentWillUnmount() {
         sharedEvents.off('processAllStart', this.onProcessAllStart);
         sharedEvents.off('processAllDone', this.onProcessAllDone);
-
-        this.hashHistoryUnlisten();
     }
 
     onHashChange() {
+        let path = '';
+        if(this.props.location){
+            path = this.props.location.pathname;
+        }
+        console.log(path);
         this.setState({
-            currentPathname: hashHistory.getCurrentLocation().pathname
+            currentPathname: path
         });
     }
 
@@ -161,18 +165,20 @@ export default class Header extends Component {
                     {updateAvailable}
                 </div>
                 <div className="header__right">
-                    <IndexLink to="/" className={classNameHome} title="Tasks">
+                    <Link  to="/" className={classNameHome} title="Tasks">
                         <img className="header__icon" src={ListViewIcon} alt="Home" />
-                    </IndexLink>
-                    <Link to="/summary" className={classNameSummary} title="Summary">
+                    </Link >
+                    <Link  to="/summary" className={classNameSummary} title="Summary">
                         <img className="header__icon" src={CalendarIcon} alt="Calendar" />
-                    </Link>
-                    <Link to="/profile" className={classNameProfile} title="Profile">
+                    </Link >
+                    <Link  to="/profile" className={classNameProfile} title="Profile">
                         <img className="header__icon" src={UserIcon} alt="Profile" />
-                    </Link>
+                    </Link >
                     {sync}
                 </div>
             </div>
         );
     }
 }
+
+export default withRouter(props => <Header {...props}/>);

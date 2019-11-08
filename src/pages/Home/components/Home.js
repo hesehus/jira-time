@@ -8,9 +8,7 @@ import './Home.scss';
 
 export class Home extends Component {
     static get contextTypes() {
-        return {
-            router: PropTypes.object.isRequired
-        };
+        return {};
     }
 
     static get propTypes() {
