@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { default as swal } from 'sweetalert2';
 
 import config from 'shared/config.json';

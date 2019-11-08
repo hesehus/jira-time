@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { IndexLink, Link, hashHistory } from 'react-router';
 
 import Sync, { sharedEvents } from 'shared/sync';

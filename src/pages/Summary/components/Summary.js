@@ -1,5 +1,6 @@
 import moment from 'moment';
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import { getWorkLogs } from 'shared/jiraClient';
 import HistoryRecordItem from 'modules/HistoryRecordItem';

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import keycode from 'keycode';
 
 import { TASKS_SORT_ORDERS } from 'store/reducers/tasks';
