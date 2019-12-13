@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { default as swal } from 'sweetalert2';
 
 import config from 'shared/config.json';
@@ -18,7 +19,8 @@ export default class Task extends Component {
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object,
             removeTask: PropTypes.func.isRequired,
-            records: PropTypes.array
+            records: PropTypes.array,
+            updateHighlighted: PropTypes.func.isRequired
         };
     }
 
@@ -26,15 +28,35 @@ export default class Task extends Component {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
+        this.onTaskClick = this.onTaskClick.bind(this);
+        this.taskRef = React.createRef();
 
         this.state = {};
+    }
+
+    componentDidMount() {
+        const {
+            task: { highlighted }
+        } = this.props;
+        if (highlighted) {
+            this.scrollToTaskRef();
+        }
+    }
+
+    componentDidUpdate() {
+        const {
+            task: { highlighted }
+        } = this.props;
+        if (highlighted) {
+            this.scrollToTaskRef();
+        }
     }
 
     onRemoveClick() {
         const { records, removeTask, task } = this.props;
 
         if (records.length > 0) {
-            let worklogName = records.length === 1 ? 'worklog' : 'worklogs';
+            const worklogName = records.length === 1 ? 'worklog' : 'worklogs';
             swal({
                 title: 'Hold on dude! Are you sure?',
                 text: `You have ${records.length} ${worklogName} on this task`,
@@ -56,12 +78,29 @@ export default class Task extends Component {
         }
     }
 
+    onTaskClick(event) {
+        if (event.target === event.currentTarget) {
+            const {
+                updateHighlighted,
+                task: { highlighted, issue }
+            } = this.props;
+            updateHighlighted({ issue, highlighted: !highlighted });
+        }
+    }
+
+    scrollToTaskRef = () => {
+        this.taskRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
+
     render() {
         const { task, movingRecord, movingTask, records, setIssueRemainingEstimate } = this.props;
 
         let className = 'task';
         if (movingRecord && movingRecord.taskDroppableCuid === task.cuid) {
             className += ' task--drop-active';
+        }
+        if (task.highlighted) {
+            className += ' task--highlighted';
         }
 
         const deleteButton = (
@@ -99,13 +138,16 @@ export default class Task extends Component {
 
         const somethingIsMoving = !!movingRecord || !!movingTask;
 
-        console.log(task);
-
         // Output the task
         return (
-            <div className={className} data-cuid={task.cuid} data-taskissuekey={task.issue ? task.issue.key : null}>
+            <div
+                className={className}
+                data-cuid={task.cuid}
+                data-taskissuekey={task.issue ? task.issue.key : null}
+                ref={this.taskRef}
+            >
                 {deleteButton}
-                <div className="task__info">
+                <div className="task__info" onClick={this.onTaskClick}>
                     <div className="task__left">
                         <div className="task__key-and-status">
                             <a
@@ -124,7 +166,7 @@ export default class Task extends Component {
                                     target="_blank"
                                     tabIndex="-1"
                                 >
-                                EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
+                                    EPIC: {task.issue.epic.fields.customfield_10007} ({task.issue.epic.key})
                                 </a>
                             ) : (
                                 ''

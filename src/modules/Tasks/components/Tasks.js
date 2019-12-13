@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import calculateScrollbarWidth from 'scrollbar-width';
 
 import TasksHeader from 'modules/TasksHeader';
@@ -30,9 +31,6 @@ export default class Tasks extends Component {
         this.state = {
             scrollTop: 0
         };
-    }
-
-    componentWillMount() {
         scrollbarWidth = calculateScrollbarWidth();
     }
 

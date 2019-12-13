@@ -1,5 +1,6 @@
 import moment from 'moment';
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import TimeInput from 'time-input';
 // import Flatpickr from 'react-flatpickr'
 import Flatpickr from 'flatpickr';
@@ -20,14 +21,15 @@ export default class DateInput extends Component {
         this.onDateInputChanged = this.onDateInputChanged.bind(this);
         this.onTimeChange = this.onTimeChange.bind(this);
 
-        this.state = {
-            date: null,
-            time: null
-        };
-    }
+        const dateObject = moment(props.date);
 
-    componentWillMount() {
-        this.setDateState(this.props.date);
+        const date = dateObject.toDate();
+        const time = dateObject.format('HH:mm');
+        this.state = {
+            date,
+            time
+        };
+        
     }
 
     componentDidMount() {

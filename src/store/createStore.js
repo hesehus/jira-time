@@ -1,7 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import thunk from 'redux-thunk';
-import { hashHistory } from 'react-router';
 import makeRootReducer from './reducers.js';
 import { updateLocation } from './reducers/location';
 
@@ -52,7 +51,7 @@ export default () => {
     store.asyncReducers = {};
 
     // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-    store.unsubscribeHistory = hashHistory.listen(updateLocation(store));
+    //store.unsubscribeHistory = history.listen(updateLocation(store));
 
     if (module.hot) {
         module.hot.accept('./reducers', () => {

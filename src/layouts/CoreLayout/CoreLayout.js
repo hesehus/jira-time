@@ -1,5 +1,7 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
 
 import Theme from 'modules/theme';
 import Header from 'modules/Header';
@@ -11,11 +13,9 @@ import 'styles/core.scss';
 export const CoreLayout = ({ children, profile }) => (
     <Theme>
         <div
-            className={
-                'layout-container' +
-                (profile.preferences.compactView ? ' compact-view' : '') +
-                (!profile.preferences.enableAnimations ? ' disable-animations' : '')
-            }
+            className={`layout-container${profile.preferences.compactView ? ' compact-view' : ''}${
+                !profile.preferences.enableAnimations ? ' disable-animations' : ''
+            }`}
         >
             <Header />
             <div className="layout-container__viewport">{children}</div>
@@ -23,6 +23,19 @@ export const CoreLayout = ({ children, profile }) => (
         </div>
     </Theme>
 );
+
+export const CoreLayoutRoute = ({ component: Component, profile, ...rest }) => {
+    return (
+        <Route
+            {...rest}
+            render={matchProps => (
+                <CoreLayout profile={profile}>
+                    <Component {...matchProps} />
+                </CoreLayout>
+            )}
+        />
+    );
+};
 
 CoreLayout.propTypes = {
     children: PropTypes.element.isRequired,
@@ -35,4 +48,4 @@ const mapStateToProps = ({ profile }) => {
     };
 };
 
-export default connect(mapStateToProps)(CoreLayout);
+export default connect(mapStateToProps)(CoreLayoutRoute);

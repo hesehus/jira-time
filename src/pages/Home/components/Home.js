@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import Tasks from 'modules/Tasks';
 import Login from 'modules/Login';
@@ -7,9 +8,7 @@ import './Home.scss';
 
 export class Home extends Component {
     static get contextTypes() {
-        return {
-            router: PropTypes.object.isRequired
-        };
+        return {};
     }
 
     static get propTypes() {

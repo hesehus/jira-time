@@ -24,6 +24,7 @@ export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 export const SET_SEARCH = 'SET_SEARCH';
+export const UPDATE_HIGHLIGHTED = 'UPDATE_HIGHLIGHTED';
 
 // ------------------------------------
 // Actions
@@ -86,6 +87,38 @@ export function setTasksSearch({ search }) {
         search
     };
 }
+export function updateHighlighted({ issue, highlighted }) {
+    return {
+        type: UPDATE_HIGHLIGHTED,
+        issue,
+        highlighted
+    };
+}
+
+// ------------------------------------
+// Helper functions
+// ------------------------------------
+
+function setHighlighted(state, issue, highlighted) {
+    const tasks = state.tasks.map(task => {
+        if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
+            const newTask = DeepAssign({}, task);
+            newTask.highlighted = highlighted;
+            return newTask;
+        }
+        if (highlighted && task.highlighted) {
+            const newTask = DeepAssign({}, task);
+            newTask.highlighted = false;
+            return newTask;
+        }
+        return task;
+    });
+
+    return {
+        ...state,
+        tasks
+    };
+}
 
 // ------------------------------------
 // Action Handlers
@@ -95,13 +128,14 @@ const ACTION_HANDLERS = {
         const { issue } = action;
 
         // Prevent adding tasks with issue keys that we have already
-        if (state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase())) {
-            return state;
+        const existingTask = state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase());
+        if (existingTask) {
+            return setHighlighted(state, issue, true);
         }
 
         return {
             ...state,
-            tasks: [...state.tasks, TaskModel({ issue })]
+            tasks: [...state.tasks, TaskModel({ issue, highlighted: true })]
         };
     },
     [REMOVE_TASK]: (state, action) => {
@@ -205,6 +239,9 @@ const ACTION_HANDLERS = {
             ...state,
             search
         };
+    },
+    [UPDATE_HIGHLIGHTED]: (state, { issue, highlighted }) => {
+        return setHighlighted(state, issue, highlighted);
     },
     SERVER_STATE_PUSH: (state, { tasks }) => tasks
 };

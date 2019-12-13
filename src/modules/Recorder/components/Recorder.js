@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { default as swal } from 'sweetalert2';
 
 import ws, { initWebsocketConnection } from 'shared/websocket';
@@ -15,7 +16,8 @@ export default class Recorder extends Component {
             addTask: PropTypes.func.isRequired,
             recorder: PropTypes.object.isRequired,
             updateRecordElapsed: PropTypes.func.isRequired,
-            profile: PropTypes.object.isRequired
+            profile: PropTypes.object.isRequired,
+            updateHighlighted: PropTypes.func.isRequired
         };
     }
 
@@ -44,6 +46,9 @@ export default class Recorder extends Component {
             if (result.success) {
                 this.props.addTask({ issue: result.issue });
                 addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
+                setTimeout(() => {
+                    this.props.updateHighlighted({ issue: result.issue, highlighted: false });
+                }, 2000);
             } else {
                 swal('Heeey..', result.message, 'error');
             }
@@ -56,7 +61,11 @@ export default class Recorder extends Component {
         });
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        ws.on('connecting', this.onWsConnecting);
+        ws.on('connected', this.onWsConnected);
+        ws.on('closeOrError', this.onWsCloseOrError);
+
         if (!this.state.binded) {
             this.setState({ binded: true });
 
@@ -67,12 +76,6 @@ export default class Recorder extends Component {
             this.elapsedTimeInterval = setInterval(this.updateElapsedTime, oneMinute);
             this.updateElapsedTime();
         }
-    }
-
-    componentDidMount() {
-        ws.on('connecting', this.onWsConnecting);
-        ws.on('connected', this.onWsConnected);
-        ws.on('closeOrError', this.onWsCloseOrError);
     }
 
     componentWillUnmount() {

@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { hashHistory, Router } from 'react-router';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { HashRouter } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 
 import KeyAndPasteEventsHandler from 'modules/KeyAndPasteEventsHandler';
@@ -27,7 +28,9 @@ class AppContainer extends Component {
 
         return (
             <Provider store={store}>
-                <Router history={hashHistory} children={routes} />
+                <HashRouter>
+                    {routes}
+                </HashRouter>
             </Provider>
         );
     }
