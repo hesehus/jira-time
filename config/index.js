@@ -75,7 +75,8 @@ config.globals = {
     __PROD__: config.env === 'production',
     __TEST__: config.env === 'test',
     __COVERAGE__: !argv.watch && config.env === 'test',
-    __BASENAME__: JSON.stringify(process.env.BASENAME || '')
+    __BASENAME__: JSON.stringify(process.env.BASENAME || ''),
+    VERSION: JSON.stringify(require('../package.json').version)
 };
 
 // ------------------------------------

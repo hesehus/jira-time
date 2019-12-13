@@ -203,7 +203,8 @@
         text-transform: none;
 
         .compact-view & {
-            display: none;
+            font-size: 0.65rem;
+            margin-left: 5px;
         }
 
         @media (max-width: $screen-sm) {

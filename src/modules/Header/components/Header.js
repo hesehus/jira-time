@@ -80,7 +80,7 @@ class Header extends Component {
     }
 
     onUpdateAvailableClick() {
-        location.reload();
+        history.go(0);
     }
 
     onSyncClick() {

@@ -11,6 +11,8 @@ import './Profile.scss';
 
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
+const version = VERSION;
+
 export class Profile extends Component {
     static get propTypes() {
         return {
@@ -145,6 +147,8 @@ export class Profile extends Component {
                     <button className="profile-logout btn" onClick={this.onLogoutClick}>
                         Log out
                     </button>
+
+                    <div className="profile-version">Version {version}</div>
                 </div>
             </div>
         );
