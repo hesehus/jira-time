@@ -24,7 +24,7 @@ export const SET_MANUAL_SORT_ORDER = 'SET_MANUAL_SORT_ORDER';
 export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 export const SET_SEARCH = 'SET_SEARCH';
-export const UPDATE_HIGHTLIGHTED = 'UPDATE_HIGHTLIGHTED';
+export const UPDATE_HIGHLIGHTED = 'UPDATE_HIGHLIGHTED';
 
 // ------------------------------------
 // Actions
@@ -89,9 +89,34 @@ export function setTasksSearch({ search }) {
 }
 export function updateHighlighted({ issue, highlighted }) {
     return {
-        type: UPDATE_HIGHTLIGHTED,
+        type: UPDATE_HIGHLIGHTED,
         issue,
         highlighted
+    };
+}
+
+// ------------------------------------
+// Helper functions
+// ------------------------------------
+
+function setHighlighted(state, issue, highlighted) {
+    const tasks = state.tasks.map(task => {
+        if (task.issue.key.toLowerCase() === issue.key.toLowerCase()) {
+            const newTask = DeepAssign({}, task);
+            newTask.highlighted = highlighted;
+            return newTask;
+        }
+        if (highlighted && task.highlighted) {
+            const newTask = DeepAssign({}, task);
+            newTask.highlighted = false;
+            return newTask;
+        }
+        return task;
+    });
+
+    return {
+        ...state,
+        tasks
     };
 }
 
@@ -105,8 +130,7 @@ const ACTION_HANDLERS = {
         // Prevent adding tasks with issue keys that we have already
         const existingTask = state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase());
         if (existingTask) {
-            existingTask.highlighted = true;
-            return state;
+            return setHighlighted(state, issue, true);
         }
 
         return {
@@ -216,14 +240,8 @@ const ACTION_HANDLERS = {
             search
         };
     },
-    [UPDATE_HIGHTLIGHTED]: (state, action) => {
-        const { issue, highlighted } = action;
-
-        const existingTask = state.tasks.find(task => task.issue.key.toLowerCase() === issue.key.toLowerCase());
-        if (existingTask) {
-            existingTask.highlighted = highlighted;
-        }
-        return state;
+    [UPDATE_HIGHLIGHTED]: (state, { issue, highlighted }) => {
+        return setHighlighted(state, issue, highlighted);
     },
     SERVER_STATE_PUSH: (state, { tasks }) => tasks
 };

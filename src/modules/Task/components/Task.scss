@@ -38,11 +38,13 @@
     }
 
     &--highlighted:before {
-        opacity: 0.6;
+        opacity: 0.5;
     }
-
     body:not(.moving) &:hover:before {
         opacity: 0.3;
+    }
+    body:not(.moving) &--highlighted:hover:before {
+        opacity: 0.6;
     }
     &--drop-active:before {
         opacity: 0.4;

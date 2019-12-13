@@ -47,7 +47,7 @@ export default class Recorder extends Component {
                 this.props.addTask({ issue: result.issue });
                 addCurrentUserAsWatcher({ taskIssueKey: result.issue.key });
                 setTimeout(() => {
-                    this.props.updateHighlighted({ issue: result.issue, hightlighted: false });
+                    this.props.updateHighlighted({ issue: result.issue, highlighted: false });
                 }, 2000);
             } else {
                 swal('Heeey..', result.message, 'error');
@@ -59,7 +59,6 @@ export default class Recorder extends Component {
                 tasksAddingRemaining: 0
             });
         });
-        
     }
 
     componentDidMount() {

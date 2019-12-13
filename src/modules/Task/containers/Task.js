@@ -5,7 +5,8 @@ import {
     refreshIssue,
     setIssueRefreshing,
     setIssueRemainingEstimate,
-    getMovingTask
+    getMovingTask,
+    updateHighlighted
 } from 'store/reducers/tasks';
 
 import { getMovingRecord, getRecordsForTask, getRecordsWithNoIssue } from 'store/reducers/recorder';
@@ -25,7 +26,8 @@ const mapDispatchToProps = {
     removeTask,
     refreshIssue,
     setIssueRefreshing,
-    setIssueRemainingEstimate
+    setIssueRemainingEstimate,
+    updateHighlighted
 };
 
 export default connect(

@@ -19,7 +19,8 @@ export default class Task extends Component {
             movingRecord: PropTypes.object,
             movingTask: PropTypes.object,
             removeTask: PropTypes.func.isRequired,
-            records: PropTypes.array
+            records: PropTypes.array,
+            updateHighlighted: PropTypes.func.isRequired
         };
     }
 
@@ -27,16 +28,35 @@ export default class Task extends Component {
         super(props);
 
         this.onRemoveClick = this.onRemoveClick.bind(this);
+        this.onTaskClick = this.onTaskClick.bind(this);
         this.taskRef = React.createRef();
 
         this.state = {};
+    }
+
+    componentDidMount() {
+        const {
+            task: { highlighted }
+        } = this.props;
+        if (highlighted) {
+            this.scrollToTaskRef();
+        }
+    }
+
+    componentDidUpdate() {
+        const {
+            task: { highlighted }
+        } = this.props;
+        if (highlighted) {
+            this.scrollToTaskRef();
+        }
     }
 
     onRemoveClick() {
         const { records, removeTask, task } = this.props;
 
         if (records.length > 0) {
-            let worklogName = records.length === 1 ? 'worklog' : 'worklogs';
+            const worklogName = records.length === 1 ? 'worklog' : 'worklogs';
             swal({
                 title: 'Hold on dude! Are you sure?',
                 text: `You have ${records.length} ${worklogName} on this task`,
@@ -58,19 +78,19 @@ export default class Task extends Component {
         }
     }
 
-    scrollToTaskRef = () =>{
-    console.log('scroll');
-        window.scrollTo({
-            top: this.taskRef.offsetTop,
-            left: 0,
-            behavior: 'smooth'
-        });}
-
-    componentDidMount() {
-        if (this.props.task.highlighted) {
-            this.scrollToTaskRef();
+    onTaskClick(event) {
+        if (event.target === event.currentTarget) {
+            const {
+                updateHighlighted,
+                task: { highlighted, issue }
+            } = this.props;
+            updateHighlighted({ issue, highlighted: !highlighted });
         }
     }
+
+    scrollToTaskRef = () => {
+        this.taskRef.current.scrollIntoView({ behavior: 'smooth' });
+    };
 
     render() {
         const { task, movingRecord, movingTask, records, setIssueRemainingEstimate } = this.props;
@@ -127,7 +147,7 @@ export default class Task extends Component {
                 ref={this.taskRef}
             >
                 {deleteButton}
-                <div className="task__info">
+                <div className="task__info" onClick={this.onTaskClick}>
                     <div className="task__left">
                         <div className="task__key-and-status">
                             <a

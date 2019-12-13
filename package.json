@@ -124,7 +124,7 @@
         "keycode": "^2.1.8",
         "lorem-ipsum": "^1.0.3",
         "moment": "^2.15.2",
-        "node-sass": "^3.7.0",
+        "node-sass": "~4.13.0",
         "normalize.css": "^4.1.1",
         "postcss-loader": "^0.13.0",
         "prop-types": "~15.7.2",
