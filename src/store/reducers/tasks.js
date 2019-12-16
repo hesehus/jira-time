@@ -25,6 +25,7 @@ export const SET_TASK_MOVING = 'SET_TASK_MOVING';
 export const SET_TASKS_SORT_ORDER = 'SET_TASKS_SORT_ORDER';
 export const SET_SEARCH = 'SET_SEARCH';
 export const UPDATE_HIGHLIGHTED = 'UPDATE_HIGHLIGHTED';
+export const DROP_TASK_AFTER_TARGET = 'DROP_TASK_AFTER_TARGET';
 
 // ------------------------------------
 // Actions
@@ -73,6 +74,13 @@ export function setTaskMoving({ cuid, moving }) {
         type: SET_TASK_MOVING,
         cuid,
         moving
+    };
+}
+export function dropTaskAfterTarget({ cuid, targetTaskCuid }) {
+    return {
+        type: DROP_TASK_AFTER_TARGET,
+        cuid,
+        targetTaskCuid
     };
 }
 export function setTasksSortOrder({ sortOrder }) {
@@ -217,6 +225,17 @@ const ACTION_HANDLERS = {
         return {
             ...state,
             tasks
+        };
+    },
+    [DROP_TASK_AFTER_TARGET]: (state, { cuid, targetTaskCuid }) => {
+        let targetIndex = state.tasks.findIndex(task => task.cuid === targetTaskCuid);
+        let task = state.tasks.find(t => t.cuid === cuid);
+        let taskIndex = state.tasks.findIndex(t => t.cuid === targetTaskCuid);
+        const tasks = [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)];
+        // TODO THIS SHIT IS NOT RIGHT!!!!!! !!!!!!!!
+        return {
+            ...state,
+            tasks: [tasks.slice(0, targetIndex), task, tasks.slice(targetIndex)]
         };
     },
     [SET_TASKS_SORT_ORDER]: (state, { sortOrder }) => {

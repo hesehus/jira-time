@@ -5,10 +5,11 @@ import domClosest from 'dom-closest';
 import events from 'shared/events';
 import { setRecordTask, setRecordMoving, getMovingRecord, setRecordMoveTarget } from 'store/reducers/recorder';
 
-import { getTasksFilteredBySearch } from 'store/reducers/tasks';
+import { getTasksFilteredBySearch, dropTaskAfterTarget } from 'store/reducers/tasks';
 
 let eventsBinded;
 let taskElement;
+let taskElementClone;
 let recordElement;
 let recordElementClone;
 let recordElementHeight;
@@ -55,7 +56,8 @@ export function getClosestTaskFromPosition({ x, y }) {
 
     return {
         index,
-        task: tasksFilteredBySearch[index]
+        task: tasksFilteredBySearch[index],
+        taskElement
     };
 }
 
@@ -107,10 +109,22 @@ function onPanStart(event) {
             if (taskElement) {
                 doSharedMovingPreparations();
 
-                return events.emit('panstart:task', {
-                    event,
-                    element: taskElement
-                });
+                const rect = taskElement.getBoundingClientRect();
+
+                const container = domClosest(taskElement, '.tasks');
+                const rectContainer = container.getBoundingClientRect();
+                taskElementClone = taskElement.cloneNode(true);
+                taskElementClone.style.position = 'absolute';
+                taskElementClone.style.top = rect.top - rectContainer.top + 'px';
+                taskElementClone.style.left = rect.left + 'px';
+                taskElementClone.style.height = rect.height + 'px';
+                taskElementClone.style.width = rect.width + 'px';
+                taskElementClone.style.pointerEvents = 'none';
+                container.appendChild(taskElementClone);
+
+                taskElement.style.opacity = 0;
+
+                onPanMove(event);
             }
         }
     }
@@ -155,10 +169,35 @@ function onPanMove(event) {
 
     if (taskElement) {
         event.preventDefault();
-        return events.emit('panmove:task', {
-            event,
-            element: taskElement
+        const taskCuid = taskElement.dataset.cuid;
+        taskElementClone.style.transform = `translate3d(${event.deltaX}px, ${event.deltaY}px, 0) scale(1.05)`;
+
+        const { x, y } = event.center;
+        const closestTask = getClosestTaskFromPosition({ x, y });
+
+        const container = domClosest(taskElement, '.tasks');
+        const tasks = container.querySelectorAll('.task');
+        tasks.forEach(elem => {
+            elem.style.marginBottom = '';
         });
+
+        let newTargetTaskCuid;
+        let newTargetTaskIssueKey;
+
+        if (!closestTask.task) {
+            newTargetTaskCuid = null;
+            newTargetTaskIssueKey = null;
+        } else {
+            newTargetTaskCuid = closestTask.task.cuid;
+            newTargetTaskIssueKey = closestTask.task.issue.key;
+        }
+
+        if (closestTask.taskElement && taskCuid !== newTargetTaskCuid) {
+            closestTask.taskElement.style.marginBottom = '50px';
+        }
+
+        targetTaskCuid = newTargetTaskCuid;
+        targetTaskIssueKey = newTargetTaskIssueKey;
     }
 }
 
@@ -182,8 +221,15 @@ function onPanEnd(e) {
 
     if (taskElement) {
         e.preventDefault();
+
+        store.dispatch(
+            dropTaskAfterTarget({
+                cuid: taskElement.dataset.cuid,
+                targetTaskCuid
+            })
+        );
+
         panCleanup();
-        return events.emit('panend:task', e);
     }
 }
 
@@ -197,6 +243,18 @@ function panCleanup() {
     }
     if (recordElementClone) {
         recordElementClone.remove();
+    }
+    if (taskElement) {
+        taskElement.style.transform = ``;
+        taskElement.style.opacity = 1;
+        const container = domClosest(taskElement, '.tasks');
+        const tasks = container.querySelectorAll('.task');
+        tasks.forEach(elem => {
+            elem.style.marginBottom = '';
+        });
+    }
+    if (taskElementClone) {
+        taskElementClone.remove();
     }
 }
 
@@ -218,7 +276,7 @@ function cancelPan() {
             );
         }
     } else if (taskElement) {
-        events.emit('pancancel:task');
+        // events.emit('pancancel:task');
 
         taskElement = null;
     }
