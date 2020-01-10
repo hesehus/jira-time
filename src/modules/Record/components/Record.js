@@ -199,6 +199,8 @@ export default class RecordItem extends Component {
                     title="Stop recording"
                 />
             );
+        } else if (!task) {
+            btnSync = null;
         } else {
             btnSync = (
                 <button
