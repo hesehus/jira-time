@@ -228,14 +228,14 @@ const ACTION_HANDLERS = {
         };
     },
     [DROP_TASK_AFTER_TARGET]: (state, { cuid, targetTaskCuid }) => {
-        let targetIndex = state.tasks.findIndex(task => task.cuid === targetTaskCuid);
-        let task = state.tasks.find(t => t.cuid === cuid);
-        let taskIndex = state.tasks.findIndex(t => t.cuid === targetTaskCuid);
+        const task = state.tasks.find(t => t.cuid === cuid);
+        const taskIndex = state.tasks.findIndex(t => t.cuid === cuid);
         const tasks = [...state.tasks.slice(0, taskIndex), ...state.tasks.slice(taskIndex + 1)];
-        // TODO THIS SHIT IS NOT RIGHT!!!!!! !!!!!!!!
+        const targetIndex = tasks.findIndex(t => t.cuid === targetTaskCuid);
+
         return {
             ...state,
-            tasks: [tasks.slice(0, targetIndex), task, tasks.slice(targetIndex)]
+            tasks: [...tasks.slice(0, targetIndex + 1), task, ...tasks.slice(targetIndex + 1)]
         };
     },
     [SET_TASKS_SORT_ORDER]: (state, { sortOrder }) => {

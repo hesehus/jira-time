@@ -52,12 +52,12 @@ export default class ProcessTask extends EventClass {
                     });
                 }
             })
-            .catch(() => {
+            .catch(err => {
                 this.emit('add', {
                     success: false,
-                    message: `Hey, ${key} is not a valid JIRA issue key.\nPull yourself together!`
+                    message: `An error occurred while getting JIRA issue ${key}.`
                 });
-
+                console.log(err);
                 next();
             });
     }

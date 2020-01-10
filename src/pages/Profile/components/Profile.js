@@ -11,7 +11,8 @@ import './Profile.scss';
 
 const browserHasSpeechRecognition = 'webkitSpeechRecognition' in window;
 
-const version = VERSION;
+const version = __VERSION__;
+const isDevelopment = __DEV__;
 
 export class Profile extends Component {
     static get propTypes() {
@@ -84,6 +85,8 @@ export class Profile extends Component {
             avatarUrl = avatarUrls[avatarSize].replace('http://localhost:3000', '/');
         }
 
+        const development = isDevelopment ? ' - DEVELOPMENT' : null;
+
         return (
             <div className="profile">
                 <div className="profile-avatar">
@@ -148,7 +151,10 @@ export class Profile extends Component {
                         Log out
                     </button>
 
-                    <div className="profile-version">Version {version}</div>
+                    <div className="profile-version">
+                        Version {version}
+                        {development}
+                    </div>
                 </div>
             </div>
         );

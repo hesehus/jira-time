@@ -123,6 +123,9 @@ function onPanStart(event) {
                 container.appendChild(taskElementClone);
 
                 taskElement.style.opacity = 0;
+                taskElement.style.height = 0;
+                taskElement.style.padding = 0;
+                taskElement.style.margin = 0;
 
                 onPanMove(event);
             }
@@ -178,7 +181,7 @@ function onPanMove(event) {
         const container = domClosest(taskElement, '.tasks');
         const tasks = container.querySelectorAll('.task');
         tasks.forEach(elem => {
-            elem.style.marginBottom = '';
+            elem.classList.remove('task--drop-target');
         });
 
         let newTargetTaskCuid;
@@ -193,7 +196,7 @@ function onPanMove(event) {
         }
 
         if (closestTask.taskElement && taskCuid !== newTargetTaskCuid) {
-            closestTask.taskElement.style.marginBottom = '50px';
+            closestTask.taskElement.classList.add('task--drop-target');
         }
 
         targetTaskCuid = newTargetTaskCuid;
@@ -215,6 +218,7 @@ function onPanEnd(e) {
 
             e.preventDefault();
             panCleanup();
+            recordElement = null;
             return;
         }
     }
@@ -230,7 +234,9 @@ function onPanEnd(e) {
         );
 
         panCleanup();
+        taskElement = null;
     }
+    targetTaskCuid = null;
 }
 
 function panCleanup() {
@@ -247,10 +253,13 @@ function panCleanup() {
     if (taskElement) {
         taskElement.style.transform = ``;
         taskElement.style.opacity = 1;
+        taskElement.style.height = '';
+        taskElement.style.padding = '';
+        taskElement.style.margin = '';
         const container = domClosest(taskElement, '.tasks');
         const tasks = container.querySelectorAll('.task');
         tasks.forEach(elem => {
-            elem.style.marginBottom = '';
+            elem.classList.remove('task--drop-target');
         });
     }
     if (taskElementClone) {
@@ -259,10 +268,11 @@ function panCleanup() {
 }
 
 function cancelPan() {
+    panCleanup();
+    clearSelection();
     if (recordElement) {
         events.emit('pancancel:record');
 
-        recordElement.style.transform = ``;
         targetTaskCuid = null;
         recordElement = null;
 
@@ -277,12 +287,9 @@ function cancelPan() {
         }
     } else if (taskElement) {
         // events.emit('pancancel:task');
-
         taskElement = null;
+        targetTaskCuid = null;
     }
-
-    panCleanup();
-    clearSelection();
 }
 
 // Clears any HTML text selection on the page
