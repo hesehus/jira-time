@@ -105,7 +105,7 @@ export default class HistoryRecordItem extends Component {
                 this.props.onSyncedSynced(record);
             });
         } else {
-            syncer.on('logSynced', ({ worklog }) => {
+            syncer.on('logSynced', ({ record, worklog }) => {
                 this.props.onNotSyncedSynced({ record, worklog });
             });
         }
@@ -173,6 +173,8 @@ export default class HistoryRecordItem extends Component {
                     {record.taskIssueKey}
                 </a>
             );
+        } else if (record.splitTaskArray && record.splitTaskArray.length) {
+            editWorklogLink = record.splitTaskArray.map(t => t.taskIssueKey).join(', ');
         }
 
         return (

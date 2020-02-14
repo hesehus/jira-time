@@ -97,12 +97,13 @@ export function setRecordComment({ cuid, comment }) {
         comment
     };
 }
-export function setRecordTask({ cuid, taskCuid, taskIssueKey }) {
+export function setRecordTask({ cuid, taskCuid, taskIssueKey, splitTask }) {
     return {
         type: SET_RECORD_TASK,
         cuid,
         taskCuid,
-        taskIssueKey
+        taskIssueKey,
+        splitTask
     };
 }
 export function setRecordMoving({ cuid, moving }) {
@@ -246,21 +247,32 @@ const ACTION_HANDLERS = {
         };
     },
     [SET_RECORD_TASK]: (state, action) => {
-        const { taskCuid, taskIssueKey } = action;
+        const { taskCuid, taskIssueKey, splitTask } = action;
 
         const records = state.records.map(record => {
             if (record.cuid === action.cuid) {
+                let splitTaskArray = [...(record.splitTaskArray || [])];
+                if (splitTask) {
+                    if (record.taskCuid && !splitTaskArray.find(t => t.taskCuid === record.taskCuid)) {
+                        splitTaskArray.push({ taskCuid: record.taskCuid, taskIssueKey: record.taskIssueKey });
+                    }
+                    if (!splitTaskArray.find(t => t.taskCuid === taskCuid)) {
+                        splitTaskArray.push({ taskCuid, taskIssueKey });
+                    }
+                } else {
+                    splitTaskArray = [];
+                }
                 return Object.assign({}, record, {
                     taskCuid,
                     taskIssueKey,
                     moving: false,
-                    taskDroppableCuid: null
+                    taskDroppableCuid: null,
+                    splitTaskArray
                 });
             }
-
             return record;
         });
-
+        console.log(records);
         return {
             ...state,
             records
@@ -368,7 +380,10 @@ function stopRecordingInState({ state }) {
 // ------------------------------------
 // Getters
 // ------------------------------------
-export const getRecordsForTask = ({ state, taskCuid }) => state.recorder.records.filter(r => r.taskCuid === taskCuid);
+export const getRecordsForTask = ({ state, taskCuid }) =>
+    state.recorder.records.filter(
+        r => r.taskCuid === taskCuid || (r.splitTaskArray && r.splitTaskArray.find(t => t.taskCuid === taskCuid))
+    );
 
 export const getRecords = ({ state }) => state.recorder.records;
 

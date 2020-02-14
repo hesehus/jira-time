@@ -206,13 +206,15 @@ function onPanMove(event) {
 
 function onPanEnd(e) {
     if (recordElement) {
+        const [{ ctrlKey = false }] = e.changedPointers;
         const record = getMovingRecord({ state: store.getState() });
         if (record) {
             store.dispatch(
                 setRecordTask({
                     cuid: record.cuid,
                     taskCuid: targetTaskCuid,
-                    taskIssueKey: targetTaskIssueKey
+                    taskIssueKey: targetTaskIssueKey,
+                    splitTask: ctrlKey
                 })
             );
 

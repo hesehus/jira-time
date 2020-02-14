@@ -21,6 +21,7 @@ export default function RecordModel({
         cuid,
         taskCuid: task ? task.cuid : null,
         taskIssueKey: task ? task.issue.key : taskIssueKey || null,
+        splitTaskArray: [],
         taskDroppableCuid: null,
         moving: false,
         createdTime,

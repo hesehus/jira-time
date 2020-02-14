@@ -272,7 +272,7 @@ export function extractIssueKeysFromText(text) {
  * @returns promise
  **/
 export function addWorklog({ record }) {
-    let { comment, startTime, endTime } = record;
+    let { comment, startTime, endTime, taskIssueKey } = record;
 
     startTime = moment(startTime);
     endTime = moment(endTime);
@@ -281,7 +281,7 @@ export function addWorklog({ record }) {
 
     return new Promise((resolve, reject) => {
         callApi({
-            path: `api/2/issue/${record.taskIssueKey}/worklog`,
+            path: `api/2/issue/${taskIssueKey}/worklog`,
             method: 'post',
             body: {
                 comment,
@@ -319,7 +319,7 @@ export function addWorklog({ record }) {
  * @returns promise
  **/
 export function updateWorklog({ record }) {
-    let { comment, startTime, endTime, id } = record;
+    let { comment, startTime, endTime, id, taskIssueKey } = record;
 
     startTime = moment(startTime);
     endTime = moment(endTime);
@@ -328,7 +328,7 @@ export function updateWorklog({ record }) {
 
     return new Promise((resolve, reject) => {
         callApi({
-            path: `api/2/issue/${record.taskIssueKey}/worklog/${id}`,
+            path: `api/2/issue/${taskIssueKey}/worklog/${id}`,
             method: 'put',
             body: {
                 comment,
