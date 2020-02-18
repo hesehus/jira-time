@@ -106,7 +106,9 @@ function onPanStart(event) {
         const tasksAreFiltered = !!store.getState().tasks.search;
         if (!tasksAreFiltered) {
             taskElement = domClosest(event.target, '.task');
-            if (taskElement) {
+            if (taskElement && taskElement.classList.contains('task--limbo')) {
+                taskElement = null;
+            } else if (taskElement) {
                 doSharedMovingPreparations();
 
                 const rect = taskElement.getBoundingClientRect();
@@ -225,14 +227,14 @@ function onPanEnd(e) {
 
     if (taskElement) {
         e.preventDefault();
-
-        store.dispatch(
-            dropTaskAfterTarget({
-                cuid: taskElement.dataset.cuid,
-                targetTaskCuid
-            })
-        );
-
+        if (taskElement.dataset.cuid && targetTaskCuid) {
+            store.dispatch(
+                dropTaskAfterTarget({
+                    cuid: taskElement.dataset.cuid,
+                    targetTaskCuid
+                })
+            );
+        }
         panCleanup();
         taskElement = null;
     }
